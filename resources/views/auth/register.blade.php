@@ -1,5 +1,5 @@
 @extends('layout.layout')
-@section('title', Route::is('login') ? 'Login' : '🟢🟢🟢')
+@section('title', Route::is('register') ? 'Sign Up' : '🟢🟢🟢')
 
 @section('content')
 
@@ -33,27 +33,28 @@
                                             <hr />
                                         </div>
                                         <div class="form-body">
-                                            <form class="row g-3">
+                                            <form class="row g-3" method="post" action="{{route('register')}}">
+                                                @csrf
                                                 <div class="col-sm-6">
                                                     <label for="inputFirstName" class="form-label">First Name</label>
-                                                    <input type="text" class="form-control" id="inputFirstName"
+                                                    <input type="text" name="first_name" class="form-control" id="inputFirstName"
                                                         placeholder="Jhon">
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label for="inputLastName" class="form-label">Last Name</label>
-                                                    <input type="text" class="form-control" id="inputLastName"
+                                                    <input type="text" name="last_name" class="form-control" id="inputLastName"
                                                         placeholder="Deo">
                                                 </div>
                                                 <div class="col-12">
                                                     <label for="inputEmailAddress" class="form-label">Email Address</label>
-                                                    <input type="email" class="form-control" id="inputEmailAddress"
+                                                    <input type="email" name="email" class="form-control" id="inputEmailAddress"
                                                         placeholder="example@user.com">
                                                 </div>
                                                 <div class="col-12">
                                                     <label for="inputChoosePassword" class="form-label">Password</label>
                                                     <div class="input-group" id="show_hide_password">
                                                         <input type="password" class="form-control border-end-0"
-                                                            id="inputChoosePassword" value="12345678"
+                                                            id="inputChoosePassword" name="password" value="12345678"
                                                             placeholder="Enter Password"> <a href="javascript:;"
                                                             class="input-group-text bg-transparent"><i
                                                                 class='bx bx-hide'></i></a>

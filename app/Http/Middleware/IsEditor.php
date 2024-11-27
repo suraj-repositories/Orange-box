@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsUser
+class IsEditor
 {
     /**
      * Handle an incoming request.
@@ -18,7 +18,7 @@ class IsUser
     {
         if(Auth::check() &&
             (strtolower(Auth::user()->role->name) == 'admin'
-            || strtolower(Auth::user()->role->name) == 'user')){
+            || strtolower(Auth::user()->role->name) == 'editor')){
             return $next($request);
         }
         return redirect()->route('login')->with('error', 'Please Login First!');
