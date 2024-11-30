@@ -12,10 +12,10 @@
     @auth
         @if (Auth::user()->hasRole('admin'))
             <a href="{{ route('admin.dashboard') }}">Dashboard</a>
-        @elseif(Auth::user()->hasRole('editor'))
+        @elseif(Auth::user()->hasRole('editor', Auth::user()->id))
             <a href="{{ route('editor.dashboard') }}">Dashboard</a>
         @elseif(Auth::user()->hasRole('user'))
-            <a href="{{ route('user.dashboard') }}">Dashboard</a>
+            <a href="{{ route('user.dashboard', Auth::user()->id) }}">Dashboard</a>
         @endif
     @endauth
     @guest
