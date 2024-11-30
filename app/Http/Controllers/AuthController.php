@@ -25,18 +25,8 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($request->only(['email', 'password']))) {
-
-            $role = strtolower(Auth::user()->role->name);
-
-            if($role == 'admin'){
-                return redirect()->route('admin.dashboard')->with('success', 'Login Successful!');
-            }else if($role == 'editor'){
-                return redirect()->route('editor.dashboard', Auth::user()->id)->with('success', 'Login Successful!');
-
-            }else if($role == 'user'){
-                return redirect()->route('user.dashboard', Auth::user()->id)->with('success', 'Login Successful!');
-
-            }
+            $user = Auth::user();
+            return redirect()->route('home')->with('success', 'Login Successful!');
         }
 
         return redirect()->route('login')->with('error', 'Wrong Credentials!');
@@ -48,37 +38,21 @@ class AuthController extends Controller
 
     public function register(Request $request){
         $validated = $request->validate([
-            'first_name' => 'required',
+            'username' => 'required|unique:users,email',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
         ]);
 
         $user = User::create([
+            'username' => $validated['username'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role_id' => Role::where('name', 'User')->value('id'),
         ]);
 
-        $user_detail = UserDetails::create([
-            'first_name' => $validated['first_name'],
-            'last_name' => $request->last_name,
-            'user_id' => $user->id,
-        ]);
-
+        $user->assignRole('user');
         Auth::login($user);
-        $role = strtolower(Auth::user()->role->name);
 
-        if($role == 'admin'){
-            return redirect()->route('admin.dashboard')->with('success', 'Login Successful!');
-        }else if($role == 'editor'){
-            return redirect()->route('editor.dashboard', Auth::user()->id)->with('success', 'Login Successful!');
-
-        }else if($role == 'user'){
-            return redirect()->route('user.dashboard', Auth::user()->id)->with('success', 'Login Successful!');
-
-        }
-
-        return redirect()->route('login')->with('error', 'Login Failed!');
+        return redirect()->route('home')->with('success', 'Registration Successful!');
 
     }
 

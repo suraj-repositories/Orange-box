@@ -1,758 +1,1142 @@
-<!doctype html>
-<html lang="en" class="semi-dark">
+<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--favicon-->
-	<link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
-	<!--plugins-->
-	<link href="assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet"/>
-	<link href="assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
-	<link href="assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
-	<link href="assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
-	<!-- loader-->
-	<link href="assets/css/pace.min.css" rel="stylesheet" />
-	<script src="assets/js/pace.min.js"></script>
-	<!-- Bootstrap CSS -->
-	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
-	<link href="assets/css/bootstrap-extended.css" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-	<link href="assets/css/app.css" rel="stylesheet">
-	<link href="assets/css/icons.css" rel="stylesheet">
-	<!-- Theme Style CSS -->
-	<link rel="stylesheet" href="assets/css/semi-dark.css" />
-	<title>Rocker - Free Bootstrap 5 Admin Dashboard Template</title>
+
+    <meta charset="utf-8" />
+    <title>Dashboard | Tapeli - Responsive Admin Dashboard Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A fully featured admin theme which can be used to build CRM, CMS, etc." />
+    <meta name="author" content="Zoyothemes" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+    <!-- App css -->
+    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
+
+    <!-- Icons -->
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+
 </head>
 
-<body>
-	<!--wrapper-->
-	<div class="wrapper">
-		<!--sidebar wrapper -->
-		<div class="sidebar-wrapper" data-simplebar="true">
-			<div class="sidebar-header">
-				<div>
-					<img src="assets/images/logo-icon.png" class="logo-icon" alt="logo icon">
-				</div>
-				<div>
-					<h4 class="logo-text">Rocker</h4>
-				</div>
-				<div class="toggle-icon ms-auto"><i class='bx bx-arrow-to-left'></i>
-				</div>
-			</div>
-			<!--navigation-->
-			<ul class="metismenu" id="menu">
-				<li>
-					<a href="index.html">
-						<div class="parent-icon"><i class='bx bx-home-circle'></i>
-						</div>
-						<div class="menu-title">Dashboard</div>
-					</a>
-				</li>
-				<li class="menu-label">UI Elements</li>
-				<li>
-					<a class="has-arrow" href="javascript:;">
-						<div class="parent-icon"><i class='bx bx-bookmark-heart'></i>
-						</div>
-						<div class="menu-title">Components</div>
-					</a>
-					<ul>
-						<li> <a href="component-buttons.html"><i class="bx bx-right-arrow-alt"></i>Buttons</a>
-						</li>
-						<li> <a href="component-cards.html"><i class="bx bx-right-arrow-alt"></i>Cards</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a class="has-arrow" href="javascript:;">
-						<div class="parent-icon"><i class="bx bx-repeat"></i>
-						</div>
-						<div class="menu-title">Content</div>
-					</a>
-					<ul>
-						<li> <a href="content-grid-system.html"><i class="bx bx-right-arrow-alt"></i>Grid System</a>
-						</li>
-						<li> <a href="content-typography.html"><i class="bx bx-right-arrow-alt"></i>Typography</a>
-						</li>
-						<li> <a href="content-text-utilities.html"><i class="bx bx-right-arrow-alt"></i>Text Utilities</a>
-						</li>
-					</ul>
-				</li>
-				
-				<li class="menu-label">Addons</li>
-				<li>
-					<a class="has-arrow" href="javascript:;">
-						<div class="parent-icon"><i class="bx bx-lock"></i>
-						</div>
-						<div class="menu-title">Authentication</div>
-					</a>
-					<ul>
-						<li> <a href="authentication-signin.html" target="_blank"><i class="bx bx-right-arrow-alt"></i>Sign In</a>
-						</li>
-						<li> <a href="authentication-signup.html" target="_blank"><i class="bx bx-right-arrow-alt"></i>Sign Up</a>
-						</li>
-						<li> <a href="authentication-forgot-password.html" target="_blank"><i class="bx bx-right-arrow-alt"></i>Forgot Password</a>
-						</li>
-						<li> <a href="errors-404-error.html" target="_blank"><i class="bx bx-right-arrow-alt"></i>404 Error</a></li>
-						<li> <a href="error-blank-page.html" target="_blank"><i class="bx bx-right-arrow-alt"></i>Blank Page</a>
-						</li>
-					</ul>
-				</li>
-				<li>
-					<a href="charts-chartjs.html">
-						<div class="parent-icon"><i class="bx bx-user-circle"></i>
-						</div>
-						<div class="menu-title">Charts</div>
-					</a>
-				</li>
-				<li>
-					<a href="table-datatable.html">
-						<div class="parent-icon"> <i class="bx bx-video-recording"></i>
-						</div>
-						<div class="menu-title">Tables</div>
-					</a>
-				</li>
-			</ul>
-			<!--end navigation-->
-			<div class="pro-card border border-light-2 bg-light-transparent p-3 radius-10 mx-3">
-				<p class="text-light">Rocker Premium Template has full features of all UI Components for admin panel.</p>
-				<div class="d-grid">
-					<a href="https://codervent.gumroad.com/l/rocker" target="_blank" class="btn btn-primary radius-10">Upgrade to Pro!</a>
-				</div>
-			</div>
-		</div>
-		<!--end sidebar wrapper -->
-		<!--start header -->
-		<header>
-			<div class="topbar d-flex align-items-center">
-				<nav class="navbar navbar-expand">
-					<div class="mobile-toggle-menu"><i class='bx bx-menu'></i>
-					</div>
-					<div class="search-bar flex-grow-1">
-						<div class="position-relative search-bar-box">
-							<input type="text" class="form-control search-control" placeholder="Type to search..."> <span class="position-absolute top-50 search-show translate-middle-y"><i class='bx bx-search'></i></span>
-							<span class="position-absolute top-50 search-close translate-middle-y"><i class='bx bx-x'></i></span>
-						</div>
-					</div>
-					<div class="top-menu ms-auto">
-						<ul class="navbar-nav align-items-center">
-							<li class="nav-item mobile-search-icon">
-								<a class="nav-link" href="#">	<i class='bx bx-search'></i>
-								</a>
-							</li>
-							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">	<i class='bx bx-category'></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-end">
-									<div class="row row-cols-3 g-3 p-3">
-										<div class="col text-center">
-											<div class="app-box mx-auto text-primary"><i class='bx bx-group'></i>
-											</div>
-											<div class="app-title">Teams</div>
-										</div>
-										<div class="col text-center">
-											<div class="app-box mx-auto text-danger"><i class='bx bx-atom'></i>
-											</div>
-											<div class="app-title">Projects</div>
-										</div>
-										<div class="col text-center">
-											<div class="app-box mx-auto text-success"><i class='bx bx-shield'></i>
-											</div>
-											<div class="app-title">Tasks</div>
-										</div>
-										<div class="col text-center">
-											<div class="app-box mx-auto text-info"><i class='bx bx-notification'></i>
-											</div>
-											<div class="app-title">Feeds</div>
-										</div>
-										<div class="col text-center">
-											<div class="app-box mx-auto text-warning"><i class='bx bx-file'></i>
-											</div>
-											<div class="app-title">Files</div>
-										</div>
-										<div class="col text-center">
-											<div class="app-box mx-auto text-dark"><i class='bx bx-filter-alt'></i>
-											</div>
-											<div class="app-title">Alerts</div>
-										</div>
-									</div>
-								</div>
-							</li>
-							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">7</span>
-									<i class='bx bx-bell'></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-end">
-									<a href="javascript:;">
-										<div class="msg-header">
-											<p class="msg-header-title">Notifications</p>
-											<p class="msg-header-clear ms-auto">Marks all as read</p>
-										</div>
-									</a>
-									<div class="header-notifications-list">
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-primary text-primary"><i class="bx bx-group"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">New Customers<span class="msg-time float-end">14 Sec
-												ago</span></h6>
-													<p class="msg-info">5 new user registered</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-danger text-danger"><i class="bx bx-cart-alt"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">New Orders <span class="msg-time float-end">2 min
-												ago</span></h6>
-													<p class="msg-info">You have recived new orders</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-success text-success"><i class="bx bx-file"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">24 PDF File<span class="msg-time float-end">19 min
-												ago</span></h6>
-													<p class="msg-info">The pdf files generated</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-warning text-warning"><i class="bx bx-send"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Time Response <span class="msg-time float-end">28 min
-												ago</span></h6>
-													<p class="msg-info">5.1 min avarage time response</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-info text-info"><i class="bx bx-home-circle"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">New Product Approved <span
-												class="msg-time float-end">2 hrs ago</span></h6>
-													<p class="msg-info">Your new product has approved</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-danger text-danger"><i class="bx bx-message-detail"></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">New Comments <span class="msg-time float-end">4 hrs
-												ago</span></h6>
-													<p class="msg-info">New customer comments recived</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-success text-success"><i class='bx bx-check-square'></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Your item is shipped <span class="msg-time float-end">5 hrs
-												ago</span></h6>
-													<p class="msg-info">Successfully shipped your item</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-primary text-primary"><i class='bx bx-user-pin'></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">New 24 authors<span class="msg-time float-end">1 day
-												ago</span></h6>
-													<p class="msg-info">24 new authors joined last week</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="notify bg-light-warning text-warning"><i class='bx bx-door-open'></i>
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Defense Alerts <span class="msg-time float-end">2 weeks
-												ago</span></h6>
-													<p class="msg-info">45% less alerts last 4 weeks</p>
-												</div>
-											</div>
-										</a>
-									</div>
-									<a href="javascript:;">
-										<div class="text-center msg-footer">View All Notifications</div>
-									</a>
-								</div>
-							</li>
-							<li class="nav-item dropdown dropdown-large">
-								<a class="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"> <span class="alert-count">8</span>
-									<i class='bx bx-comment'></i>
-								</a>
-								<div class="dropdown-menu dropdown-menu-end">
-									<a href="javascript:;">
-										<div class="msg-header">
-											<p class="msg-header-title">Messages</p>
-											<p class="msg-header-clear ms-auto">Marks all as read</p>
-										</div>
-									</a>
-									<div class="header-message-list">
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-1.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Daisy Anderson <span class="msg-time float-end">5 sec
-												ago</span></h6>
-													<p class="msg-info">The standard chunk of lorem</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-2.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Althea Cabardo <span class="msg-time float-end">14
-												sec ago</span></h6>
-													<p class="msg-info">Many desktop publishing packages</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-3.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Oscar Garner <span class="msg-time float-end">8 min
-												ago</span></h6>
-													<p class="msg-info">Various versions have evolved over</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-4.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Katherine Pechon <span class="msg-time float-end">15
-												min ago</span></h6>
-													<p class="msg-info">Making this the first true generator</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-5.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Amelia Doe <span class="msg-time float-end">22 min
-												ago</span></h6>
-													<p class="msg-info">Duis aute irure dolor in reprehenderit</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-6.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Cristina Jhons <span class="msg-time float-end">2 hrs
-												ago</span></h6>
-													<p class="msg-info">The passage is attributed to an unknown</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-7.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">James Caviness <span class="msg-time float-end">4 hrs
-												ago</span></h6>
-													<p class="msg-info">The point of using Lorem</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-8.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Peter Costanzo <span class="msg-time float-end">6 hrs
-												ago</span></h6>
-													<p class="msg-info">It was popularised in the 1960s</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-9.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">David Buckley <span class="msg-time float-end">2 hrs
-												ago</span></h6>
-													<p class="msg-info">Various versions have evolved over</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-10.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Thomas Wheeler <span class="msg-time float-end">2 days
-												ago</span></h6>
-													<p class="msg-info">If you are going to use a passage</p>
-												</div>
-											</div>
-										</a>
-										<a class="dropdown-item" href="javascript:;">
-											<div class="d-flex align-items-center">
-												<div class="user-online">
-													<img src="assets/images/avatars/avatar-11.png" class="msg-avatar" alt="user avatar">
-												</div>
-												<div class="flex-grow-1">
-													<h6 class="msg-name">Johnny Seitz <span class="msg-time float-end">5 days
-												ago</span></h6>
-													<p class="msg-info">All the Lorem Ipsum generators</p>
-												</div>
-											</div>
-										</a>
-									</div>
-									<a href="javascript:;">
-										<div class="text-center msg-footer">View All Messages</div>
-									</a>
-								</div>
-							</li>
-						</ul>
-					</div>
-					<div class="user-box dropdown">
-						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar">
-							<div class="user-info ps-3">
-								<p class="user-name mb-0">Pauline Seitz</p>
-								<p class="designattion mb-0">Web Designer</p>
-							</div>
-						</a>
-						<ul class="dropdown-menu dropdown-menu-end">
-							<li><a class="dropdown-item" href="javascript:;"><i class="bx bx-user"></i><span>Profile</span></a>
-							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class="bx bx-cog"></i><span>Settings</span></a>
-							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-home-circle'></i><span>Dashboard</span></a>
-							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-dollar-circle'></i><span>Earnings</span></a>
-							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-download'></i><span>Downloads</span></a>
-							</li>
-							<li>
-								<div class="dropdown-divider mb-0"></div>
-							</li>
-							<li><a class="dropdown-item" href="javascript:;"><i class='bx bx-log-out-circle'></i><span>Logout</span></a>
-							</li>
-						</ul>
-					</div>
-				</nav>
-			</div>
-		</header>
-		<!--end header -->
-		<!--start page wrapper -->
-		<div class="page-wrapper">
-			<div class="page-content">
-				<div class="row row-cols-1 row-cols-md-2 row-cols-xl-4">
-					<div class="col">
-						<div class="card radius-10 border-primary border-start border-0 border-4">
-							<div class="card-body">
-								<div class="d-flex align-items-center">
-									<div>
-										<p class="mb-0">Total Orders</p>
-										<h4 class="my-1 text-primary">845</h4>
-									</div>
-									<div class="text-primary ms-auto font-35"><i class="bx bx-cart-alt"></i>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="card radius-10 border-success border-start border-0 border-4">
-							<div class="card-body">
-								<div class="d-flex align-items-center">
-									<div>
-										<p class="mb-0">Total Income</p>
-										<h4 class="my-1 text-success">$89,245</h4>
-									</div>
-									<div class="text-success ms-auto font-35"><i class="bx bx-dollar"></i>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="card radius-10  border-warning border-start border-0 border-4">
-							<div class="card-body">
-								<div class="d-flex align-items-center">
-									<div>
-										<p class="mb-0">Total Users</p>
-										<h4 class="text-warning my-1">24.5K</h4>
-									</div>
-									<div class="text-warning ms-auto font-35"><i class="bx bx-user-pin"></i>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="col">
-						<div class="card radius-10 border-danger border-start border-0 border-4">
-							<div class="card-body">
-								<div class="d-flex align-items-center">
-									<div>
-										<p class="mb-0">Comments</p>
-										<h4 class="my-1 text-danger">8569</h4>
-									</div>
-									<div class="text-danger ms-auto font-35"><i class="bx bx-comment-detail"></i>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div><!--end row-->
+<!-- body start -->
 
-				<div class="row">
-                   <div class="col-12 col-lg-8">
-                      <div class="card radius-10">
-						<div class="card-header">
-							<div class="d-flex align-items-center">
-								<div>
-									<h6 class="mb-0">Sales Overview</h6>
-								</div>
-								<div class="dropdown ms-auto">
-									<a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-									</a>
-									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="javascript:;">Action</a>
-										</li>
-										<li><a class="dropdown-item" href="javascript:;">Another action</a>
-										</li>
-										<li>
-											<hr class="dropdown-divider">
-										</li>
-										<li><a class="dropdown-item" href="javascript:;">Something else here</a>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						  <div class="card-body">
-							<div class="chart-container-0">
-								<canvas id="chart1"></canvas>
-							  </div>
-						  </div>
-					  </div>
-				   </div>
-				   <div class="col-12 col-lg-4">
-                       <div class="card radius-10">
-						<div class="card-header">
-							<div class="d-flex align-items-center">
-								<div>
-									<h6 class="mb-0">Trending Products</h6>
-								</div>
-								<div class="dropdown ms-auto">
-									<a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-									</a>
-									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="javascript:;">Action</a>
-										</li>
-										<li><a class="dropdown-item" href="javascript:;">Another action</a>
-										</li>
-										<li>
-											<hr class="dropdown-divider">
-										</li>
-										<li><a class="dropdown-item" href="javascript:;">Something else here</a>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						   <div class="card-body">
-							<div class="chart-container-0">
-								<canvas id="chart2"></canvas>
-							  </div>
-						   </div>
-					   </div>
-				   </div>
-				</div><!--end row-->
-				
+<body data-menu-color="light" data-sidebar="default">
 
-				 <div class="card radius-10">
-                         <div class="card-body">
-							<div class="d-flex align-items-center">
-								<div>
-									<h6 class="mb-0">Recent Orders</h6>
-								</div>
-								<div class="dropdown ms-auto">
-									<a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-									</a>
-									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="javascript:;">Action</a>
-										</li>
-										<li><a class="dropdown-item" href="javascript:;">Another action</a>
-										</li>
-										<li>
-											<hr class="dropdown-divider">
-										</li>
-										<li><a class="dropdown-item" href="javascript:;">Something else here</a>
-										</li>
-									</ul>
-								</div>
-							</div>
-						 <div class="table-responsive">
-						   <table class="table align-middle mb-0">
-							<thead class="table-light">
-							 <tr>
-							   <th>Product</th>
-							   <th>Photo</th>
-							   <th>Product ID</th>
-							   <th>Status</th>
-							   <th>Amount</th>
-							   <th>Date</th>
-							 </tr>
-							 </thead>
-							 <tbody><tr>
-							  <td>Iphone 5</td>
-							  <td><img src="assets/images/products/01.png" class="product-img-2" alt="product img"></td>
-							  <td>#9405822</td>
-							  <td><span class="badge bg-success text-white shadow-sm">Paid</span></td>
-							  <td>$1250.00</td>
-							  <td>03 Feb 2020</td>
-							 </tr>
-		  
-							 <tr>
-							  <td>Earphone GL</td>
-							  <td><img src="assets/images/products/02.png" class="product-img-2" alt="product img"></td>
-							  <td>#8304620</td>
-							  <td><span class="badge bg-info text-white shadow-sm">Pending</span></td>
-							  <td>$1500.00</td>
-							  <td>05 Feb 2020</td>
-							 </tr>
-		  
-							 <tr>
-							  <td>HD Hand Camera</td>
-							  <td><img src="assets/images/products/03.png" class="product-img-2" alt="product img"></td>
-							  <td>#4736890</td>
-							  <td><span class="badge bg-danger text-white shadow-sm">Failed</span></td>
-							  <td>$1400.00</td>
-							  <td>06 Feb 2020</td>
-							 </tr>
-		  
-							 <tr>
-							  <td>Clasic Shoes</td>
-							  <td><img src="assets/images/products/04.png" class="product-img-2" alt="product img"></td>
-							  <td>#8543765</td>
-							  <td><span class="badge bg-success text-white shadow-sm">Paid</span></td>
-							  <td>$1200.00</td>
-							  <td>14 Feb 2020</td>
-							 </tr>
-							 <tr>
-							  <td>Sitting Chair</td>
-							  <td><img src="assets/images/products/06.png" class="product-img-2" alt="product img"></td>
-							  <td>#9629240</td>
-							  <td><span class="badge bg-info text-white shadow-sm">Pending</span></td>
-							  <td>$1500.00</td>
-							  <td>18 Feb 2020</td>
-							 </tr>
-							 <tr>
-							  <td>Hand Watch</td>
-							  <td><img src="assets/images/products/05.png" class="product-img-2" alt="product img"></td>
-							  <td>#8506790</td>
-							  <td><span class="badge bg-danger text-white shadow-sm">Failed</span></td>
-							  <td>$1800.00</td>
-							  <td>21 Feb 2020</td>
-							 </tr>
-						    </tbody>
-						  </table>
-						  </div>
-						 </div>
-					  </div>
+    <!-- Begin page -->
+    <div id="app-layout">
 
-					  <div class="card radius-10 w-100">
-						<div class="card-header bg-transparent">
-							<div class="d-flex align-items-center">
-								<div>
-									<h6 class="mb-0">World Map</h6>
-								</div>
-								<div class="dropdown ms-auto">
-									<a class="dropdown-toggle dropdown-toggle-nocaret" href="#" data-bs-toggle="dropdown"><i class='bx bx-dots-horizontal-rounded font-22 text-option'></i>
-									</a>
-									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" href="javascript:;">Action</a>
-										</li>
-										<li><a class="dropdown-item" href="javascript:;">Another action</a>
-										</li>
-										<li>
-											<hr class="dropdown-divider">
-										</li>
-										<li><a class="dropdown-item" href="javascript:;">Something else here</a>
-										</li>
-									</ul>
-								</div>
-							</div>
-						   </div>
-						<div class="card-body">
-							<div id="geographic-map-2"></div>
-						 </div>
-					   </div>
 
-			</div>
-		</div>
-		<!--end page wrapper -->
-		<!--start overlay-->
-		<div class="overlay toggle-icon"></div>
-		<!--end overlay-->
-		<!--Start Back To Top Button-->
-		  <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
-		<!--End Back To Top Button-->
-		<footer class="page-footer">
-			<p class="mb-0">Copyright © 2021. All right reserved.</p>
-		</footer>
-	</div>
-	<!--end wrapper-->
-	
-	<!-- Bootstrap JS -->
-	<script src="assets/js/bootstrap.bundle.min.js"></script>
-	<!--plugins-->
-	<script src="assets/js/jquery.min.js"></script>
-	<script src="assets/plugins/simplebar/js/simplebar.min.js"></script>
-	<script src="assets/plugins/metismenu/js/metisMenu.min.js"></script>
-	<script src="assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
-	<script src="assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
-    <script src="assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
-	<script src="assets/plugins/chartjs/js/Chart.min.js"></script>
-	<script src="assets/js/index.js"></script>
-	<!--app JS-->
-	<script src="assets/js/app.js"></script>
+        <!-- Topbar Start -->
+        <div class="topbar-custom">
+            <div class="container-xxl">
+                <div class="d-flex justify-content-between">
+                    <ul class="list-unstyled topnav-menu mb-0 d-flex align-items-center">
+                        <li>
+                            <button class="button-toggle-menu nav-link ps-0">
+                                <i data-feather="menu" class="noti-icon"></i>
+                            </button>
+                        </li>
+                        <li class="d-none d-lg-block">
+                            <div class="position-relative topbar-search">
+                                <input type="text" class="form-control bg-light bg-opacity-75 border-light ps-4"
+                                    placeholder="Search...">
+                                <i
+                                    class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <ul class="list-unstyled topnav-menu mb-0 d-flex align-items-center">
+
+                        <li class="d-none d-sm-flex">
+                            <button type="button" class="btn nav-link" data-toggle="fullscreen">
+                                <i data-feather="maximize" class="align-middle fullscreen noti-icon"></i>
+                            </button>
+                        </li>
+
+                        <li class="dropdown notification-list topbar-dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                                aria-haspopup="false" aria-expanded="false">
+                                <i data-feather="bell" class="noti-icon"></i>
+                                <span class="badge bg-danger rounded-circle noti-icon-badge">9</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-lg">
+
+                                <!-- item-->
+                                <div class="dropdown-item noti-title">
+                                    <h5 class="m-0">
+                                        <span class="float-end">
+                                            <a href="#" class="text-dark">
+                                                <small>Clear All</small>
+                                            </a>
+                                        </span>Notification
+                                    </h5>
+                                </div>
+
+                                <div class="noti-scroll" data-simplebar>
+
+                                    <!-- item-->
+                                    <a href="javascript:void(0);"
+                                        class="dropdown-item notify-item text-muted link-primary active">
+                                        <div class="notify-icon">
+                                            <img src="assets/images/users/user-12.jpg" class="img-fluid rounded-circle"
+                                                alt="" />
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <p class="notify-details">Carl Steadham</p>
+                                            <small class="text-muted">5 min ago</small>
+                                        </div>
+                                        <p class="mb-0 user-msg">
+                                            <small class="fs-14">Completed <span class="text-reset">Improve workflow in
+                                                    Figma</span></small>
+                                        </p>
+                                    </a>
+
+                                    <!-- item-->
+                                    <a href="javascript:void(0);"
+                                        class="dropdown-item notify-item text-muted link-primary">
+                                        <div class="notify-icon">
+                                            <img src="assets/images/users/user-2.jpg" class="img-fluid rounded-circle"
+                                                alt="" />
+                                        </div>
+                                        <div class="notify-content">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <p class="notify-details">Olivia McGuire</p>
+                                                <small class="text-muted">1 min ago</small>
+                                            </div>
+
+                                            <div class="d-flex mt-2 align-items-center">
+                                                <div class="notify-sub-icon">
+                                                    <i class="mdi mdi-download-box text-dark"></i>
+                                                </div>
+
+                                                <div>
+                                                    <p class="notify-details mb-0">dark-themes.zip</p>
+                                                    <small class="text-muted">2.4 MB</small>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </a>
+
+                                    <!-- item-->
+                                    <a href="javascript:void(0);"
+                                        class="dropdown-item notify-item text-muted link-primary">
+                                        <div class="notify-icon">
+                                            <img src="assets/images/users/user-3.jpg" class="img-fluid rounded-circle"
+                                                alt="" />
+                                        </div>
+                                        <div class="notify-content">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <p class="notify-details">Travis Williams</p>
+                                                <small class="text-muted">7 min ago</small>
+                                            </div>
+                                            <p class="noti-mentioned p-2 rounded-2 mb-0 mt-2"><span
+                                                    class="text-primary">@Patryk</span> Please make sure that you're....
+                                            </p>
+                                        </div>
+                                    </a>
+
+                                    <!-- item-->
+                                    <a href="javascript:void(0);"
+                                        class="dropdown-item notify-item text-muted link-primary">
+                                        <div class="notify-icon">
+                                            <img src="assets/images/users/user-8.jpg" class="img-fluid rounded-circle"
+                                                alt="" />
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <p class="notify-details">Violette Lasky</p>
+                                            <small class="text-muted">5 min ago</small>
+                                        </div>
+                                        <p class="mb-0 user-msg">
+                                            <small class="fs-14">Completed <span class="text-reset">Create new
+                                                    components</span></small>
+                                        </p>
+                                    </a>
+
+                                    <!-- item-->
+                                    <a href="javascript:void(0);"
+                                        class="dropdown-item notify-item text-muted link-primary">
+                                        <div class="notify-icon">
+                                            <img src="assets/images/users/user-5.jpg" class="img-fluid rounded-circle"
+                                                alt="" />
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <p class="notify-details">Ralph Edwards</p>
+                                            <small class="text-muted">5 min ago</small>
+                                        </div>
+                                        <p class="mb-0 user-msg">
+                                            <small class="fs-14">Completed <span class="text-reset">Improve workflow in
+                                                    React</span></small>
+                                        </p>
+                                    </a>
+
+                                    <!-- item-->
+                                    <a href="javascript:void(0);"
+                                        class="dropdown-item notify-item text-muted link-primary">
+                                        <div class="notify-icon">
+                                            <img src="assets/images/users/user-6.jpg" class="img-fluid rounded-circle"
+                                                alt="" />
+                                        </div>
+                                        <div class="notify-content">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <p class="notify-details">Jocab jones</p>
+                                                <small class="text-muted">7 min ago</small>
+                                            </div>
+                                            <p class="noti-mentioned p-2 rounded-2 mb-0 mt-2"><span
+                                                    class="text-reset">@Patryk</span> Please make sure that you're....
+                                            </p>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <!-- All-->
+                                <a href="javascript:void(0);"
+                                    class="dropdown-item text-center text-primary notify-item notify-all">
+                                    View all
+                                    <i class="fe-arrow-right"></i>
+                                </a>
+
+                            </div>
+                        </li>
+
+                        <li class="dropdown notification-list topbar-dropdown">
+                            <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#"
+                                role="button" aria-haspopup="false" aria-expanded="false">
+                                <img src="assets/images/users/user-11.jpg" alt="user-image" class="rounded-circle">
+                                <span class="pro-user-name ms-1">
+                                    Christian <i class="mdi mdi-chevron-down"></i>
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
+                                <!-- item-->
+                                <div class="dropdown-header noti-title">
+                                    <h6 class="text-overflow m-0">Welcome !</h6>
+                                </div>
+
+                                <!-- item-->
+                                <a class='dropdown-item notify-item' href='pages-profile.html'>
+                                    <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
+                                    <span>My Account</span>
+                                </a>
+
+                                <!-- item-->
+                                <a class='dropdown-item notify-item' href='auth-lock-screen.html'>
+                                    <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
+                                    <span>Lock Screen</span>
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <!-- item-->
+                                <a class='dropdown-item notify-item' href='auth-logout.html'>
+                                    <i class="mdi mdi-location-exit fs-16 align-middle"></i>
+                                    <span>Logout</span>
+                                </a>
+
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- end Topbar -->
+
+        <!-- Left Sidebar Start -->
+        <div class="app-sidebar-menu">
+            <div class="h-100" data-simplebar>
+
+                <!--- Sidemenu -->
+                <div id="sidebar-menu">
+
+                    <div class="logo-box">
+                        <a class='logo logo-light' href='index.html'>
+                            <span class="logo-sm">
+                                <img src="assets/images/logo-sm.png" alt="" height="22">
+                            </span>
+                            <span class="logo-lg">
+                                <img src="assets/images/logo-light.png" alt="" height="24">
+                            </span>
+                        </a>
+                        <a class='logo logo-dark' href='index.html'>
+                            <span class="logo-sm">
+                                <img src="assets/images/logo-sm.png" alt="" height="22">
+                            </span>
+                            <span class="logo-lg">
+                                <img src="assets/images/logo-dark.png" alt="" height="24">
+                            </span>
+                        </a>
+                    </div>
+
+                    <ul id="side-menu">
+
+                        <li class="menu-title">Menu</li>
+
+                        <li>
+                            <a href="#sidebarDashboards" data-bs-toggle="collapse">
+                                <i data-feather="home"></i>
+                                <span> Dashboard </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarDashboards">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a class='tp-link' href='index.html'>Analytical</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ecommerce.html'>E-commerce</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <!-- <li>
+                                <a href="landing.html" target="_blank">
+                                    <i data-feather="globe"></i>
+                                    <span> Landing </span>
+                                </a>
+                            </li> -->
+
+                        <li class="menu-title">Pages</li>
+
+                        <li>
+                            <a href="#sidebarAuth" data-bs-toggle="collapse">
+                                <i data-feather="users"></i>
+                                <span> Authentication </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarAuth">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a class='tp-link' href='auth-login.html'>Log In</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='auth-register.html'>Register</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='auth-recoverpw.html'>Recover Password</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='auth-lock-screen.html'>Lock Screen</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='auth-confirm-mail.html'>Confirm Mail</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='email-verification.html'>Email Verification</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='auth-logout.html'>Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a href="#sidebarError" data-bs-toggle="collapse">
+                                <i data-feather="alert-octagon"></i>
+                                <span> Error Pages </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarError">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a class='tp-link' href='error-404'>Error 404</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='error-500.html'>Error 500</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='error-503.html'>Error 503</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='error-429.html'>Error 429</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='offline-page.html'>Offline Page</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a href="#sidebarExpages" data-bs-toggle="collapse">
+                                <i data-feather="file-text"></i>
+                                <span> Utility </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarExpages">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a class='tp-link' href='pages-starter.html'>Starter</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='pages-profile.html'>Profile</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='pages-pricing.html'>Pricing</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='pages-timeline.html'>Timeline</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='pages-invoice'>Invoice</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='pages-faqs.html'>FAQs</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='pages-gallery.html'>Gallery</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='pages-maintenance.html'>Maintenance</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='pages-coming-soon.html'>Coming Soon</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a class='tp-link' href='calendar'>
+                                <i data-feather="calendar"></i>
+                                <span> Calendar </span>
+                            </a>
+                        </li>
+
+                        <li class="menu-title mt-2">General</li>
+
+                        <li>
+                            <a href="#sidebarBaseui" data-bs-toggle="collapse">
+                                <i data-feather="package"></i>
+                                <span> Components </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarBaseui">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a class='tp-link' href='ui-accordions'>Accordions</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-alerts'>Alerts</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-badges.html'>Badges</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-breadcrumb'>Breadcrumb</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-buttons.html'>Buttons</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-cards.html'>Cards</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-collapse.html'>Collapse</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-dropdowns.html'>Dropdowns</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-video.html'>Embed Video</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-grid.html'>Grid</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-images.html'>Images</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-list.html'>List Group</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-modals.html'>Modals</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-placeholders'>Placeholders</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-pagination.html'>Pagination</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-popovers.html'>Popovers</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-progress.html'>Progress</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-scrollspy.html'>Scrollspy</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-spinners.html'>Spinners</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-tabs.html'>Tabs</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-tooltips.html'>Tooltips</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='ui-typography'>Typography</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a class='tp-link' href='widgets.html'>
+                                <i data-feather="aperture"></i>
+                                <span> Widgets </span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#sidebarAdvancedUI" data-bs-toggle="collapse">
+                                <i data-feather="cpu"></i>
+                                <span> Extended UI </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarAdvancedUI">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a class='tp-link' href='extended-carousel.html'>Carousel</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='extended-notifications.html'>Notifications</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='extended-offcanvas.html'>Offcanvas</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='extended-range-slider'>Range Slider</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a href="#sidebarIcons" data-bs-toggle="collapse">
+                                <i data-feather="award"></i>
+                                <span> Icons </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarIcons">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a class='tp-link' href='icons-feather.html'>Feather Icons</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='icons-mdi.html'>Material Design Icons</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a href="#sidebarForms" data-bs-toggle="collapse">
+                                <i data-feather="briefcase"></i>
+                                <span> Forms </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarForms">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a class='tp-link' href='forms-elements'>General Elements</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='forms-validation.html'>Validation</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='forms-quilljs.html'>Quilljs Editor</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='forms-pickers'>Picker</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a href="#sidebarTables" data-bs-toggle="collapse">
+                                <i data-feather="table"></i>
+                                <span> Tables </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarTables">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a class='tp-link' href='tables-basic.html'>Basic Tables</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='tables-datatables.html'>Data Tables</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a href="#sidebarCharts" data-bs-toggle="collapse">
+                                <i data-feather="pie-chart"></i>
+                                <span> Apex Charts </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarCharts">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a href='charts-line'>Line</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-area.html'>Area</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-column.html'>Column</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-bar.html'>Bar</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-mixed.html'>Mixed</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-timeline.html'>Timeline</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-rangearea.html'>Range Area</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-funnel.html'>Funnel</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-candlestick.html'>Candlestick</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-boxplot.html'>Boxplot</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-bubble.html'>Bubble</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-scatter'>Scatter</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-heatmap.html'>Heatmap</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-treemap.html'>Treemap</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-pie.html'>Pie</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-radialbar.html'>Radialbar</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-radar.html'>Radar</a>
+                                    </li>
+                                    <li>
+                                        <a href='charts-polararea.html'>Polar</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li>
+                            <a href="#sidebarMaps" data-bs-toggle="collapse">
+                                <i data-feather="map"></i>
+                                <span> Maps </span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="sidebarMaps">
+                                <ul class="nav-second-level">
+                                    <li>
+                                        <a class='tp-link' href='maps-google.html'>Google Maps</a>
+                                    </li>
+                                    <li>
+                                        <a class='tp-link' href='maps-vector.html'>Vector Maps</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </div>
+                <!-- End Sidebar -->
+
+                <div class="clearfix"></div>
+
+            </div>
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Start Content-->
+                <div class="container-xxl">
+
+                    <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+                        <div class="flex-grow-1">
+                            <h4 class="fs-18 fw-semibold m-0">Dashboard</h4>
+                        </div>
+                    </div>
+
+                    <!-- start row -->
+                    <div class="row">
+                        <div class="col-md-12 col-xl-12">
+                            <div class="row g-3">
+
+                                <div class="col-md-6 col-xl-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="fs-14 mb-1">Website Traffic</div>
+                                            </div>
+
+                                            <div class="d-flex align-items-baseline mb-2">
+                                                <div class="fs-22 mb-0 me-2 fw-semibold text-black">91.6K</div>
+                                                <div class="me-auto">
+                                                    <span class="text-primary d-inline-flex align-items-center">
+                                                        15%
+                                                        <i data-feather="trending-up" class="ms-1"
+                                                            style="height: 22px; width: 22px;"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div id="website-visitors" class="apex-charts"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-xl-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="fs-14 mb-1">Conversion rate</div>
+                                            </div>
+
+                                            <div class="d-flex align-items-baseline mb-2">
+                                                <div class="fs-22 mb-0 me-2 fw-semibold text-black">15%</div>
+                                                <div class="me-auto">
+                                                    <span class="text-danger d-inline-flex align-items-center">
+                                                        10%
+                                                        <i data-feather="trending-down" class="ms-1"
+                                                            style="height: 22px; width: 22px;"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div id="conversion-visitors" class="apex-charts"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-xl-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="fs-14 mb-1">Session duration</div>
+                                            </div>
+
+                                            <div class="d-flex align-items-baseline mb-2">
+                                                <div class="fs-22 mb-0 me-2 fw-semibold text-black">90 Sec</div>
+                                                <div class="me-auto">
+                                                    <span class="text-success d-inline-flex align-items-center">
+                                                        25%
+                                                        <i data-feather="trending-up" class="ms-1"
+                                                            style="height: 22px; width: 22px;"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div id="session-visitors" class="apex-charts"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-xl-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="fs-14 mb-1">Active Users</div>
+                                            </div>
+
+                                            <div class="d-flex align-items-baseline mb-2">
+                                                <div class="fs-22 mb-0 me-2 fw-semibold text-black">2,986</div>
+                                                <div class="me-auto">
+                                                    <span class="text-success d-inline-flex align-items-center">
+                                                        4%
+                                                        <i data-feather="trending-up" class="ms-1"
+                                                            style="height: 22px; width: 22px;"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div id="active-users" class="apex-charts"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end sales -->
+                    </div> <!-- end row -->
+
+                    <!-- Start Monthly Sales -->
+                    <div class="row">
+                        <div class="col-md-6 col-xl-8">
+                            <div class="card">
+
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                                        <div class="border border-dark rounded-2 me-2 widget-icons-sections">
+                                            <i data-feather="bar-chart" class="widgets-icons"></i>
+                                        </div>
+                                        <h5 class="card-title mb-0">Monthly Sales</h5>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <div id="monthly-sales" class="apex-charts"></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card overflow-hidden">
+
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                                        <div class="border border-dark rounded-2 me-2 widget-icons-sections">
+                                            <i data-feather="tablet" class="widgets-icons"></i>
+                                        </div>
+                                        <h5 class="card-title mb-0">Best Traffic Source</h5>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-traffic mb-0">
+                                            <tbody>
+                                                <thead>
+                                                    <tr>
+                                                        <th>Network</th>
+                                                        <th colspan="2">Visitors</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tr>
+                                                    <td>Instagram</td>
+                                                    <td>3,550</td>
+                                                    <td class="w-50">
+                                                        <div class="progress progress-md mt-0">
+                                                            <div class="progress-bar bg-danger" style="width: 80.0%">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Facebook</td>
+                                                    <td>1,245</td>
+                                                    <td class="w-50">
+                                                        <div class="progress progress-md mt-0">
+                                                            <div class="progress-bar bg-primary" style="width: 55.9%">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Twitter</td>
+                                                    <td>1,798</td>
+                                                    <td class="w-50">
+                                                        <div class="progress progress-md mt-0">
+                                                            <div class="progress-bar bg-secondary" style="width: 67.0%">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>YouTube</td>
+                                                    <td>986</td>
+                                                    <td class="w-50">
+                                                        <div class="progress progress-md mt-0">
+                                                            <div class="progress-bar bg-success" style="width: 38.72%">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Pinterest</td>
+                                                    <td>854</td>
+                                                    <td class="w-50">
+                                                        <div class="progress progress-md mt-0">
+                                                            <div class="progress-bar bg-danger" style="width: 45.08%">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Linkedin</td>
+                                                    <td>650</td>
+                                                    <td class="w-50">
+                                                        <div class="progress progress-md mt-0">
+                                                            <div class="progress-bar bg-warning" style="width: 68.0%">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>Nextdoor</td>
+                                                    <td>420</td>
+                                                    <td class="w-50">
+                                                        <div class="progress progress-md mt-0">
+                                                            <div class="progress-bar bg-info" style="width: 56.4%">
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Monthly Sales -->
+
+                    <div class="row">
+                        <div class="col-md-6 col-xl-6">
+                            <div class="card">
+
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                                        <div class="border border-dark rounded-2 me-2 widget-icons-sections">
+                                            <i data-feather="minus-square" class="widgets-icons"></i>
+                                        </div>
+                                        <h5 class="card-title mb-0">Audiences By Time Of Day</h5>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <div id="audiences-daily" class="apex-charts mt-n3"></div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-xl-6">
+                            <div class="card overflow-hidden">
+
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center">
+                                        <div class="border border-dark rounded-2 me-2 widget-icons-sections">
+                                            <i data-feather="table" class="widgets-icons"></i>
+                                        </div>
+                                        <h5 class="card-title mb-0">Most Visited Pages</h5>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-traffic mb-0">
+                                            <tbody>
+
+                                                <thead>
+                                                    <tr>
+                                                        <th>Page name</th>
+                                                        <th>Visitors</th>
+                                                        <th>Unique</th>
+                                                        <th colspan="2">Bounce rate</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tr>
+                                                    <td>
+                                                        /home
+                                                        <a href="#" class="ms-1" aria-label="Open website">
+                                                            <i data-feather="link" class="ms-1 text-primary"
+                                                                style="height: 15px; width: 15px;"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>5,896</td>
+                                                    <td>3,654</td>
+                                                    <td>82.54%</td>
+                                                    <td class="w-25">
+                                                        <div id="sparkline-bounce-1" class="apex-charts"></div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        /about.html
+                                                        <a href="#" class="ms-1" aria-label="Open website">
+                                                            <i data-feather="link" class="ms-1 text-primary"
+                                                                style="height: 15px; width: 15px;"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>3,898</td>
+                                                    <td>3,450</td>
+                                                    <td>76.29%</td>
+                                                    <td class="w-25">
+                                                        <div id="sparkline-bounce-2" class="apex-charts"></div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        /index.html
+                                                        <a href="#" class="ms-1" aria-label="Open website">
+                                                            <i data-feather="link" class="ms-1 text-primary"
+                                                                style="height: 15px; width: 15px;"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>3,057</td>
+                                                    <td>2,589</td>
+                                                    <td>72.68%</td>
+                                                    <td class="w-25">
+                                                        <div id="sparkline-bounce-3" class="apex-charts"></div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        /invoice.html
+                                                        <a href="#" class="ms-1" aria-label="Open website">
+                                                            <i data-feather="link" class="ms-1 text-primary"
+                                                                style="height: 15px; width: 15px;"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>867</td>
+                                                    <td>795</td>
+                                                    <td>44.78%</td>
+                                                    <td class="w-25">
+                                                        <div id="sparkline-bounce-4" class="apex-charts"></div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        /docs/
+                                                        <a href="#" class="ms-1" aria-label="Open website">
+                                                            <i data-feather="link" class="ms-1 text-primary"
+                                                                style="height: 15px; width: 15px;"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>958</td>
+                                                    <td>801</td>
+                                                    <td>41.15%</td>
+                                                    <td class="w-25">
+                                                        <div id="sparkline-bounce-5" class="apex-charts"></div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        /service.html
+                                                        <a href="#" class="ms-1" aria-label="Open website">
+                                                            <i data-feather="link" class="ms-1 text-primary"
+                                                                style="height: 15px; width: 15px;"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>658</td>
+                                                    <td>589</td>
+                                                    <td>32.65%</td>
+                                                    <td class="w-25">
+                                                        <div id="sparkline-bounce-6" class="apex-charts"></div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>
+                                                        /analytical.html
+                                                        <a href="#" class="ms-1" aria-label="Open website">
+                                                            <i data-feather="link" class="ms-1 text-primary"
+                                                                style="height: 15px; width: 15px;"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>457</td>
+                                                    <td>859</td>
+                                                    <td>32.65%</td>
+                                                    <td class="w-25">
+                                                        <div id="sparkline-bounce-7" class="apex-charts"></div>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div> <!-- container-fluid -->
+            </div> <!-- content -->
+
+            <!-- Footer Start -->
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col fs-13 text-muted text-center">
+                            &copy;
+                            <script>document.write(new Date().getFullYear())</script> - Made with <span
+                                class="mdi mdi-heart text-danger"></span> by <a href="#!"
+                                class="text-reset fw-semibold">Zoyothemes</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- end Footer -->
+
+        </div>
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <!-- Vendor -->
+    <script src="assets/libs/jquery/jquery.min.js"></script>
+    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="assets/libs/node-waves/waves.min.js"></script>
+    <script src="assets/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+    <script src="assets/libs/jquery.counterup/jquery.counterup.min.js"></script>
+    <script src="assets/libs/feather-icons/feather.min.js"></script>
+
+    <!-- Apexcharts JS -->
+    <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+
+    <!-- for basic area chart -->
+    <script src="../../../apexcharts.com/samples/assets/stock-prices.js"></script>
+
+    <!-- Widgets Init Js -->
+    <script src="assets/js/pages/analytics-dashboard.init.js"></script>
+
+    <!-- App js-->
+    <script src="assets/js/app.js"></script>
+
 </body>
+
+<!-- Mirrored from zoyothemes.com/tapeli/html/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 29 Nov 2024 12:42:48 GMT -->
 
 </html>

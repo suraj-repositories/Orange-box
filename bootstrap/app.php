@@ -20,9 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //
         $middleware->alias([
-            'admin' => App\Http\Middleware\IsAdmin::class,
-            'editor' => App\Http\Middleware\IsEditor::class,
-            'user' => App\Http\Middleware\IsUser::class,
+            'admin' => App\Http\Middleware\AdminMiddleware::class,
+            'editor' => App\Http\Middleware\EditorMiddleware::class,
+            'user' => App\Http\Middleware\UserMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
