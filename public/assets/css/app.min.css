@@ -17176,3 +17176,36 @@ body.loading {
     object-fit: cover;
     object-position: center;
 }
+
+.media-upload-preview .show,
+.media-upload-preview .rename,
+.media-upload-preview .delete{
+    font-size: 22px;
+    padding: 0 3px;
+    margin-top: 2px;
+    color: var(--bs-gray-700);
+    transition: all 0.5s ease;
+}
+.media-upload-preview .action a{
+    margin: 0;
+    padding: 0;
+}
+
+.media-upload-preview .show{
+    color: var(--bs-green);
+}
+.media-upload-preview .rename{
+    color: var(--bs-primary);
+}
+.media-upload-preview .delete{
+    color: var(--bs-danger);
+}
+.media-upload-preview .show:hover{
+    color: #0d982f;
+}
+.media-upload-preview .rename:hover{
+    color: #3a6bff;
+}
+.media-upload-preview .delete:hover{
+    color: #ff0000;
+}

@@ -94,9 +94,11 @@
                                                             <li><span class="text-muted">Size:</span> 512KB</li>
                                                         </ul>
 
-                                                        <i class='bx bx-show-alt'></i>
-                                                        <i class='bx bx-rename'></i>
-                                                        <i class='bx bx-trash-alt'></i>
+                                                        <a class="show" href="javascript:void()"  data-bs-toggle="tooltip" data-bs-title="View"><i class='bx bx-show-alt'></i></a>
+                                                        <a class="rename" href="javascript:void()" data-bs-toggle="tooltip" data-bs-title="Rename"><i class='bx bx-rename'></i></a>
+                                                        <a class="delete" href="javascript:void()"  data-bs-toggle="tooltip" data-bs-title="Delete"><i class='bx bx-trash-alt'></i></a>
+
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -158,9 +160,12 @@
                                                     <div class="type">JPEG</div>
                                                     <div class="size">200KB</div>
                                                     <div class="action">
-                                                        <i class='bx bx-show-alt'></i>
-                                                        <i class='bx bx-rename'></i>
-                                                        <i class='bx bx-trash-alt'></i>
+
+                                                        <a class="show" href="javascript:void()"  data-bs-toggle="tooltip" data-bs-title="View"><i class='bx bx-show-alt'></i></a>
+                                                        <a class="rename" href="javascript:void()" data-bs-toggle="tooltip" data-bs-title="Rename"><i class='bx bx-rename'></i></a>
+                                                        <a class="delete" href="javascript:void()"  data-bs-toggle="tooltip" data-bs-title="Delete"><i class='bx bx-trash-alt'></i></a>
+
+
                                                     </div>
                                                 </div>
                                             </div>

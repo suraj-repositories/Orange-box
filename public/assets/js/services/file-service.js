@@ -1,6 +1,35 @@
 
 class FileService {
     static #file = null;
+    static #extensions = [
+        "aac", "ai", "bmp", "cs", "css", "csv", "doc", "docx",
+        "exe", "gif", "heic", "html", "java", "jpg", "jpeg",
+        "js", "json", "jsx", "key", "m4p", "md", "mid", "mkv",
+        "mov", "mp3", "mp4", "otf", "pdf", "php", "png", "ppt",
+        "pptx", "psd", "py", "raw", "rb", "rtf", "sass", "scss",
+        "sh", "sql", "svg", "tar", "ttf", "txt",
+        "wav", "woff", "xls", "xlsx", "xml", "yml", "zip"
+    ];
+
+    static #bootstrapIcons = [
+        "bi-filetype-aac", "bi-filetype-ai", "bi-filetype-bmp", "bi-filetype-cs",
+        "bi-filetype-css", "bi-filetype-csv", "bi-filetype-doc", "bi-filetype-docx",
+        "bi-filetype-exe", "bi-filetype-gif", "bi-filetype-heic", "bi-filetype-html",
+        "bi-filetype-java", "bi-filetype-jpg", "bi-filetype-jpg", "bi-filetype-js",
+        "bi-filetype-json", "bi-filetype-jsx", "bi-filetype-key", "bi-filetype-m4p",
+        "bi-filetype-md", "bi-file-earmark-music", "bi-file-earmark-play", "bi-filetype-mov",
+        "bi-filetype-mp3", "bi-filetype-mp4", "bi-filetype-otf", "bi-filetype-pdf",
+        "bi-filetype-php", "bi-filetype-png", "bi-filetype-ppt", "bi-filetype-pptx",
+        "bi-filetype-psd", "bi-filetype-py", "bi-filetype-raw", "bi-filetype-rb",
+        "bi-file-earmark-text", "bi-filetype-sass", "bi-filetype-scss", "bi-filetype-sh",
+        "bi-filetype-sql", "bi-filetype-svg", "bi-file-zip",
+        "bi-filetype-ttf", "bi-filetype-txt", "bi-filetype-wav",
+        "bi-filetype-woff", "bi-filetype-xls", "bi-filetype-xlsx", "bi-filetype-xml",
+        "bi-filetype-yml", "bi-file-earmark-zip"
+    ];
+
+    static #defaultBootstrapIcon = "bi-file-earmark";
+
 
     constructor(file) {
         FileService.#file = file;
@@ -31,28 +60,59 @@ class FileService {
         }
     }
 
-    getName(file = FileService.#file){
+    getName(file = FileService.#file) {
         return file.name;
     }
 
-    getType(file = FileService.#file){
+    getType(file = FileService.#file) {
         return file.type;
     }
 
-    getExtension(file=FileService.#file){
+    getExtension(file = FileService.#file) {
 
         const name = this.getName(file);
-        if(name.indexOf('.') > -1){
+        if (name.indexOf('.') > -1) {
             return name.substring(name.lastIndexOf('.') + 1).toUpperCase();
         }
         const type = this.getType(file);
-        if(type == ""){
+        if (type == "") {
             return "-";
         }
         return type.substring(type.lastIndexOf('/') + 1).toUpperCase();
 
     }
 
+    getIconFromExtension(extension) {
+        const index = FileService.#extensions.indexOf(extension);
+        if (index > -1) {
+            return FileService.#bootstrapIcons[index];
+        }
+        return FileService.#defaultBootstrapIcon;
+    }
 
+    getAllAvailableIcons() {
+
+        FileService.#bootstrapIcons.push(FileService.#defaultBootstrapIcon);
+        return FileService.#bootstrapIcons;
+
+    }
+
+    setImageOnView(file, img) {
+        if (file) {
+            const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
+            const fileName = file.name;
+            const extension = this.getExtension(file);
+
+            img.src = '/assets/images/svg/loading-placeholder-100.svg'
+            if (allowedExtensions.includes(extension)) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                }
+
+                reader.readAsDataURL(file);
+            }
+        }
+    }
 
 }
