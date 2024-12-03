@@ -1,7 +1,16 @@
 <?php
 
+use App\Http\Controllers\User\DailyDigestController;
+use App\Http\Controllers\User\DashboardController;
 use Illuminate\Support\Facades\Route;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
-Route::get('dashboard', function(){
-    dd('user submit');
-})->name('dashboard');
+Route::controller(DashboardController::class)->group(function(){
+    Route::get('dashboard', 'index')->name('dashboard');
+});
+
+Route::controller(DailyDigestController::class)->group(function(){
+    Route::get('daily-digest', 'index')->name('daily-digest');
+    Route::get('daily-digest/create', 'create')->name('daily-digest.create');
+    Route::post('daily-digest', 'store')->name('daily-digest.store');
+});

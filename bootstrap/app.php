@@ -11,10 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
             then: function(){
-                Route::namespace('Auth')->middleware(['web'])->group(base_path('routes/auth.php'));
-                Route::namespace('Admin')->middleware(['web', 'admin'])->prefix('admin')->name('admin.')->group(base_path('routes/admin.php'));
-                Route::namespace('Editor')->middleware(['web', 'editor'])->prefix('e/{userid}')->name('editor.')->group(base_path('routes/editor.php'));
-                Route::namespace('User')->middleware(['web', 'user'])->prefix('u/{userid}')->name('user.')->group(base_path('routes/user.php'));
+                Route::middleware(['web'])->group(base_path('routes/auth.php'));
+                Route::middleware(['web', 'admin'])->prefix('admin')->name('admin.')->group(base_path('routes/admin.php'));
+                Route::middleware(['web', 'editor'])->prefix('e/{userid?}')->name('editor.')->group(base_path('routes/editor.php'));
+                Route::middleware(['web', 'user'])->prefix('u/{userid?}')->name('user.')->group(base_path('routes/user.php'));
             },
     )
     ->withMiddleware(function (Middleware $middleware) {
@@ -23,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => App\Http\Middleware\AdminMiddleware::class,
             'editor' => App\Http\Middleware\EditorMiddleware::class,
             'user' => App\Http\Middleware\UserMiddleware::class,
+
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

@@ -1,4 +1,4 @@
-@extends('layout/layout')
+@extends('layout/auth_layout')
 @section('title', Route::is('login') ? 'Login' : '🟢🟢🟢')
 
 @section('content')

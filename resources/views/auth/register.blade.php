@@ -1,4 +1,4 @@
-@extends('layout/layout')
+@extends('layout/auth_layout')
 @section('title', Route::is('register') ? 'Sign Up' : '🟢🟢🟢')
 
 @section('content')
@@ -17,12 +17,12 @@
                                 </div>
 
                                 <div class="pt-0">
-                                    <form method="post" action="{{route('register')}}" class="my-4">
+                                    <form method="post" action="{{ route('register') }}" class="my-4">
                                         @csrf
                                         <div class="form-group mb-3">
                                             <label for="username" class="form-label">Username</label>
                                             <input class="form-control" name="username" type="text" id="username"
-                                              placeholder="Enter your Username">
+                                                placeholder="Enter your Username">
                                         </div>
 
                                         <div class="form-group mb-3">
@@ -33,7 +33,7 @@
 
                                         <div class="form-group mb-3">
                                             <label for="password" class="form-label">Password</label>
-                                            <input class="form-control" type="password" name="password"  id="password"
+                                            <input class="form-control" type="password" name="password" id="password"
                                                 placeholder="Enter your password">
                                         </div>
 
@@ -61,7 +61,7 @@
 
                                     <div class="text-center text-muted mb-4">
                                         <p class="mb-0">Already have an account ?<a class='text-primary ms-2 fw-medium'
-                                                href='auth-login.html'>Login here</a></p>
+                                                href='{{ route('login') }}'>Login here</a></p>
                                     </div>
 
                                     <div class="row">
