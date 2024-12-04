@@ -8,7 +8,7 @@ class FileService {
         "mov", "mp3", "mp4", "otf", "pdf", "php", "png", "ppt",
         "pptx", "psd", "py", "raw", "rb", "rtf", "sass", "scss",
         "sh", "sql", "svg", "tar", "ttf", "txt",
-        "wav", "woff", "xls", "xlsx", "xml", "yml", "zip"
+        "wav", "woff", "xls", "xlsx", "xml", "yml", "zip", "rar"
     ];
 
     static #bootstrapIcons = [
@@ -25,7 +25,7 @@ class FileService {
         "bi-filetype-sql", "bi-filetype-svg", "bi-file-zip",
         "bi-filetype-ttf", "bi-filetype-txt", "bi-filetype-wav",
         "bi-filetype-woff", "bi-filetype-xls", "bi-filetype-xlsx", "bi-filetype-xml",
-        "bi-filetype-yml", "bi-file-earmark-zip"
+        "bi-filetype-yml", "bi-file-earmark-zip", "bi-file-zip-fill"
     ];
 
     static #defaultBootstrapIcon = "bi-file-earmark";
@@ -83,7 +83,7 @@ class FileService {
     }
 
     getIconFromExtension(extension) {
-        const index = FileService.#extensions.indexOf(extension);
+        const index = FileService.#extensions.indexOf(extension.toLowerCase());
         if (index > -1) {
             return FileService.#bootstrapIcons[index];
         }
@@ -97,22 +97,24 @@ class FileService {
 
     }
 
-    setImageOnView(file, img) {
-        if (file) {
-            const allowedExtensions = ["jpg", "jpeg", "png", "gif"];
-            const fileName = file.name;
-            const extension = this.getExtension(file);
+    setImageOnView(file = FileService.#file, img) {
 
-            img.src = '/assets/images/svg/loading-placeholder-100.svg'
-            if (allowedExtensions.includes(extension)) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    img.src = e.target.result;
-                }
+        const allowedExtensions = ["jpg", "jpeg", "png", "gif", "svg", "webp", "ico"];
+        const fileName = file.name;
+        const extension = this.getExtension(file).toLowerCase();
 
-                reader.readAsDataURL(file);
+        img.src = '/assets/images/svg/loading-placeholder-100.svg'
+        if (allowedExtensions.includes(extension)) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result;
             }
+
+            reader.readAsDataURL(file);
+            return true;
         }
+        return false;
+
     }
 
 }

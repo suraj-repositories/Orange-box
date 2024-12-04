@@ -17087,7 +17087,7 @@ body.loading {
     display: flex;
     width: 100%;
     align-items: center;
-    padding: 10px 20px;
+    padding: 8px 20px;
 }
 .media-upload-preview .card{
     margin-bottom: 7px !important;
@@ -17103,6 +17103,7 @@ body.loading {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 22px;
 }
 .horizontal-viewer .name{
     width: 60%;
@@ -17159,7 +17160,7 @@ body.loading {
     width: 80px;
     height: 80px;
 }
-.file-thumb-box .bx{
+.file-thumb-box i{
     font-size: 40px;
 }
 
@@ -17180,12 +17181,15 @@ body.loading {
 .media-upload-preview .show,
 .media-upload-preview .rename,
 .media-upload-preview .delete{
-    font-size: 22px;
-    padding: 0 3px;
+    font-size: 18px;
+    padding: 0 1px;
     margin-top: 2px;
     color: var(--bs-gray-700);
+    display: flex;
+    align-items: center;
     transition: all 0.5s ease;
 }
+
 .media-upload-preview .action a{
     margin: 0;
     padding: 0;
@@ -17208,4 +17212,54 @@ body.loading {
 }
 .media-upload-preview .delete:hover{
     color: #ff0000;
+}
+.file-thumb-holder .hover-actions,
+.image-cards .img-container .hover-actions{
+    display: none;
+}
+.file-thumb-holder:hover .hover-actions,
+.image-cards .img-container:hover .hover-actions{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    gap: 5px;
+    animation: forwards 0.5s smoothColorChange;
+}
+@keyframes smoothColorChange{
+    0%{
+        background-color: hsla(0, 0, 0, 0);
+    }
+    100%{
+        background-color: #48484873;
+    }
+}
+
+.file-thumb-holder:hover .hover-actions a,
+.image-cards .img-container:hover .hover-actions a{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    background: white;
+    border-radius: 50%;
+    margin-top: 30px;
+    animation: forwards 0.3s slideup;
+
+}
+@keyframes slideup{
+    0%{
+        margin-top: 30px;
+    }
+    100%{
+        margin-top: 0px;
+
+    }
 }

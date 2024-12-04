@@ -76,141 +76,106 @@
 
 
                                         <div id="card-view-container"
-                                            class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 media-upload-preview image-cards">
-                                            <div class="col">
-                                                <div class="card h-100">
+                                            class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5 row-cols-xxl-6 g-3 media-upload-preview image-cards">
+                                            {{--
+                                                <div class="col">
+                                                    <div class="card h-100">
 
-                                                    <div class="file-thumb-holder">
-                                                        <div class="file-thumb-box">
-                                                            <i class="bx bxs-file"></i>
+                                                        <div class="file-thumb-holder">
+                                                            <div class="file-thumb-box">
+                                                                <i class="bx bxs-file"></i>
+                                                            </div>
+
+                                                            <div class="hover-actions">
+                                                                <a class="show" href="javascript:void()"
+                                                                    data-bs-toggle="tooltip" data-bs-title="View">
+                                                                    <i class='bx bx-show-alt'></i>
+                                                                </a>
+                                                                <a class="rename" href="javascript:void()"
+                                                                    data-bs-toggle="tooltip" data-bs-title="Rename">
+                                                                    <i class='bx bx-rename'></i>
+                                                                </a>
+                                                                <a class="delete" href="javascript:void()"
+                                                                    data-bs-toggle="tooltip" data-bs-title="Delete">
+                                                                    <i class='bx bx-trash-alt'></i>
+                                                                </a>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card-body">
+                                                            <h5 class="card-title text-truncate">
+                                                                EAadhaar_2728208020303320241102094945_07112024145514 (1)</h5>
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li><span class="text-muted">Type:</span> Text</li>
+                                                                <li><span class="text-muted">Size:</span> 512KB</li>
+                                                            </ul>
+
+
+
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="card h-100">
+                                                        <div class="img-container">
+                                                            <img src="https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg"
+                                                                alt="Image" />
+                                                            <div class="hover-actions">
+                                                                <a class="show" href="javascript:void()"
+                                                                    data-bs-toggle="tooltip" data-bs-title="View">
+                                                                    <i class='bx bx-show-alt'></i>
+                                                                </a>
+                                                                <a class="rename" href="javascript:void()"
+                                                                    data-bs-toggle="tooltip" data-bs-title="Rename">
+                                                                    <i class='bx bx-rename'></i>
+                                                                </a>
+                                                                <a class="delete" href="javascript:void()"
+                                                                    data-bs-toggle="tooltip" data-bs-title="Delete">
+                                                                    <i class='bx bx-trash-alt'></i>
+                                                                </a>
 
-                                                    <div class="card-body">
-                                                        <h5 class="card-title text-truncate">
-                                                            EAadhaar_2728208020303320241102094945_07112024145514 (1)</h5>
-                                                        <ul class="list-unstyled mb-0">
-                                                            <li><span class="text-muted">Type:</span> Text</li>
-                                                            <li><span class="text-muted">Size:</span> 512KB</li>
-                                                        </ul>
+                                                            </div>
+                                                        </div>
 
-                                                        <a class="show" href="javascript:void()"  data-bs-toggle="tooltip" data-bs-title="View"><i class='bx bx-show-alt'></i></a>
-                                                        <a class="rename" href="javascript:void()" data-bs-toggle="tooltip" data-bs-title="Rename"><i class='bx bx-rename'></i></a>
-                                                        <a class="delete" href="javascript:void()"  data-bs-toggle="tooltip" data-bs-title="Delete"><i class='bx bx-trash-alt'></i></a>
-
-
+                                                        <div class="card-body">
+                                                            <h5 class="card-title">Card title</h5>
+                                                            <ul class="list-unstyled mb-0">
+                                                                <li><span class="text-muted">Type:</span> Text</li>
+                                                                <li><span class="text-muted">Size:</span> 512KB</li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="card h-100">
-
-                                                    <div class="img-container">
-                                                        <img src="https://placehold.co/100" alt="Image" />
-                                                    </div>
-
-
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">Card title</h5>
-                                                        <ul class="list-unstyled mb-0">
-                                                            <li><span class="text-muted">Type:</span> Text</li>
-                                                            <li><span class="text-muted">Size:</span> 512KB</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="card h-100">
-                                                    <div class="img-container">
-                                                        <img src="https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg"
-                                                            alt="Image" />
-                                                    </div>
-
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">Card title</h5>
-                                                        <ul class="list-unstyled mb-0">
-                                                            <li><span class="text-muted">Type:</span> Text</li>
-                                                            <li><span class="text-muted">Size:</span> 512KB</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="card h-100">
-                                                    <div class="img-container">
-                                                        <img src="https://placehold.co/100" alt="Image" />
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <h5 class="card-title">Card title</h5>
-                                                        <ul class="list-unstyled mb-0">
-                                                            <li><span class="text-muted">Type:</span> Text</li>
-                                                            <li><span class="text-muted">Size:</span> 512KB</li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            --}}
                                         </div>
 
                                         <div id="list-view-container" class="media-upload-preview mt-3 ">
-                                            <div class="card border-0 rounded-0">
-                                                <div class="horizontal-viewer">
-                                                    <div class="icon"><i class='bx bxs-file-jpg'></i></div>
-                                                    <div class="name text-truncate">
-                                                        EAadhaar_2728208020303320241102094945_07112024145514.jpg</div>
-                                                    <div class="type">JPEG</div>
-                                                    <div class="size">200KB</div>
-                                                    <div class="action">
+                                            {{--
+                                                <div class="card border-0 rounded-0">
+                                                    <div class="horizontal-viewer">
+                                                        <div class="icon"><i class="bi bi-file-earmark-code"></i></div>
+                                                        <div class="name text-truncate">
+                                                            EAadhaar_2728208020303320241102094945_07112024145514.jpg</div>
+                                                        <div class="type">JPEG</div>
+                                                        <div class="size">200KB</div>
+                                                        <div class="action">
 
-                                                        <a class="show" href="javascript:void()"  data-bs-toggle="tooltip" data-bs-title="View"><i class='bx bx-show-alt'></i></a>
-                                                        <a class="rename" href="javascript:void()" data-bs-toggle="tooltip" data-bs-title="Rename"><i class='bx bx-rename'></i></a>
-                                                        <a class="delete" href="javascript:void()"  data-bs-toggle="tooltip" data-bs-title="Delete"><i class='bx bx-trash-alt'></i></a>
+                                                            <a class="show" href="javascript:void()"
+                                                                data-bs-toggle="tooltip" data-bs-title="View"><i
+                                                                    class='bx bx-show-alt'></i></a>
+                                                            <a class="rename" href="javascript:void()"
+                                                                data-bs-toggle="tooltip" data-bs-title="Rename"><i
+                                                                    class='bx bx-rename'></i></a>
+                                                            <a class="delete" href="javascript:void()"
+                                                                data-bs-toggle="tooltip" data-bs-title="Delete"><i
+                                                                    class='bx bx-trash-alt'></i></a>
 
 
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="card border-0 rounded-0">
-                                                <div class="horizontal-viewer">
-                                                    <div class="icon"><i class='bx bxs-file-jpg'></i></div>
-                                                    <div class="name">
-                                                        EAadhaar_2728208020303320241102094945_07112024145514.jpg</div>
-                                                    <div class="type">JPEG</div>
-                                                    <div class="size">200KB</div>
-                                                    <div class="action">
-                                                        <i class='bx bx-show-alt'></i>
-                                                        <i class='bx bx-rename'></i>
-                                                        <i class='bx bx-trash-alt'></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card border-0 rounded-0">
-                                                <div class="horizontal-viewer">
-                                                    <div class="icon"><i class='bx bxs-file-jpg'></i></div>
-                                                    <div class="name">
-                                                        EAadhaar_2728208020303320241102094945_07112024145514.jpg</div>
-                                                    <div class="type">JPEG</div>
-                                                    <div class="size">200KB</div>
-                                                    <div class="action">
-                                                        <i class='bx bx-show-alt'></i>
-                                                        <i class='bx bx-rename'></i>
-                                                        <i class='bx bx-trash-alt'></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="card border-0 rounded-0">
-                                                <div class="horizontal-viewer">
-                                                    <div class="icon"><i class='bx bxs-file-jpg'></i></div>
-                                                    <div class="name">
-                                                        EAadhaar_2728208020303320241102094945_07112024145514.jpg</div>
-                                                    <div class="type">JPEG</div>
-                                                    <div class="size">200KB</div>
-                                                    <div class="action">
-                                                        <i class='bx bx-show-alt'></i>
-                                                        <i class='bx bx-rename'></i>
-                                                        <i class='bx bx-trash-alt'></i>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            --}}
                                         </div>
 
 

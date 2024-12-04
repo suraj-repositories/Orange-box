@@ -1,3 +1,11 @@
+let MEDIA_FILES = [];
+
+let fileService = null;
+
+document.addEventListener('DOMContentLoaded',function(){
+    fileService = new FileService();
+});
+
 
 // ------------------------------------------------------
 // show grid and list view
@@ -28,58 +36,132 @@ function showView(view = 'card'){
 // ------------------------------------------------------
 // add selected files to card logic
 // ------------------------------------------------------
-let mediaFiles = [];
+
+
 
 document.querySelector("#media-input").addEventListener('change', (event)=>{
-    let file = event.target.files[0];
-    console.log(file);
-    let fileService = new FileService();
+    event.target.files.forEach(file => {
+        MEDIA_FILES.push(file);
 
-    let imageCard = `<div class="col">
-                        <div class="card h-100">
-                            <div class="img-container">
-                                <img src="https://placehold.co/100" alt="Image" />
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <ul class="list-unstyled mb-0">
-                                    <li><span class="text-muted">Type:</span> Text</li>
-                                    <li><span class="text-muted">Size:</span> 512KB</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>`;
-    let iconCard = `<div class="col">
-                        <div class="card h-100">
-                            <div class="file-thumb-holder">
-                                <div class="file-thumb-box">
-                                    <i class="bx bxs-file"></i>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title text-truncate">
-                                    EAadhaar_2728208020303320241102094945_07112024145514 (1)</h5>
-                                <ul class="list-unstyled mb-0">
-                                    <li><span class="text-muted">Type:</span> Text</li>
-                                    <li><span class="text-muted">Size:</span> 512KB</li>
-                                </ul>
-                                <i class='bx bx-show-alt'></i>
-                                <i class='bx bx-rename'></i>
-                                <i class='bx bx-trash-alt'></i>
+        updateCardsView(file);
+        updateListView(file);
+
+    });
+});
+
+function updateListView(file){
+    let listRowHTML = `<div class="card border-0 rounded-0 list-row-card" data-media-files-index="${MEDIA_FILES.length - 1}">
+                        <div class="horizontal-viewer">
+                            <div class="icon"><i class="bi ${fileService.getIconFromExtension(fileService.getExtension(file))}"></i></div>
+                            <div class="name text-truncate">${fileService.getName(file)}</div>
+                            <div class="type">${fileService.getExtension(file)}</div>
+                            <div class="size">${fileService.getSize(file)}</div>
+                            <div class="action">
+                                <a class="show" href="javascript:void(0)"
+                                    data-bs-toggle="tooltip" data-bs-title="View"><i
+                                        class='bx bx-show-alt'></i></a>
+                                <a class="rename" href="javascript:void(0)"
+                                    data-bs-toggle="tooltip" data-bs-title="Rename"><i
+                                        class='bx bx-rename'></i></a>
+                                <a class="delete delete-list-item" href="javascript:void(0)"
+                                    data-bs-toggle="tooltip" data-bs-title="Delete" ><i
+                                        class='bx bx-trash-alt'></i></a>
                             </div>
                         </div>
                     </div>`;
 
-    // const filesize = fileService.getSize(file);
-    let iconClasses = fileService.getAllAvailableIcons();
-    let icons = "";
-    iconClasses.forEach(element => {
-        icons += `<i class="bi ${element}"></i>`;
+    let listRow = document.createRange().createContextualFragment(listRowHTML).firstElementChild;
+    listRow.querySelector('.delete-list-item').addEventListener('click', function(){
+        listRow.remove();
+        let indexToRemove = parseInt(listRow.getAttribute("data-media-files-index"));
+        if (indexToRemove > -1 && indexToRemove < MEDIA_FILES.length) {
+            MEDIA_FILES.splice(indexToRemove, 1);
+
+
+            // HERE YOU forget when items is deleted the index should decresed....
+        }
+
+        console.log(MEDIA_FILES);
     });
 
-    document.getElementById('card-view-container').innerHTML = icons;
-    console.log('the file size is : ' + icons);
-});
+    listViewContainer.appendChild(listRow);
+
+}
+
+function updateCardsView(file){
+    let imageCardHTML = `<div class="col">
+        <div class="card h-100">
+        <div class="img-container">
+            <img src=".." alt="Image" />
+            <div class="hover-actions">
+                <a class="show" href="javascript:void(0)"
+                    data-bs-toggle="tooltip" data-bs-title="View">
+                    <i class='bx bx-show-alt'></i>
+                </a>
+                <a class="rename" href="javascript:void(0)"
+                    data-bs-toggle="tooltip" data-bs-title="Rename">
+                    <i class='bx bx-rename'></i>
+                </a>
+                <a class="delete" href="javascript:void(0)"
+                    data-bs-toggle="tooltip" data-bs-title="Delete">
+                    <i class='bx bx-trash-alt'></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">${fileService.getName(file)}</h5>
+            <ul class="list-unstyled mb-0">
+                <li><span class="text-muted">Type:</span> ${fileService.getExtension(file)}</li>
+                <li><span class="text-muted">Size:</span> ${fileService.getSize(file)}</li>
+            </ul>
+        </div>
+        </div>
+    </div>`;
+
+    let iconCardHTML = ` <div class="col">
+    <div class="card h-100">
+        <div class="file-thumb-holder">
+            <div class="file-thumb-box">
+                <i class="bi ${fileService.getIconFromExtension(fileService.getExtension(file))}"></i>
+            </div>
+            <div class="hover-actions">
+                <a class="show" href="javascript:void(0)"
+                    data-bs-toggle="tooltip" data-bs-title="View">
+                    <i class='bx bx-show-alt'></i>
+                </a>
+                <a class="rename" href="javascript:void(0)"
+                    data-bs-toggle="tooltip" data-bs-title="Rename">
+                    <i class='bx bx-rename'></i>
+                </a>
+                <a class="delete" href="javascript:void(0)"
+                    data-bs-toggle="tooltip" data-bs-title="Delete">
+                    <i class='bx bx-trash-alt'></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title text-truncate">${fileService.getName(file)}</h5>
+            <ul class="list-unstyled mb-0">
+                <li><span class="text-muted">Type:</span> ${fileService.getExtension(file)}</li>
+                <li><span class="text-muted">Size:</span> ${fileService.getSize(file)}</li>
+            </ul>
+            </div>
+    </div>
+    </div>`;
+
+    let iconCard = document.createRange().createContextualFragment(iconCardHTML).firstElementChild;
+    let imageCard = document.createRange().createContextualFragment(imageCardHTML).firstElementChild;
+
+
+    if(fileService.setImageOnView(file, imageCard.querySelector('img'))){
+        cardViewContainer.appendChild(imageCard);
+    }else{
+        console.log(iconCard);
+        cardViewContainer.appendChild(iconCard);
+    }
+
+}
+
 
 
 
