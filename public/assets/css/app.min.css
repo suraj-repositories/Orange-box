@@ -17127,8 +17127,11 @@ body.loading {
     gap: 5px;
 }
 @media(max-width: 730px){
-    .horizontal-viewer{
+    .list-view-container{
         display: none;
+    }
+    .card-view-container.hide{
+        display: flex !important;
     }
     .hide-lt-730{
         display: none;

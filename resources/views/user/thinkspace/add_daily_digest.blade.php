@@ -32,52 +32,64 @@
                             </div><!-- end card header -->
 
                             <div class="card-body">
-                                <div class="row">
-                                    <div class="col col-12 col-md-6">
-                                        <label for="title-input" class="form-label">Title</label>
+                                <form action="" method="POST" enctype="multipart/form-data" id="add-digest-form">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col col-12 col-md-6">
+                                            <label for="title-input" class="form-label">Title</label>
 
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="basic-addon1"> <i
-                                                    class="bi bi-journal-bookmark-fill"></i> </span>
-                                            <input type="text" class="form-control" placeholder="Username"
-                                                id="title-input">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1"> <i
+                                                        class="bi bi-journal-bookmark-fill"></i> </span>
+                                                <input type="text" class="form-control" placeholder="Enter title"
+                                                    id="title-input">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col col-12 col-md-6"></div>
-                                    <div class="col col-12 col-md-12">
-                                        <label for="title-input" class="form-label">Content</label>
+                                        <div class="col col-12 col-md-6">
+                                            <label for="sub-title-input" class="form-label">Sub-title</label>
 
-                                        <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3"></textarea>
-                                    </div>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="bi bi-list-nested"></i> </span>
+                                                <input type="text" class="form-control" placeholder="Enter sub-title"
+                                                    id="sub-title-input">
+                                            </div>
+                                        </div>
+                                        <div class="col col-12 col-md-12">
+                                            <label for="title-input" class="form-label">Content</label>
 
-                                    <div class="col col-md-12 mt-3">
-                                        <label for="title-input" class="form-label">Media</label>
-                                        <br>
-                                        <input type="file" class="hide" id="media-input" multiple>
+                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3"></textarea>
+                                        </div>
 
-                                        <div class="d-flex align-items-center justify-content-between  mb-2">
-                                            <label class="btn btn-primary d-flex align-items-center w-fit"
-                                                for="media-input">
-                                                <i class="bi bi-file-earmark-plus fw-semibold me-1"></i>
-                                                Add Media
-                                            </label>
-                                            <div class="btn-group-horizontal grid-list hide-lt-730" role="group"\>
-                                                <input type="radio" class="btn-check" name="hbtn-radio" id="card-radio"
-                                                    autocomplete="off" checked>
-                                                <label class="btn btn-outline-primary" for="card-radio"><i
-                                                        class='bx bx-grid-alt'></i></label>
-                                                <input type="radio" class="btn-check" name="hbtn-radio" id="list-radio"
-                                                    autocomplete="off">
-                                                <label class="btn btn-outline-primary" for="list-radio"><i
-                                                        class='bx bx-list-ul'></i></label>
+                                        <div class="col col-md-12 mt-3">
+                                            <label for="title-input" class="form-label">Media</label>
+                                            <br>
+                                            <input type="file" class="hide" name="media-files" id="media-input" multiple>
+
+                                            <div class="d-flex align-items-center justify-content-between  mb-2">
+                                                <label class="btn btn-primary d-flex align-items-center w-fit"
+                                                    for="media-input">
+                                                    <i class="bi bi-file-earmark-plus fw-semibold me-1"></i>
+                                                    Add Media
+                                                </label>
+                                                <div class="btn-group-horizontal grid-list hide-lt-730 hide"
+                                                    id="card-list-tab-toggler" role="group"\>
+                                                    <input type="radio" class="btn-check" name="hbtn-radio"
+                                                        id="card-radio" autocomplete="off" checked>
+                                                    <label class="btn btn-outline-primary" for="card-radio"><i
+                                                            class='bx bx-grid-alt'></i></label>
+                                                    <input type="radio" class="btn-check" name="hbtn-radio"
+                                                        id="list-radio" autocomplete="off">
+                                                    <label class="btn btn-outline-primary" for="list-radio"><i
+                                                            class='bx bx-list-ul'></i></label>
+                                                </div>
+
                                             </div>
 
-                                        </div>
 
-
-                                        <div id="card-view-container"
-                                            class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5 row-cols-xxl-6 g-3 media-upload-preview image-cards">
-                                            {{--
+                                            <div id="card-view-container"
+                                                class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5 row-cols-xxl-6 g-3 media-upload-preview image-cards card-view-container">
+                                                {{--
                                                 <div class="col">
                                                     <div class="card h-100">
 
@@ -148,10 +160,11 @@
                                                     </div>
                                                 </div>
                                             --}}
-                                        </div>
+                                            </div>
 
-                                        <div id="list-view-container" class="media-upload-preview mt-3 ">
-                                            {{--
+                                            <div id="list-view-container"
+                                                class="media-upload-preview mt-3 list-view-container">
+                                                {{--
                                                 <div class="card border-0 rounded-0">
                                                     <div class="horizontal-viewer">
                                                         <div class="icon"><i class="bi bi-file-earmark-code"></i></div>
@@ -176,16 +189,16 @@
                                                     </div>
                                                 </div>
                                             --}}
+                                            </div>
+
+
                                         </div>
 
-
+                                        <div class="mt-2">
+                                            <button class="btn btn-primary mt-2">Submit</button>
+                                        </div>
                                     </div>
-
-                                    <div class="mt-2">
-                                        <button class="btn btn-primary">Submit</button>
-                                    </div>
-                                </div>
-
+                                </form>
                             </div>
 
                         </div>

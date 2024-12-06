@@ -2,7 +2,7 @@ let MEDIA_FILES = [];
 
 let fileService = null;
 
-document.addEventListener('DOMContentLoaded',function(){
+document.addEventListener('DOMContentLoaded', function () {
     fileService = new FileService();
 });
 
@@ -13,23 +13,26 @@ document.addEventListener('DOMContentLoaded',function(){
 const cardViewContainer = document.getElementById("card-view-container");
 const listViewContainer = document.getElementById("list-view-container");
 
-document.getElementById('card-radio').addEventListener('click', function(event){
+document.getElementById('card-radio').addEventListener('click', function (event) {
     showView('card');
 });
-document.getElementById('list-radio').addEventListener('click', function(event){
+document.getElementById('list-radio').addEventListener('click', function (event) {
     showView('list');
 });
 showView('card');
 
 
-function showView(view = 'card'){
+function showView(view = 'card') {
 
-    if(view === 'card'){
+    if (view === 'card') {
         !listViewContainer.classList.contains('hide') && listViewContainer.classList.add('hide');
-       cardViewContainer.classList.contains('hide') && cardViewContainer.classList.remove('hide');
-    }else if(view === 'list'){
+        cardViewContainer.classList.contains('hide') && cardViewContainer.classList.remove('hide');
+        document.getElementById("card-radio").checked = true;
+
+    } else if (view === 'list') {
         !cardViewContainer.classList.contains('hide') && cardViewContainer.classList.add('hide');
         listViewContainer.classList.contains('hide') && listViewContainer.classList.remove('hide');
+        document.getElementById("list-radio").checked= true;
     }
 }
 
@@ -39,9 +42,10 @@ function showView(view = 'card'){
 
 
 
-document.querySelector("#media-input").addEventListener('change', (event)=>{
+document.querySelector("#media-input").addEventListener('change', (event) => {
     event.target.files.forEach(file => {
         MEDIA_FILES.push(file);
+        toggleCardListTabBtns('show');
 
         updateCardsView(file);
         updateListView(file);
@@ -49,7 +53,7 @@ document.querySelector("#media-input").addEventListener('change', (event)=>{
     });
 });
 
-function updateListView(file){
+function updateListView(file) {
     let listRowHTML = `<div class="card border-0 rounded-0 list-row-card" data-media-files-index="${MEDIA_FILES.length - 1}">
                         <div class="horizontal-viewer">
                             <div class="icon"><i class="bi ${fileService.getIconFromExtension(fileService.getExtension(file))}"></i></div>
@@ -63,16 +67,16 @@ function updateListView(file){
                                 <a class="rename" href="javascript:void(0)"
                                     data-bs-toggle="tooltip" data-bs-title="Rename"><i
                                         class='bx bx-rename'></i></a>
-                                <a class="delete delete-list-item" href="javascript:void(0)"
+                                <a class="delete" href="javascript:void(0)" data-og-dismiss="list-item-card"
                                     data-bs-toggle="tooltip" data-bs-title="Delete" ><i
                                         class='bx bx-trash-alt'></i></a>
                             </div>
-                        </div>
-                    </div>`;
+        </div>
+    </div>`;
 
     let listRow = document.createRange().createContextualFragment(listRowHTML).firstElementChild;
 
-    listRow.querySelector('.delete-list-item').addEventListener('click', function(){
+    listRow.querySelector('[data-og-dismiss="list-item-card"]').addEventListener('click', function () {
 
         let indexToRemove = parseInt(listRow.getAttribute("data-media-files-index"));
         removeCardAndListItemsWithIndex(indexToRemove);
@@ -90,9 +94,31 @@ function removeCardAndListItemsWithIndex(index) {
             MEDIA_FILES[index] = null;
         }
     });
+
+    if (MEDIA_FILES.every(element => element === null)) {
+        toggleCardListTabBtns('hide');
+    }
+
 }
 
-function updateCardsView(file){
+function toggleCardListTabBtns(action) {
+
+    let toggler = document.getElementById('card-list-tab-toggler');
+
+    if (action === "show") {
+        if(toggler.classList.contains('hide')){
+            toggler.classList.remove('hide')
+        }
+    } else if (action === "hide") {
+        if(!toggler.classList.contains('hide')){
+            toggler.classList.add('hide')
+        }
+
+    }
+    showView('card');
+}
+
+function updateCardsView(file) {
 
     const hoverActions = ` <div class="hover-actions">
                 <a class="show" href="javascript:void(0)"
@@ -104,7 +130,7 @@ function updateCardsView(file){
                     <i class='bx bx-rename'></i>
                 </a>
                 <a class="delete" href="javascript:void(0)"
-                    data-bs-toggle="tooltip" data-bs-title="Delete" data->
+                    data-bs-toggle="tooltip" data-bs-title="Delete" data-ob-dismiss="delete-card">
                     <i class='bx bx-trash-alt'></i>
                 </a>
             </div>`;
@@ -141,24 +167,41 @@ function updateCardsView(file){
     let iconCard = document.createRange().createContextualFragment(iconCardHTML).firstElementChild;
     let imageCard = document.createRange().createContextualFragment(imageCardHTML).firstElementChild;
 
-
-    if(fileService.setImageOnView(file, imageCard.querySelector('img'))){
+    let appliedCard = null;
+    if (fileService.setImageOnView(file, imageCard.querySelector('img'))) {
         cardViewContainer.appendChild(imageCard);
-
-        imageCard.querySelector('.delete-list-item').addEventListener('click', function(){
-
-            let indexToRemove = parseInt(listRow.getAttribute("data-media-files-index"));
-            removeCardAndListItemsWithIndex(indexToRemove);
-            console.log(MEDIA_FILES);
-
-        });
-    }else{
+        appliedCard = imageCard;
+    } else {
         console.log(iconCard);
         cardViewContainer.appendChild(iconCard);
+        appliedCard = iconCard;
+
     }
 
+    appliedCard.querySelector(`[data-ob-dismiss='delete-card']`).addEventListener('click', function () {
+        let indexToRemove = parseInt(appliedCard.getAttribute("data-media-files-index"));
+        removeCardAndListItemsWithIndex(indexToRemove);
+        console.log(MEDIA_FILES);
+
+    });
 }
 
 
+// ------------------------------------------------------
+// adding images to form
+// ------------------------------------------------------
 
+document.querySelector("#add-digest-form").addEventListener('submit', function(e){
+    e.preventDefault();
 
+    let dataTransfer = new DataTransfer();
+    MEDIA_FILES.forEach(file => {
+        if(file && file != null){
+            dataTransfer.items.add(file);
+        }
+    });
+
+    this.querySelector('#media-input').files = dataTransfer.files;
+
+    console.log(this.querySelector('#media-input'), this.querySelector('#media-input').files);
+});
