@@ -71,29 +71,30 @@ function updateListView(file){
                     </div>`;
 
     let listRow = document.createRange().createContextualFragment(listRowHTML).firstElementChild;
+
     listRow.querySelector('.delete-list-item').addEventListener('click', function(){
-        listRow.remove();
+
         let indexToRemove = parseInt(listRow.getAttribute("data-media-files-index"));
-        if (indexToRemove > -1 && indexToRemove < MEDIA_FILES.length) {
-            MEDIA_FILES.splice(indexToRemove, 1);
-
-
-            // HERE YOU forget when items is deleted the index should decresed....
-        }
-
+        removeCardAndListItemsWithIndex(indexToRemove);
         console.log(MEDIA_FILES);
+
     });
 
     listViewContainer.appendChild(listRow);
 
 }
+function removeCardAndListItemsWithIndex(index) {
+    document.querySelectorAll(`[data-media-files-index="${index}"]`).forEach(element => {
+        element.remove();
+        if (index > -1 && index < MEDIA_FILES.length) {
+            MEDIA_FILES[index] = null;
+        }
+    });
+}
 
 function updateCardsView(file){
-    let imageCardHTML = `<div class="col">
-        <div class="card h-100">
-        <div class="img-container">
-            <img src=".." alt="Image" />
-            <div class="hover-actions">
+
+    const hoverActions = ` <div class="hover-actions">
                 <a class="show" href="javascript:void(0)"
                     data-bs-toggle="tooltip" data-bs-title="View">
                     <i class='bx bx-show-alt'></i>
@@ -103,50 +104,38 @@ function updateCardsView(file){
                     <i class='bx bx-rename'></i>
                 </a>
                 <a class="delete" href="javascript:void(0)"
-                    data-bs-toggle="tooltip" data-bs-title="Delete">
+                    data-bs-toggle="tooltip" data-bs-title="Delete" data->
                     <i class='bx bx-trash-alt'></i>
                 </a>
-            </div>
-        </div>
-        <div class="card-body">
+            </div>`;
+    const cardBody = ` <div class="card-body">
             <h5 class="card-title">${fileService.getName(file)}</h5>
             <ul class="list-unstyled mb-0">
                 <li><span class="text-muted">Type:</span> ${fileService.getExtension(file)}</li>
                 <li><span class="text-muted">Size:</span> ${fileService.getSize(file)}</li>
             </ul>
+        </div>`;
+
+    let imageCardHTML = `<div class="col" data-media-files-index="${MEDIA_FILES.length - 1}">
+        <div class="card h-100">
+        <div class="img-container">
+            <img src=".." alt="Image" />
+            ${hoverActions}
         </div>
+            ${cardBody}
         </div>
     </div>`;
 
-    let iconCardHTML = ` <div class="col">
-    <div class="card h-100">
-        <div class="file-thumb-holder">
-            <div class="file-thumb-box">
-                <i class="bi ${fileService.getIconFromExtension(fileService.getExtension(file))}"></i>
+    let iconCardHTML = ` <div class="col" data-media-files-index="${MEDIA_FILES.length - 1}">
+        <div class="card h-100">
+            <div class="file-thumb-holder">
+                <div class="file-thumb-box">
+                    <i class="bi ${fileService.getIconFromExtension(fileService.getExtension(file))}"></i>
+                </div>
+                ${hoverActions}
             </div>
-            <div class="hover-actions">
-                <a class="show" href="javascript:void(0)"
-                    data-bs-toggle="tooltip" data-bs-title="View">
-                    <i class='bx bx-show-alt'></i>
-                </a>
-                <a class="rename" href="javascript:void(0)"
-                    data-bs-toggle="tooltip" data-bs-title="Rename">
-                    <i class='bx bx-rename'></i>
-                </a>
-                <a class="delete" href="javascript:void(0)"
-                    data-bs-toggle="tooltip" data-bs-title="Delete">
-                    <i class='bx bx-trash-alt'></i>
-                </a>
-            </div>
+            ${cardBody}
         </div>
-        <div class="card-body">
-            <h5 class="card-title text-truncate">${fileService.getName(file)}</h5>
-            <ul class="list-unstyled mb-0">
-                <li><span class="text-muted">Type:</span> ${fileService.getExtension(file)}</li>
-                <li><span class="text-muted">Size:</span> ${fileService.getSize(file)}</li>
-            </ul>
-            </div>
-    </div>
     </div>`;
 
     let iconCard = document.createRange().createContextualFragment(iconCardHTML).firstElementChild;
@@ -155,6 +144,14 @@ function updateCardsView(file){
 
     if(fileService.setImageOnView(file, imageCard.querySelector('img'))){
         cardViewContainer.appendChild(imageCard);
+
+        imageCard.querySelector('.delete-list-item').addEventListener('click', function(){
+
+            let indexToRemove = parseInt(listRow.getAttribute("data-media-files-index"));
+            removeCardAndListItemsWithIndex(indexToRemove);
+            console.log(MEDIA_FILES);
+
+        });
     }else{
         console.log(iconCard);
         cardViewContainer.appendChild(iconCard);
