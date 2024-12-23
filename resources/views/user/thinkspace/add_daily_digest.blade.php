@@ -32,7 +32,7 @@
                             </div><!-- end card header -->
 
                             <div class="card-body">
-                                <form action="" method="POST" enctype="multipart/form-data" id="add-digest-form">
+                                <form action="{{ route('user.daily-digest.store', Auth::user()->id) }}" method="POST" enctype="multipart/form-data" id="add-digest-form">
                                     @csrf
                                     <div class="row">
                                         <div class="col col-12 col-md-6">
@@ -42,29 +42,39 @@
                                                 <span class="input-group-text" id="basic-addon1"> <i
                                                         class="bi bi-journal-bookmark-fill"></i> </span>
                                                 <input type="text" class="form-control" placeholder="Enter title"
-                                                    id="title-input">
+                                                    id="title-input" name="title">
                                             </div>
+                                            @error('title')
+                                                <small class="text-danger">{{$message}}</small>
+                                            @enderror
                                         </div>
                                         <div class="col col-12 col-md-6">
-                                            <label for="sub-title-input" class="form-label">Sub-title</label>
+                                            <label for="sub_title-input" class="form-label">sub_title</label>
 
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="bi bi-list-nested"></i> </span>
-                                                <input type="text" class="form-control" placeholder="Enter sub-title"
-                                                    id="sub-title-input">
+                                                <input type="text" class="form-control" placeholder="Enter sub_title"
+                                                    id="sub_title-input" name="sub_title">
                                             </div>
+                                            @error('sub_title')
+                                                <small class="text-danger">{{$message}}</small>
+                                            @enderror
                                         </div>
                                         <div class="col col-12 col-md-12">
-                                            <label for="title-input" class="form-label">Content</label>
+                                            <label for="title-input" class="form-label">Description</label>
 
                                             <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3"></textarea>
+
+                                            @error('description')
+                                                <small class="text-danger">{{$message}}</small>
+                                            @enderror
                                         </div>
 
                                         <div class="col col-md-12 mt-3">
                                             <label for="title-input" class="form-label">Media</label>
                                             <br>
-                                            <input type="file" class="hide" name="media-files" id="media-input" multiple>
+                                            <input type="file" class="hide" name="media_files[]" id="media-input" multiple>
 
                                             <div class="d-flex align-items-center justify-content-between  mb-2">
                                                 <label class="btn btn-primary d-flex align-items-center w-fit"
@@ -85,6 +95,9 @@
                                                 </div>
 
                                             </div>
+                                            @error('media-files')
+                                                <small class="text-danger">{{$message}}</small>
+                                            @enderror
 
 
                                             <div id="card-view-container"
@@ -195,7 +208,7 @@
                                         </div>
 
                                         <div class="mt-2">
-                                            <button class="btn btn-primary mt-2">Submit</button>
+                                            <button class="btn btn-primary mt-2" type="submit">Submit</button>
                                         </div>
                                     </div>
                                 </form>
@@ -211,19 +224,7 @@
         </div> <!-- content -->
 
         <!-- Footer Start -->
-        <footer class="footer">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col fs-13 text-muted text-center">
-                        &copy;
-                        <script>
-                            document.write(new Date().getFullYear())
-                        </script> - Made with <span class="mdi mdi-heart text-danger"></span> by <a
-                            href="#!" class="text-reset fw-semibold">Zoyothemes</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        @include('layout.components.copyright')
         <!-- end Footer -->
 
     </div>

@@ -22,12 +22,20 @@ class UserSeeder extends Seeder
         ]);
 
         $admin->assignRole('admin');
-        $user = User::firstOrCreate([
+
+        $editor = User::firstOrCreate([
             'username' => 'Editor@123',
             'email' => 'editor@gmail.com',
             'password' => Hash::make('12345678'),
         ]);
-        $user->assignRole('editor');
+        $editor->assignRole('editor');
+
+        $user = User::firstOrCreate([
+            'username' => 'user@123',
+            'email' => 'user@gmail.com',
+            'password' => Hash::make('12345678'),
+        ]);
+        $user->assignRole('user');
 
     }
 }

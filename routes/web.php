@@ -5,7 +5,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+     return view('welcome');
+
+    // $fileName = "abc.txt";
+    // $fileName = pathinfo($fileName)['filename'] . "(".  5 .  ")" . (isset(pathinfo($fileName)['extension']) ? '.' . pathinfo($fileName)['extension'] : '');
+    // dd($fileName);
 })->name('home');
 
 Route::get('/log-me-out', function () {

@@ -6,10 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class DailyDigest extends Model
 {
+    protected $primaryKey = 'id';
     //
     protected $fillable = [
         'title',
-        'sub-title',
-        'content'
+        'sub_title',
+        'description'
     ];
+
+    public function files(){
+        return $this->morphMany(File::class, 'fileable');
+    }
+
 }

@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daily_digests', function (Blueprint $table) {
+        Schema::create('emojis', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->index();
-            $table->string('sub_title')->nullable();
-            $table->text('description')->nullable();
+            $table->string('emoji');
+            $table->string('name')->nullable();
+            $table->foreignId('emoji_category_id')->nullable()->constrained('emoji_categories')->onDelete('set null');
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_digests');
+        Schema::dropIfExists('emojis');
     }
 };

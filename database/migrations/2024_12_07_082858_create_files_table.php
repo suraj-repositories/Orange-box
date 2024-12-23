@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daily_digests', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->index();
-            $table->string('sub_title')->nullable();
-            $table->text('description')->nullable();
+            $table->string('file_path')->unique();
+            $table->string('file_name')->nullable();
+            $table->string('mime_type')->nullable();
+            $table->morphs('fileable');
+            $table->softDeletes();
             $table->timestamps();
+            $table->index(['fileable_id', 'fileable_type']);
         });
     }
 
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_digests');
+        Schema::dropIfExists('files');
     }
 };

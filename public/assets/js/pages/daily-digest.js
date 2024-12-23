@@ -202,6 +202,8 @@ document.querySelector("#add-digest-form").addEventListener('submit', function(e
     });
 
     this.querySelector('#media-input').files = dataTransfer.files;
-
     console.log(this.querySelector('#media-input'), this.querySelector('#media-input').files);
+
+    this.submit();
+
 });
