@@ -34,11 +34,20 @@
 
                                 <div class="align-items-center">
                                     <div class="d-flex align-items-center">
-                                        {{-- <div class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center">
-                                            <div class="emoji">🤣</div>
-                                        </div> --}}
-                                        <img src="http://ideas.free.nf/storage/profile/qbZVED4EfOwqn5vMAu92GszM8VmSrXmhGV3EBS92.png"
+                                        @if($dailyDigest->emoji())
+                                            <div class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center">
+                                                <div class="emoji">{{ $dailyDigest->emoji->emoji }}</div>
+                                            </div>
+                                        @elseif($dailyDigest->picture())
+                                            <img src="http://ideas.free.nf/storage/profile/qbZVED4EfOwqn5vMAu92GszM8VmSrXmhGV3EBS92.png"
                                             class="rounded-circle avatar-xxl img-thumbnail float-start" alt="image profile">
+                                        @else
+                                            <div class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center">
+                                                <div class="emoji">{{ config('constants')['DEFAULT_DIGEST_EMOJI'] }}</div>
+                                            </div>
+                                        @endif
+                                        {{--  --}}
+
 
                                         <div class="overflow-hidden ms-4">
                                             <h4 class="m-0 text-dark fs-20">{{ $dailyDigest->title }}</h4>
