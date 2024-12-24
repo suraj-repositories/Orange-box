@@ -25,7 +25,10 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         if (app()->environment('local')) {
-            Artisan::call('route:clear');
+            $this->app->booted(function () {
+                Artisan::call('route:clear');
+            });
         }
+
     }
 }

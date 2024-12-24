@@ -36,10 +36,13 @@ class FileService {
     }
 
     getSize(file = FileService.#file) {
+
+        console.log(file);
         try {
-            if (!file || !file.size) {
+            if (!file) {
                 return '-';
             }
+
 
             const units = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
             let fileSize = file.size;

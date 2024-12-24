@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Common\FileController;
 use App\Http\Controllers\Test\TestingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -18,3 +19,9 @@ Route::get('/log-me-out', function () {
 });
 
 Route::get('/testing', [TestingController::class, 'testing']);
+
+
+
+Route::controller(FileController::class)->group(function(){
+    Route::delete('file/{file}', 'destroy')->name('file.delete');
+});

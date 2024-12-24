@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Rules\DescriptionLength;
 use App\Services\FileService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DailyDigestController extends Controller
 {
@@ -84,7 +85,33 @@ class DailyDigestController extends Controller
     public function show($id, DailyDigest $dailyDigest)
     {
         //
-        return view('user.thinkspace.show_daily_digest', compact('dailyDigest'));
+        $media = [];
+        foreach ($dailyDigest->files as $file) {
+            $filePath = Storage::disk('public')->path($file->file_path);
+
+            $data = [
+                'file_id' => $file->id,
+                'file_name' => $file->file_name,
+                'extension' => strtoupper($this->fileService->getExtensionByPath($filePath)),
+                'file_path' => $file->getFileUrl(),
+                'file_icon_class' => $this->fileService->getIconFromExtension($this->fileService->getExtensionByPath($filePath)),
+                'type' => 'Unknown',
+                'size' => '0 Bits',
+                'is_available' => false,
+                'is_image' => false,
+            ];
+
+            if (Storage::disk('public')->exists($file->file_path)) {
+                $data['type'] = $this->fileService->getFileMimeTypeByPath($filePath);
+                $data['size'] = $this->fileService->getSizeByPath($filePath);
+                $data['is_available'] = true;
+                $data['is_image'] = in_array(strtolower($data['extension']), config('extension.images', []));
+            }
+
+            $media[] = $data;
+        }
+
+        return view('user.thinkspace.show_daily_digest', compact('dailyDigest', 'media'));
     }
 
     /**

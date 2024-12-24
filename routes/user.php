@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Common\FileController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
 use Illuminate\Support\Facades\Route;
@@ -15,3 +16,4 @@ Route::controller(DailyDigestController::class)->group(function(){
     Route::post('daily-digest', 'store')->name('daily-digest.store');
     Route::get('daily-digest/{dailyDigest}', 'show')->name('daily-digest.show');
 });
+
