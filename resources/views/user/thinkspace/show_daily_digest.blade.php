@@ -22,9 +22,7 @@
                 </div>
             </div> --}}
 
-                <!-- start row -->
 
-                <!-- end row -->
 
                 <div class="row">
                     <div class="col-12">
@@ -68,6 +66,7 @@
                                     </div>
                                 </div>
 
+
                                 <div id="description-area" class="rich-editor-content">
                                     @if($dailyDigest->description)
                                         <hr>
@@ -94,9 +93,11 @@
                                                     data-bs-title="View">
                                                     <i class="bx bx-show-alt"></i>
                                                 </a>
-                                                <a class="rename" href="javascript:void(0)" data-bs-toggle="tooltip"
-                                                    data-bs-title="Rename">
-                                                    <i class="bx bx-rename"></i>
+                                                <a href="javascript::void(0)" class="rename"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#{{$file['file_id']}}"
+                                                title="Rename">
+                                            <i class="bx bx-rename"></i>
                                                 </a>
                                                 <form class="delete" action="{{route('file.delete', $file['file_id'])}}" data-bs-toggle="tooltip"
                                                     data-bs-title="Delete" data-ob-dismiss="delete-card" method="POST">
@@ -128,16 +129,20 @@
                                                     data-bs-title="View">
                                                     <i class="bx bx-show-alt"></i>
                                                 </a>
-                                                <a class="rename" href="javascript:void(0)" data-bs-toggle="tooltip"
-                                                    data-bs-title="Rename">
+                                                <a href="javascript::void(0)" class="rename"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#{{$file['file_id']}}"
+                                                        title="Rename">
                                                     <i class="bx bx-rename"></i>
-                                                </a>
-                                                <form class="delete" action="{{route('file.delete', $file['file_id'])}}" data-bs-toggle="tooltip"
+
+                                            </a>
+
+                                             <form class="delete" action="{{route('file.delete', $file['file_id'])}}" data-bs-toggle="tooltip"
                                                     data-bs-title="Delete" data-ob-dismiss="delete-card" method="POST">
                                                     @csrf
                                                     @method('delete')
-                                                   <button class="delete"> <i class="bx bx-trash-alt"></i></button>
-                                            </form>
+                                                    <button class="delete"> <i class="bx bx-trash-alt"></i></button>
+                                                </form>
                                             </div>
                                         </div>
                                         <div class="card-body">
@@ -147,9 +152,12 @@
                                                 <li><span class="text-muted">Size:</span> {{$file['size']}}</li>
                                             </ul>
                                         </div>
+
                                     </div>
                                 </div>
                             @endif
+
+                            <x-modals.rename-modal :modalId="$file['file_id']"  :prevResourceName="$file['file_name']" :formActionUrl="route('file.rename', $file['file_id'])" />
                             @endforeach
                         </div>
 

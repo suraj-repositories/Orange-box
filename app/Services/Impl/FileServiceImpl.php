@@ -40,7 +40,7 @@ class FileServiceImpl implements FileService
     }
 
     public function getExtensionByPath($filePath): string{
-        return pathinfo($filePath, PATHINFO_EXTENSION) ?? "-";
+        return pathinfo($filePath, PATHINFO_EXTENSION) ?? null;
     }
 
     public function getIconFromExtension($extension): string{

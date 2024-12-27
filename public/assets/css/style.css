@@ -1,2 +1,55 @@
+/* bootstrap modal default animation changes */
 
+/* Open Animation */
+@keyframes scale-in {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
 
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal.fade:not(.show) {
+    transform: scale(0);
+    opacity: 0;
+    -webkit-transition: all .20s linear;
+    -o-transition: all .20s linear;
+    transition: all .20s linear;
+}
+.modal.show {
+    animation: scale-in 0.3s ease-out;
+}
+
+.rename-modal .modal-header{
+    border: none;
+}
+.rename-modal .modal-footer{
+    border: none;
+    padding-top: 0;
+}
+.rename-modal input {
+    border-radius: 0px;
+    padding: 10px;
+}
+.rename-modal .modal-body{
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.rename-modal .modal-content{
+    border-radius: 0px;
+}
+.rename-modal .modal-dialog{
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.rename-badge{
+    max-width: 310px;
+    text-wrap: wrap;
+    word-wrap: break-word;
+    text-align: left;
+}

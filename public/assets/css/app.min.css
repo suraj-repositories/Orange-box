@@ -17051,37 +17051,45 @@ body.loading {
 }
 
 
-.invalid-input{
+.invalid-input {
     border: 1px solid var(--bs-red);
     color: var(--bs-red);
 }
-.invalid-input:focus{
+
+.invalid-input:focus {
     color: var(--bs-red);
 }
 
 .ck-powered-by {
     display: none !important;
 }
-.hide{
+
+.hide {
     display: none;
 }
-.w-fit{
+
+.w-fit {
     width: fit-content;
 }
+
 .list-unstyled {
     font-size: 12px;
 }
-.card-title{
+
+.card-title {
     font-size: 13px;
     margin-bottom: 5px;
 }
-.media-upload-preview .card-body{
+
+.media-upload-preview .card-body {
     padding: 15px 10px;
     padding-bottom: 0;
 }
-.media-upload-preview .card{
+
+.media-upload-preview .card {
     box-shadow: 0 .125rem .5rem rgb(0 0 0 / 9%);
 }
+
 /* horizontal viewer */
 .horizontal-viewer {
     display: flex;
@@ -17089,62 +17097,76 @@ body.loading {
     align-items: center;
     padding: 8px 20px;
 }
-.media-upload-preview .card{
+
+.media-upload-preview .card {
     margin-bottom: 7px !important;
 }
-.horizontal-viewer div{
+
+.horizontal-viewer div {
     padding: 0 10px;
 }
-.horizontal-viewer .bx{
+
+.horizontal-viewer .bx {
     font-size: 24px;
 }
-.horizontal-viewer .icon{
+
+.horizontal-viewer .icon {
     width: 5%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 22px;
 }
-.horizontal-viewer .name{
+
+.horizontal-viewer .name {
     width: 60%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.horizontal-viewer .type{
+
+.horizontal-viewer .type {
     width: 10%;
     text-align: center;
 }
-.horizontal-viewer .size{
+
+.horizontal-viewer .size {
     width: 15%;
     text-align: center;
 }
-.horizontal-viewer .action{
+
+.horizontal-viewer .action {
     width: 10%;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 5px;
 }
-@media(max-width: 730px){
-    .list-view-container{
+
+@media(max-width: 730px) {
+    .list-view-container {
         display: none;
     }
-    .card-view-container.hide{
+
+    .card-view-container.hide {
         display: flex !important;
     }
-    .hide-lt-730{
+
+    .hide-lt-730 {
         display: none;
     }
 }
-.btn-group-horizontal.grid-list label{
+
+.btn-group-horizontal.grid-list label {
     padding: 5px 8px;
 }
-.btn-group-horizontal.grid-list label .bx{
+
+.btn-group-horizontal.grid-list label .bx {
     font-size: 22px;
     padding-top: 3px;
 }
-.file-thumb-holder{
+
+.file-thumb-holder {
     display: flex;
     width: 100%;
     position: relative;
@@ -17153,7 +17175,8 @@ body.loading {
     justify-content: center;
     background: var(--bs-gray-400);
 }
-.file-thumb-holder .file-thumb-box{
+
+.file-thumb-holder .file-thumb-box {
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -17163,7 +17186,8 @@ body.loading {
     width: 80px;
     height: 80px;
 }
-.file-thumb-box i{
+
+.file-thumb-box i {
     font-size: 40px;
 }
 
@@ -17183,7 +17207,7 @@ body.loading {
 
 .media-upload-preview .show,
 .media-upload-preview .rename,
-.media-upload-preview .delete{
+.media-upload-preview .delete {
     font-size: 18px;
     padding: 0 1px;
     margin-top: 2px;
@@ -17193,35 +17217,42 @@ body.loading {
     transition: all 0.5s ease;
 }
 
-.media-upload-preview .action a{
+.media-upload-preview .action a {
     margin: 0;
     padding: 0;
 }
 
-.media-upload-preview .show{
+.media-upload-preview .show {
     color: var(--bs-green);
 }
-.media-upload-preview .rename{
+
+.media-upload-preview .rename {
     color: var(--bs-primary);
 }
-.media-upload-preview .delete{
+
+.media-upload-preview .delete {
     color: var(--bs-danger);
 }
-.media-upload-preview .show:hover{
+
+.media-upload-preview .show:hover {
     color: #0d982f;
 }
-.media-upload-preview .rename:hover{
+
+.media-upload-preview .rename:hover {
     color: #3a6bff;
 }
-.media-upload-preview .delete:hover{
+
+.media-upload-preview .delete:hover {
     color: #ff0000;
 }
+
 .file-thumb-holder .hover-actions,
-.image-cards .img-container .hover-actions{
+.image-cards .img-container .hover-actions {
     display: none;
 }
+
 .file-thumb-holder:hover .hover-actions,
-.image-cards .img-container:hover .hover-actions{
+.image-cards .img-container:hover .hover-actions {
     position: absolute;
     top: 0;
     left: 0;
@@ -17234,11 +17265,13 @@ body.loading {
     gap: 5px;
     animation: forwards 0.5s smoothColorChange;
 }
-@keyframes smoothColorChange{
-    0%{
+
+@keyframes smoothColorChange {
+    0% {
         background-color: hsla(0, 0, 0, 0);
     }
-    100%{
+
+    100% {
         background-color: #48484873;
     }
 }
@@ -17246,8 +17279,7 @@ body.loading {
 .file-thumb-holder:hover .hover-actions a,
 .image-cards .img-container:hover .hover-actions a,
 .file-thumb-holder:hover .hover-actions button,
-.image-cards .img-container:hover .hover-actions button
-{
+.image-cards .img-container:hover .hover-actions button {
     border: none;
     width: 30px;
     height: 30px;
@@ -17260,11 +17292,13 @@ body.loading {
     margin-top: 30px;
     animation: forwards 0.3s slideup;
 }
-@keyframes slideup{
-    0%{
+
+@keyframes slideup {
+    0% {
         margin-top: 30px;
     }
-    100%{
+
+    100% {
         margin-top: 0px;
 
     }
@@ -17297,7 +17331,7 @@ body.loading {
 }
 
 .rich-editor-content table tbody tr:nth-child(odd) {
-    background-color:#bdbdbd33;
+    background-color: #bdbdbd33;
 }
 
 .rich-editor-content table tbody tr:nth-child(even) {
@@ -17322,7 +17356,7 @@ body.loading {
 }
 
 
-.daily-digest-show-card .emoji{
+.daily-digest-show-card .emoji {
     width: 100%;
     height: 100%;
     display: flex;
@@ -17333,4 +17367,28 @@ body.loading {
     border: 2px solid #f4f4f4;
     opacity: 0.7;
     user-select: none;
+}
+
+.btn-close {
+    background-image: none;
+    padding-right: 10px;
+}
+
+.btn-close::before {
+    content: "\00d7";
+    color: var(--bs-gray-dark);
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 0;
+}
+.rename-modal .badge{
+    background: var(--bs-gray-300);
+    font-size: 12px;
+}
+.rename-modal label{
+    font-size: 12px;
+    color: var(--bs-dark-text-emphasis);
+}
+.rename-modal .modal-title{
+    color: var(--bs-dark-text-emphasis);
 }

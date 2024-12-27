@@ -92,9 +92,9 @@ class DailyDigestController extends Controller
             $data = [
                 'file_id' => $file->id,
                 'file_name' => $file->file_name,
-                'extension' => strtoupper($this->fileService->getExtensionByPath($filePath)),
+                'extension' => strtoupper($this->fileService->getExtensionByPath($filePath) ?? "-"),
                 'file_path' => $file->getFileUrl(),
-                'file_icon_class' => $this->fileService->getIconFromExtension($this->fileService->getExtensionByPath($filePath)),
+                'file_icon_class' => $this->fileService->getIconFromExtension($this->fileService->getExtensionByPath($filePath) ?? "-"),
                 'type' => 'Unknown',
                 'size' => '0 Bits',
                 'is_available' => false,

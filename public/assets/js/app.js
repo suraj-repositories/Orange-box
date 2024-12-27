@@ -23,6 +23,20 @@ class App {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
 
+        // Tooltips With Title
+        const tooltipTriggerListWithTitle = [].slice.call(document.querySelectorAll('[title]'));
+        const tooltipListWithTitle = tooltipTriggerListWithTitle.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        document.addEventListener('focusin', function (event) {
+            if (!event.target.matches('[title]')) {
+                tooltipListWithTitle.forEach(function (tooltip) {
+                    tooltip.hide();
+                });
+            }
+        });
+
         // Toasts
         var toastElList = [].slice.call(document.querySelectorAll('.toast'))
         var toastList = toastElList.map(function (toastEl) {
