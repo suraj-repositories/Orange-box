@@ -7,18 +7,18 @@
             <div class="logo-box">
                 <a class='logo logo-light' href='index.html'>
                     <span class="logo-sm">
-                        <img src="assets/images/logo-sm.png" alt="" height="22">
+                        <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-light.png" alt="" height="24">
+                        <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="24">
                     </span>
                 </a>
                 <a class='logo logo-dark' href='index.html'>
                     <span class="logo-sm">
-                        <img src="assets/images/logo-sm.png" alt="" height="22">
+                        <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-dark.png" alt="" height="24">
+                        <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="24">
                     </span>
                 </a>
             </div>
@@ -57,10 +57,10 @@
                     <div class="collapse" id="dailyDigest">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href="{{route('user.daily-digest.create', Auth::id())}}">Add DD</a>
+                                <a class='tp-link' href="{{route('user.daily-digest.create', Auth::id())}}">Add Digestion</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='pages-profile.html'>Profile</a>
+                                <a class='tp-link' href='{{ route('user.daily-digest', Auth::id()) }}'>Digestions List</a>
                             </li>
 
                         </ul>

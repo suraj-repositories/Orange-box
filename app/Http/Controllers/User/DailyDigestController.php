@@ -9,6 +9,7 @@ use App\Rules\DescriptionLength;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use SweetAlert2\Laravel\Swal;
 
 class DailyDigestController extends Controller
 {
@@ -26,6 +27,9 @@ class DailyDigestController extends Controller
     public function index()
     {
         //
+        $digestions = DailyDigest::paginate(15);
+
+        return view('user.thinkspace.daily_digestion_list', compact('digestions'));
     }
 
     /**
@@ -34,7 +38,7 @@ class DailyDigestController extends Controller
     public function create($userid)
     {
         //
-        return view('user.thinkspace.add_daily_digest');
+        return view('user.thinkspace.daily_digest_form');
     }
 
     /**
@@ -76,7 +80,10 @@ class DailyDigestController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Digestion Created Successfully!');
+       Swal::success([
+                'title' => 'Digestion Created Successfully!',
+            ]);
+        return redirect()->back();
     }
 
     /**
@@ -85,41 +92,17 @@ class DailyDigestController extends Controller
     public function show($id, DailyDigest $dailyDigest)
     {
         //
-        $media = [];
-        foreach ($dailyDigest->files as $file) {
-            $filePath = Storage::disk('public')->path($file->file_path);
-
-            $data = [
-                'file_id' => $file->id,
-                'file_name' => $file->file_name,
-                'extension' => strtoupper($this->fileService->getExtensionByPath($filePath) ?? "-"),
-                'file_path' => $file->getFileUrl(),
-                'file_icon_class' => $this->fileService->getIconFromExtension($this->fileService->getExtensionByPath($filePath) ?? "-"),
-                'type' => 'Unknown',
-                'size' => '0 Bits',
-                'is_available' => false,
-                'is_image' => false,
-            ];
-
-            if (Storage::disk('public')->exists($file->file_path)) {
-                $data['type'] = $this->fileService->getFileMimeTypeByPath($filePath);
-                $data['size'] = $this->fileService->getSizeByPath($filePath);
-                $data['is_available'] = true;
-                $data['is_image'] = in_array(strtolower($data['extension']), config('extension.images', []));
-            }
-
-            $media[] = $data;
-        }
-
+        $media = $this->fileService->getMediaMetadata($dailyDigest->files);
         return view('user.thinkspace.show_daily_digest', compact('dailyDigest', 'media'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id, DailyDigest $dailyDigest)
     {
-        //
+        $media = $this->fileService->getMediaMetadata($dailyDigest->files);
+        return view('user.thinkspace.daily_digest_form', compact('dailyDigest', 'media'));
     }
 
     /**

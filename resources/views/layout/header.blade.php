@@ -24,7 +24,7 @@
     <link rel='stylesheet' href='{{ asset('assets/icons/boxicons-2.1.4/css/boxicons.min.css') }}'>
 
     <link rel="stylesheet" href="{{ asset('assets/ckeditor5/ckeditor5.css') }}" />
-
+    @include('sweetalert2::index')
 </head>
 
 <!-- body start -->

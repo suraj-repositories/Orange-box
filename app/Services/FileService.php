@@ -24,4 +24,6 @@ interface FileService
 
     public function getSizeByPath($filePath): string;
 
+    function getMediaMetadata($files): array;
+
 }

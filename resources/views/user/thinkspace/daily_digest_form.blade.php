@@ -1,6 +1,7 @@
 @extends('user.layout.layout')
 
-@section('title', Route::is('user.daily-digest.create') ? 'Daily Digest' : '🟢🟢🟢')
+@section('title', Route::is('user.daily-digest.create') ? 'Daily Digest' : (Route::is('user.daily-digest.edit') ? 'Edit
+    Daily Digest' : '🟢🟢🟢'))
 
 @section('content')
     <div class="content-page">
@@ -11,13 +12,13 @@
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">Create Daily Digest</h4>
+                        <h4 class="fs-18 fw-semibold m-0">{{ empty($dailyDigest) ? 'Create' : 'Edit' }} Daily Digest</h4>
                     </div>
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Daily Digest</a></li>
-                            <li class="breadcrumb-item active">Create</li>
+                            <li class="breadcrumb-item active">{{ empty($dailyDigest) ? 'Create' : 'Edit' }}</li>
                         </ol>
                     </div>
                 </div>
@@ -28,11 +29,12 @@
                         <div class="card">
 
                             <div class="card-header">
-                                <h5 class="card-title mb-0">New Digestion</h5>
+                                <h5 class="card-title mb-0">{{ empty($dailyDigest) ? 'Create' : 'Edit' }} Digestion</h5>
                             </div><!-- end card header -->
 
                             <div class="card-body">
-                                <form action="{{ route('user.daily-digest.store', Auth::user()->id) }}" method="POST" enctype="multipart/form-data" id="add-digest-form">
+                                <form action="{{ route('user.daily-digest.store', Auth::user()->id) }}" method="POST"
+                                    enctype="multipart/form-data" id="add-digest-form">
                                     @csrf
                                     <div class="row">
                                         <div class="col col-12 col-md-6">
@@ -42,10 +44,11 @@
                                                 <span class="input-group-text" id="basic-addon1"> <i
                                                         class="bi bi-journal-bookmark-fill"></i> </span>
                                                 <input type="text" class="form-control" placeholder="Enter title"
-                                                    id="title-input" name="title">
+                                                    id="title-input" name="title"
+                                                    value="{{ !empty($dailyDigest) ? $dailyDigest->title : '' }}">
                                             </div>
                                             @error('title')
-                                                <small class="text-danger">{{$message}}</small>
+                                                <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
                                         <div class="col col-12 col-md-6">
@@ -55,26 +58,30 @@
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="bi bi-list-nested"></i> </span>
                                                 <input type="text" class="form-control" placeholder="Enter sub_title"
-                                                    id="sub_title-input" name="sub_title">
+                                                    id="sub_title-input" name="sub_title"
+                                                    value="{{ !empty($dailyDigest) ? $dailyDigest->sub_title : '' }}">
                                             </div>
                                             @error('sub_title')
-                                                <small class="text-danger">{{$message}}</small>
+                                                <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
                                         <div class="col col-12 col-md-12">
                                             <label for="title-input" class="form-label">Description</label>
 
-                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3"></textarea>
+                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3">
+                                                {!! !empty($dailyDigest) ? $dailyDigest->description : '' !!}
+                                            </textarea>
 
                                             @error('description')
-                                                <small class="text-danger">{{$message}}</small>
+                                                <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
 
                                         <div class="col col-md-12 mt-3">
                                             <label for="title-input" class="form-label">Media</label>
                                             <br>
-                                            <input type="file" class="hide" name="media_files[]" id="media-input" multiple>
+                                            <input type="file" class="hide" name="media_files[]" id="media-input"
+                                                multiple>
 
                                             <div class="d-flex align-items-center justify-content-between  mb-2">
                                                 <label class="btn btn-primary d-flex align-items-center w-fit"
@@ -96,12 +103,108 @@
 
                                             </div>
                                             @error('media-files')
-                                                <small class="text-danger">{{$message}}</small>
+                                                <small class="text-danger">{{ $message }}</small>
                                             @enderror
 
 
                                             <div id="card-view-container"
                                                 class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5 row-cols-xxl-6 g-3 media-upload-preview image-cards card-view-container">
+
+                                                @if (!empty($dailyDigest))
+                                                     @foreach ($media as $file)
+                                                    @if ($file['is_image'])
+                                                        <div class="col" data-media-files-index="0">
+                                                            <div class="card h-100">
+                                                                <div class="img-container">
+                                                                    <img src="{{ $file['file_path'] }}" alt="image">
+                                                                    <div class="hover-actions">
+                                                                        <a class="show" href="{{ $file['file_path'] }}"
+                                                                            target="_blank" data-bs-toggle="tooltip"
+                                                                            data-bs-title="View">
+                                                                            <i class="bx bx-show-alt"></i>
+                                                                        </a>
+                                                                        <a href="javascript::void(0)" class="rename"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#{{ $file['file_id'] }}"
+                                                                            title="Rename">
+                                                                            <i class="bx bx-rename"></i>
+                                                                        </a>
+                                                                        <form class="delete"
+                                                                            action="{{ route('file.delete', $file['file_id']) }}"
+                                                                            data-bs-toggle="tooltip"
+                                                                            data-bs-title="Delete"
+                                                                            data-ob-dismiss="delete-card" method="POST">
+                                                                            @csrf
+                                                                            @method('delete')
+                                                                            <button class="delete"> <i
+                                                                                    class="bx bx-trash-alt"></i></button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title">{{ $file['file_name'] }}</h5>
+                                                                    <ul class="list-unstyled mb-0">
+                                                                        <li><span class="text-muted">Type:</span>
+                                                                            {{ $file['extension'] }}</li>
+                                                                        <li><span class="text-muted">Size:</span>
+                                                                            {{ $file['size'] }}</li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @else
+                                                        <div class="col" data-media-files-index="3">
+                                                            <div class="card h-100">
+                                                                <div class="file-thumb-holder">
+                                                                    <div class="file-thumb-box">
+                                                                        <i class="{{ $file['file_icon_class'] }}"></i>
+                                                                    </div>
+                                                                    <div class="hover-actions">
+                                                                        <a class="show" href="{{ $file['file_path'] }}"
+                                                                            target="_blank" data-bs-toggle="tooltip"
+                                                                            data-bs-title="View">
+                                                                            <i class="bx bx-show-alt"></i>
+                                                                        </a>
+                                                                        <a href="javascript::void(0)" class="rename"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#{{ $file['file_id'] }}"
+                                                                            title="Rename">
+                                                                            <i class="bx bx-rename"></i>
+
+                                                                        </a>
+
+                                                                        <form class="delete"
+                                                                            action="{{ route('file.delete', $file['file_id']) }}"
+                                                                            data-bs-toggle="tooltip"
+                                                                            data-bs-title="Delete"
+                                                                            data-ob-dismiss="delete-card" method="POST">
+                                                                            @csrf
+                                                                            @method('delete')
+                                                                            <button class="delete"> <i
+                                                                                    class="bx bx-trash-alt"></i></button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <h5 class="card-title">{{ $file['file_name'] }}</h5>
+                                                                    <ul class="list-unstyled mb-0">
+                                                                        <li><span class="text-muted">Type:</span>
+                                                                            {{ $file['extension'] }}</li>
+                                                                        <li><span class="text-muted">Size:</span>
+                                                                            {{ $file['size'] }}</li>
+                                                                    </ul>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
+                                                    <x-modals.rename-modal :modalId="$file['file_id']" :prevResourceName="$file['file_name']"
+                                                        :formActionUrl="route('file.rename', $file['file_id'])" />
+                                                @endforeach
+                                                @endif
+
                                                 {{--
                                                 <div class="col">
                                                     <div class="card h-100">
