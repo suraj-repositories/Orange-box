@@ -47,11 +47,12 @@
                                     <a href="{{ authRoute('user.daily-digest.edit', ['dailyDigest' => $dailyDigest]) }}" class="edit">
                                         <i class='bx bx-edit'></i>
                                     </a>
-                                    <form action="">
+                                    <form action="{{ authRoute('user.daily-digest.delete', ['dailyDigest' => $dailyDigest]) }}" method="post">
+                                       @method('DELETE')
                                         @csrf
-                                        <div class="delete">
+                                        <button type="submit" class="delete btn-no-style">
                                             <i class='bx bx-trash'></i>
-                                        </div>
+                                        </button>
                                     </form>
                                     {{-- <div class="more">
                                         <i class='bx bx-dots-vertical-rounded' ></i>

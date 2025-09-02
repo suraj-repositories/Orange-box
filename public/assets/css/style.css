@@ -258,3 +258,9 @@
 .action-container .info{
     color: var(--bs-dark);
 }
+.btn-no-style{
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+
+}

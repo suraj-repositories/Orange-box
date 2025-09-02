@@ -118,6 +118,10 @@ class DailyDigestController extends Controller
     public function update(User $user, DailyDigest $dailyDigest, Request $request)
     {
         //
+         if($dailyDigest->user_id != $user->id && !$user->hasRole('admin')){
+            abort(403, "Access Denied!");
+        }
+
         $validated = $request->validate([
             'title' => 'required|string',
             'sub_title' => 'nullable|string',
@@ -159,8 +163,17 @@ class DailyDigestController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id, DailyDigest $dailyDigest)
+    public function destroy(User $user, DailyDigest $dailyDigest)
     {
         //
+         if($dailyDigest->user_id != $user->id && !$user->hasRole('admin')){
+            abort(403, "Access Denied!");
+        }
+
+        $dailyDigest->delete();
+        Swal::success([
+            'title' => 'Digestion Deleted Successfully!',
+        ]);
+        return redirect()->to(authRoute('user.daily-digest'));
     }
 }
