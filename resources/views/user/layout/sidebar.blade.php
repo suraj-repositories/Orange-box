@@ -57,10 +57,10 @@
                     <div class="collapse" id="dailyDigest">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href="{{route('user.daily-digest.create', Auth::id())}}">Add Digestion</a>
+                                <a class='tp-link' href="{{authRoute('user.daily-digest.create')}}">Add Digestion</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='{{ route('user.daily-digest', Auth::id()) }}'>Digestions List</a>
+                                <a class='tp-link' href='{{ authRoute('user.daily-digest') }}'>Digestions List</a>
                             </li>
 
                         </ul>

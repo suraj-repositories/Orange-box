@@ -15,7 +15,7 @@
         @elseif(Auth::user()->hasRole('editor', Auth::user()->id))
             <a href="{{ route('editor.dashboard') }}">Dashboard</a>
         @elseif(Auth::user()->hasRole('user'))
-            <a href="{{ route('user.dashboard', Auth::id()) }}">Dashboard</a>
+            <a href="{{ authRoute('user.dashboard') }}">Dashboard</a>
         @endif
     @endauth
     @guest
