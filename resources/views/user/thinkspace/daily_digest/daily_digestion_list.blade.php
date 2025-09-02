@@ -28,7 +28,7 @@
                     <div class="col-sm-6 col-lg-4">
                         <div class="card d-block">
                             <div class="card-header">
-                                <a href="{{ route('user.daily-digest.show', ['userid' => Auth::id(), 'dailyDigest' => $dailyDigest]) }}"
+                                <a href="{{ authRoute('user.daily-digest.show', ['dailyDigest' => $dailyDigest]) }}"
                                     class="card-title">{{ $dailyDigest->title }}</a>
                             </div>
                             <div class="card-body">
@@ -40,7 +40,7 @@
                                         {{ $dailyDigest->created_at->diffForHumans() }}
                                     </div>
 
-                                    <a href="{{ route('user.daily-digest.show', ['userid' => Auth::id(), 'dailyDigest' => $dailyDigest]) }}" class="info">
+                                    <a href="{{ authRoute('user.daily-digest.show', ['dailyDigest' => $dailyDigest]) }}" class="info">
                                         <i class='bx bx-info-circle'></i>
                                     </a>
 

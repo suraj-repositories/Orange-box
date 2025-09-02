@@ -29,7 +29,7 @@ class DailyDigestController extends Controller
         //
         $digestions = DailyDigest::paginate(15);
 
-        return view('user.thinkspace.daily_digestion_list', compact('digestions'));
+        return view('user.thinkspace.daily_digest.daily_digestion_list', compact('digestions'));
     }
 
     /**
@@ -38,7 +38,7 @@ class DailyDigestController extends Controller
     public function create($userid)
     {
         //
-        return view('user.thinkspace.daily_digest_form');
+        return view('user.thinkspace.daily_digest.daily_digest_form');
     }
 
     /**
@@ -93,7 +93,7 @@ class DailyDigestController extends Controller
     {
         //
         $media = $this->fileService->getMediaMetadata($dailyDigest->files);
-        return view('user.thinkspace.show_daily_digest', compact('dailyDigest', 'media'));
+        return view('user.thinkspace.daily_digest.show_daily_digest', compact('dailyDigest', 'media'));
     }
 
     /**
@@ -102,7 +102,7 @@ class DailyDigestController extends Controller
     public function edit($id, DailyDigest $dailyDigest)
     {
         $media = $this->fileService->getMediaMetadata($dailyDigest->files);
-        return view('user.thinkspace.daily_digest_form', compact('dailyDigest', 'media'));
+        return view('user.thinkspace.daily_digest.daily_digest_form', compact('dailyDigest', 'media'));
     }
 
     /**

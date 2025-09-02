@@ -11,3 +11,9 @@
 An Content Management system
 
 
+- After changing anything on helpers.php file run this to see updates
+```sh
+composer dump-autoload
+```
+
+
