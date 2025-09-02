@@ -44,9 +44,9 @@
                                         <i class='bx bx-info-circle'></i>
                                     </a>
 
-                                    <div class="edit">
+                                    <a href="{{ authRoute('user.daily-digest.edit', ['dailyDigest' => $dailyDigest]) }}" class="edit">
                                         <i class='bx bx-edit'></i>
-                                    </div>
+                                    </a>
                                     <form action="">
                                         @csrf
                                         <div class="delete">

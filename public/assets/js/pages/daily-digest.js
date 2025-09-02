@@ -64,9 +64,11 @@ function updateListView(file) {
                                 <a class="show" href="javascript:void(0)"
                                     data-bs-toggle="tooltip" data-bs-title="View"><i
                                         class='bx bx-show-alt'></i></a>
+                                <!--
                                 <a class="rename" href="javascript:void(0)"
                                     data-bs-toggle="tooltip" data-bs-title="Rename"><i
                                         class='bx bx-rename'></i></a>
+                                -->
                                 <a class="delete" href="javascript:void(0)" data-og-dismiss="list-item-card"
                                     data-bs-toggle="tooltip" data-bs-title="Delete" ><i
                                         class='bx bx-trash-alt'></i></a>
@@ -125,10 +127,12 @@ function updateCardsView(file) {
                     data-bs-toggle="tooltip" data-bs-title="View">
                     <i class='bx bx-show-alt'></i>
                 </a>
+                <!--
                 <a class="rename" href="javascript:void(0)"
                     data-bs-toggle="tooltip" data-bs-title="Rename">
                     <i class='bx bx-rename'></i>
                 </a>
+                   -->
                 <a class="delete" href="javascript:void(0)"
                     data-bs-toggle="tooltip" data-bs-title="Delete" data-ob-dismiss="delete-card">
                     <i class='bx bx-trash-alt'></i>

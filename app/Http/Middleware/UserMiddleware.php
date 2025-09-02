@@ -19,7 +19,7 @@ class UserMiddleware
         if (Auth::check() &&
             (Auth::user()->hasRole('admin') || Auth::user()->hasRole('user'))) {
 
-                $request->route()->setParameter('userid', Auth::user()->id);
+               $request->route()?->setParameter('userid', Auth::user());
 
             return $next($request);
         }

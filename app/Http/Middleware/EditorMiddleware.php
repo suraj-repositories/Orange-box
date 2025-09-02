@@ -19,7 +19,7 @@ class EditorMiddleware
         if(Auth::check() &&
             (Auth::user()->hasRole('admin')
             || Auth::user()->hasRole('editor'))){
-                $request->route()?->setParameter('userid', Auth::user()->id);
+                $request->route()?->setParameter('userid', Auth::user());
             return $next($request);
         }
         return redirect()->route('login')->with('error', 'Please Login First!');

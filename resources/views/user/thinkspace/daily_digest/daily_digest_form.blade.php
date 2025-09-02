@@ -1,7 +1,12 @@
 @extends('user.layout.layout')
 
-@section('title', Route::is('user.daily-digest.create') ? 'Daily Digest' : (Route::is('user.daily-digest.edit') ? 'Edit
-    Daily Digest' : '🟢🟢🟢'))
+@section('title',
+    Route::is('user.daily-digest.create')
+    ? 'Daily Digest'
+    : (Route::is('user.daily-digest.edit')
+    ? 'Edit
+    Daily Digest'
+    : '🟢🟢🟢'))
 
 @section('content')
     <div class="content-page">
@@ -33,8 +38,9 @@
                             </div><!-- end card header -->
 
                             <div class="card-body">
-                                <form action="{{ route('user.daily-digest.store', Auth::user()->id) }}" method="POST"
-                                    enctype="multipart/form-data" id="add-digest-form">
+                                <form
+                                    action="{{ !empty($dailyDigest) ? authRoute('user.daily-digest.update', ['dailyDigest' => $dailyDigest]) : authRoute('user.daily-digest.store') }}"
+                                    method="POST" enctype="multipart/form-data" id="add-digest-form">
                                     @csrf
                                     <div class="row">
                                         <div class="col col-12 col-md-6">
@@ -111,98 +117,92 @@
                                                 class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5 row-cols-xxl-6 g-3 media-upload-preview image-cards card-view-container">
 
                                                 @if (!empty($dailyDigest))
-                                                     @foreach ($media as $file)
-                                                    @if ($file['is_image'])
-                                                        <div class="col" data-media-files-index="0">
-                                                            <div class="card h-100">
-                                                                <div class="img-container">
-                                                                    <img src="{{ $file['file_path'] }}" alt="image">
-                                                                    <div class="hover-actions">
-                                                                        <a class="show" href="{{ $file['file_path'] }}"
-                                                                            target="_blank" data-bs-toggle="tooltip"
-                                                                            data-bs-title="View">
-                                                                            <i class="bx bx-show-alt"></i>
-                                                                        </a>
-                                                                        <a href="javascript::void(0)" class="rename"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#{{ $file['file_id'] }}"
-                                                                            title="Rename">
-                                                                            <i class="bx bx-rename"></i>
-                                                                        </a>
-                                                                        <form class="delete"
-                                                                            action="{{ route('file.delete', $file['file_id']) }}"
-                                                                            data-bs-toggle="tooltip"
-                                                                            data-bs-title="Delete"
-                                                                            data-ob-dismiss="delete-card" method="POST">
-                                                                            @csrf
-                                                                            @method('delete')
-                                                                            <button class="delete"> <i
-                                                                                    class="bx bx-trash-alt"></i></button>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
+                                                    @foreach ($media as $file)
+                                                        @if ($file['is_image'])
+                                                            <div class="col" data-media-files-index="0">
+                                                                <div class="card h-100">
+                                                                    <div class="img-container">
+                                                                        <img src="{{ $file['file_path'] }}" alt="image">
+                                                                        <div class="hover-actions">
+                                                                            <a class="show"
+                                                                                href="{{ $file['file_path'] }}"
+                                                                                target="_blank" data-bs-toggle="tooltip"
+                                                                                data-bs-title="View">
+                                                                                <i class="bx bx-show-alt"></i>
+                                                                            </a>
+                                                                            <a href="javascript::void(0)" class="rename"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#{{ $file['file_id'] }}"
+                                                                                title="Rename">
+                                                                                <i class="bx bx-rename"></i>
+                                                                            </a>
+                                                                            <button type="button" class="delete"
+                                                                                data-bs-title="Delete"
+                                                                                data-bs-toggle="tooltip"
+                                                                                data-ob-dismiss="delete-card"
+                                                                                data-ob-url="{{ route('file.delete', $file['file_id']) }}">
+                                                                                <i class="bx bx-trash-alt"></i></button>
 
-                                                                <div class="card-body">
-                                                                    <h5 class="card-title">{{ $file['file_name'] }}</h5>
-                                                                    <ul class="list-unstyled mb-0">
-                                                                        <li><span class="text-muted">Type:</span>
-                                                                            {{ $file['extension'] }}</li>
-                                                                        <li><span class="text-muted">Size:</span>
-                                                                            {{ $file['size'] }}</li>
-                                                                    </ul>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="card-body">
+                                                                        <h5 class="card-title">{{ $file['file_name'] }}
+                                                                        </h5>
+                                                                        <ul class="list-unstyled mb-0">
+                                                                            <li><span class="text-muted">Type:</span>
+                                                                                {{ $file['extension'] }}</li>
+                                                                            <li><span class="text-muted">Size:</span>
+                                                                                {{ $file['size'] }}</li>
+                                                                        </ul>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    @else
-                                                        <div class="col" data-media-files-index="3">
-                                                            <div class="card h-100">
-                                                                <div class="file-thumb-holder">
-                                                                    <div class="file-thumb-box">
-                                                                        <i class="{{ $file['file_icon_class'] }}"></i>
+                                                        @else
+                                                            <div class="col" data-media-files-index="3">
+                                                                <div class="card h-100">
+                                                                    <div class="file-thumb-holder">
+                                                                        <div class="file-thumb-box">
+                                                                            <i class="{{ $file['file_icon_class'] }}"></i>
+                                                                        </div>
+                                                                        <div class="hover-actions">
+                                                                            <a class="show"
+                                                                                href="{{ $file['file_path'] }}"
+                                                                                target="_blank" data-bs-toggle="tooltip"
+                                                                                data-bs-title="View">
+                                                                                <i class="bx bx-show-alt"></i>
+                                                                            </a>
+                                                                            <a href="javascript::void(0)" class="rename"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#{{ $file['file_id'] }}"
+                                                                                title="Rename">
+                                                                                <i class="bx bx-rename"></i>
+
+                                                                            </a>
+
+                                                                            <button type='button' class="delete"
+                                                                                data-bs-title="Delete"
+                                                                                data-bs-toggle="tooltip"
+                                                                                data-ob-dismiss="delete-card"
+                                                                                data-ob-url="{{ route('file.delete', $file['file_id']) }}">
+                                                                                <i class="bx bx-trash-alt"></i></button>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class="hover-actions">
-                                                                        <a class="show" href="{{ $file['file_path'] }}"
-                                                                            target="_blank" data-bs-toggle="tooltip"
-                                                                            data-bs-title="View">
-                                                                            <i class="bx bx-show-alt"></i>
-                                                                        </a>
-                                                                        <a href="javascript::void(0)" class="rename"
-                                                                            data-bs-toggle="modal"
-                                                                            data-bs-target="#{{ $file['file_id'] }}"
-                                                                            title="Rename">
-                                                                            <i class="bx bx-rename"></i>
-
-                                                                        </a>
-
-                                                                        <form class="delete"
-                                                                            action="{{ route('file.delete', $file['file_id']) }}"
-                                                                            data-bs-toggle="tooltip"
-                                                                            data-bs-title="Delete"
-                                                                            data-ob-dismiss="delete-card" method="POST">
-                                                                            @csrf
-                                                                            @method('delete')
-                                                                            <button class="delete"> <i
-                                                                                    class="bx bx-trash-alt"></i></button>
-                                                                        </form>
+                                                                    <div class="card-body">
+                                                                        <h5 class="card-title">{{ $file['file_name'] }}
+                                                                        </h5>
+                                                                        <ul class="list-unstyled mb-0">
+                                                                            <li><span class="text-muted">Type:</span>
+                                                                                {{ $file['extension'] }}</li>
+                                                                            <li><span class="text-muted">Size:</span>
+                                                                                {{ $file['size'] }}</li>
+                                                                        </ul>
                                                                     </div>
-                                                                </div>
-                                                                <div class="card-body">
-                                                                    <h5 class="card-title">{{ $file['file_name'] }}</h5>
-                                                                    <ul class="list-unstyled mb-0">
-                                                                        <li><span class="text-muted">Type:</span>
-                                                                            {{ $file['extension'] }}</li>
-                                                                        <li><span class="text-muted">Size:</span>
-                                                                            {{ $file['size'] }}</li>
-                                                                    </ul>
-                                                                </div>
 
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    @endif
-
-                                                    <x-modals.rename-modal :modalId="$file['file_id']" :prevResourceName="$file['file_name']"
-                                                        :formActionUrl="route('file.rename', $file['file_id'])" />
-                                                @endforeach
+                                                        @endif
+                                                    @endforeach
                                                 @endif
 
                                                 {{--
@@ -315,6 +315,11 @@
                                         </div>
                                     </div>
                                 </form>
+                                @if (!empty($dailyDigest))
+                                    @foreach ($media as $file)
+                                        <x-modals.rename-modal :modalId="$file['file_id']" :prevResourceName="$file['file_name']" :formActionUrl="route('file.rename', $file['file_id'])" />
+                                    @endforeach
+                                @endif
                             </div>
 
                         </div>

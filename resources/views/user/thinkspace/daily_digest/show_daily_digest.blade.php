@@ -23,8 +23,6 @@
                 </div>
             </div>
 
-
-
                 <div class="row">
                     <div class="col-12">
                         <div class="card mt-3 daily-digest-show-card">

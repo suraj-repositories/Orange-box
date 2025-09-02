@@ -16,5 +16,7 @@ Route::controller(DailyDigestController::class)->group(function(){
     Route::post('daily-digest', 'store')->name('daily-digest.store');
     Route::get('daily-digest/{dailyDigest}', 'show')->name('daily-digest.show');
     Route::get('daily-digest/{dailyDigest}/edit', 'edit')->name('daily-digest.edit');
+    Route::post('daily-digest/{dailyDigest}', 'update')->name('daily-digest.update');
+    Route::delete('daily-digest/{dailyDigest}', 'destroy')->name('daily-digest.delete');
 });
 
