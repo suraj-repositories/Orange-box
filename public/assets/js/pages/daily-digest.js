@@ -70,7 +70,7 @@ function updateListView(file) {
                             <div class="size">${fileService.getSize(file)}</div>
                             <div class="action">
                                 <a class="show" href="javascript:void(0)"
-                                    data-bs-toggle="tooltip" data-bs-title="View"><i
+                                    data-bs-toggle="tooltip" data-bs-title="View" data-ob-view="view-file"><i
                                         class='bx bx-show-alt'></i></a>
                                 <!--
                                 <a class="rename" href="javascript:void(0)"
@@ -87,11 +87,13 @@ function updateListView(file) {
     let listRow = document.createRange().createContextualFragment(listRowHTML).firstElementChild;
 
     listRow.querySelector('[data-og-dismiss="list-item-card"]').addEventListener('click', function () {
-
         let indexToRemove = parseInt(listRow.getAttribute("data-media-files-index"));
         removeCardAndListItemsWithIndex(indexToRemove);
-        console.log(MEDIA_FILES);
+    });
 
+    listRow.querySelector('[data-ob-view="view-file"]').addEventListener('click', function () {
+        let indexToView = parseInt(listRow.getAttribute("data-media-files-index"));
+        launchViewFile(indexToView);
     });
 
     listViewContainer.appendChild(listRow);
@@ -109,6 +111,12 @@ function removeCardAndListItemsWithIndex(index) {
         toggleCardListTabBtns('hide');
     }
 
+}
+
+function launchViewFile(index){
+    const file = MEDIA_FILES[index];
+    const imageUrl = URL.createObjectURL(file);
+    window.open(imageUrl, "_blank");
 }
 
 function toggleCardListTabBtns(action) {
@@ -132,7 +140,7 @@ function updateCardsView(file) {
 
     const hoverActions = ` <div class="hover-actions">
                 <a class="show" href="javascript:void(0)"
-                    data-bs-toggle="tooltip" data-bs-title="View">
+                    data-bs-toggle="tooltip" data-bs-title="View" data-ob-view="view-file">
                     <i class='bx bx-show-alt'></i>
                 </a>
                 <!--
@@ -193,9 +201,16 @@ function updateCardsView(file) {
     appliedCard.querySelector(`[data-ob-dismiss='delete-card']`).addEventListener('click', function () {
         let indexToRemove = parseInt(appliedCard.getAttribute("data-media-files-index"));
         removeCardAndListItemsWithIndex(indexToRemove);
-        console.log(MEDIA_FILES);
 
     });
+
+    appliedCard.querySelector(`[ data-ob-view="view-file"]`).addEventListener('click', function () {
+        let indexToView = parseInt(appliedCard.getAttribute("data-media-files-index"));
+        launchViewFile(indexToView);
+
+    });
+
+
 }
 
 
