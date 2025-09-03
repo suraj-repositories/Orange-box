@@ -82,7 +82,7 @@ class DailyDigestController extends Controller
         }
         Swal::success([
                 'title' => 'Digestion Created Successfully!',
-            ]);
+        ]);
         return redirect()->to(authRoute('user.daily-digest.show', ['dailyDigest' => $dailyDigest]));
     }
 

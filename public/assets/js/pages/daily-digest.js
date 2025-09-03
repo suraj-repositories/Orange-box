@@ -4,6 +4,8 @@ let fileService = null;
 
 document.addEventListener('DOMContentLoaded', function () {
     fileService = new FileService();
+
+    enableRefactorFileDelete();
 });
 
 
@@ -13,12 +15,18 @@ document.addEventListener('DOMContentLoaded', function () {
 const cardViewContainer = document.getElementById("card-view-container");
 const listViewContainer = document.getElementById("list-view-container");
 
-document.getElementById('card-radio').addEventListener('click', function (event) {
-    showView('card');
-});
-document.getElementById('list-radio').addEventListener('click', function (event) {
-    showView('list');
-});
+const cardRadio = document.getElementById('card-radio');
+if (cardRadio) {
+    cardRadio.addEventListener('click', function (event) {
+        showView('card');
+    });
+}
+const listRadio = document.getElementById('list-radio');
+if (listRadio) {
+    listRadio.addEventListener('click', function (event) {
+        showView('list');
+    });
+}
 showView('card');
 
 
@@ -32,7 +40,7 @@ function showView(view = 'card') {
     } else if (view === 'list') {
         !cardViewContainer.classList.contains('hide') && cardViewContainer.classList.add('hide');
         listViewContainer.classList.contains('hide') && listViewContainer.classList.remove('hide');
-        document.getElementById("list-radio").checked= true;
+        document.getElementById("list-radio").checked = true;
     }
 }
 
@@ -108,11 +116,11 @@ function toggleCardListTabBtns(action) {
     let toggler = document.getElementById('card-list-tab-toggler');
 
     if (action === "show") {
-        if(toggler.classList.contains('hide')){
+        if (toggler.classList.contains('hide')) {
             toggler.classList.remove('hide')
         }
     } else if (action === "hide") {
-        if(!toggler.classList.contains('hide')){
+        if (!toggler.classList.contains('hide')) {
             toggler.classList.add('hide')
         }
 
@@ -195,12 +203,12 @@ function updateCardsView(file) {
 // adding images to form
 // ------------------------------------------------------
 
-document.querySelector("#add-digest-form").addEventListener('submit', function(e){
+document.querySelector("#add-digest-form").addEventListener('submit', function (e) {
     e.preventDefault();
 
     let dataTransfer = new DataTransfer();
     MEDIA_FILES.forEach(file => {
-        if(file && file != null){
+        if (file && file != null) {
             dataTransfer.items.add(file);
         }
     });
@@ -211,3 +219,49 @@ document.querySelector("#add-digest-form").addEventListener('submit', function(e
     this.submit();
 
 });
+
+function enableRefactorFileDelete() {
+    const fileCards = document.querySelectorAll('[data-ob-deleteable-card="true"]');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    if (!fileCards.length) return;
+
+    fileCards.forEach(card => {
+        const deleteBtn = card.querySelector('[data-ob-dismiss="editing-delete-card"]');
+        if (!deleteBtn) return;
+
+        deleteBtn.addEventListener('click', (e) => {
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            card.style.filter = "grayscale(1)";
+            card.style.opacity = "0.5";
+            const url = deleteBtn.getAttribute('data-ob-delete-url');
+            console.log("Deleting:", url);
+
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+                .then(response => {
+                    if (!response.ok) throw new Error("Failed request");
+                    return response.json();
+                })
+                .then(data => {
+                    const tooltip = bootstrap.Tooltip.getInstance(deleteBtn);
+                    if (tooltip) tooltip.dispose();
+                    card.remove();
+                    console.log('File deleted successfully');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    card.style.filter = "grayscale(0)";
+                     card.style.opacity = "1";
+                });
+        });
+    });
+}

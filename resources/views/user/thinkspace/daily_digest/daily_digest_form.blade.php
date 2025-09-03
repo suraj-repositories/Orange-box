@@ -96,7 +96,7 @@
                                                     Add Media
                                                 </label>
                                                 <div class="btn-group-horizontal grid-list hide-lt-730 hide"
-                                                    id="card-list-tab-toggler" role="group"\>
+                                                    id="card-list-tab-toggler" role="group">
                                                     <input type="radio" class="btn-check" name="hbtn-radio"
                                                         id="card-radio" autocomplete="off" checked>
                                                     <label class="btn btn-outline-primary" for="card-radio"><i
@@ -119,7 +119,7 @@
                                                 @if (!empty($dailyDigest))
                                                     @foreach ($media as $file)
                                                         @if ($file['is_image'])
-                                                            <div class="col" data-media-files-index="0">
+                                                            <div class="col" data-ob-deleteable-card="true">
                                                                 <div class="card h-100">
                                                                     <div class="img-container">
                                                                         <img src="{{ $file['file_path'] }}" alt="image">
@@ -139,8 +139,8 @@
                                                                             <button type="button" class="delete"
                                                                                 data-bs-title="Delete"
                                                                                 data-bs-toggle="tooltip"
-                                                                                data-ob-dismiss="delete-card"
-                                                                                data-ob-url="{{ route('file.delete', $file['file_id']) }}">
+                                                                                data-ob-dismiss="editing-delete-card"
+                                                                                data-ob-delete-url="{{ route('file.delete', $file['file_id']) }}">
                                                                                 <i class="bx bx-trash-alt"></i></button>
 
                                                                         </div>
@@ -159,7 +159,7 @@
                                                                 </div>
                                                             </div>
                                                         @else
-                                                            <div class="col" data-media-files-index="3">
+                                                            <div class="col" data-ob-deleteable-card="true">
                                                                 <div class="card h-100">
                                                                     <div class="file-thumb-holder">
                                                                         <div class="file-thumb-box">
@@ -180,11 +180,11 @@
 
                                                                             </a>
 
-                                                                            <button type='button' class="delete"
+                                                                          <button type="button" class="delete"
                                                                                 data-bs-title="Delete"
                                                                                 data-bs-toggle="tooltip"
-                                                                                data-ob-dismiss="delete-card"
-                                                                                data-ob-url="{{ route('file.delete', $file['file_id']) }}">
+                                                                                data-ob-dismiss="editing-delete-card"
+                                                                                data-ob-delete-url="{{ route('file.delete', $file['file_id']) }}">
                                                                                 <i class="bx bx-trash-alt"></i></button>
                                                                         </div>
                                                                     </div>

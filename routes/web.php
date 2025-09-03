@@ -22,7 +22,7 @@ Route::get('/testing', [TestingController::class, 'testing']);
 
 
 
-Route::controller(FileController::class)->group(function(){
+Route::controller(FileController::class)->middleware('auth')->group(function(){
     Route::delete('file/{file}', 'destroy')->name('file.delete');
     Route::patch('file/{file}', 'rename')->name('file.rename');
 });

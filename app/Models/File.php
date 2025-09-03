@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 class File extends Model
 {
     //
+    use SoftDeletes;
 
     protected $fillable = [
         'file_path',
@@ -15,9 +17,11 @@ class File extends Model
         'mime_type'
     ];
 
-    public function imageable(){
+    public function fileable()
+    {
         return $this->morphTo();
     }
+
 
     public function getFileUrl(){
         if(Storage::disk('public')->exists($this->file_path)){

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 
 <head>
 
@@ -10,6 +9,7 @@
     <meta name="description" content="An Orange-box project is content storing system." />
     <meta name="author" content="ProjectAndPrograms" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- App favicon -->
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/ico" />
