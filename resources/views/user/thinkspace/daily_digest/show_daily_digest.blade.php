@@ -125,14 +125,7 @@
                             </div>
 
                         </div>
-
-
-
-
-
                     </div>
-                </div>
-
 
                 <div
                     class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5 row-cols-xxl-6 g-3 media-upload-preview image-cards card-view-container">
@@ -225,7 +218,6 @@
     <!-- Footer Start -->
     @include('layout.components.copyright')
     <!-- end Footer -->
-
 
 
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
