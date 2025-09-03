@@ -17214,7 +17214,7 @@ body.loading {
     color: var(--bs-gray-700);
     display: flex;
     align-items: center;
-    transition: all 0.5s ease;
+    /* transition: all 0.2s ease; */
 }
 
 .media-upload-preview .action a {

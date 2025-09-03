@@ -1,3 +1,4 @@
+
 :root,
 [data-bs-theme=light] {
     --bs-blue: #537AEF;
@@ -197,7 +198,7 @@
     transition: all .20s linear;
 }
 .modal.show {
-    animation: scale-in 0.3s ease-out;
+    animation: scale-in 0.2s ease-out;
 }
 
 .rename-modal .modal-header{
@@ -262,5 +263,34 @@
     background-color: transparent;
     border: 0;
     padding: 0;
+}
 
+/*  --------------------- actions tab ------------------- */
+
+.ob-actions-tab .action{
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    background: transparent;
+    cursor: pointer;
+}
+.ob-actions-tab .action.delete{
+  background-color: #ffe4e485 !important;
+  color: #ff3f2b !important;
+  border: 1px solid #ffbfbf !important;
+}
+.ob-actions-tab .action.edit{
+    background-color: #E1FFEB !important;
+  color: #0dc13a !important;
+  border: 1px solid #88e19a !important;
+}
+.ob-actions-tab .action.make-private{
+  background-color: #ffeedd85 !important;
+  color: #ff7836 !important;
+  border: 1px solid #ffab3f !important;
 }

@@ -71,9 +71,16 @@ class FileController extends Controller
                 $file->mime_type = Storage::disk('public')->mimeType($new_file_path);
                 $file->save();
 
+
+                Swal::success([
+                    'title' => 'File Rename Successful!',
+                ]);
                 return redirect()->back()->with('success', 'File Rename Successful!');
             }
 
+        Swal::error([
+            'title' => 'Something went wrong!',
+        ]);
             return redirect()->back()->with('error', 'Something went wrong!');
         }
 
