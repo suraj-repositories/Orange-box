@@ -18,5 +18,8 @@ Route::controller(DailyDigestController::class)->group(function(){
     Route::get('daily-digest/{dailyDigest}/edit', 'edit')->name('daily-digest.edit');
     Route::post('daily-digest/{dailyDigest}', 'update')->name('daily-digest.update');
     Route::delete('daily-digest/{dailyDigest}', 'destroy')->name('daily-digest.delete');
+
+    Route::post('daily-digest/{dailyDigest}/like', 'like')->name('daily-digest.like');
+    Route::post('daily-digest/{dailyDigest}/dislike', 'dislike')->name('daily-digest.dislike');
 });
 

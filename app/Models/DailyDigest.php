@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Likeable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DailyDigest extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Likeable;
 
     protected $primaryKey = 'id';
     //

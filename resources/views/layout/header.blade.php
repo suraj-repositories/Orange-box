@@ -25,6 +25,13 @@
 
     <link rel="stylesheet" href="{{ asset('assets/ckeditor5/ckeditor5.css') }}" />
     @include('sweetalert2::index')
+    @routes
+    <script>
+        function authRoute(url, args){
+            const uid = @json(Auth::check() ? Auth::user()->username : null);
+            return route(url, {userid: uid, ...args});
+        }
+    </script>
 </head>
 
 <!-- body start -->

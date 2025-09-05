@@ -294,3 +294,12 @@
   color: #ff7836 !important;
   border: 1px solid #ffab3f !important;
 }
+
+.like-btn, .dislike-btn{
+    border: none;
+    padding: 0;
+    background:transparent;
+    color: var(--bs-dark);
+    font-size: 18px;
+    cursor: pointer;
+}

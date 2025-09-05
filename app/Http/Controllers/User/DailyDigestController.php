@@ -9,6 +9,7 @@ use App\Rules\DescriptionLength;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Pail\ValueObjects\Origin\Console;
 use SweetAlert2\Laravel\Swal;
 
 class DailyDigestController extends Controller
@@ -175,5 +176,37 @@ class DailyDigestController extends Controller
             'title' => 'Digestion Deleted Successfully!',
         ]);
         return redirect()->to(authRoute('user.daily-digest'));
+    }
+
+    public function like(User $user, DailyDigest $dailyDigest, Request $request){
+        if($dailyDigest->likedBy($user->id)){
+            $dailyDigest->removeLike($user->id);
+        }else{
+            $dailyDigest->like($user->id);
+        }
+        return response()->json([
+            'status' => 'success',
+            'likes' => $dailyDigest->likesCount(),
+            'dislikes' => $dailyDigest->dislikesCount(),
+            'is_liked' => $dailyDigest->likedBy($user->id),
+            'is_disliked' => $dailyDigest->dislikedBy($user->id)
+        ]);
+    }
+
+    public function dislike(User $user, DailyDigest $dailyDigest, Request $request){
+
+
+        if($dailyDigest->dislikedBy($user->id)){
+            $dailyDigest->removeLike($user->id);
+        }else{
+            $dailyDigest->dislike($user->id);
+        }
+        return response()->json([
+            'status' => 'success',
+            'likes' => $dailyDigest->likesCount(),
+            'dislikes' => $dailyDigest->dislikesCount(),
+            'is_liked' => $dailyDigest->likedBy($user->id),
+            'is_disliked' => $dailyDigest->dislikedBy($user->id)
+        ]);
     }
 }
