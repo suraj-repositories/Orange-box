@@ -97,6 +97,7 @@ class DailyDigestController extends Controller
         }
 
         $media = $this->fileService->getMediaMetadata($dailyDigest->files);
+
         return view('user.thinkspace.daily_digest.show_daily_digest', compact('dailyDigest', 'media'));
     }
 

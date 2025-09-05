@@ -3,6 +3,13 @@
 
 class App {
 
+    init() {
+        this.initComponents();
+        this.initMenu();
+        this.initControls();
+        this.initResizeableTextArea();
+    }
+
     initComponents() {
 
         // Waves Effect
@@ -180,11 +187,22 @@ class App {
         }
     }
 
-    init() {
-        this.initComponents();
-        this.initMenu();
-        this.initControls();
+    initResizeableTextArea(){
+        const textAreas = document.querySelectorAll('textarea[resizeable="true"]');
+
+        if(!textAreas) return;
+
+        textAreas.forEach(textArea=>{
+            textArea.style.overflow = "hidden";
+           	textArea.rows = 1;
+            textArea.addEventListener("input", () => {
+                textArea.style.height = "auto";
+                textArea.style.height = textArea.scrollHeight + "px";
+            });
+        });
+
     }
+
 }
 
 new App().init();

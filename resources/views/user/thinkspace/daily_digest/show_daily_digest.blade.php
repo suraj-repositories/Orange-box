@@ -66,8 +66,9 @@
                                                 @php $dislikes = $dailyDigest->dislikesCount(); @endphp
                                                 {{ $dislikes > 0 ? $dislikes : 'Dislike' }}
                                             </span>
-                                            <i class="mdi ms-3 mdi-message me-1 align-middle"> </i>
-                                            50
+                                            <i class="mdi ms-2 fs-5 {{ $dailyDigest->commentBy(Auth::id()) ? 'mdi-message' : 'mdi-message-outline' }} me-1 align-middle"> </i>
+                                            @php $totalCommnents = $dailyDigest->totalCommentsCount(); @endphp
+                                            {{  $totalCommnents == 0 ? 'No comments' : $totalCommnents }}
                                             <i class="mdi mdi-calendar-blank-outline ms-2 me-1 align-middle"> </i>
 
                                             <span>Since - <span
@@ -104,7 +105,7 @@
                             </ul>
 
                             <div class="tab-content text-muted bg-white">
-                                <div class="tab-pane active show pt-4" id="ob_description" role="tabpanel">
+                                <div class="tab-pane  show pt-4" id="ob_description" role="tabpanel">
                                     <div id="description-area" class="rich-editor-content">
                                         @if ($dailyDigest->description)
                                             {!! $dailyDigest->description !!}
@@ -113,8 +114,8 @@
 
                                 </div>
 
-                                <div class="tab-pane pt-4" id="ob_comments" role="tabpanel">
-
+                                <div class="tab-pane active pt-2" id="ob_comments" role="tabpanel">
+                                    <x-comments />
                                 </div>
                                 <div class="tab-pane ob-actions-tab pt-4" id="ob_actions" role="tabpanel">
                                     <div class="d-flex gap-2 mb-2">
