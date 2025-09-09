@@ -115,7 +115,7 @@
                                 </div>
 
                                 <div class="tab-pane active pt-2" id="ob_comments" role="tabpanel">
-                                    <x-comments />
+                                    <x-comments :commentable="$dailyDigest" />
                                 </div>
                                 <div class="tab-pane ob-actions-tab pt-4" id="ob_actions" role="tabpanel">
                                     <div class="d-flex gap-2 mb-2">
@@ -235,4 +235,5 @@
 
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/daily-digest.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/comment.js') }}"></script>
 @endsection

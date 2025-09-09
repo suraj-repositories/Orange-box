@@ -8,12 +8,19 @@ use Illuminate\View\Component;
 
 class Comments extends Component
 {
+    public $comments;
+    public $commentable;
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct($commentable = null)
     {
         //
+        $this->comments = collect();
+        if(!empty($commentable)){
+            $this->comments = $commentable->topLevelComments()->orderBy('id', 'desc')->paginate(20);
+        }
+        $this->commentable = $commentable;
     }
 
     /**
@@ -21,6 +28,8 @@ class Comments extends Component
      */
     public function render(): View|Closure|string
     {
+
+
         return view('components.comments');
     }
 }

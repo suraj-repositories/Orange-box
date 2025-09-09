@@ -6,6 +6,7 @@
 <script src="{{ asset('assets/libs/waypoints/lib/jquery.waypoints.min.js') }}"></script>
 <script src="{{ asset('assets/libs/jquery.counterup/jquery.counterup.min.js') }}"></script>
 <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
+<script src="{{ asset('assets/libs/sweetalert/sweetalert2.min.js') }}"></script>
 
 <!-- Apexcharts JS -->
 <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>

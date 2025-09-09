@@ -52,5 +52,13 @@ class User extends Authenticatable
         ];
     }
 
+    public function name(){
+        return $this->username;
+    }
+
+    public function profilePicture(){
+        return "https://placehold.co/100/6E92FF/ffffff?text=S";
+    }
+
 
 }

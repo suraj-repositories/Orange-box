@@ -57,13 +57,18 @@
                                 width="128" height="128">
                             <div class="flex-grow-1 ms-3">
                                 <div class="form-floating comment-compose mb-2">
-                                    <textarea class="form-control w-100" resizeable='true' rows="1" placeholder="Leave a comment here" id="my-comment-reply" ></textarea>
-                                    <label for="my-comment-reply">Leave a comment here</label>
+                                    <textarea class="form-control w-100" resizeable='true' rows="1" placeholder="Leave a comment here"
+                                        id="comment-message-box"></textarea>
+                                    <label for="comment-message-box">Leave a comment here</label>
                                 </div>
                                 <div class="hstack justify-content-end gap-1">
                                     <button class="btn btn-sm btn-secondary rounded-pill">Cancel</button>
                                     <button class="btn btn-sm btn-primary rounded-pill"
-                                        id="my-comment-post">Comment</button>
+                                        data-ob-commentable-type="{{ $commentable::class }}"
+                                        data-ob-commentable-id="{{ $commentable->id }}"
+                                        data-ob-parent-id=""
+
+                                        id="comment-post-btn">Comment</button>
                                 </div>
                             </div>
                         </div>
@@ -76,159 +81,167 @@
                 <div class="vstack gap-4" style="--sk-icon-btn-size:1.25em;--sk-icon-btn-padding:.25rem;"
                     id="my-comment-list">
 
-                    <div class="comment-box">
-                        <div class="d-flex comment">
-                            <img class="rounded-circle comment-img" src="https://placehold.co/100/6E92FF/ffffff?text=S"
-                                width="128" height="128">
-                            <div class="flex-grow-1 ms-3">
-                                <div class="mb-1"><a href="#" class="fw-bold link-body-emphasis me-1">Studio
-                                        KonKon</a> <i class="zmdi zmdi-check me-1 fw-bold" title="verified"></i> <span
-                                        class="text-body-secondary text-nowrap">2 days ago</span></div>
-                                <div class="mb-1">Lorem ipsum dolor sit amet, ut qui commodo sensibus, id utinam
-                                    inermis constituto vim. In nam dolorum interesset, per fierent ponderum ea. Eos
-                                    aperiri feugiat democritum ne.</div>
-                                <div class="hstack align-items-center mb-0" style="margin-left:-.25rem;">
-                                    <button class="icon-btn me-1" href="#"><svg
-                                            class="svg-icon material-symbols-filled material-symbols-thumb_up"
-                                            width="48" height="48">
-                                            <use xlink:href="#google-thumb_up-fill"></use>
-                                        </svg></button>
-                                    <span class="me-3 small">55</span>
-                                    <button class="icon-btn me-4"><svg
-                                            class="svg-icon material-symbols-outlined material-symbols-thumb_down"
-                                            width="48" height="48">
-                                            <use xlink:href="#google-thumb_down"></use>
-                                        </svg></button>
-                                    <button class="btn btn-sm btn-secondary rounded-pill small">Reply</button>
-                                    <button class="btn btn-sm btn-danger rounded-pill small">Delete</button>
-                                </div>
-                                <div style="margin-left:-.769rem;">
-                                    <button
-                                        class="btn btn-primary rounded-pill d-inline-flex align-items-center collapsed"
-                                        data-bs-toggle="collapse" data-bs-target="#collapse-comment001"
-                                        aria-expanded="true" aria-controls="collapse-comment001">
-                                        <i class="chevron-down zmdi zmdi-chevron-down fs-4 me-2"></i>
-                                        <i class="chevron-up zmdi zmdi-chevron-up fs-4 me-2"></i>
-                                        <span>3 replies</span>
-                                    </button>
+                    @forelse ($comments as $comment)
+                        <div class="comment-box">
+                            <div class="d-flex comment">
+                                <img class="rounded-circle comment-img"
+                                    src="{{ $comment->user->profilePicture() }}" width="128" height="128">
+                                <div class="flex-grow-1 ms-3">
+                                    <div class="mb-1"><a href="#" class="fw-bold link-body-emphasis me-1"> {{ $comment->user->name() }} </a> <i class="zmdi zmdi-check me-1 fw-bold" title="verified"></i>
+                                        <span class="text-body-secondary text-nowrap">{{  $comment->created_at->diffForHumans() }}</span></div>
+                                    <div class="mb-1">{{ $comment->message }}</div>
+                                    <div class="hstack align-items-center mb-0" style="margin-left:-.25rem;">
+                                        <button class="icon-btn me-1" href="#"><svg
+                                                class="svg-icon material-symbols-filled material-symbols-thumb_up"
+                                                width="48" height="48">
+                                                <use xlink:href="#google-thumb_up-fill"></use>
+                                            </svg></button>
+                                        <span class="me-3 small">55</span>
+                                        <button class="icon-btn me-4"><svg
+                                                class="svg-icon material-symbols-outlined material-symbols-thumb_down"
+                                                width="48" height="48">
+                                                <use xlink:href="#google-thumb_down"></use>
+                                            </svg></button>
+                                        <button class="btn btn-sm btn-secondary rounded-pill small">Reply</button>
+                                        <button class="btn btn-sm btn-danger rounded-pill small">Delete</button>
+                                    </div>
+                                    <div style="margin-left:-.769rem;">
+                                        <button
+                                            class="btn btn-primary rounded-pill d-inline-flex align-items-center collapsed"
+                                            data-bs-toggle="collapse" data-bs-target="#collapse-comment001"
+                                            aria-expanded="true" aria-controls="collapse-comment001">
+                                            <i class="chevron-down zmdi zmdi-chevron-down fs-4 me-2"></i>
+                                            <i class="chevron-up zmdi zmdi-chevron-up fs-4 me-2"></i>
+                                            <span>3 replies</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
 
-                        <div class="collapse show" id="collapse-comment001" style="">
-                            <div class="comment-replies vstack gap-3 mt-1 bg-body-tertiary p-3 rounded-3">
+                            <div class="collapse show" id="collapse-comment001" style="">
+                                <div class="comment-replies vstack gap-3 mt-1 bg-body-tertiary p-3 rounded-3">
 
 
-                                <div class="d-flex">
-                                    <img class="rounded-circle comment-img"
-                                        src="https://placehold.co/100/cc99ff/ffffff?text=S" width="128"
-                                        height="128">
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="mb-1"><a href="#"
-                                                class="fw-bold link-body-emphasis pe-1">Shinobu KonKon</a> <span
-                                                class="text-body-secondary text-nowrap">1 day ago</span></div>
-                                        <div class="mb-2">Disputando voluptatibus ei sit. Et veri deserunt
-                                            theophrastus pri, at mutat choro eum.</div>
-                                        <div class="hstack align-items-center" style="margin-left:-.25rem;">
-                                            <button class="icon-btn me-1" href="#"><svg
-                                                    class="svg-icon material-symbols-outlined material-symbols-thumb_up"
-                                                    width="48" height="48">
-                                                    <use xlink:href="#google-thumb_up"></use>
-                                                </svg></button>
-                                            <span class="me-3 small">1</span>
-                                            <button class="icon-btn me-4" href="#"><svg
-                                                    class="svg-icon material-symbols-outlined material-symbols-thumb_down"
-                                                    width="48" height="48">
-                                                    <use xlink:href="#google-thumb_down"></use>
-                                                </svg></button>
-                                            <button class="btn btn-sm btn-secondary rounded-pill small">Reply</button>
+                                    <div class="d-flex">
+                                        <img class="rounded-circle comment-img"
+                                            src="https://placehold.co/100/cc99ff/ffffff?text=S" width="128"
+                                            height="128">
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="mb-1"><a href="#"
+                                                    class="fw-bold link-body-emphasis pe-1">Shinobu KonKon</a> <span
+                                                    class="text-body-secondary text-nowrap">1 day ago</span></div>
+                                            <div class="mb-2">Disputando voluptatibus ei sit. Et veri deserunt
+                                                theophrastus pri, at mutat choro eum.</div>
+                                            <div class="hstack align-items-center" style="margin-left:-.25rem;">
+                                                <button class="icon-btn me-1" href="#"><svg
+                                                        class="svg-icon material-symbols-outlined material-symbols-thumb_up"
+                                                        width="48" height="48">
+                                                        <use xlink:href="#google-thumb_up"></use>
+                                                    </svg></button>
+                                                <span class="me-3 small">1</span>
+                                                <button class="icon-btn me-4" href="#"><svg
+                                                        class="svg-icon material-symbols-outlined material-symbols-thumb_down"
+                                                        width="48" height="48">
+                                                        <use xlink:href="#google-thumb_down"></use>
+                                                    </svg></button>
+                                                <button
+                                                    class="btn btn-sm btn-secondary rounded-pill small">Reply</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- Comment #1 Replies #1.2 //-->
-                                <div class="d-flex">
-                                    <img class="rounded-circle comment-img"
-                                        src="https://placehold.co/100/ffcc99/ffffff?text=O" width="128"
-                                        height="128">
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="mb-1"><a href="#"
-                                                class="fw-bold link-body-emphasis pe-1">Yuki Uki</a> <span
-                                                class="text-body-secondary text-nowrap">1 minute ago</span></div>
-                                        <div class="mb-1">Oremlo ipsumay olay orsumday itamay oremay oxfay imdray
-                                            onsecteturcay adipiscingay elitay, eday osay eiusmoday emporecay
-                                            incididuntay utay aborecay etay oloredcay agnay aliquaay.</div>
-                                        <div class="hstack align-items-center" style="margin-left:-.25rem;">
-                                            <button class="icon-btn me-1" href="#"><svg
-                                                    class="svg-icon material-symbols-outlined material-symbols-thumb_up"
-                                                    width="48" height="48">
-                                                    <use xlink:href="#google-thumb_up"></use>
-                                                </svg></button>
-                                            <span class="me-3 small" hidden="">0</span>
-                                            <button class="icon-btn me-4" href="#"><svg
-                                                    class="svg-icon material-symbols-filled material-symbols-thumb_down-fill"
-                                                    width="48" height="48">
-                                                    <use xlink:href="#google-thumb_down-fill"></use>
-                                                </svg></button>
-                                            <button class="btn btn-sm btn-secondary rounded-pill small">Reply</button>
+                                    <!-- Comment #1 Replies #1.2 //-->
+                                    <div class="d-flex">
+                                        <img class="rounded-circle comment-img"
+                                            src="https://placehold.co/100/ffcc99/ffffff?text=O" width="128"
+                                            height="128">
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="mb-1"><a href="#"
+                                                    class="fw-bold link-body-emphasis pe-1">Yuki Uki</a> <span
+                                                    class="text-body-secondary text-nowrap">1 minute ago</span></div>
+                                            <div class="mb-1">Oremlo ipsumay olay orsumday itamay oremay oxfay imdray
+                                                onsecteturcay adipiscingay elitay, eday osay eiusmoday emporecay
+                                                incididuntay utay aborecay etay oloredcay agnay aliquaay.</div>
+                                            <div class="hstack align-items-center" style="margin-left:-.25rem;">
+                                                <button class="icon-btn me-1" href="#"><svg
+                                                        class="svg-icon material-symbols-outlined material-symbols-thumb_up"
+                                                        width="48" height="48">
+                                                        <use xlink:href="#google-thumb_up"></use>
+                                                    </svg></button>
+                                                <span class="me-3 small" hidden="">0</span>
+                                                <button class="icon-btn me-4" href="#"><svg
+                                                        class="svg-icon material-symbols-filled material-symbols-thumb_down-fill"
+                                                        width="48" height="48">
+                                                        <use xlink:href="#google-thumb_down-fill"></use>
+                                                    </svg></button>
+                                                <button
+                                                    class="btn btn-sm btn-secondary rounded-pill small">Reply</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- Comment #1 Replies #1.3 //-->
-                                <div class="d-flex">
-                                    <img class="rounded-circle comment-img"
-                                        src="https://placehold.co/100/ff99cc/ffffff?text=K" width="128"
-                                        height="128">
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="mb-1"><a href="#"
-                                                class="fw-bold text-bg-secondary py-1 px-2 rounded-pill me-1">Kamisato
-                                                Mugi</a> <span class="text-body-secondary text-nowrap">just now</span>
-                                        </div>
-                                        <div class="mb-1"><a href="#">@Shinobu_KonKon</a> Vivamus ac varius
-                                            augue. Curabitur luctus convallis lorem, vitae convallis dui volutpat nec.
-                                        </div>
-                                        <div class="hstack align-items-center" style="margin-left:-.25rem;">
-                                            <button class="icon-btn me-1" href="#"><svg
-                                                    class="svg-icon material-symbols-filled material-symbols-thumb_up-fill"
-                                                    width="48" height="48">
-                                                    <use xlink:href="#google-thumb_up-fill"></use>
-                                                </svg></button>
-                                            <span class="me-3 small">2</span>
-                                            <button class="icon-btn me-4" href="#"><svg
-                                                    class="svg-icon material-symbols-outlined material-symbols-thumb_down"
-                                                    width="48" height="48">
-                                                    <use xlink:href="#google-thumb_down"></use>
-                                                </svg></button>
-                                            <button class="btn btn-sm btn-secondary rounded-pill small">Reply</button>
+                                    <!-- Comment #1 Replies #1.3 //-->
+                                    <div class="d-flex">
+                                        <img class="rounded-circle comment-img"
+                                            src="https://placehold.co/100/ff99cc/ffffff?text=K" width="128"
+                                            height="128">
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="mb-1"><a href="#"
+                                                    class="fw-bold text-bg-secondary py-1 px-2 rounded-pill me-1">Kamisato
+                                                    Mugi</a> <span class="text-body-secondary text-nowrap">just
+                                                    now</span>
+                                            </div>
+                                            <div class="mb-1"><a href="#">@Shinobu_KonKon</a> Vivamus ac
+                                                varius
+                                                augue. Curabitur luctus convallis lorem, vitae convallis dui volutpat
+                                                nec.
+                                            </div>
+                                            <div class="hstack align-items-center" style="margin-left:-.25rem;">
+                                                <button class="icon-btn me-1" href="#"><svg
+                                                        class="svg-icon material-symbols-filled material-symbols-thumb_up-fill"
+                                                        width="48" height="48">
+                                                        <use xlink:href="#google-thumb_up-fill"></use>
+                                                    </svg></button>
+                                                <span class="me-3 small">2</span>
+                                                <button class="icon-btn me-4" href="#"><svg
+                                                        class="svg-icon material-symbols-outlined material-symbols-thumb_down"
+                                                        width="48" height="48">
+                                                        <use xlink:href="#google-thumb_down"></use>
+                                                    </svg></button>
+                                                <button
+                                                    class="btn btn-sm btn-secondary rounded-pill small">Reply</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="d-flex">
-                                    <img class="rounded-circle comment-img"
-                                        src="https://placehold.co/100/6E92FF/ffffff?text=S" width="128"
-                                        height="128">
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="mb-2">
-                                            <div class="text-body-secondary small">Replying to @Kamisato_Mugi</div>
-                                        </div>
-                                        <div class="form-floating comment-compose mb-2">
-                                            <textarea class="form-control w-100" placeholder="Leave a comment here" id="my-comment-reply" style="height:2rem;"></textarea>
-                                            <label for="my-comment-reply">Leave a comment here</label>
-                                        </div>
-                                        <div class="hstack justify-content-end gap-1">
-                                            <button class="btn btn-sm btn-secondary rounded-pill">Cancel</button>
-                                            <button class="btn btn-sm btn-primary rounded-pill">Comment</button>
+                                    <div class="d-flex">
+                                        <img class="rounded-circle comment-img"
+                                            src="https://placehold.co/100/6E92FF/ffffff?text=S" width="128"
+                                            height="128">
+                                        <div class="flex-grow-1 ms-3">
+                                            <div class="mb-2">
+                                                <div class="text-body-secondary small">Replying to @Kamisato_Mugi</div>
+                                            </div>
+                                            <div class="form-floating comment-compose mb-2">
+                                                <textarea class="form-control w-100" placeholder="Leave a comment here" id="my-comment-reply" style="height:2rem;"></textarea>
+                                                <label for="my-comment-reply">Leave a comment here</label>
+                                            </div>
+                                            <div class="hstack justify-content-end gap-1">
+                                                <button class="btn btn-sm btn-secondary rounded-pill">Cancel</button>
+                                                <button class="btn btn-sm btn-primary rounded-pill">Comment</button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
-                        </div>
 
-                    </div>
+                        </div>
+                    @empty
+                        <x-no-data />
+                    @endforelse
+
 
                 </div>
 
