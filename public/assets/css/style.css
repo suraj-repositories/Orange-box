@@ -488,4 +488,16 @@
 .comment-section .link-body-emphasis:hover{
     color:  rgba(255, 69, 69, 0.932) !important
 }
+
+.loading-btn .spinner-border{
+    display: none;
+}
+.loading-btn.loading{
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+.loading-btn.loading .spinner-border{
+    display: inline-block;
+}
 /* End : comment section css */
+

@@ -31,8 +31,48 @@ class CommentController extends Controller
             'message' => 'Comment added successfully.',
             'data'    => $comment->load('user', 'replies'),
         ]);
-
-
     }
+
+    public function loadComment(Request $request){
+        $size = 5;
+        $modelClass = $request->commentable_type;
+        $commentable = $modelClass::find($request->commentable_id);
+
+        if (!$commentable) {
+            return response()->json([
+                'status' => 404,
+                'data' => '',
+                'message' => 'Commentable not found'
+            ]);
+        }
+
+        $comments = $commentable->topLevelComments()
+        ->orderBy('id', 'desc')
+        ->paginate($size, ['*'], 'page', $request->page ?? 1);
+
+
+        if ($comments->isEmpty()) {
+            return response()->json([
+                'status' => 204,
+                'data' => view('components.no-data')->render(),
+                'message' => 'No comments available'
+            ]);
+        }
+
+        if ($request->page > $comments->lastPage()) {
+            return response()->json([
+                'status' => 204,
+                'data' => '',
+                'message' => 'No more comments to load'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => view('components.comment.comments', ['comments' => $comments])->render(),
+            'message' => 'Comments fetched successfully'
+        ]);
+}
+
 
 }

@@ -26,6 +26,11 @@ class Comment extends Model
     public function replies(){
         return $this->hasMany(Comment::class, 'parent_id');
     }
+
+    public function totalReplies(){
+        return $this->replies()->count();
+    }
+
     public function parent(){
         return $this->belongsTo(Comment::class, 'parent_id');
     }
