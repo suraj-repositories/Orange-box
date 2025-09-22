@@ -32,16 +32,22 @@ showView('card');
 
 
 function showView(view = 'card') {
-
+    const cardRadio = document.getElementById("card-radio");
+    const listRadio = document.getElementById("list-radio");
     if (view === 'card') {
-        !listViewContainer.classList.contains('hide') && listViewContainer.classList.add('hide');
-        cardViewContainer.classList.contains('hide') && cardViewContainer.classList.remove('hide');
-        document.getElementById("card-radio").checked = true;
+        listViewContainer && !listViewContainer.classList.contains('hide') && listViewContainer.classList.add('hide');
+        cardViewContainer && cardViewContainer.classList.contains('hide') && cardViewContainer.classList.remove('hide');
+        if (cardRadio) {
+            cardRadio.checked = true;
+        }
 
     } else if (view === 'list') {
-        !cardViewContainer.classList.contains('hide') && cardViewContainer.classList.add('hide');
-        listViewContainer.classList.contains('hide') && listViewContainer.classList.remove('hide');
-        document.getElementById("list-radio").checked = true;
+        cardViewContainer && !cardViewContainer.classList.contains('hide') && cardViewContainer.classList.add('hide');
+        listViewContainer && listViewContainer.classList.contains('hide') && listViewContainer.classList.remove('hide');
+        if (listRadio) {
+            listRadio.checked = true;
+
+        }
     }
 }
 
@@ -49,18 +55,20 @@ function showView(view = 'card') {
 // add selected files to card logic
 // ------------------------------------------------------
 
+const mediaInputElement = document.querySelector("#media-input");
 
+if (mediaInputElement) {
+    mediaInputElement.addEventListener('change', (event) => {
+        event.target.files.forEach(file => {
+            MEDIA_FILES.push(file);
+            toggleCardListTabBtns('show');
 
-document.querySelector("#media-input").addEventListener('change', (event) => {
-    event.target.files.forEach(file => {
-        MEDIA_FILES.push(file);
-        toggleCardListTabBtns('show');
+            updateCardsView(file);
+            updateListView(file);
 
-        updateCardsView(file);
-        updateListView(file);
-
+        });
     });
-});
+}
 
 function updateListView(file) {
     let listRowHTML = `<div class="card border-0 rounded-0 list-row-card" data-media-files-index="${MEDIA_FILES.length - 1}">
@@ -218,23 +226,25 @@ function updateCardsView(file) {
 // ------------------------------------------------------
 // adding images to form
 // ------------------------------------------------------
+const addDailyDigestForm = document.querySelector("#add-digest-form");
+if (addDailyDigestForm) {
+    addDailyDigestForm.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-document.querySelector("#add-digest-form").addEventListener('submit', function (e) {
-    e.preventDefault();
+        let dataTransfer = new DataTransfer();
+        MEDIA_FILES.forEach(file => {
+            if (file && file != null) {
+                dataTransfer.items.add(file);
+            }
+        });
 
-    let dataTransfer = new DataTransfer();
-    MEDIA_FILES.forEach(file => {
-        if (file && file != null) {
-            dataTransfer.items.add(file);
-        }
+        this.querySelector('#media-input').files = dataTransfer.files;
+        console.log(this.querySelector('#media-input'), this.querySelector('#media-input').files);
+
+        this.submit();
+
     });
-
-    this.querySelector('#media-input').files = dataTransfer.files;
-    console.log(this.querySelector('#media-input'), this.querySelector('#media-input').files);
-
-    this.submit();
-
-});
+}
 
 function enableRefactorFileDelete() {
     const fileCards = document.querySelectorAll('[data-ob-deleteable-card="true"]');

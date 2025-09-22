@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     //
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'commentable_type' => 'required|string',
             'commentable_id'   => 'required|integer',
@@ -21,7 +22,7 @@ class CommentController extends Controller
         $comment = Comment::create([
             'user_id'         => Auth::id(),
             'parent_id'       => $request->parent_id,
-            'commentable_type'=> $request->commentable_type,
+            'commentable_type' => $request->commentable_type,
             'commentable_id'  => $request->commentable_id,
             'message'         => $request->message,
         ]);
@@ -33,7 +34,8 @@ class CommentController extends Controller
         ]);
     }
 
-    public function loadComment(Request $request){
+    public function loadComment(Request $request)
+    {
         $size = 5;
         $modelClass = $request->commentable_type;
         $commentable = $modelClass::find($request->commentable_id);
@@ -47,8 +49,8 @@ class CommentController extends Controller
         }
 
         $comments = $commentable->topLevelComments()
-        ->orderBy('id', 'desc')
-        ->paginate($size, ['*'], 'page', $request->page ?? 1);
+            ->orderBy('id', 'desc')
+            ->paginate($size, ['*'], 'page', $request->page ?? 1);
 
 
         if ($comments->isEmpty()) {
@@ -69,10 +71,56 @@ class CommentController extends Controller
 
         return response()->json([
             'status' => 200,
-            'data' => view('components.comment.comments', ['comments' => $comments])->render(),
+            'data' => view('components.comment.comments', ['comments' => $comments, 'commentable' => $commentable])->render(),
             'message' => 'Comments fetched successfully'
         ]);
-}
+    }
+
+    public function loadReplies(Request $request)
+    {
+        $size = 5;
+        $modelClass = $request->commentable_type;
+        $commentable = $modelClass::find($request->commentable_id);
+        $comment = Comment::find($request->comment_id);
+
+        if (!$commentable) {
+            return response()->json([
+                'status' => 404,
+                'data' => '',
+                'message' => 'Commentable not found'
+            ]);
+        }
+        if (!$comment) {
+            return response()->json([
+                'status' => 404,
+                'data' => '',
+                'message' => 'Comment not found'
+            ]);
+        }
+
+        $replies = $comment->topLevelReplies()->paginate($size, ['*'], 'page', $request->page ?? 1);
 
 
+        if ($replies->isEmpty()) {
+            return response()->json([
+                'status' => 204,
+                'data' => view('components.no-data')->render(),
+                'message' => 'No replies available'
+            ]);
+        }
+
+        if ($request->page > $replies->lastPage()) {
+            return response()->json([
+                'status' => 204,
+                'data' => '',
+                'message' => 'No more replies to load'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 200,
+            'data' => view('components.comment.comment-reply', ['commentable' => $commentable, 'comment' => $comment, 'replies' => $replies])->render(),
+            'message' => 'Replies fetched successfully'
+        ]);
+    }
 }

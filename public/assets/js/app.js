@@ -188,17 +188,18 @@ class App {
     }
 
     initResizeableTextArea(){
-        const textAreas = document.querySelectorAll('textarea[resizeable="true"]');
+       const textAreas = document.querySelectorAll('textarea[resizeable="true"]');
 
-        if(!textAreas) return;
-
-        textAreas.forEach(textArea=>{
+        if (!textAreas.length) return;
+        textAreas.forEach(textArea => {
+            if (textArea.dataset.autoResizeAttached) return;
             textArea.style.overflow = "hidden";
-           	textArea.rows = 1;
+            textArea.rows = 1;
             textArea.addEventListener("input", () => {
                 textArea.style.height = "auto";
                 textArea.style.height = textArea.scrollHeight + "px";
             });
+            textArea.dataset.autoResizeAttached = "true";
         });
 
     }

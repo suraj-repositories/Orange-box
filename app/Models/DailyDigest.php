@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Commentable;
-use App\Likeable;
+use App\Traits\Commentable;
+use App\Traits\Likeable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Comment;
 use App\Models\File;
+use App\Observers\CommentObserver;
 use App\Policies\FilePolicy;
 use App\Services\FileService;
 use App\Services\Impl\FileServiceImpl;
@@ -28,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
     {
 
         Gate::policy(File::class, FilePolicy::class);
+
+        Comment::observe(CommentObserver::class);
 
         //
         if (app()->environment('local')) {

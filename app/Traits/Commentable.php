@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Traits;
 
 use App\Models\Comment;
 
@@ -26,5 +26,7 @@ trait Commentable
     public function commentBy($userId){
         return $this->comments()->where('user_id', $userId)->exists();
     }
+
+
 
 }
