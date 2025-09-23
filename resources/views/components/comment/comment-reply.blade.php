@@ -1,5 +1,5 @@
 @foreach ($replies as $reply)
-    <div class="d-flex ps-4">
+    <div class="d-flex ps-4" @if(!empty($is_newly_created)) data-ob-is-newly-created="true" data-ob-new-identification-key="{{ $reply->id }}" @endif>
         <img class="rounded-circle comment-img" src="{{ $reply->user->profilePicture() }}" width="128" height="128">
         <div class="flex-grow-1 ms-2">
             <div class="mb-1"><a href="#" class="fw-bold link-body-emphasis pe-1">{{ $reply->user->name() }}</a>
@@ -24,7 +24,7 @@
                         <use xlink:href="#google-thumb_down{{ $reply->dislikedBy(Auth::id()) ? '-fill' : '' }}"></use>
                     </svg></button>
                 <button data-ob-replyto="{{ $reply->user->name() }}"
-                    data-ob-commentable-type="{{ $commentable::class }}"
+                    data-ob-commentable-type=@json($commentable::class)
                     data-ob-commentable-id="{{ $commentable->id }}" data-ob-parent-id="{{ $reply->id }}"
                     class="btn btn-sm btn-secondary rounded-pill small reply-btn">Reply</button>
             </div>

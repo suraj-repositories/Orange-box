@@ -27,7 +27,7 @@
                         </svg></button>
                     <button class="btn btn-sm btn-secondary rounded-pill small reply-btn"
                         data-ob-replyto="{{ $comment->user->name() }}"
-                        data-ob-commentable-type="{{ $commentable::class }}"
+                        data-ob-commentable-type=@json($commentable::class)
                         data-ob-commentable-id="{{ $commentable->id }}"
                         data-ob-parent-id="{{ $comment->id }}">Reply</button>
                     <button class="btn btn-sm btn-danger rounded-pill small">Delete</button>
@@ -55,11 +55,10 @@
                 <x-comment.comment-reply :commentable="$commentable" :comment="$comment" :replies="$comment->topLevelReplies()->take(5)->get()" />
 
                 @if ($comment->totalTopLevelReplies() > 5)
-
                     <button data-ob-commentable-type="{{ $commentable::class }}"
                         data-ob-commentable-id="{{ $commentable->id }}" data-ob-comment-id="{{ $comment->id }}"
                         data-ob-page="2" onclick="loadReplyBtnClick(this)"
-                        class="btn btn-primary loading-btn px-2 btn-sm rounded-pill w-fit ms-4">
+                        class="btn btn-primary load-more-replies-btn loading-btn px-2 btn-sm rounded-pill w-fit ms-4">
                         <span class="spinner-border spinner-border-sm " aria-hidden="true"></span>
                         <span class="btn-text" role="status">Load More</span>
                     </button>

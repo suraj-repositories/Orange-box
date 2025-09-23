@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Psy\CodeCleaner\ReturnTypePass;
 
 class CommentController extends Controller
 {
@@ -27,10 +28,25 @@ class CommentController extends Controller
             'message'         => $request->message,
         ]);
 
+        $htmlView = "";
+        if (!empty($request->parent_id)) {
+            $modelClass = $request->commentable_type;
+            $commentable = $modelClass::find($request->commentable_id);
+            $parentComment = Comment::find($request->parent_id);
+
+            $htmlView = view('components.comment.comment-reply')->with([
+                'commentable' => $commentable,
+                'comment' => $parentComment,
+                'replies' => collect([$comment]),
+                'is_newly_created' => true
+            ])->render();
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Comment added successfully.',
             'data'    => $comment->load('user', 'replies'),
+            'html' => $htmlView
         ]);
     }
 
@@ -98,7 +114,11 @@ class CommentController extends Controller
             ]);
         }
 
-        $replies = $comment->topLevelReplies()->paginate($size, ['*'], 'page', $request->page ?? 1);
+        $replies = $comment->topLevelReplies()
+            ->when($request->has('new_identification_keys'), function ($query) use ($request) {
+                $query->whereNotIn('id', $request->new_identification_keys);
+            })
+            ->paginate($size, ['*'], 'page', $request->page ?? 1);
 
 
         if ($replies->isEmpty()) {

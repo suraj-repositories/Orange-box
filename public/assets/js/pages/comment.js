@@ -31,6 +31,7 @@ function enableCommentFeature() {
 }
 
 function saveComment(commentInput, commentableType, commentableId, parentId) {
+
     fetch(authRoute('user.comments.store', {}), {
         method: "POST",
         headers: {
@@ -49,15 +50,40 @@ function saveComment(commentInput, commentableType, commentableId, parentId) {
             if (data.success) {
 
                 commentInput.value = "";
-                if(parentId == null || parentId == undefined || parentId == ""){
+                if (parentId == null || parentId == undefined || parentId == "") {
                     loadComments("#ob-comment-list", args = { page: 1 });
-                }
 
-                Swal.fire({
-                    title: "Success",
-                    text: data.message,
-                    icon: "success"
-                });
+                    Swal.fire({
+                        title: "Success",
+                        text: data.message,
+                        icon: "success"
+                    });
+                } else {
+                    const replyForm = commentInput.closest(".reply-form");
+                    if (replyForm) {
+                        const commentBox = replyForm.closest(".comment-box");
+                        const replyBox = commentBox.querySelector('.comment-replies');
+                        const collapse = commentBox.querySelector('.collapse');
+                        if (collapse && !collapse.classList.contains('show')) {
+                            collapse.classList.add('show');
+                        }
+
+                        if (replyBox) {
+                            const loadMoreBtn = replyBox.querySelector("button.load-more-replies-btn");
+                            const noMoreCommentMsg = replyBox.querySelector(".no-more-replies");
+                            if (loadMoreBtn) {
+                                loadMoreBtn.insertAdjacentHTML("beforebegin", data.html);
+                            } else if (noMoreCommentMsg) {
+                                noMoreCommentMsg.outerHTML = data.html;
+                            } else {
+                                replyBox.insertAdjacentHTML("beforeend", data.html);
+                            }
+                        }
+                        replyForm.remove();
+                        enableReplyBtns();
+                    }
+
+                }
             } else {
                 Swal.fire({
                     title: "Oops...",
@@ -173,48 +199,50 @@ function enableReplyBtns() {
         const isListenerAdded = btn.getAttribute('is-listener-added');
         if (isListenerAdded && isListenerAdded == 'true') return;
 
-        btn.setAttribute("is-listener-added", 'true');
         btn.addEventListener('click', function () {
-            const parent = btn.parentElement;
-            const replyUser = btn.getAttribute("data-ob-replyto");
-            const replierPhotoElement = document.querySelector('img.user-image');
-            if (!parent || parent.parentElement.querySelector('.reply-form')) {
-                return;
-            }
-            let replierPhotoSrc = "/assets/images/defaults/user.png";
-            if (replierPhotoElement) {
-                replierPhotoSrc = replierPhotoElement.src;
-            }
-
-            const commentableType = btn.getAttribute('data-ob-commentable-type');
-            const commentableId = btn.getAttribute('data-ob-commentable-id');
-            const parentId = btn.getAttribute('data-ob-parent-id');
-
-            parent.insertAdjacentHTML(
-                "afterend",
-                `<div class="d-flex reply-form mt-2">
-                            <img class="rounded-circle comment-img" src="${replierPhotoSrc}">
-                            <div class="flex-grow-1 ms-3">
-                                <div class="mb-2">
-                                    <div class="text-body-secondary small">Replying to <i class="text-primary">@${replyUser}</i></div>
-                                </div>
-                                <div class="form-floating comment-compose mb-2">
-                                    <textarea class="form-control w-100" id="my-comment-reply"  placeholder="Leave a comment here" resizeable="true"></textarea>
-                                </div>
-                                <div class="hstack justify-content-end gap-1">
-                                    <button class="btn btn-sm btn-secondary rounded-pill" onclick="deleteThisReplyForm(this)">Cancel</button>
-                                    <button class="btn btn-sm btn-primary rounded-pill" onclick="replyComment(this, '${commentableType}', ${commentableId}, ${parentId})">Comment</button>
-                                </div>
-                            </div>
-                        </div>`
-            );
-
-            new App().initResizeableTextArea();
+            addLisenerToReplyBtn(btn);
         });
+        btn.setAttribute("is-listener-added", 'true');
     });
+}
+
+function addLisenerToReplyBtn(btn) {
+    const parent = btn.parentElement;
+    const replyUser = btn.getAttribute("data-ob-replyto");
+    const replierPhotoElement = document.querySelector('img.user-image');
+    if (!parent || parent.parentElement.querySelector('.reply-form')) {
+        return;
+    }
+    let replierPhotoSrc = "/assets/images/defaults/user.png";
+    if (replierPhotoElement) {
+        replierPhotoSrc = replierPhotoElement.src;
+    }
+
+    const commentableType = btn.getAttribute('data-ob-commentable-type');
+    const commentableId = btn.getAttribute('data-ob-commentable-id');
+    const parentId = btn.getAttribute('data-ob-parent-id');
 
 
+    parent.insertAdjacentHTML(
+        "afterend",
+        `<div class="d-flex reply-form mt-2">
+            <img class="rounded-circle comment-img" src="${replierPhotoSrc}">
+            <div class="flex-grow-1 ms-3">
+                <div class="mb-2">
+                    <div class="text-body-secondary small">Replying to <i class="text-primary">@${replyUser}</i></div>
+                </div>
+                <div class="form-floating comment-compose mb-2">
+                    <textarea class="form-control w-100" id="my-comment-reply"  placeholder="Leave a comment here" resizeable="true"></textarea>
+                </div>
+                <div class="hstack justify-content-end gap-1">
+                    <button class="btn btn-sm btn-secondary rounded-pill" onclick="deleteThisReplyForm(this)">Cancel</button>
+                    <button class="btn btn-sm btn-primary rounded-pill" data-type="${commentableType}"  onclick="replyComment(this, '${commentableType}', ${commentableId}, ${parentId})">Comment</button>
+                </div>
+            </div>
+        </div>`
+    );
 
+    new App().initResizeableTextArea();
 }
 
 function deleteThisReplyForm(deleteBtn) {
@@ -226,6 +254,7 @@ function deleteThisReplyForm(deleteBtn) {
 
 function replyComment(button, commentableType, commentableId, parentId) {
 
+    console.log(commentableType);
     const replyForm = button.closest(".reply-form");
     if (replyForm) {
 
@@ -237,7 +266,7 @@ function replyComment(button, commentableType, commentableId, parentId) {
     }
 }
 
-function loadReplyBtnClick(loadMoreBtn){
+function loadReplyBtnClick(loadMoreBtn) {
     const commentableType = loadMoreBtn.getAttribute("data-ob-commentable-type");
     const commentableId = loadMoreBtn.getAttribute("data-ob-commentable-id");
     const commentId = loadMoreBtn.getAttribute("data-ob-comment-id");
@@ -261,6 +290,15 @@ function loadReplies(loadMoreBtn, commentableType, commentableId, commentId, pag
         loadMoreBtn.classList.add('loading');
         loadMoreBtn.querySelector('.btn-text').textContent = 'Loading...';
 
+
+        const commentBox = loadMoreBtn.closest(".comment-box");
+        const newElems = commentBox.querySelectorAll(
+            '[data-ob-is-newly-created="true"]'
+        );
+
+        const keys = Array.from(newElems).map(el =>
+            el.getAttribute('data-ob-new-identification-key')
+        );
         try {
 
             const response = await fetch(authRoute('user.comments.load.replies'), {
@@ -273,7 +311,8 @@ function loadReplies(loadMoreBtn, commentableType, commentableId, commentId, pag
                     commentable_type: commentableType,
                     commentable_id: commentableId,
                     comment_id: commentId,
-                    page: page
+                    page: page,
+                    new_identification_keys: keys
                 })
             });
 
