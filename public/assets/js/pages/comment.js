@@ -2,13 +2,14 @@
 document.addEventListener("DOMContentLoaded", () => {
     enableCommentFeature();
     loadComments("#ob-comment-list");
+    enableCancelComment("#canelComment", '#comment-message-box');
 });
 
 function enableCommentFeature() {
     const commentTextarea = document.getElementById("comment-message-box");
     const postBtn = document.getElementById("comment-post-btn");
 
-    postBtn.addEventListener("click", function () {
+    postBtn.addEventListener("click", async function () {
         let message = commentTextarea.value.trim();
 
         if (message === "") {
@@ -24,15 +25,24 @@ function enableCommentFeature() {
         const parentId = postBtn.getAttribute('data-ob-parent-id') ?? null;
 
 
-        saveComment(commentTextarea, commentableType, commentableId, parentId);
+        await saveComment(commentTextarea, commentableType, commentableId, parentId);
+        commentTextarea.style.height = "56px";
     });
 
 
 }
 
-function saveComment(commentInput, commentableType, commentableId, parentId) {
+function enableCancelComment(btnSelector, textAreaSelector){
+    const btn = document.querySelector(btnSelector);
+    const textArea = document.querySelector(textAreaSelector);
+    btn.addEventListener('click', ()=>{
+        textArea.style.height = "56px";
+        textArea.value = "";
+    });
+}
 
-    fetch(authRoute('user.comments.store', {}), {
+async function saveComment(commentInput, commentableType, commentableId, parentId, counterElement = null) {
+    await fetch(authRoute('user.comments.store', {}), {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -84,6 +94,23 @@ function saveComment(commentInput, commentableType, commentableId, parentId) {
                     }
 
                 }
+
+                if (counterElement) {
+                    let num = parseInt(counterElement.textContent.trim());
+                    counterElement.textContent = (num + 1) + "";
+                }
+
+                const totalCommentCountEl = document.querySelector(".total_comment_count");
+                if (totalCommentCountEl) {
+                    const rawText = totalCommentCountEl.textContent.trim();
+                    const count = parseInt(rawText, 10);
+
+                    if (!isNaN(count) && Number.isInteger(count)) {
+                        updateTotalCommentCount(count + 1);
+                    }
+                }
+
+
             } else {
                 Swal.fire({
                     title: "Oops...",
@@ -93,7 +120,6 @@ function saveComment(commentInput, commentableType, commentableId, parentId) {
             }
         })
         .catch(error => {
-            console.error("Error:", error);
             Swal.fire({
                 title: "Oops...",
                 text: 'Failed to post comment.',
@@ -103,7 +129,16 @@ function saveComment(commentInput, commentableType, commentableId, parentId) {
         });
 }
 
-function loadComments(selector, args = { page: 1 }) {
+function updateTotalCommentCount(count) {
+    const counters = document.querySelectorAll('.total_comment_count');
+    if (counters) {
+        counters.forEach(counter => {
+            counter.textContent = count;
+        });
+    }
+}
+
+function loadComments(selector, args = { page: 1, order: 'desc' }) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const commentBox = document.querySelector(selector);
     const loader = commentBox.querySelector('.loader');
@@ -134,7 +169,8 @@ function loadComments(selector, args = { page: 1 }) {
                 body: JSON.stringify({
                     commentable_type: commentableType,
                     commentable_id: commentableId,
-                    page: page
+                    page: page,
+                    order: args.order
                 })
             });
 
@@ -252,9 +288,9 @@ function deleteThisReplyForm(deleteBtn) {
     }
 }
 
-function replyComment(button, commentableType, commentableId, parentId) {
+async function replyComment(button, commentableType, commentableId, parentId) {
 
-    console.log(commentableType);
+
     const replyForm = button.closest(".reply-form");
     if (replyForm) {
 
@@ -262,7 +298,22 @@ function replyComment(button, commentableType, commentableId, parentId) {
         if (!textarea) {
             return;
         }
-        saveComment(textarea, commentableType, commentableId, parentId);
+        if (textarea.value.trim() == '') {
+            Swal.fire({
+                title: "Oops...",
+                text: 'Please write a comment before posting.',
+                icon: "error"
+            });
+            return;
+        }
+
+        const btnTxt = button.textContent;
+        button.textContent = "Saving...";
+        const commentBox = button.closest('.comment-box');
+        const counterElement = commentBox.querySelector(".replies_count");
+
+        await saveComment(textarea, commentableType, commentableId, parentId, counterElement);
+        button.textContent = btnTxt;
     }
 }
 
@@ -345,4 +396,73 @@ function loadReplies(loadMoreBtn, commentableType, commentableId, commentId, pag
 
     fetchReplies();
 
+}
+
+async function deleteCommentBtnClick(deleteBtn, commentId) {
+    const comment = deleteBtn.closest('.comment-box');
+
+    if (!comment) {
+        return;
+    }
+    comment.classList.add('deleting');
+    const deleted = await deleteComment(commentId);
+
+    if (deleted) {
+        comment.remove();
+    } else {
+        comment.classList.remove('deleting');
+    }
+
+    const hasMore = document.querySelector("#ob-comment-list .comment-box .comment");
+    console.log(hasMore);
+    if(!hasMore){
+         loadComments("#ob-comment-list");
+    }
+}
+
+
+async function deleteReplyBtnClick(deleteBtn, commentId) {
+    const comment = deleteBtn.closest('.comment-reply');
+    if (!comment) {
+        return;
+    }
+
+    comment.classList.add('deleting');
+
+    if (await deleteComment(commentId)) {
+        comment.remove();
+    } else {
+
+        comment.classList.remove('deleting');
+    }
+}
+
+async function deleteComment(commentId) {
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const response = await fetch(authRoute('user.comments.destroy', { comment: commentId }), {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': csrfToken
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+            let totalCommentCount = document.querySelector(".total_comment_count");
+            if (totalCommentCount) {
+                totalCommentCount = parseInt(totalCommentCount.textContent);
+                updateTotalCommentCount(totalCommentCount - 1);
+            }
+
+            return true;
+        }
+
+        return false;
+
+    } catch (error) {
+        return false;
+    }
 }

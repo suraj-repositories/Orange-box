@@ -28,4 +28,5 @@ Route::controller(CommentController::class)->group(function(){
     Route::post('comments', 'store')->name('comments.store');
     Route::post('comments/load-comments', 'loadComment')->name('comments.load.comments');
     Route::post('comments/load-replies', 'loadReplies')->name('comments.load.replies');
+    Route::delete('comments/{comment}', 'destroy')->name('comments.destroy');
 });

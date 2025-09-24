@@ -1,5 +1,6 @@
+
 @foreach ($replies as $reply)
-    <div class="d-flex ps-4" @if(!empty($is_newly_created)) data-ob-is-newly-created="true" data-ob-new-identification-key="{{ $reply->id }}" @endif>
+    <div class="d-flex comment-reply ps-4" @if(!empty($is_newly_created)) data-ob-is-newly-created="true" data-ob-new-identification-key="{{ $reply->id }}" @endif>
         <img class="rounded-circle comment-img" src="{{ $reply->user->profilePicture() }}" width="128" height="128">
         <div class="flex-grow-1 ms-2">
             <div class="mb-1"><a href="#" class="fw-bold link-body-emphasis pe-1">{{ $reply->user->name() }}</a>
@@ -27,6 +28,10 @@
                     data-ob-commentable-type=@json($commentable::class)
                     data-ob-commentable-id="{{ $commentable->id }}" data-ob-parent-id="{{ $reply->id }}"
                     class="btn btn-sm btn-secondary rounded-pill small reply-btn">Reply</button>
+                @if($reply->user->id == auth()->id())
+                    <button data-comment-id="{{ $reply->id }}" onclick="deleteReplyBtnClick(this, this.dataset.commentId)"
+                        class="btn btn-sm btn-danger rounded-pill small">Delete</button>
+                @endif
             </div>
         </div>
     </div>

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Psy\CodeCleaner\ReturnTypePass;
 
 class CommentController extends Controller
@@ -64,8 +66,8 @@ class CommentController extends Controller
             ]);
         }
 
-        $comments = $commentable->topLevelComments()
-            ->orderBy('id', 'desc')
+        $comments = $commentable->topLevelComments()->with(['user'])
+            ->orderBy('id', $request->order ?? 'desc')
             ->paginate($size, ['*'], 'page', $request->page ?? 1);
 
 
@@ -141,6 +143,20 @@ class CommentController extends Controller
             'status' => 200,
             'data' => view('components.comment.comment-reply', ['commentable' => $commentable, 'comment' => $comment, 'replies' => $replies])->render(),
             'message' => 'Replies fetched successfully'
+        ]);
+    }
+
+    public function destroy(User $user, Comment $comment, Request $request){
+        if($comment->user->id != $user->id){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Access deined!'
+            ]);
+        }
+        $comment->delete();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Comment deleted successfully!'
         ]);
     }
 }

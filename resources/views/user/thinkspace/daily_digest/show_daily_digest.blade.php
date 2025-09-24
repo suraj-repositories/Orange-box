@@ -68,7 +68,7 @@
                                             </span>
                                             <i class="mdi ms-2 fs-5 {{ $dailyDigest->commentBy(Auth::id()) ? 'mdi-message' : 'mdi-message-outline' }} me-1 align-middle"> </i>
                                             @php $totalCommnents = $dailyDigest->totalCommentsCount(); @endphp
-                                            {{  $totalCommnents == 0 ? 'No comments' : $totalCommnents }}
+                                            <span class="total_comment_count">{{  $totalCommnents == 0 ? 'No comments' : $totalCommnents }}</span>
                                             <i class="mdi mdi-calendar-blank-outline ms-2 me-1 align-middle"> </i>
 
                                             <span>Since - <span

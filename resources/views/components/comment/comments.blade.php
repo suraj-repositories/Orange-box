@@ -30,7 +30,11 @@
                         data-ob-commentable-type=@json($commentable::class)
                         data-ob-commentable-id="{{ $commentable->id }}"
                         data-ob-parent-id="{{ $comment->id }}">Reply</button>
-                    <button class="btn btn-sm btn-danger rounded-pill small">Delete</button>
+                    @if ($comment->user->id == auth()->id())
+                        <button data-comment-id="{{ $comment->id }}"
+                            onclick="deleteCommentBtnClick(this, this.dataset.commentId)"
+                            class="btn btn-sm btn-danger rounded-pill small">Delete</button>
+                    @endif
                 </div>
                 @php $totalReplies = $comment->totalTopLevelReplies(); @endphp
 
@@ -41,7 +45,7 @@
                             aria-expanded="true" aria-controls="collapse-{{ $loop->iteration }}">
                             <i class="chevron-down zmdi zmdi-chevron-down fs-4 me-2"></i>
                             <i class="chevron-up zmdi zmdi-chevron-up fs-4 me-2"></i>
-                            <span>{{ $totalReplies }} replies</span>
+                            <span><span class="replies_count">{{ $totalReplies }}</span> replies</span>
                         </button>
                     </div>
                 @endif

@@ -29,7 +29,7 @@
             <div class="mb-4">
 
                 <div class="mb-5 hstack gap-3 align-items-center">
-                    <div class="fs-5">{{ $totalComments }} Comments</div>
+                    <div class="fs-5"><span class="total_comment_count">{{ $totalComments }}</span> Comments</div>
                     <div class="dropdown">
                         <button class="sort-btn btn btn-secondary hstack align-items-center gap-2 py-1 px-2 fw-normal"
                             data-bs-toggle="dropdown" role="button" aria-expanded="false">
@@ -57,11 +57,11 @@
                             <div class="flex-grow-1 ms-3">
                                 <div class="form-floating comment-compose mb-2">
                                     <textarea class="form-control w-100" resizeable='true' rows="1" placeholder="Leave a comment here"
-                                        id="comment-message-box"></textarea>
+                                        id="comment-message-box" ></textarea>
                                     <label for="comment-message-box">Leave a comment here</label>
                                 </div>
                                 <div class="hstack justify-content-end gap-1">
-                                    <button class="btn btn-sm btn-secondary rounded-pill">Cancel</button>
+                                    <button class="btn btn-sm btn-secondary rounded-pill" id="canelComment">Cancel</button>
                                     <button class="btn btn-sm btn-primary rounded-pill"
                                         data-ob-commentable-type="{{ $commentable::class }}"
                                         data-ob-commentable-id="{{ $commentable->id }}" data-ob-parent-id=""

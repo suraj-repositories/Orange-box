@@ -524,9 +524,22 @@
     min-height: 20px;
     padding: 0 !important;
 }
-.comment-section .reply-form .comment-img{
+
+.comment-section .reply-form .comment-img {
     width: 2rem;
     height: 2rem;
+}
+
+.comment-section .deleting {
+    filter: grayscale(1);
+    position: relative;
+}
+
+.comment-section .deleting::after {
+    content: "Deleting...";
+    position: absolute;
+    right: 0px;
+    top: 2px;
 }
 
 /* End : comment section css */
