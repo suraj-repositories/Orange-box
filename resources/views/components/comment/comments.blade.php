@@ -3,7 +3,7 @@
         <div class="d-flex comment">
             <img class="rounded-circle comment-img" src="{{ $comment->user->profilePicture() }}" width="128"
                 height="128">
-            <div class="flex-grow-1 ms-3">
+            <div class="flex-grow-1 ms-3 text-break">
                 <div class="mb-1"><a href="#" class="fw-bold link-body-emphasis me-1">
                         {{ $comment->user->name() }} </a> <i class="zmdi zmdi-check me-1 fw-bold" title="verified"></i>
                     <span class="text-body-secondary text-nowrap">{{ $comment->created_at->diffForHumans() }}</span>

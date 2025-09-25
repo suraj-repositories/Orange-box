@@ -11,6 +11,7 @@ function enableCommentFeature() {
 
     postBtn.addEventListener("click", async function () {
         let message = commentTextarea.value.trim();
+        const prevPostBtnText = postBtn.textContent;
 
         if (message === "") {
             Swal.fire({
@@ -20,6 +21,7 @@ function enableCommentFeature() {
             });
             return;
         }
+        postBtn.textContent = "Saving...";
         const commentableType = postBtn.getAttribute('data-ob-commentable-type');
         const commentableId = postBtn.getAttribute('data-ob-commentable-id');
         const parentId = postBtn.getAttribute('data-ob-parent-id') ?? null;
@@ -27,15 +29,21 @@ function enableCommentFeature() {
 
         await saveComment(commentTextarea, commentableType, commentableId, parentId);
         commentTextarea.style.height = "56px";
+
+        postBtn.textContent = "Comment Saved!";
+        setTimeout(() => {
+            postBtn.textContent = prevPostBtnText;
+        }, 2000);
+
     });
 
 
 }
 
-function enableCancelComment(btnSelector, textAreaSelector){
+function enableCancelComment(btnSelector, textAreaSelector) {
     const btn = document.querySelector(btnSelector);
     const textArea = document.querySelector(textAreaSelector);
-    btn.addEventListener('click', ()=>{
+    btn.addEventListener('click', () => {
         textArea.style.height = "56px";
         textArea.value = "";
     });
@@ -62,12 +70,11 @@ async function saveComment(commentInput, commentableType, commentableId, parentI
                 commentInput.value = "";
                 if (parentId == null || parentId == undefined || parentId == "") {
                     loadComments("#ob-comment-list", args = { page: 1 });
-
-                    Swal.fire({
-                        title: "Success",
-                        text: data.message,
-                        icon: "success"
-                    });
+                    // Swal.fire({
+                    //     title: "Success",
+                    //     text: data.message,
+                    //     icon: "success"
+                    // });
                 } else {
                     const replyForm = commentInput.closest(".reply-form");
                     if (replyForm) {
@@ -100,15 +107,7 @@ async function saveComment(commentInput, commentableType, commentableId, parentI
                     counterElement.textContent = (num + 1) + "";
                 }
 
-                const totalCommentCountEl = document.querySelector(".total_comment_count");
-                if (totalCommentCountEl) {
-                    const rawText = totalCommentCountEl.textContent.trim();
-                    const count = parseInt(rawText, 10);
-
-                    if (!isNaN(count) && Number.isInteger(count)) {
-                        updateTotalCommentCount(count + 1);
-                    }
-                }
+                setTotalCommentCount(data.total_comments);
 
 
             } else {
@@ -129,11 +128,16 @@ async function saveComment(commentInput, commentableType, commentableId, parentI
         });
 }
 
-function updateTotalCommentCount(count) {
+function setTotalCommentCount(count) {
     const counters = document.querySelectorAll('.total_comment_count');
     if (counters) {
         counters.forEach(counter => {
-            counter.textContent = count;
+            if (!isNaN(count)) {
+                counter.textContent = count;
+            } else {
+                counter.textContent = 0;
+            }
+
         });
     }
 }
@@ -414,12 +418,11 @@ async function deleteCommentBtnClick(deleteBtn, commentId) {
     }
 
     const hasMore = document.querySelector("#ob-comment-list .comment-box .comment");
-    console.log(hasMore);
-    if(!hasMore){
-         loadComments("#ob-comment-list");
+
+    if (!hasMore) {
+        loadComments("#ob-comment-list");
     }
 }
-
 
 async function deleteReplyBtnClick(deleteBtn, commentId) {
     const comment = deleteBtn.closest('.comment-reply');
@@ -448,15 +451,13 @@ async function deleteComment(commentId) {
             }
         });
 
+        if (response.status === 404) {
+            return true;
+        }
+
         const data = await response.json();
 
         if (data.status === "success") {
-            let totalCommentCount = document.querySelector(".total_comment_count");
-            if (totalCommentCount) {
-                totalCommentCount = parseInt(totalCommentCount.textContent);
-                updateTotalCommentCount(totalCommentCount - 1);
-            }
-
             return true;
         }
 

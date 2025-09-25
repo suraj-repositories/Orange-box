@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\DeleteCommentTreeJob;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
-use Psy\CodeCleaner\ReturnTypePass;
 
 class CommentController extends Controller
 {
@@ -44,11 +43,18 @@ class CommentController extends Controller
             ])->render();
         }
 
+        $totalComments = $comment->commentable->totalCommentsCount();
+        $rootComment = Comment::find($comment->root_id);
+        $totalReplies = $rootComment->totalTopLevelReplies();
+
         return response()->json([
             'success' => true,
             'message' => 'Comment added successfully.',
             'data'    => $comment->load('user', 'replies'),
-            'html' => $htmlView
+            'total_comments' => $totalComments,
+            'total_replies' => $totalReplies,
+            'html' => $htmlView,
+
         ]);
     }
 
@@ -146,17 +152,21 @@ class CommentController extends Controller
         ]);
     }
 
-    public function destroy(User $user, Comment $comment, Request $request){
-        if($comment->user->id != $user->id){
+    public function destroy(User $user, Comment $comment, Request $request)
+    {
+        if ($comment->user->id != $user->id) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Access deined!'
             ]);
         }
         $comment->delete();
+        DeleteCommentTreeJob::dispatch($comment->id);
+
         return response()->json([
             'status' => 'success',
-            'message' => 'Comment deleted successfully!'
+            'message' => 'Comment deleted successfully!',
+
         ]);
     }
 }
