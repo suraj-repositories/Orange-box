@@ -10,21 +10,30 @@
                 </div>
                 <div class="mb-1">{{ $comment->message }}</div>
                 <div class="hstack align-items-center mb-0" style="margin-left:-.25rem;">
-                    <button class="icon-btn me-1" href="#"><svg
-                            class="svg-icon material-symbols-filled material-symbols-thumb_up" width="48"
-                            height="48">
-                            <use xlink:href="#google-thumb_up{{ $comment->likedBy(Auth::id()) ? '-fill' : '' }}"></use>
-                        </svg></button>
-                    <span class="me-3 small">
+                     <button class="icon-btn comment-like-btn {{ $comment->likedBy(Auth::id()) ? 'filled' : '' }}" onclick="toggleCommentReaction(this, {{ $comment->id }}, 'like')">
+                        <svg class="svg-icon material-symbols-outlined material-symbols-thumb_up active"
+                            width="48" height="48">
+                            <use xlink:href="#google-thumb_up-fill"></use>
+                        </svg>
+                        <svg class="svg-icon material-symbols-outlined material-symbols-thumb_up inactive"
+                            width="48" height="48">
+                            <use xlink:href="#google-thumb_up"></use>
+                        </svg>
+                    </button>
+                    <span class="me-3 small comment-like-count">
                         @php $likeCount = $comment->likesCount(); @endphp
                         {{ $likeCount > 0 ? $likeCount : 'Like' }}
                     </span>
-                    <button class="icon-btn me-4"><svg
-                            class="svg-icon material-symbols-outlined material-symbols-thumb_down" width="48"
-                            height="48">
-                            <use xlink:href="#google-thumb_down{{ $comment->dislikedBy(Auth::id()) ? '-fill' : '' }}">
-                            </use>
-                        </svg></button>
+                    <button class="icon-btn comment-dislike-btn me-2 {{ $comment->dislikedBy(Auth::id()) ? 'filled' : '' }}"  onclick="toggleCommentReaction(this, {{ $comment->id }}, 'dislike')">
+                        <svg class="svg-icon material-symbols-outlined material-symbols-thumb_down active"
+                            width="48" height="48">
+                            <use xlink:href="#google-thumb_down-fill"></use>
+                        </svg>
+                        <svg class="svg-icon material-symbols-outlined material-symbols-thumb_down inactive"
+                            width="48" height="48">
+                            <use xlink:href="#google-thumb_down"></use>
+                        </svg>
+                    </button>
                     <button class="btn btn-sm btn-secondary rounded-pill small reply-btn"
                         data-ob-replyto="{{ $comment->user->name() }}"
                         data-ob-commentable-type=@json($commentable::class)
@@ -40,7 +49,7 @@
 
                 @if ($totalReplies > 0)
                     <div style="margin-left:-.769rem;">
-                        <button class="btn btn-primary rounded-pill d-inline-flex align-items-center collapsed"
+                        <button class="btn show-replies-btn btn-primary rounded-pill d-inline-flex align-items-center collapsed"
                             data-bs-toggle="collapse" data-bs-target="#collapse-{{ $loop->iteration }}"
                             aria-expanded="true" aria-controls="collapse-{{ $loop->iteration }}">
                             <i class="chevron-down zmdi zmdi-chevron-down fs-4 me-2"></i>

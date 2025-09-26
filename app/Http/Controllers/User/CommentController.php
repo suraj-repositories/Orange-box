@@ -96,6 +96,7 @@ class CommentController extends Controller
         return response()->json([
             'status' => 200,
             'data' => view('components.comment.comments', ['comments' => $comments, 'commentable' => $commentable])->render(),
+            'has_next_page' => $comments->hasMorePages(),
             'message' => 'Comments fetched successfully'
         ]);
     }
@@ -148,6 +149,7 @@ class CommentController extends Controller
         return response()->json([
             'status' => 200,
             'data' => view('components.comment.comment-reply', ['commentable' => $commentable, 'comment' => $comment, 'replies' => $replies])->render(),
+            'has_next_page' => $replies->hasMorePages(),
             'message' => 'Replies fetched successfully'
         ]);
     }
@@ -167,6 +169,39 @@ class CommentController extends Controller
             'status' => 'success',
             'message' => 'Comment deleted successfully!',
 
+        ]);
+    }
+
+    public function like(User $user, Comment $comment, Request $request)
+    {
+        if ($comment->likedBy($user->id)) {
+            $comment->removeLike($user->id);
+        } else {
+            $comment->like($user->id);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'likes' => $comment->likesCount(),
+            'dislikes' => $comment->dislikesCount(),
+            'is_liked' => $comment->likedBy($user->id),
+            'is_disliked' => $comment->dislikedBy($user->id)
+        ]);
+    }
+    public function dislike(User $user, Comment $comment, Request $request)
+    {
+        if ($comment->dislikedBy($user->id)) {
+            $comment->removeLike($user->id);
+        } else {
+            $comment->dislike($user->id);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'likes' => $comment->likesCount(),
+            'dislikes' => $comment->dislikesCount(),
+            'is_liked' => $comment->likedBy($user->id),
+            'is_disliked' => $comment->dislikedBy($user->id)
         ]);
     }
 }

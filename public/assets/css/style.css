@@ -542,4 +542,20 @@
     top: 2px;
 }
 
+.comment-section .icon-btn .svg-icon.active {
+  display: none !important;
+}
+
+.comment-section .icon-btn .svg-icon.inactive {
+  display: inline !important;
+}
+
+.comment-section .icon-btn.filled .svg-icon.active {
+  display: inline !important;
+}
+
+.comment-section .icon-btn.filled .svg-icon.inactive {
+  display: none !important;
+}
+
 /* End : comment section css */

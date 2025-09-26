@@ -21,6 +21,7 @@ function enableCommentFeature() {
             });
             return;
         }
+        postBtn.disabled = true;
         postBtn.textContent = "Saving...";
         const commentableType = postBtn.getAttribute('data-ob-commentable-type');
         const commentableId = postBtn.getAttribute('data-ob-commentable-id');
@@ -30,9 +31,11 @@ function enableCommentFeature() {
         await saveComment(commentTextarea, commentableType, commentableId, parentId);
         commentTextarea.style.height = "56px";
 
+
         postBtn.textContent = "Comment Saved!";
         setTimeout(() => {
             postBtn.textContent = prevPostBtnText;
+            postBtn.disabled = false;
         }, 2000);
 
     });
@@ -191,6 +194,11 @@ function loadComments(selector, args = { page: 1, order: 'desc' }) {
                 } else {
                     commentBox.insertAdjacentHTML("beforeend", result.data);
                 }
+
+                if(!result.has_next_page){
+                    loadMoreBtn.remove();
+                }
+
                 page++;
                 enableReplyBtns();
             } else if (result.status === 204) {
@@ -379,6 +387,9 @@ function loadReplies(loadMoreBtn, commentableType, commentableId, commentId, pag
             loadMoreBtn.querySelector('.btn-text').textContent = 'Load More';
             if (result.status === 200) {
                 loadMoreBtn.insertAdjacentHTML("beforebegin", result.data);
+                if(!result.has_next_page){
+                    loadMoreBtn.remove();
+                }
                 page++;
                 enableReplyBtns();
             } else if (result.status === 204) {
@@ -429,13 +440,55 @@ async function deleteReplyBtnClick(deleteBtn, commentId) {
     if (!comment) {
         return;
     }
-
     comment.classList.add('deleting');
 
     if (await deleteComment(commentId)) {
-        comment.remove();
-    } else {
 
+        const collapse = comment.closest(".collapse");
+        comment.remove();
+        if (collapse != undefined && collapse != null) {
+            const hasMoreReplies = collapse.querySelector(".comment-reply");
+
+            const loadMoreBtn = collapse.querySelector(".load-more-replies-btn");
+            if (!hasMoreReplies && loadMoreBtn) {
+
+                loadMoreBtn.click();
+
+                setTimeout(() => {
+                    const hasLoadedReplies = collapse.querySelector(".comment-reply");
+                    if (!hasLoadedReplies) {
+
+                        collapse.classList.remove('show');
+                        const noMoreReplyElement = collapse.querySelector(".no-more-replies");
+                        if (noMoreReplyElement) {
+                            noMoreReplyElement.remove();
+                        }
+
+                        const commentbox = collapse.closest('.comment-box');
+                        if (commentbox) {
+                            const repliesCountBtn = commentbox.querySelector(".show-replies-btn");
+                            if (repliesCountBtn) {
+                                repliesCountBtn.remove();
+                            }
+                        }
+                    }
+                }, 2500);
+
+            } else if (!hasMoreReplies && !loadMoreBtn) {
+
+                collapse.classList.remove('show');
+
+                const commentbox = collapse.closest('.comment-box');
+                if (commentbox) {
+                    const repliesCountBtn = commentbox.querySelector(".show-replies-btn");
+                    if (repliesCountBtn) {
+                        repliesCountBtn.remove();
+                    }
+                }
+            }
+
+        }
+    } else {
         comment.classList.remove('deleting');
     }
 }
@@ -466,4 +519,56 @@ async function deleteComment(commentId) {
     } catch (error) {
         return false;
     }
+}
+
+function toggleCommentReaction(btn, commentId, action) {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const actionDiv = btn.parentElement;
+
+    const likeText = actionDiv.querySelector(".comment-like-count");
+    const likeBtn = actionDiv.querySelector(".comment-like-btn");
+    const dislikeBtn = actionDiv.querySelector(".comment-dislike-btn");
+
+    const isLikeAction = action == 'like';
+    const otherBtn = isLikeAction ? dislikeBtn : likeBtn;
+
+    console.log(isLikeAction, otherBtn);
+
+    btn.classList.toggle('filled');
+    if (otherBtn.classList.contains('filled')) {
+        otherBtn.classList.remove('filled');
+    }
+
+    const route = authRoute(
+        isLikeAction ? 'user.comments.like' : 'user.comments.dislike',
+        { comment: commentId }
+    );
+
+    fetch(route, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-csrf-token': csrfToken
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                if (data.is_liked === true) {
+                    dislikeBtn.classList.remove('filled');
+                    likeBtn.classList.add('filled');
+                } else if (data.is_disliked === true) {
+                    likeBtn.classList.remove('filled');
+                    dislikeBtn.classList.add('filled');
+                } else {
+                    likeBtn.classList.remove('filled');
+                    dislikeBtn.classList.remove('filled');
+                }
+
+                likeText.textContent = data.likes > 0 ? data.likes : 'Like';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
