@@ -11,10 +11,13 @@ class DeleteCommentTreeJob implements ShouldQueue
     use Queueable;
 
     protected $chunkSize = 1000;
+    protected $commentId;
     /**
      * Create a new job instance.
      */
-    public function __construct(public int $commentId) {}
+    public function __construct(int $commentId) {
+        $this->commentId = $commentId;
+    }
 
     /**
      * Execute the job.
@@ -34,6 +37,8 @@ class DeleteCommentTreeJob implements ShouldQueue
 
             $page++;
         } while (count($ids) === 1000);
+
+        $comment->delete();
 
     }
 }

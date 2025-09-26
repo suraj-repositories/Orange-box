@@ -27,16 +27,17 @@ class FileController extends Controller
 
         $file->delete();
 
-       if ($request->isJson() || $request->wantsJson()) {
-                return response()->json([
-                    'status' => 200,
-                    'message' => 'File Deleted Successfully!'
-                ]);
+        if ($request->isJson() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'File Deleted Successfully!'
+            ]);
         }
 
 
         Swal::success([
-            'title' => 'File Deleted Successfully!',
+            'title' => 'Success!',
+            'text' => 'File Deleted Successfully!',
         ]);
         return redirect()->back();
     }
@@ -73,14 +74,17 @@ class FileController extends Controller
 
 
                 Swal::success([
-                    'title' => 'File Rename Successful!',
+                    'title' => 'Success!',
+                    'text' => 'File Rename Successful!',
                 ]);
                 return redirect()->back()->with('success', 'File Rename Successful!');
             }
 
-        Swal::error([
-            'title' => 'Something went wrong!',
-        ]);
+            Swal::error([
+                'title' => 'Oops!',
+                'text' => 'Something went wrong!',
+            ]);
+
             return redirect()->back()->with('error', 'Something went wrong!');
         }
 

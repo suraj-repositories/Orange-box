@@ -105,7 +105,7 @@
                             </ul>
 
                             <div class="tab-content text-muted bg-white">
-                                <div class="tab-pane  show pt-4" id="ob_description" role="tabpanel">
+                                <div class="tab-pane active show pt-4" id="ob_description" role="tabpanel">
                                     <div id="description-area" class="rich-editor-content">
                                         @if ($dailyDigest->description)
                                             {!! $dailyDigest->description !!}
@@ -114,7 +114,7 @@
 
                                 </div>
 
-                                <div class="tab-pane active pt-2" id="ob_comments" role="tabpanel">
+                                <div class="tab-pane pt-2" id="ob_comments" role="tabpanel">
                                    <x-comment.comment-component :commentable="$dailyDigest" />
                                 </div>
                                 <div class="tab-pane ob-actions-tab pt-4" id="ob_actions" role="tabpanel">

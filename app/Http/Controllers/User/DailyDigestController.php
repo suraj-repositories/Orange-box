@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\DeleteCommentableCommentsJob;
 use App\Models\DailyDigest;
 use App\Models\User;
 use App\Rules\DescriptionLength;
@@ -82,7 +83,8 @@ class DailyDigestController extends Controller
             }
         }
         Swal::success([
-                'title' => 'Digestion Created Successfully!',
+            'title' => 'Success!',
+            'text' => 'Digestion Created Successfully!',
         ]);
         return redirect()->to(authRoute('user.daily-digest.show', ['dailyDigest' => $dailyDigest]));
     }
@@ -92,7 +94,7 @@ class DailyDigestController extends Controller
      */
     public function show(User $user, DailyDigest $dailyDigest)
     {
-        if($dailyDigest->user_id != $user->id && !$user->hasRole('admin')){
+        if ($dailyDigest->user_id != $user->id && !$user->hasRole('admin')) {
             abort(403, "Access Denied!");
         }
 
@@ -106,7 +108,7 @@ class DailyDigestController extends Controller
      */
     public function edit(User $user, DailyDigest $dailyDigest)
     {
-        if($dailyDigest->user_id != $user->id && !$user->hasRole('admin')){
+        if ($dailyDigest->user_id != $user->id && !$user->hasRole('admin')) {
             abort(403, "Access Denied!");
         }
 
@@ -120,7 +122,7 @@ class DailyDigestController extends Controller
     public function update(User $user, DailyDigest $dailyDigest, Request $request)
     {
         //
-         if($dailyDigest->user_id != $user->id && !$user->hasRole('admin')){
+        if ($dailyDigest->user_id != $user->id && !$user->hasRole('admin')) {
             abort(403, "Access Denied!");
         }
 
@@ -157,8 +159,9 @@ class DailyDigestController extends Controller
 
         $dailyDigest->save();
         Swal::success([
-                'title' => 'Digestion Updated Successfully!',
-            ]);
+            'title' => 'Success!',
+            'text' => 'Digestion Updated Successfully!',
+        ]);
         return redirect()->to(authRoute('user.daily-digest.show', ['dailyDigest' => $dailyDigest]));
     }
 
@@ -168,21 +171,28 @@ class DailyDigestController extends Controller
     public function destroy(User $user, DailyDigest $dailyDigest)
     {
         //
-         if($dailyDigest->user_id != $user->id && !$user->hasRole('admin')){
+        if ($dailyDigest->user_id != $user->id && !$user->hasRole('admin')) {
             abort(403, "Access Denied!");
         }
 
+        DeleteCommentableCommentsJob::dispatch(
+            get_class($dailyDigest),
+            $dailyDigest->id
+        );
         $dailyDigest->delete();
+
         Swal::success([
-            'title' => 'Digestion Deleted Successfully!',
+            'title' => 'Success!',
+            'text' => 'Digestion Deleted Successfully!',
         ]);
         return redirect()->to(authRoute('user.daily-digest'));
     }
 
-    public function like(User $user, DailyDigest $dailyDigest, Request $request){
-        if($dailyDigest->likedBy($user->id)){
+    public function like(User $user, DailyDigest $dailyDigest, Request $request)
+    {
+        if ($dailyDigest->likedBy($user->id)) {
             $dailyDigest->removeLike($user->id);
-        }else{
+        } else {
             $dailyDigest->like($user->id);
         }
         return response()->json([
@@ -194,12 +204,13 @@ class DailyDigestController extends Controller
         ]);
     }
 
-    public function dislike(User $user, DailyDigest $dailyDigest, Request $request){
+    public function dislike(User $user, DailyDigest $dailyDigest, Request $request)
+    {
 
 
-        if($dailyDigest->dislikedBy($user->id)){
+        if ($dailyDigest->dislikedBy($user->id)) {
             $dailyDigest->removeLike($user->id);
-        }else{
+        } else {
             $dailyDigest->dislike($user->id);
         }
         return response()->json([

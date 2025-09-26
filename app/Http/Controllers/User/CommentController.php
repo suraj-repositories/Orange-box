@@ -188,6 +188,7 @@ class CommentController extends Controller
             'is_disliked' => $comment->dislikedBy($user->id)
         ]);
     }
+
     public function dislike(User $user, Comment $comment, Request $request)
     {
         if ($comment->dislikedBy($user->id)) {
