@@ -180,7 +180,7 @@
 
                                                                             </a>
 
-                                                                          <button type="button" class="delete"
+                                                                            <button type="button" class="delete"
                                                                                 data-bs-title="Delete"
                                                                                 data-bs-toggle="tooltip"
                                                                                 data-ob-dismiss="editing-delete-card"
@@ -339,5 +339,6 @@
 
     @include('layout.ckeditor5')
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/add-media.js') }}"></script>
     <script src="{{ asset('assets/js/pages/daily-digest.js') }}"></script>
 @endsection

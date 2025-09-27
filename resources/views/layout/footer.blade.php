@@ -7,18 +7,23 @@
 <script src="{{ asset('assets/libs/jquery.counterup/jquery.counterup.min.js') }}"></script>
 <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
 <script src="{{ asset('assets/libs/sweetalert/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('assets/libs/summernote-0.9.0/summernote-lite.min.js') }}"></script>
 
 <!-- Apexcharts JS -->
 <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
 
 <!-- for basic area chart -->
 <script src="{{ asset('assets/js/lib-config/stock-prices.js') }}"></script>
+<script src="{{ asset('assets/js/lib-config/summernote-config.js') }}"></script>
 
 <!-- Widgets Init Js -->
 <script src="{{ asset('assets/js/lib-config/analytics-dashboard.init.js') }}"></script>
 
 <!-- App js-->
 <script src="{{ asset('assets/js/app.js') }}"></script>
+
+
+
 
 </body>
 

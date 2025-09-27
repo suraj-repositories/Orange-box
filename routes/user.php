@@ -24,10 +24,15 @@ Route::controller(DailyDigestController::class)->group(function () {
     Route::post('daily-digest/{dailyDigest}/like', 'like')->name('daily-digest.like');
     Route::post('daily-digest/{dailyDigest}/dislike', 'dislike')->name('daily-digest.dislike');
 });
+
 Route::controller(ThinkPadController::class)->group(function () {
     Route::get('think-pad', 'index')->name('think-pad');
     Route::get('think-pad/create', 'create')->name('think-pad.create');
+    Route::post('think-pad/editor/images/store', 'storeEditorImages')->name('think-pad.editor.images.store');
     Route::get('think-pad/{thinkPad}/edit', 'edit')->name('think-pad.edit');
+
+    Route::post('think-pad', 'store')->name('think-pad.store');
+    Route::post('think-pad/{thinkPad}', 'update')->name('think-pad.update');
 });
 
 Route::controller(CommentController::class)->group(function () {

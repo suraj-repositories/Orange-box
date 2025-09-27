@@ -24,6 +24,8 @@
     <link rel='stylesheet' href='{{ asset('assets/icons/boxicons-2.1.4/css/boxicons.min.css') }}'>
 
     <link rel="stylesheet" href="{{ asset('assets/ckeditor5/ckeditor5.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/libs/summernote-0.9.0/summernote-lite.min.css') }}">
+
     @include('sweetalert2::index')
     @routes
     <script>

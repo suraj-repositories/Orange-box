@@ -68,17 +68,17 @@
                 </li>
                 <li>
                     <a href="#creative" data-bs-toggle="collapse">
-                        <i data-feather="users"></i>
+                        <i data-feather="copy"></i>
                         <span> Think Pad </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="creative">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='auth-login.html'>Log In</a>
+                                <a class='tp-link' href='{{ authRoute('user.think-pad.create') }}'>Create Think Pad</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='auth-register.html'>Register</a>
+                                <a class='tp-link' href='{{ authRoute('user.think-pad') }}'>Think Pads</a>
                             </li>
 
                         </ul>
@@ -94,10 +94,10 @@
                     <div class="collapse" id="code-syntax-container">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='error-404'>Error 404</a>
+                                <a class='tp-link' href='#'>Write Syntax</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='error-500.html'>Error 500</a>
+                                <a class='tp-link' href='#'>Syntax Store</a>
                             </li>
                             <li>
 
@@ -114,10 +114,10 @@
                     <div class="collapse" id="talk-insights">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='pages-starter.html'>Starter</a>
+                                <a class='tp-link' href='#'>Create Talks</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='pages-profile.html'>Profile</a>
+                                <a class='tp-link' href='#'>Talk History</a>
                             </li>
 
                         </ul>

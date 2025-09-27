@@ -72,6 +72,7 @@ class DailyDigestController extends Controller
                         'file_path' => $this->fileService->uploadFile($file, 'daily_digests'),
                         'file_name' => $this->fileService->getFileName($file),
                         'mime_type' => $this->fileService->getMimeType($file),
+                        'user_id' => $user->id
                     ]);
                 }
             } else {
@@ -79,6 +80,7 @@ class DailyDigestController extends Controller
                     'file_path' => $this->fileService->uploadFile($media, 'daily_digests'),
                     'file_name' => $this->fileService->getFileName($media),
                     'mime_type' => $this->fileService->getMimeType($media),
+                    'user_id' => $user->id
                 ]);
             }
         }
@@ -146,6 +148,7 @@ class DailyDigestController extends Controller
                         'file_path' => $this->fileService->uploadFile($file, 'daily_digests'),
                         'file_name' => $this->fileService->getFileName($file),
                         'mime_type' => $this->fileService->getMimeType($file),
+                        'user_id' => $user->id
                     ]);
                 }
             } else {
@@ -153,6 +156,7 @@ class DailyDigestController extends Controller
                     'file_path' => $this->fileService->uploadFile($media, 'daily_digests'),
                     'file_name' => $this->fileService->getFileName($media),
                     'mime_type' => $this->fileService->getMimeType($media),
+                    'user_id' => $user->id
                 ]);
             }
         }
@@ -206,8 +210,6 @@ class DailyDigestController extends Controller
 
     public function dislike(User $user, DailyDigest $dailyDigest, Request $request)
     {
-
-
         if ($dailyDigest->dislikedBy($user->id)) {
             $dailyDigest->removeLike($user->id);
         } else {

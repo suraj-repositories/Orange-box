@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
 use App\Models\File;
+use App\Models\User;
 use App\Services\FileService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use SweetAlert2\Laravel\Swal;
@@ -19,6 +21,8 @@ class FileController extends Controller
     {
         $this->fileService = $fileService;
     }
+
+    public function store(Request $request) {}
 
     public function destroy(File $file, Request $request)
     {
@@ -34,12 +38,39 @@ class FileController extends Controller
             ]);
         }
 
-
         Swal::success([
             'title' => 'Success!',
             'text' => 'File Deleted Successfully!',
         ]);
         return redirect()->back();
+    }
+
+    public function destroyEditorFileByPath(Request $request)
+    {
+        $src = $request->input('src');
+
+        $parts = parse_url($src);
+        $path = ltrim($parts['path'], '/');
+        $path = preg_replace('/^storage\//', '', $path);
+
+        $user = Auth::user();
+
+        if (empty($user)) {
+            return response()->json(['success' => false, 'message' => 'Access Denied!']);
+        }
+
+        $file = File::where('user_id', $user->id)->where('file_path', $path)->first();
+
+
+        if (!$file) {
+            return response()->json(['success' => false, 'message' => 'Access Denied!', 'path' => $path, 'file' => empty($file)]);
+        }
+
+        if ($this->fileService->deleteIfExists($file->file_path)) {
+            return  response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false]);
     }
 
     public function rename(File $file, Request $request)
@@ -90,4 +121,5 @@ class FileController extends Controller
 
         return redirect()->back();
     }
+
 }

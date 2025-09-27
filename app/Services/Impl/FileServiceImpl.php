@@ -18,6 +18,23 @@ class FileServiceImpl implements FileService
         return $file->storeAs($folder, $uniqueFileName, $disk);
     }
 
+    public function fileExists($filePath, $disk = 'public')
+    {
+        if ($filePath && Storage::disk($disk)->exists($filePath)) {
+            return true;
+        }
+        return false;
+    }
+
+    function deleteIfExists($filePath)
+    {
+        if ($filePath && Storage::disk('public')->exists($filePath)) {
+            Storage::disk('public')->delete($filePath);
+            return 1;
+        }
+        return 0;
+    }
+
     public function getFileName(\Illuminate\Http\UploadedFile $file): string
     {
         return $file->getClientOriginalName();

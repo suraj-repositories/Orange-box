@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class ThinkPad extends Model
 {
@@ -14,26 +15,37 @@ class ThinkPad extends Model
         'description',
         'emoji_id',
         'file_id',
-        'slug',
+        'uuid',
         'status',
     ];
 
-     public function files(){
+    protected static function booted()
+    {
+        static::creating(function ($thinkPad) {
+            if (empty($thinkPad->uuid)) {
+                $thinkPad->uuid = (string) Str::uuid();
+            }
+        });
+    }
+
+    public function files()
+    {
         return $this->morphMany(File::class, 'fileable');
     }
 
-    public function emoji(){
-        if(!isset($this->emoji_id)){
+    public function emoji()
+    {
+        if (!isset($this->emoji_id)) {
             return null;
         }
         return $this->belongsTo(Emoji::class);
     }
 
-    public function picture(){
-        if(!isset($this->file_id)){
+    public function picture()
+    {
+        if (!isset($this->file_id)) {
             return null;
         }
         return $this->belongsTo(File::class);
     }
-
 }

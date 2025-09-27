@@ -23,4 +23,10 @@ Route::get('/testing', [TestingController::class, 'testing']);
 Route::controller(FileController::class)->middleware('auth')->group(function(){
     Route::delete('file/{file}', 'destroy')->name('file.delete');
     Route::patch('file/{file}', 'rename')->name('file.rename');
+
+    Route::post('/file/delete-by-path', 'destroyEditorFileByPath')->name('file.path.delete');
+});
+
+Route::get('/test', function(){
+    dd(Auth::user());
 });

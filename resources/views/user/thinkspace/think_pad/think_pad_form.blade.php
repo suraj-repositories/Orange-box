@@ -1,11 +1,7 @@
 @extends('user.layout.layout')
 
-@section('title',
-    Route::is('user.think-pad.create')
-    ? 'Think Pad'
-    : (Route::is('user.think-pad.edit')
-    ? 'Edit Pad'
-    : '🟢🟢🟢'))
+@section('title', Route::is('user.think-pad.create') ? 'Think Pad' : (Route::is('user.think-pad.edit') ? 'Edit Pad' :
+    '🟢🟢🟢'))
 
 @section('content')
     <div class="content-page">
@@ -21,7 +17,7 @@
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.daily-digest') }}">Think Pad</a></li>
+                            <li class="breadcrumb-item"><a href="{{ authRoute('user.think-pad') }}">Think Pad</a></li>
                             <li class="breadcrumb-item active">{{ empty($thinkPad) ? 'Create' : 'Edit' }}</li>
                         </ol>
                     </div>
@@ -38,7 +34,7 @@
 
                             <div class="card-body">
                                 <form
-                                    action="{{ !empty($thinkPad) ? authRoute('user.daily-digest.update', ['thinkPad' => $thinkPad]) : authRoute('user.daily-digest.store') }}"
+                                    action="{{ !empty($thinkPad) ? authRoute('user.think-pad.update', ['thinkPad' => $thinkPad]) : authRoute('user.think-pad.store') }}"
                                     method="POST" enctype="multipart/form-data" id="add-digest-form">
                                     @csrf
                                     <div class="row">
@@ -73,7 +69,7 @@
                                         <div class="col col-12 col-md-12">
                                             <label for="title-input" class="form-label">Description</label>
 
-                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3">
+                                            <textarea class="form-control summernote" name="description" id="editor" cols="30" rows="3" data-image-save-url="{{ authRoute('user.think-pad.editor.images.store') }}">
                                                 {!! !empty($thinkPad) ? $thinkPad->description : '' !!}
                                             </textarea>
 
@@ -179,7 +175,7 @@
 
                                                                             </a>
 
-                                                                          <button type="button" class="delete"
+                                                                            <button type="button" class="delete"
                                                                                 data-bs-title="Delete"
                                                                                 data-bs-toggle="tooltip"
                                                                                 data-ob-dismiss="editing-delete-card"
@@ -339,7 +335,8 @@
 
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/think-pad.js') }}"></script>
-    {{-- <script src="{{ asset('assets/js/pages/daily-digest.js') }}"></script> --}}
+    <script src="{{ asset('assets/js/pages/add-media.js') }}"></script>
+
 
 
 @endsection
