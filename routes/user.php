@@ -4,6 +4,7 @@ use App\Http\Controllers\Common\FileController;
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\SyntaxStoreController;
 use App\Http\Controllers\User\ThinkPadController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -35,6 +36,12 @@ Route::controller(ThinkPadController::class)->group(function () {
     Route::delete('think-pad/{thinkPad}', 'destroy')->name('think-pad.delete');
     Route::post('think-pad/{thinkPad}/like', 'like')->name('think-pad.like');
     Route::post('think-pad/{thinkPad}/dislike', 'dislike')->name('think-pad.dislike');
+});
+
+Route::controller(SyntaxStoreController::class)->group(function () {
+    Route::get('syntax-store', 'index')->name('syntax-store');
+    Route::get('syntax-store/create', 'create')->name('syntax-store.create');
+    Route::get('syntax-store/edit', 'create')->name('syntax-store.edit');
 });
 
 Route::controller(CommentController::class)->group(function () {

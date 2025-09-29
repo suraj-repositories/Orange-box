@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="{{ asset('assets/ckeditor5/ckeditor5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/libs/summernote-0.9.0/summernote-lite.min.css') }}">
 
+    @yield('css')
+
     @include('sweetalert2::index')
     @routes
     <script>

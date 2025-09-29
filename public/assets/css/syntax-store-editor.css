@@ -1,0 +1,10 @@
+ul.ob-sortable{
+    list-style-type: none;
+    padding: 0;
+}
+
+.ob-sortable .editor{
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+}
