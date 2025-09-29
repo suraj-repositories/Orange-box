@@ -1,20 +1,22 @@
 @extends('user.layout.layout')
 
-@section('title', Route::is('user.daily-digest.show') ? 'Daily Digest' : '🟢🟢🟢')
+@section('title', Route::is('user.think-pad.show') ? 'Think Pad' : '🟢🟢🟢')
 
 @section('content')
     <div class="content-page">
         <div class="content">
+
+
             <div class="container-xxl">
 
                 <div class="pt-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">Daily Digestions</h4>
+                        <h4 class="fs-18 fw-semibold m-0">Think Pad</h4>
                     </div>
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.daily-digest') }}">Daily Digest List</a>
+                            <li class="breadcrumb-item"><a href="{{ authRoute('user.think-pad') }}">Think Pad List</a>
                             </li>
                             <li class="breadcrumb-item active">Show</li>
                         </ol>
@@ -24,18 +26,18 @@
 
             <div class="row">
                 <div class="col-12">
-                    <div class="card mt-3 daily-digest-show-card show-card">
+                    <div class="card mt-3 think-pad-show-card show-card">
 
                         <div class="card-body">
 
                             <div class="align-items-center">
                                 <div class="d-flex flex-column flex-md-row align-items-center">
-                                    @if ($dailyDigest->emoji())
+                                    @if ($thinkPad->emoji())
                                         <div
                                             class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center">
-                                            <div class="emoji">{{ $dailyDigest->emoji->emoji }}</div>
+                                            <div class="emoji">{{ $thinkPad->emoji->emoji }}</div>
                                         </div>
-                                    @elseif($dailyDigest->picture())
+                                    @elseif($thinkPad->picture())
                                         <img src="http://ideas.free.nf/storage/profile/qbZVED4EfOwqn5vMAu92GszM8VmSrXmhGV3EBS92.png"
                                             class="rounded-circle avatar-xxl img-thumbnail float-start" alt="image profile">
                                     @else
@@ -48,37 +50,37 @@
 
 
                                     <div class="overflow-hidden mt-3 mt-md-0 ms-md-4">
-                                        <h4 class="m-0 text-dark fs-20">{{ $dailyDigest->title }}</h4>
-                                        <p class="my-1 text-muted fs-16">{{ $dailyDigest->sub_title }}</p>
+                                        <h4 class="m-0 text-dark fs-20">{{ $thinkPad->title }}</h4>
+                                        <p class="my-1 text-muted fs-16">{{ $thinkPad->sub_title }}</p>
                                         <span class="fs-15">
-                                            <button class="like-btn" data-daily-digest-id='{{ $dailyDigest->uuid }}'>
+                                            <button class="like-btn" data-think-pad-id='{{ $thinkPad->uuid }}'>
                                                 <i
-                                                    class="mdi {{ $dailyDigest->likedBy(auth()->id()) ? 'mdi-thumb-up' : 'mdi-thumb-up-outline' }} me-1 align-middle"></i>
+                                                    class="mdi {{ $thinkPad->likedBy(auth()->id()) ? 'mdi-thumb-up' : 'mdi-thumb-up-outline' }} me-1 align-middle"></i>
                                             </button>
-                                            @php $likes = $dailyDigest->likesCount(); @endphp
+                                            @php $likes = $thinkPad->likesCount(); @endphp
                                             <span id="like-count"
-                                                data-daily-digest-id='{{ $dailyDigest->uuid }}'>{{ $likes > 0 ? $likes : 'Like' }}
+                                                data-think-pad-id='{{ $thinkPad->uuid }}'>{{ $likes > 0 ? $likes : 'Like' }}
                                             </span>
 
-                                            <button class="dislike-btn" data-daily-digest-id='{{ $dailyDigest->uuid }}'>
+                                            <button class="dislike-btn" data-think-pad-id='{{ $thinkPad->uuid }}'>
                                                 <i
-                                                    class="mdi {{ $dailyDigest->dislikedBy(auth()->id()) ? 'mdi-thumb-down' : 'mdi-thumb-down-outline' }} me-1 ms-1 align-middle"></i>
+                                                    class="mdi {{ $thinkPad->dislikedBy(auth()->id()) ? 'mdi-thumb-down' : 'mdi-thumb-down-outline' }} me-1 ms-1 align-middle"></i>
                                             </button>
                                             <span id="dislike-count">
-                                                @php $dislikes = $dailyDigest->dislikesCount(); @endphp
+                                                @php $dislikes = $thinkPad->dislikesCount(); @endphp
                                                 {{ $dislikes > 0 ? $dislikes : 'Dislike' }}
                                             </span>
                                             <i
-                                                class="mdi ms-2 fs-5 {{ $dailyDigest->commentBy(Auth::id()) ? 'mdi-message' : 'mdi-message-outline' }} me-1 align-middle">
+                                                class="mdi ms-2 fs-5 {{ $thinkPad->commentBy(Auth::id()) ? 'mdi-message' : 'mdi-message-outline' }} me-1 align-middle">
                                             </i>
-                                            @php $totalCommnents = $dailyDigest->totalCommentsCount(); @endphp
+                                            @php $totalCommnents = $thinkPad->totalCommentsCount(); @endphp
                                             <span
                                                 class="total_comment_count">{{ $totalCommnents == 0 ? 'No comments' : $totalCommnents }}</span>
                                             <i class="mdi mdi-calendar-blank-outline ms-2 me-1 align-middle"> </i>
 
                                             <span>Since - <span
                                                     class="badge bg-primary-subtle text-primary px-2 py-1 fs-13 fw-normal">
-                                                    {{ date('M d, Y', strtotime($dailyDigest->created_at)) }}
+                                                    {{ date('M d, Y', strtotime($thinkPad->created_at)) }}
                                                 </span>
                                             </span></span>
                                     </div>
@@ -112,9 +114,8 @@
                             <div class="tab-content text-muted bg-white">
                                 <div class="tab-pane active show pt-4" id="ob_description" role="tabpanel">
                                     <div id="description-area" class="rich-editor-content ">
-                                        @if ($dailyDigest->description)
-                                        {!! Str::markdown($dailyDigest->description) !!}
-                                            {{-- {!! $dailyDigest->description !!} --}}
+                                        @if ($thinkPad->description)
+                                            {!! $thinkPad->description !!}
                                         @endif
                                     </div>
                                     <br>
@@ -216,15 +217,15 @@
                                 </div>
 
                                 <div class="tab-pane pt-2" id="ob_comments" role="tabpanel">
-                                    <x-comment.comment-component :commentable="$dailyDigest" />
+                                    <x-comment.comment-component :commentable="$thinkPad" />
                                 </div>
 
                                 <div class="tab-pane ob-actions-tab pt-4" id="ob_actions" role="tabpanel">
                                     <div class="d-flex gap-2 mb-2">
-                                        <a href="{{ authRoute('user.daily-digest.edit', ['dailyDigest' => $dailyDigest]) }}"
+                                        <a href="{{ authRoute('user.think-pad.edit', ['thinkPad' => $thinkPad]) }}"
                                             class="action edit"><i class="bx bx-edit"></i></a>
                                         <form
-                                            action="{{ authRoute('user.daily-digest.delete', ['dailyDigest' => $dailyDigest]) }}"
+                                            action="{{ authRoute('user.think-pad.delete', ['thinkPad' => $thinkPad]) }}"
                                             method="POST">
                                             @csrf
                                             @method('delete')
@@ -256,6 +257,6 @@
 
 
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/daily-digest.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/think-pad.js') }}"></script>
     <script src="{{ asset('assets/js/pages/comment.js') }}"></script>
 @endsection

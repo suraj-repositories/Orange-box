@@ -24,30 +24,30 @@
             </div>
 
             <div class="row">
-                @forelse ($thinkpads as $pad)
+                @forelse ($thinkPads as $thinkPad)
                     <div class="col-sm-6 col-lg-4">
                         <div class="card d-block">
                             <div class="card-header">
                                 <a href="#"
-                                    class="card-title">{{ $pad->title }}</a>
+                                    class="card-title">{{ $thinkPad->title }}</a>
                             </div>
                             <div class="card-body">
-                                <p class="card-text text-muted mb-0">{{ $pad->sub_title }}</p>
+                                <p class="card-text text-muted mb-0">{{ $thinkPad->sub_title }}</p>
 
 
                                 <div class="action-container">
                                     <div class="ago-string">
-                                        {{ $pad->created_at->diffForHumans() }}
+                                        {{ $thinkPad->created_at->diffForHumans() }}
                                     </div>
 
-                                    <a href="#" class="info">
+                                    <a href="{{ authRoute('user.think-pad.show', ['thinkPad'=> $thinkPad]) }}" class="info">
                                         <i class='bx bx-info-circle'></i>
                                     </a>
 
-                                    <a href="#" class="edit">
+                                    <a href="{{ authRoute('user.think-pad.edit', ['thinkPad'=> $thinkPad]) }}" class="edit">
                                         <i class='bx bx-edit'></i>
                                     </a>
-                                    <form action="#" method="post">
+                                    <form action="{{ authRoute('user.think-pad.delete', ['thinkPad'=> $thinkPad]) }}" method="post">
                                        @method('DELETE')
                                         @csrf
                                         <button type="submit" class="delete btn-no-style">

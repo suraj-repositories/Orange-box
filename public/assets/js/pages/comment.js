@@ -185,8 +185,10 @@ function loadComments(selector, args = { page: 1, order: 'desc' }) {
             if (loader) {
                 loader.remove();
             }
-            loadMoreBtn.classList.remove('loading');
-            loadMoreBtn.querySelector('.btn-text').textContent = 'Load More';
+            if (loadMoreBtn) {
+                loadMoreBtn.classList.remove('loading');
+                loadMoreBtn.querySelector('.btn-text').textContent = 'Load More';
+            }
             if (result.status === 200) {
                 if (page == 1) {
                     commentBox.innerHTML = result.data;
@@ -195,7 +197,7 @@ function loadComments(selector, args = { page: 1, order: 'desc' }) {
                     commentBox.insertAdjacentHTML("beforeend", result.data);
                 }
 
-                if(!result.has_next_page){
+                if (!result.has_next_page && loadMoreBtn) {
                     loadMoreBtn.remove();
                 }
 
@@ -387,7 +389,7 @@ function loadReplies(loadMoreBtn, commentableType, commentableId, commentId, pag
             loadMoreBtn.querySelector('.btn-text').textContent = 'Load More';
             if (result.status === 200) {
                 loadMoreBtn.insertAdjacentHTML("beforebegin", result.data);
-                if(!result.has_next_page){
+                if (!result.has_next_page) {
                     loadMoreBtn.remove();
                 }
                 page++;

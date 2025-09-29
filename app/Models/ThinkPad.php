@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\Commentable;
+use App\Traits\Likeable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class ThinkPad extends Model
 {
+    use SoftDeletes, Likeable, Commentable;
     //
     protected $fillable = [
         'user_id',
@@ -19,12 +23,32 @@ class ThinkPad extends Model
         'status',
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
     protected static function booted()
     {
         static::creating(function ($thinkPad) {
             if (empty($thinkPad->uuid)) {
                 $thinkPad->uuid = (string) Str::uuid();
             }
+        });
+
+        static::deleting(function ($thinkPad) {
+            if ($thinkPad->isForceDeleting()) {
+                $thinkPad->files()->withTrashed()->forceDelete();
+                $thinkPad->picture()?->forceDelete();
+            } else {
+                $thinkPad->files()->delete();
+                $thinkPad->picture()?->delete();
+            }
+        });
+
+        static::restoring(function ($thinkPad) {
+            $thinkPad->files()->withTrashed()->restore();
+            $thinkPad->picture()?->restore();
         });
     }
 

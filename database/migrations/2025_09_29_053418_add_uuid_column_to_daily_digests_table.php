@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('files', function (Blueprint $table) {
+        Schema::table('daily_digests', function (Blueprint $table) {
             //
-            $table->softDeletes();
+            $table->uuid('uuid')->unique()->after('description');
+            $table->index(['uuid']);
         });
     }
 
@@ -22,8 +23,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('files', function (Blueprint $table) {
+        Schema::table('daily_digests', function (Blueprint $table) {
             //
+            $table->dropColumn('uuid');
         });
     }
 };

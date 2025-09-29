@@ -9,8 +9,6 @@ use App\Models\User;
 use App\Rules\DescriptionLength;
 use App\Services\FileService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Laravel\Pail\ValueObjects\Origin\Console;
 use SweetAlert2\Laravel\Swal;
 
 class DailyDigestController extends Controller

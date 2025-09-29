@@ -20,7 +20,6 @@ Route::controller(DailyDigestController::class)->group(function () {
     Route::get('daily-digest/{dailyDigest}/edit', 'edit')->name('daily-digest.edit');
     Route::post('daily-digest/{dailyDigest}', 'update')->name('daily-digest.update');
     Route::delete('daily-digest/{dailyDigest}', 'destroy')->name('daily-digest.delete');
-
     Route::post('daily-digest/{dailyDigest}/like', 'like')->name('daily-digest.like');
     Route::post('daily-digest/{dailyDigest}/dislike', 'dislike')->name('daily-digest.dislike');
 });
@@ -28,11 +27,14 @@ Route::controller(DailyDigestController::class)->group(function () {
 Route::controller(ThinkPadController::class)->group(function () {
     Route::get('think-pad', 'index')->name('think-pad');
     Route::get('think-pad/create', 'create')->name('think-pad.create');
-    Route::post('think-pad/editor/images/store', 'storeEditorImages')->name('think-pad.editor.images.store');
-    Route::get('think-pad/{thinkPad}/edit', 'edit')->name('think-pad.edit');
-
     Route::post('think-pad', 'store')->name('think-pad.store');
+    Route::post('think-pad/editor/images/store', 'storeEditorImages')->name('think-pad.editor.images.store');
+    Route::get('think-pad/{thinkPad}', 'show')->name('think-pad.show');
+    Route::get('think-pad/{thinkPad}/edit', 'edit')->name('think-pad.edit');
     Route::post('think-pad/{thinkPad}', 'update')->name('think-pad.update');
+    Route::delete('think-pad/{thinkPad}', 'destroy')->name('think-pad.delete');
+    Route::post('think-pad/{thinkPad}/like', 'like')->name('think-pad.like');
+    Route::post('think-pad/{thinkPad}/dislike', 'dislike')->name('think-pad.dislike');
 });
 
 Route::controller(CommentController::class)->group(function () {

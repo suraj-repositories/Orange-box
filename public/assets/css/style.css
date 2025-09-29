@@ -559,3 +559,9 @@
 }
 
 /* End : comment section css */
+p{
+    color: var(--bs-dark-text-emphasis);
+}
+.note-frame{
+    color: #39383c !important;
+}

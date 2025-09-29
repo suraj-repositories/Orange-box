@@ -43,10 +43,10 @@
                                     method="POST" enctype="multipart/form-data" id="add-digest-form">
                                     @csrf
                                     <div class="row">
-                                        <div class="col col-12 col-md-6">
+                                        <div class="col col-12 col-md-6  mb-3">
                                             <label for="title-input" class="form-label">Title</label>
 
-                                            <div class="input-group mb-3">
+                                            <div class="input-group">
                                                 <span class="input-group-text" id="basic-addon1"> <i
                                                         class="bi bi-journal-bookmark-fill"></i> </span>
                                                 <input type="text" class="form-control" placeholder="Enter title"
@@ -57,10 +57,10 @@
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
-                                        <div class="col col-12 col-md-6">
+                                        <div class="col col-12 col-md-6 mb-3">
                                             <label for="sub_title-input" class="form-label">sub_title</label>
 
-                                            <div class="input-group mb-3">
+                                            <div class="input-group">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="bi bi-list-nested"></i> </span>
                                                 <input type="text" class="form-control" placeholder="Enter sub_title"
@@ -74,8 +74,8 @@
                                         <div class="col col-12 col-md-12">
                                             <label for="title-input" class="form-label">Description</label>
 
-                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3">
-                                                {!! !empty($dailyDigest) ? $dailyDigest->description : '' !!}
+                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3" data-markdown="{{ !empty($dailyDigest) ? $dailyDigest->description : '' }}">
+                                                {{ !empty($dailyDigest) ? trim($dailyDigest->description) : '' }}
                                             </textarea>
 
                                             @error('description')
