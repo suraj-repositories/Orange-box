@@ -30,6 +30,7 @@
 
     @include('sweetalert2::index')
     @routes
+    @vite(['resources/js/app.js'])
     <script>
         function authRoute(url, args){
             const uid = @json(Auth::check() ? Auth::user()->username : null);

@@ -1,10 +1,15 @@
-ul.ob-sortable{
-    list-style-type: none;
-    padding: 0;
+#editor{
+    border: none !important;
+}
+#editor .ce-block__content{
+    max-width: unset !important;
+    margin-left: 45px;
 }
 
-.ob-sortable .editor{
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
+#editor .ce-toolbar__content{
+ max-width: unset !important;
+}
+
+#editor .ce-toolbar__actions{
+    left: -10px;
 }
