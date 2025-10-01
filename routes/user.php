@@ -41,7 +41,11 @@ Route::controller(ThinkPadController::class)->group(function () {
 Route::controller(SyntaxStoreController::class)->group(function () {
     Route::get('syntax-store', 'index')->name('syntax-store');
     Route::get('syntax-store/create', 'create')->name('syntax-store.create');
+    Route::post('syntax-store/store', 'store')->name('syntax-store.store');
     Route::get('syntax-store/edit', 'create')->name('syntax-store.edit');
+    Route::post('syntax-store/editor/images/store', 'storeEditorImages')->name('syntax-store.editor.images.store');
+    Route::post('syntax-store/editor/fetch-url-media', 'fetchMediaFromUrl')->name('syntax-store.editor.fetch-url-media');
+    Route::get('syntax-store/editor/fetch-url-data', 'fetchUrlData')->name('syntax-store.editor.fetch-url-data');
 });
 
 Route::controller(CommentController::class)->group(function () {

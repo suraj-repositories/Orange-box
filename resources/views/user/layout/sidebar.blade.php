@@ -94,7 +94,7 @@
                     <div class="collapse" id="code-syntax-container">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='#'>Write Syntax</a>
+                                <a class='tp-link' href='{{ authRoute('user.syntax-store.create') }}'>Write Syntax</a>
                             </li>
                             <li>
                                 <a class='tp-link' href='#'>Syntax Store</a>

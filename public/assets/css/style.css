@@ -565,3 +565,11 @@ p{
 .note-frame{
     color: #39383c !important;
 }
+.resize-none{
+    resize: none;
+}
+.center-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

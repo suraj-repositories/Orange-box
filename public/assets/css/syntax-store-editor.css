@@ -1,15 +1,56 @@
-#editor{
+#editorjs-editor {
     border: none !important;
+    min-height: 150px !important;
 }
-#editor .ce-block__content{
+
+#editorjs-editor .ce-block__content {
     max-width: unset !important;
     margin-left: 45px;
 }
 
-#editor .ce-toolbar__content{
- max-width: unset !important;
+#editorjs-editor .ce-toolbar__content {
+    max-width: unset !important;
 }
 
-#editor .ce-toolbar__actions{
+#editorjs-editor .ce-toolbar__actions {
     left: -10px;
+}
+
+#editorjs-editor .ce-code__textarea.cdx-input {
+    min-height: 130px;
+}
+
+#editorjs-editor .ce-rawtool__textarea {
+    min-height: 130px;
+}
+
+pre#ob-editorjs-output {
+    font-family: inherit;
+    font-size: 0.93rem;
+}
+
+pre button.code-copy-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    color: white;
+    background: transparent;
+    font-size: 18px;
+    padding: 0;
+    margin: 2px;
+}
+
+#editorjs-editor .codex-editor__redactor{
+   padding-bottom: 100px !important;
+}
+
+@media (max-width: 450px){
+    #editorjs-editor .ce-block__content{
+        margin-left: unset;
+    }
+}
+
+#editorjs-editor .cdx-input.image-tool__caption{
+    background-color: #ffffffbf !important;
 }

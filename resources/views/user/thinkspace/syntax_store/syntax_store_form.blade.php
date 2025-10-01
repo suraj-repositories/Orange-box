@@ -10,19 +10,7 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/css/syntax-store-editor.css') }}">
-    <style>
-        #editor {
-            width: 100%;
-            max-width: 100%;
-            box-sizing: border-box;
-        }
 
-        /* .ce-block img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        } */
-    </style>
 @endsection
 
 @section('content')
@@ -44,17 +32,57 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0">{{ empty($syntax) ? 'Write' : 'Edit' }} Syntax</h5>
-                            </div>
+                        <form action="{{ authRoute('user.syntax-store.store') }}" id="saveSyntax" method="POST">
+                            @csrf
+                            <div class="card">
+                                <div class="card-header p-2 d-flex align-items-center gap-2">
+                                    <input type="text" name="title" class="form-control border-0 fw-bold"
+                                        value="Untitled" placeholder="Enter title" autocomplete="off">
 
-                            <div class="card-body">
-                                <div id="editor" style="min-height: 300px; border:1px solid #ccc; padding:10px;"></div>
-                                <button id="save-button" class="btn btn-primary mt-2">Save</button>
-                                <pre id="output"></pre>
+                                    <!-- Main action buttons -->
+                                    <input type="hidden" name="submit_status" value="publish">
+                                    <div class="d-flex align-items-center gap-1">
+                                        <!-- Preview button: more visible, with icon -->
+                                        <input type="checkbox" class="btn-check" id="previewToggleCheckbox" autocomplete="off">
+                                        <label class="btn btn-outline-dark" for="previewToggleCheckbox">Preview</label><br>
+
+                                        <div class="btn-group">
+                                            <button type="submit" class="btn btn-primary">Publish</button>
+                                            <button type="button"
+                                                class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                                                data-bs-toggle="dropdown" aria-expanded="false" data-bs-reference="parent">
+                                                <i class="mdi mdi-chevron-down"></i>
+                                                <span class="visually-hidden">Toggle Dropdown</span>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <button class="dropdown-item d-flex align-items-center" type="submit">
+                                                        <i class='bx bx-save fs-5  me-1'></i> Save
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button class="dropdown-item d-flex align-items-center" type="submit">
+                                                        <i class='bx bx-cloud-upload fs-5 me-1'></i>Save & Publish
+                                                    </button>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <div id="editorjs-editor" data-ob-submit-form="#saveSyntax"
+                                        data-ob-image-upload-url="{{ authRoute('user.syntax-store.editor.images.store') }}"
+                                        data-ob-preview-toggle-checkbox="#previewToggleCheckbox"
+                                        data-ob-cacheable-id="syntax-store-editorjs"
+                                        data-ob-fetch-online-media-url="{{ authRoute('user.syntax-store.editor.fetch-url-media') }}"
+                                        data-ob-fetch-data-url="{{ authRoute('user.syntax-store.editor.fetch-url-data') }}">
+                                    </div>
+                                    <pre id="output"></pre>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
 
@@ -66,8 +94,7 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('assets/libs/jquery-ui/jquery-ui.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/syntax-store-editor.js') }}"></script>
+
 
 
 @endsection
