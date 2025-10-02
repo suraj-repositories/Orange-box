@@ -67,6 +67,8 @@
 
             </div>
 
+            {{ $thinkPads->links() }}
+
         </div> <!-- content -->
 
         <!-- Footer Start -->
@@ -75,7 +77,6 @@
 
     </div>
 
-    @include('layout.ckeditor5')
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/daily-digest.js') }}"></script>
 @endsection

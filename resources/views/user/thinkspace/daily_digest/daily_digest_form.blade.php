@@ -337,7 +337,7 @@
 
     </div>
 
-    @include('layout.ckeditor5')
+    @include('layout.extras.ckeditor5')
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/add-media.js') }}"></script>
     <script src="{{ asset('assets/js/pages/daily-digest.js') }}"></script>

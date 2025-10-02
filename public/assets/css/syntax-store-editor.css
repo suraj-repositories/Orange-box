@@ -54,3 +54,99 @@ pre button.code-copy-btn {
 #editorjs-editor .cdx-input.image-tool__caption{
     background-color: #ffffffbf !important;
 }
+
+
+/* PREVIEW STYLE START */
+.editorjs-preview {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.editorjs-preview h1,
+.editorjs-preview h2,
+.editorjs-preview h3,
+.editorjs-preview h4,
+.editorjs-preview h5,
+.editorjs-preview h6 {
+    margin: 1em 0 0.5em;
+    font-weight: bold;
+}
+
+.editorjs-preview p {
+    margin: 0.5em 0;
+}
+
+.editorjs-preview ul,
+.editorjs-preview ol {
+    padding-left: 1.5em;
+    margin: 0.5em 0;
+}
+
+.editorjs-preview blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 1em;
+    color: #666;
+    margin: 1em 0;
+    font-style: italic;
+}
+
+.editorjs-preview hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 1em 0;
+}
+
+.editorjs-preview a {
+    color: #3498db;
+    text-decoration: underline;
+}
+
+.editorjs-preview figure {
+    margin: 1em 0;
+}
+
+.editorjs-preview figure img {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+}
+
+.editorjs-preview figcaption {
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 0.3em;
+}
+
+.editorjs-preview table {
+    border-collapse: collapse;
+    margin: 1em 0;
+}
+
+.editorjs-preview table td,
+.editorjs-preview table th {
+    border: 1px solid #ddd;
+    padding: 6px 8px;
+}
+
+.editorjs-preview pre {
+    background: #f5f5f5;
+    padding: 1em;
+    overflow-x: auto;
+    position: relative;
+}
+
+.editorjs-preview ul.editorjs-checklist li {
+    display: flex;
+    align-items: center;
+    margin: 0.3em 0;
+}
+
+.editorjs-preview ul.editorjs-checklist li input[type="checkbox"] {
+    margin-right: 0.5em;
+}
+
+
+/* PREVIEW STYLE END */
+

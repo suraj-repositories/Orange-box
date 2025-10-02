@@ -27,7 +27,7 @@ class DailyDigestController extends Controller
     public function index()
     {
         //
-        $digestions = DailyDigest::paginate(15);
+        $digestions = DailyDigest::paginate(9);
 
         return view('user.thinkspace.daily_digest.daily_digestion_list', compact('digestions'));
     }

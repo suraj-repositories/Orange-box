@@ -1,10 +1,4 @@
-/*
-Template Name: Tapeli - Responsive Bootstrap 5 Admin Dashboard
-Author: Zoyothemes
-Version: 1.0.0
-Website: https://zoyothemes.com/
-File: Datatable init Js
-*/
+
 
 $(document).ready(function () {
 
@@ -18,8 +12,8 @@ $(document).ready(function () {
     });
 
     // Key Tables
-    $("#key-table").DataTable({ 
-        keys: true 
+    $("#key-table").DataTable({
+        keys: true
     });
 
     // Responsive Datatable
@@ -33,24 +27,24 @@ $(document).ready(function () {
     });
 
     // Alternative Pagination Datatable
-    $("#alternative-page-datatable").DataTable({ 
-        "pagingType": "full_numbers", 
+    $("#alternative-page-datatable").DataTable({
+        "pagingType": "full_numbers",
     });
 
     // Scroll Vertical Datatable
-    $("#scroll-vertical-datatable").DataTable({ 
-        scrollY: "350px", 
-        scrollCollapse: true, 
-        paging: false 
+    $("#scroll-vertical-datatable").DataTable({
+        scrollY: "350px",
+        scrollCollapse: true,
+        paging: false
     });
 
     // Scroll Horizontal Datatable
-    $('#scroll-horizontal-datatable').DataTable({ 
+    $('#scroll-horizontal-datatable').DataTable({
         scrollX: true
     });
 
     // Complex headers with column visibility Datatable
-    $("#complex-header-datatable").DataTable({ 
+    $("#complex-header-datatable").DataTable({
         "columnDefs": [ {
             "visible": false,
             "targets": -1
@@ -58,7 +52,7 @@ $(document).ready(function () {
     });
 
     // Row created callback Datatable
-    $("#row-callback-datatable").DataTable({ 
+    $("#row-callback-datatable").DataTable({
         "createdRow": function ( row, data, index ) {
             if ( data[5].replace(/[\$,]/g, '') * 1 > 150000 ) {
                 $('td', row).eq(5).addClass('text-danger');
@@ -67,17 +61,17 @@ $(document).ready(function () {
     }),
 
     // State Saving Datatable
-    $("#state-saving-datatable").DataTable({ 
+    $("#state-saving-datatable").DataTable({
         stateSave: true
     });
 
     // Fixed Columns Datatable
-    $("#fixed-columns-datatable").DataTable({ 
-        scrollY: 300, 
-        scrollX: true, 
-        scrollCollapse: true, 
-        paging: false, 
-        fixedColumns: true 
+    $("#fixed-columns-datatable").DataTable({
+        scrollY: 300,
+        scrollX: true,
+        scrollCollapse: true,
+        paging: false,
+        fixedColumns: true
     });
 
     // Fixed Header Database
@@ -98,7 +92,6 @@ $(document).ready(function () {
 //     var table = $('#fixed-header-datatable').DataTable( {
 //         responsive: true,
 //     } );
- 
+
 //     new $.fn.dataTable.FixedHeader( table );
 // } );
-    

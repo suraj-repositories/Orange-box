@@ -30,7 +30,12 @@ import 'prismjs/components/prism-css';
 const LANGUAGES = ['javascript', 'php', 'python', 'markup', 'bash', 'css'];
 
 document.addEventListener("DOMContentLoaded", () => {
+    enableEditorJs();
+    enableEditorJsPreview('[data-ob-preview-type="editorjs"]');
 
+});
+
+function enableEditorJs() {
     const editorElement = document.querySelector('#editorjs-editor');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
@@ -51,19 +56,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let preloadData = editorElement.getAttribute("data-ob-content");
 
-    if (!preloadData) {
+    try {
+        if (preloadData) {
+            preloadData = JSON.parse(preloadData);
+            if (Array.isArray(preloadData) && preloadData.length === 1 && typeof preloadData[0] === 'string') {
+                const inner = JSON.parse(preloadData[0]);
+                preloadData = inner.blocks || [];
+            }
+            else if (preloadData.blocks && Array.isArray(preloadData.blocks)) {
+                preloadData = preloadData.blocks;
+            }
+            else if (!Array.isArray(preloadData)) {
+                preloadData = [preloadData];
+            }
+        } else {
+            preloadData = [
+                { type: 'paragraph', data: { text: 'Start writing your content and code below...' } }
+            ];
+        }
+    } catch (err) {
+        console.error("Error processing preloadData:", err);
         preloadData = [
             { type: 'paragraph', data: { text: 'Start writing your content and code below...' } }
         ];
     }
 
-    if (cacheableId) {
-        const storedData = localStorage.getItem(cacheableId);
-        if (storedData) {
-            preloadData = JSON.parse(storedData).blocks;
-        }
-    }
 
+    console.log(preloadData);
     const editor = new EditorJS({
         holder: 'editorjs-editor',
         autofocus: true,
@@ -108,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-
     if (submitForm) {
         submitForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -138,14 +156,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-
-    const saveButton = document.getElementById('save-button');
-    const output = document.getElementById('output');
-
     if (previewToggleCheckbox) {
 
         previewToggleCheckbox.addEventListener('change', async function () {
-              console.log(132456);
+            console.log(132456);
 
             let outputElement = document.querySelector('#ob-editorjs-output');
             if (!outputElement) {
@@ -161,8 +175,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 outputElement.classList.remove("hide");
 
                 const savedData = await editor.save();
-                const html = editorJsonToHtml(savedData);
-                outputElement.innerHTML = html;
+                const innerContent = editorJsonToHtml(savedData);
+                outputElement.innerHTML = "";
+                outputElement.appendChild(innerContent);
 
                 if (cacheableId) {
                     localStorage.setItem(cacheableId, JSON.stringify(savedData));
@@ -177,11 +192,51 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-});
+
+}
+function enableEditorJsPreview(previewSelector) {
+    try {
+        const previewElements = document.querySelectorAll(previewSelector);
+
+        if (!previewElements || previewElements.length === 0) {
+            console.warn(`No elements found for selector: ${previewSelector}`);
+            return;
+        }
+
+        previewElements.forEach(element => {
+            try {
+                const contentString = element.getAttribute("data-ob-content");
+                if (!contentString) {
+                    console.warn("No data-ob-content found for given element!");
+                    return;
+                }
+
+                let parsedJson;
+                try {
+                    parsedJson = JSON.parse(contentString);
+                } catch (jsonError) {
+                    console.error("Failed to parse JSON with error :", jsonError);
+                    return;
+                }
+
+                const htmlElement = editorJsonToHtml(parsedJson);
+                element.innerHTML = '';
+                element.appendChild(htmlElement);
+            } catch (elementError) {
+                console.error("Error processing :", elementError);
+            }
+        });
+    } catch (error) {
+        console.error("Error :", error);
+    }
+}
+
 
 
 function editorJsonToHtml(savedData) {
     const output = document.createElement("div");
+    output.classList.add("editorjs-preview");
+
     savedData.blocks.forEach(block => {
         switch (block.type) {
             case 'header':
@@ -189,23 +244,83 @@ function editorJsonToHtml(savedData) {
                 h.textContent = block.data.text;
                 output.appendChild(h);
                 break;
+
             case 'paragraph':
                 const p = document.createElement('p');
                 p.textContent = block.data.text;
                 output.appendChild(p);
                 break;
+
+            case 'list':
+                const listEl = document.createElement(block.data.style === 'ordered' ? 'ol' : 'ul');
+                block.data.items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    listEl.appendChild(li);
+                });
+                output.appendChild(listEl);
+                break;
+
+            case 'quote':
+                const blockquote = document.createElement('blockquote');
+                blockquote.textContent = block.data.text;
+                if(block.data.caption) {
+                    const cite = document.createElement('cite');
+                    cite.textContent = block.data.caption;
+                    blockquote.appendChild(cite);
+                }
+                output.appendChild(blockquote);
+                break;
+
+            case 'delimiter':
+                const hr = document.createElement('hr');
+                output.appendChild(hr);
+                break;
+
+            case 'linkTool':
+                const a = document.createElement('a');
+                a.href = block.data.link;
+                a.textContent = block.data.link || block.data.meta?.title || 'Link';
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                output.appendChild(a);
+                break;
+
+            case 'raw':
+                const rawDiv = document.createElement('div');
+                rawDiv.innerHTML = block.data.html;
+                output.appendChild(rawDiv);
+                break;
+
             case 'image':
+                const figure = document.createElement('figure');
                 const img = document.createElement('img');
                 img.src = block.data.file?.url || block.data.url || '';
                 img.alt = block.data.caption || '';
-                img.style.maxWidth = '100%';
-                output.appendChild(img);
+                figure.appendChild(img);
                 if (block.data.caption) {
                     const cap = document.createElement('figcaption');
                     cap.textContent = block.data.caption;
-                    output.appendChild(cap);
+                    figure.appendChild(cap);
                 }
+                output.appendChild(figure);
                 break;
+
+            case 'checklist':
+                const ul = document.createElement('ul');
+                ul.classList.add('editorjs-checklist');
+                block.data.items.forEach(item => {
+                    const li = document.createElement('li');
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = item.checked;
+                    li.appendChild(checkbox);
+                    li.appendChild(document.createTextNode(item.text));
+                    ul.appendChild(li);
+                });
+                output.appendChild(ul);
+                break;
+
             case 'code':
                 const pre = document.createElement('pre');
                 pre.style.position = 'relative';
@@ -215,7 +330,6 @@ function editorJsonToHtml(savedData) {
                 codeEl.textContent = block.data.code || '';
                 pre.appendChild(codeEl);
 
-                // Copy button
                 const copyBtn = document.createElement('button');
                 copyBtn.type = "button";
                 copyBtn.innerHTML = "<i class='bx bx-copy'></i>";
@@ -232,6 +346,7 @@ function editorJsonToHtml(savedData) {
                 output.appendChild(pre);
                 Prism.highlightElement(codeEl);
                 break;
+
             case 'embed':
                 const iframe = document.createElement('iframe');
                 iframe.src = block.data.embed || block.data.source || '';
@@ -240,6 +355,7 @@ function editorJsonToHtml(savedData) {
                 iframe.style.border = '0';
                 output.appendChild(iframe);
                 break;
+
             case 'table':
                 if (Array.isArray(block.data.content)) {
                     const table = document.createElement('table');
@@ -259,6 +375,7 @@ function editorJsonToHtml(savedData) {
                     output.appendChild(table);
                 }
                 break;
+
             default:
                 const preRaw = document.createElement('pre');
                 preRaw.textContent = JSON.stringify(block, null, 2);
@@ -266,5 +383,6 @@ function editorJsonToHtml(savedData) {
         }
     });
 
-    return output.innerHTML;
+    return output;
 }
+

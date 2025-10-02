@@ -57,7 +57,7 @@
                     <div class="collapse" id="dailyDigest">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href="{{authRoute('user.daily-digest.create')}}">Add Digestion</a>
+                                <a class='tp-link' href="{{ authRoute('user.daily-digest.create') }}">Add Digestion</a>
                             </li>
                             <li>
                                 <a class='tp-link' href='{{ authRoute('user.daily-digest') }}'>Digestions List</a>
@@ -97,7 +97,7 @@
                                 <a class='tp-link' href='{{ authRoute('user.syntax-store.create') }}'>Write Syntax</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='#'>Syntax Store</a>
+                                <a class='tp-link' href='{{ authRoute('user.syntax-store') }}'>Syntax Store</a>
                             </li>
                             <li>
 

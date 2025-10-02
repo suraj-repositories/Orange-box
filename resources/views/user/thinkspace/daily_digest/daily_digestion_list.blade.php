@@ -40,15 +40,19 @@
                                         {{ $dailyDigest->created_at->diffForHumans() }}
                                     </div>
 
-                                    <a href="{{ authRoute('user.daily-digest.show', ['dailyDigest' => $dailyDigest]) }}" class="info">
+                                    <a href="{{ authRoute('user.daily-digest.show', ['dailyDigest' => $dailyDigest]) }}"
+                                        class="info">
                                         <i class='bx bx-info-circle'></i>
                                     </a>
 
-                                    <a href="{{ authRoute('user.daily-digest.edit', ['dailyDigest' => $dailyDigest]) }}" class="edit">
+                                    <a href="{{ authRoute('user.daily-digest.edit', ['dailyDigest' => $dailyDigest]) }}"
+                                        class="edit">
                                         <i class='bx bx-edit'></i>
                                     </a>
-                                    <form action="{{ authRoute('user.daily-digest.delete', ['dailyDigest' => $dailyDigest]) }}" method="post">
-                                       @method('DELETE')
+                                    <form
+                                        action="{{ authRoute('user.daily-digest.delete', ['dailyDigest' => $dailyDigest]) }}"
+                                        method="post">
+                                        @method('DELETE')
                                         @csrf
                                         <button type="submit" class="delete btn-no-style">
                                             <i class='bx bx-trash'></i>
@@ -67,6 +71,8 @@
 
             </div>
 
+            {{ $digestions->links() }}
+
         </div> <!-- content -->
 
         <!-- Footer Start -->
@@ -75,7 +81,7 @@
 
     </div>
 
-    @include('layout.ckeditor5')
+
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/daily-digest.js') }}"></script>
 @endsection

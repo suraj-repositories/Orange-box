@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\DeleteCommentableCommentsJob;
 use App\Models\File;
 use App\Models\SyntaxStore;
-use App\Models\ThinkPad;
 use App\Models\User;
+use App\Services\EditorJsService;
 use Illuminate\Http\Request;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Http;
@@ -15,18 +16,28 @@ use SweetAlert2\Laravel\Swal;
 class SyntaxStoreController extends Controller
 {
     protected $fileService;
+    protected $editorService;
 
-    public function __construct(FileService $fileService)
+    public function __construct(FileService $fileService, EditorJsService $editorService)
     {
         $this->fileService = $fileService;
+        $this->editorService = $editorService;
     }
-    //
+
+    public function index()
+    {
+        $items = SyntaxStore::orderBy('id', 'desc')->paginate(10);
+
+        return view('user.thinkspace.syntax_store.syntax_store_list', compact('items'));
+    }
+
     public function create()
     {
         return view('user.thinkspace.syntax_store.syntax_store_form');
     }
 
-    public function store(User $user, Request $request){
+    public function store(User $user, Request $request)
+    {
         $validated = $request->validate([
             'title' => 'required',
             'editor_content' => 'required',
@@ -35,6 +46,7 @@ class SyntaxStoreController extends Controller
 
         $store = SyntaxStore::create([
             'title' => $validated['title'],
+            'preview_text' => $this->editorService->jsonToPlainText($validated['editor_content']),
             'content' => $validated['editor_content'],
             'status' => $validated['submit_status'],
             'user_id' => $user->id
@@ -44,8 +56,38 @@ class SyntaxStoreController extends Controller
             'title' => 'Success!',
             'text' => 'Syntax Created Successfully!'
         ]);
-        return redirect()->back()->with( ['store' => $store]);
+        return redirect()->back()->with(['store' => $store]);
+    }
 
+    public function show(User $user, SyntaxStore $syntaxStore, Request $request)
+    {
+        return view('user.thinkspace.syntax_store.show_syntax_store', compact('syntaxStore', 'user'));
+    }
+
+    public function edit(User $user, SyntaxStore $syntaxStore, Request $request){
+
+        return view('user.thinkspace.syntax_store.syntax_store_form', compact('user', 'syntaxStore'));
+    }
+
+    public function update(User $user, SyntaxStore $syntaxStore, Request $request){
+         $validated = $request->validate([
+            'title' => 'required',
+            'editor_content' => 'required',
+            'submit_status' => 'required|in:publish,draft',
+        ]);
+
+        $syntaxStore->title = $validated['title'];
+        $syntaxStore->preview_text = $this->editorService->jsonToPlainText($validated['editor_content']);
+        $syntaxStore->content =$validated['editor_content'];
+        $syntaxStore->status = $validated['submit_status'];
+
+        $syntaxStore->save();
+
+        Swal::success([
+            'title' => 'Success!',
+            'text' => 'Syntax Updated Successfully!'
+        ]);
+        return redirect()->to(authRoute('user.syntax-store.show', ['syntaxStore' => $syntaxStore]));
     }
 
     public function storeEditorImages(User $user, Request $request)
@@ -59,7 +101,6 @@ class SyntaxStoreController extends Controller
         }
 
         $uploadedFile = $request->file('image');
-        // dd($request->all());
         $filePath = $this->fileService->uploadFile($uploadedFile, 'think_pad');
 
         if ($filePath) {
@@ -170,8 +211,9 @@ class SyntaxStoreController extends Controller
         return null;
     }
 
-    public function fetchMediaFromUrl(Request $request){
-        if(!$request->has('url')){
+    public function fetchMediaFromUrl(Request $request)
+    {
+        if (!$request->has('url')) {
             return response()->json([
                 'success' => 0,
                 'file' => [
@@ -180,11 +222,62 @@ class SyntaxStoreController extends Controller
             ]);
         }
 
-         return response()->json([
-                'success' => 1,
-                'file' => [
-                    'url' => $request->url
-                ]
-            ]);
+        return response()->json([
+            'success' => 1,
+            'file' => [
+                'url' => $request->url
+            ]
+        ]);
+    }
+
+    public function destroy(User $user, SyntaxStore $syntaxStore)
+    {
+        if ($syntaxStore->user_id != $user->id && !$user->hasRole('admin')) {
+            abort(403, "Access Denied!");
+        }
+
+        DeleteCommentableCommentsJob::dispatch(
+            get_class($syntaxStore),
+            $syntaxStore->id
+        );
+        $syntaxStore->delete();
+
+        Swal::success([
+            'title' => 'Success!',
+            'text' => 'Syntax Deleted Successfully!',
+        ]);
+        return redirect()->to(authRoute('user.syntax-store'));
+    }
+
+    public function like(User $user, SyntaxStore $syntaxStore, Request $request)
+    {
+        if ($syntaxStore->likedBy($user->id)) {
+            $syntaxStore->removeLike($user->id);
+        } else {
+            $syntaxStore->like($user->id);
+        }
+        return response()->json([
+            'status' => 'success',
+            'likes' => $syntaxStore->likesCount(),
+            'dislikes' => $syntaxStore->dislikesCount(),
+            'is_liked' => $syntaxStore->likedBy($user->id),
+            'is_disliked' => $syntaxStore->dislikedBy($user->id)
+        ]);
+    }
+
+    public function dislike(User $user, SyntaxStore $syntaxStore, Request $request)
+    {
+        if ($syntaxStore->dislikedBy($user->id)) {
+            $syntaxStore->removeLike($user->id);
+        } else {
+            $syntaxStore->dislike($user->id);
+        }
+        return response()->json([
+            'status' => 'success',
+            'likes' => $syntaxStore->likesCount(),
+            'dislikes' => $syntaxStore->dislikesCount(),
+            'is_liked' => $syntaxStore->likedBy($user->id),
+            'is_disliked' => $syntaxStore->dislikedBy($user->id)
+        ]);
     }
 }
