@@ -54,9 +54,9 @@ class ThinkPadController extends Controller
         $thinkPad->sub_title = $request->input('sub_title', null);
         $thinkPad->description =  $request->input('description', null);
 
-         $thinkPad->save();
+        $thinkPad->save();
 
-         if ($request->has('media_files')) {
+        if ($request->has('media_files')) {
             $media = $request->media_files;
             if (is_array($media)) {
                 foreach ($media as $file) {
@@ -64,6 +64,7 @@ class ThinkPadController extends Controller
                         'file_path' => $this->fileService->uploadFile($file, 'think_pad'),
                         'file_name' => $this->fileService->getFileName($file),
                         'mime_type' => $this->fileService->getMimeType($file),
+                        'file_size' => $file->getSize() ?? null,
                         'user_id' => $user->id
                     ]);
                 }
@@ -72,6 +73,7 @@ class ThinkPadController extends Controller
                     'file_path' => $this->fileService->uploadFile($media, 'think_pad'),
                     'file_name' => $this->fileService->getFileName($media),
                     'mime_type' => $this->fileService->getMimeType($media),
+                    'file_size' => $media->getSize() ?? null,
                     'user_id' => $user->id
                 ]);
             }
@@ -82,17 +84,18 @@ class ThinkPadController extends Controller
         ]);
 
         return redirect()->to(authRoute('user.think-pad.show', ['thinkPad' => $thinkPad]));
-
     }
 
-    public function show(User $user, ThinkPad $thinkPad, Request $request){
+    public function show(User $user, ThinkPad $thinkPad, Request $request)
+    {
 
-         $media = $this->fileService->getMediaMetadata($thinkPad->files);
+        $media = $this->fileService->getMediaMetadata($thinkPad->files);
 
         return view('user.thinkspace.think_pad.show_think_pad', compact('thinkPad', 'media'));
     }
 
-    public function edit(User $user, ThinkPad $thinkPad) {
+    public function edit(User $user, ThinkPad $thinkPad)
+    {
         if ($thinkPad->user_id != $user->id && !$user->hasRole('admin')) {
             abort(403, "Access Denied!");
         }
@@ -101,7 +104,8 @@ class ThinkPadController extends Controller
         return view('user.thinkspace.think_pad.think_pad_form', compact('thinkPad', 'media'));
     }
 
-    public function update(User $user, ThinkPad $thinkPad, Request $request){
+    public function update(User $user, ThinkPad $thinkPad, Request $request)
+    {
         if ($thinkPad->user_id != $user->id && !$user->hasRole('admin')) {
             abort(403, "Access Denied!");
         }
@@ -126,6 +130,7 @@ class ThinkPadController extends Controller
                         'file_path' => $this->fileService->uploadFile($file, 'daily_digests'),
                         'file_name' => $this->fileService->getFileName($file),
                         'mime_type' => $this->fileService->getMimeType($file),
+                        'file_size' => $file->getSize() ?? null,
                         'user_id' => $user->id
                     ]);
                 }
@@ -134,6 +139,7 @@ class ThinkPadController extends Controller
                     'file_path' => $this->fileService->uploadFile($media, 'daily_digests'),
                     'file_name' => $this->fileService->getFileName($media),
                     'mime_type' => $this->fileService->getMimeType($media),
+                    'file_size' => $media->getSize() ?? null,
                     'user_id' => $user->id
                 ]);
             }
@@ -168,6 +174,7 @@ class ThinkPadController extends Controller
                     'file_name'     => $this->fileService->getFileName($uploadedFile),
                     'file_path'     => $filePath,
                     'mime_type'     => $this->fileService->getMimeType($uploadedFile),
+                    'file_size' => $uploadedFile->getSize() ?? null,
                     'fileable_type' => ThinkPad::class,
                     'fileable_id'   => null,
                 ]);
@@ -192,7 +199,7 @@ class ThinkPadController extends Controller
         ]);
     }
 
-     public function destroy(User $user, ThinkPad $thinkPad)
+    public function destroy(User $user, ThinkPad $thinkPad)
     {
         //
         if ($thinkPad->user_id != $user->id && !$user->hasRole('admin')) {
@@ -212,7 +219,7 @@ class ThinkPadController extends Controller
         return redirect()->to(authRoute('user.think-pad'));
     }
 
-     public function like(User $user, ThinkPad $thinkPad, Request $request)
+    public function like(User $user, ThinkPad $thinkPad, Request $request)
     {
         if ($thinkPad->likedBy($user->id)) {
             $thinkPad->removeLike($user->id);

@@ -3,13 +3,14 @@
 namespace App\Services\Impl;
 
 use App\Services\FileService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class FileServiceImpl implements FileService
 {
 
 
-    public function uploadFile(\Illuminate\Http\UploadedFile $file, string $folder = "uploads", string $disk = "public"): string
+    public function uploadFile(UploadedFile $file, string $folder = "uploads", string $disk = "public"): string
     {
         if ($file->getSize() > 0) {
             return $file->store($folder, $disk);
@@ -35,17 +36,17 @@ class FileServiceImpl implements FileService
         return 0;
     }
 
-    public function getFileName(\Illuminate\Http\UploadedFile $file): string
+    public function getFileName(UploadedFile $file): string
     {
         return $file->getClientOriginalName();
     }
 
-    public function getExtension(\Illuminate\Http\UploadedFile $file): string
+    public function getExtension(UploadedFile $file): string
     {
         return $file->getClientOriginalExtension();
     }
 
-    public function getMimeType(\Illuminate\Http\UploadedFile $file): string
+    public function getMimeType(UploadedFile $file): string
     {
         return $file->getClientMimeType() ?? 'Unknown';
     }
@@ -80,8 +81,12 @@ class FileServiceImpl implements FileService
         if (!file_exists($filePath)) {
             return "File does not exist.";
         }
+        return $this->getFormattedSize(filesize($filePath));
+    }
 
-        $size = filesize($filePath);
+    public function getFormattedSize($sizeInBytes): string
+    {
+        $size = $sizeInBytes;
         $units = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 
         $unitIndex = 0;
@@ -122,5 +127,26 @@ class FileServiceImpl implements FileService
         }
 
         return $media;
+    }
+
+    function deleteDirectoryIfExists($dir)
+    {
+        if (!file_exists($dir)) {
+            return false;
+        }
+
+        if (is_dir($dir)) {
+            $files = array_diff(scandir($dir), array('.', '..'));
+            foreach ($files as $file) {
+                $filePath = $dir . DIRECTORY_SEPARATOR . $file;
+                if (is_dir($filePath)) {
+                    $this->deleteDirectoryIfExists($filePath);
+                } else {
+                    unlink($filePath);
+                }
+            }
+            return rmdir($dir);
+        }
+        return false;
     }
 }

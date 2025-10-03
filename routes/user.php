@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\Common\FileController;
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\FolderFactoryController;
 use App\Http\Controllers\User\SyntaxStoreController;
 use App\Http\Controllers\User\ThinkPadController;
+use App\Models\FolderFactory;
 use Illuminate\Support\Facades\Route;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 Route::controller(DashboardController::class)->group(function () {
     Route::get('dashboard', 'index')->name('dashboard');
@@ -48,7 +48,6 @@ Route::controller(SyntaxStoreController::class)->group(function () {
     Route::post('syntax-store/editor/images/store', 'storeEditorImages')->name('syntax-store.editor.images.store');
     Route::post('syntax-store/editor/fetch-url-media', 'fetchMediaFromUrl')->name('syntax-store.editor.fetch-url-media');
     Route::get('syntax-store/editor/fetch-url-data', 'fetchUrlData')->name('syntax-store.editor.fetch-url-data');
-
     Route::delete('syntax-store/{syntaxStore}', 'destroy')->name('syntax-store.delete');
     Route::post('syntax-store/{syntaxStore}/like', 'like')->name('syntax-store.like');
     Route::post('syntax-store/{syntaxStore}/dislike', 'dislike')->name('syntax-store.dislike');
@@ -61,4 +60,15 @@ Route::controller(CommentController::class)->group(function () {
     Route::delete('comments/{comment}', 'destroy')->name('comments.destroy');
     Route::post('comments/{comment}/like', 'like')->name('comments.like');
     Route::post('comments/{comment}/dislike', 'dislike')->name('comments.dislike');
+});
+
+
+Route::controller(FolderFactoryController::class)->group(function () {
+    Route::get('folder-factory', 'index')->name('folder-factory');
+    Route::post('folder-factory', 'store')->name('folder-factory.save');
+    Route::get('folder-factory/create', 'create')->name('folder-factory.create');
+
+    Route::get('/ff-files/upload/status', 'uploadStatus')->name('folder-factory.file.upload.status');
+    Route::post('/ff-files/upload', 'uploadChunk')->name('folder-factory.files.upload.chunk');
+    Route::post('/ff-files/upload/cancel', 'cancelUpload')->name('folder-factory.files.upload.cancel');
 });

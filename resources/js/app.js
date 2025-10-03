@@ -255,7 +255,7 @@ function editorJsonToHtml(savedData) {
                 const listEl = document.createElement(block.data.style === 'ordered' ? 'ol' : 'ul');
                 block.data.items.forEach(item => {
                     const li = document.createElement('li');
-                    li.textContent = item;
+                    li.innerHTML = item.content;
                     listEl.appendChild(li);
                 });
                 output.appendChild(listEl);
@@ -263,10 +263,12 @@ function editorJsonToHtml(savedData) {
 
             case 'quote':
                 const blockquote = document.createElement('blockquote');
-                blockquote.textContent = block.data.text;
-                if(block.data.caption) {
+                blockquote.innerHTML = block.data.text;
+                const caption = block.data.caption?.trim();
+                if (caption && caption !== '<br>') {
                     const cite = document.createElement('cite');
-                    cite.textContent = block.data.caption;
+
+                    cite.innerHTML = block.data.caption;
                     blockquote.appendChild(cite);
                 }
                 output.appendChild(blockquote);
@@ -300,8 +302,17 @@ function editorJsonToHtml(savedData) {
                 figure.appendChild(img);
                 if (block.data.caption) {
                     const cap = document.createElement('figcaption');
-                    cap.textContent = block.data.caption;
+                    cap.innerHTML = block.data.caption;
                     figure.appendChild(cap);
+                }
+                if (block.data.withBorder) {
+                    figure.classList.add('figure-border');
+                }
+                if (block.data.withBackground) {
+                    figure.classList.add('figure-background');
+                }
+                if (block.data.stretched) {
+                    figure.classList.add('figure-stretched');
                 }
                 output.appendChild(figure);
                 break;
@@ -315,7 +326,7 @@ function editorJsonToHtml(savedData) {
                     checkbox.type = 'checkbox';
                     checkbox.checked = item.checked;
                     li.appendChild(checkbox);
-                    li.appendChild(document.createTextNode(item.text));
+                    li.appendChild(document.createTextNode(decodeEntities(item.text)));
                     ul.appendChild(li);
                 });
                 output.appendChild(ul);
@@ -386,3 +397,8 @@ function editorJsonToHtml(savedData) {
     return output;
 }
 
+function decodeEntities(str) {
+    const el = document.createElement("textarea");
+    el.innerHTML = str;
+    return el.value;
+}

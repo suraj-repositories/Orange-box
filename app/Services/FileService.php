@@ -2,19 +2,21 @@
 
 namespace App\Services;
 
+use Illuminate\Http\UploadedFile;
+
 interface FileService
 {
-    function uploadFile(\Illuminate\Http\UploadedFile $file, string $folder = "uploads", string $disk = "public"): string;
+    function uploadFile(UploadedFile $file, string $folder = "uploads", string $disk = "public"): string;
 
     function fileExists($filePath, string $disk = "public");
 
     function deleteIfExists($filePath);
 
-    function getFileName(\Illuminate\Http\UploadedFile $file): string;
+    function getFileName(UploadedFile $file): string;
 
-    function getExtension(\Illuminate\Http\UploadedFile $file): string;
+    function getExtension(UploadedFile $file): string;
 
-    function getMimeType(\Illuminate\Http\UploadedFile $file): string;
+    function getMimeType(UploadedFile $file): string;
 
     function getFileNameByPath($filePath): string;
 
@@ -26,8 +28,12 @@ interface FileService
 
     function getAllAvailableIcons(): array;
 
-    public function getSizeByPath($filePath): string;
+    function getSizeByPath($filePath): string;
+
+    function getFormattedSize($sizeInBytes): string;
 
     function getMediaMetadata($files): array;
+
+    function deleteDirectoryIfExists($dir);
 
 }

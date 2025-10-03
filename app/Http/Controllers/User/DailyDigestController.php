@@ -70,6 +70,7 @@ class DailyDigestController extends Controller
                         'file_path' => $this->fileService->uploadFile($file, 'daily_digests'),
                         'file_name' => $this->fileService->getFileName($file),
                         'mime_type' => $this->fileService->getMimeType($file),
+                        'file_size' => $file->getSize() ?? null,
                         'user_id' => $user->id
                     ]);
                 }
@@ -78,6 +79,7 @@ class DailyDigestController extends Controller
                     'file_path' => $this->fileService->uploadFile($media, 'daily_digests'),
                     'file_name' => $this->fileService->getFileName($media),
                     'mime_type' => $this->fileService->getMimeType($media),
+                    'file_size' => $media->getSize() ?? null,
                     'user_id' => $user->id
                 ]);
             }
@@ -146,6 +148,7 @@ class DailyDigestController extends Controller
                         'file_path' => $this->fileService->uploadFile($file, 'daily_digests'),
                         'file_name' => $this->fileService->getFileName($file),
                         'mime_type' => $this->fileService->getMimeType($file),
+                        'file_size' => $file->getSize() ?? null,
                         'user_id' => $user->id
                     ]);
                 }
@@ -154,6 +157,7 @@ class DailyDigestController extends Controller
                     'file_path' => $this->fileService->uploadFile($media, 'daily_digests'),
                     'file_name' => $this->fileService->getFileName($media),
                     'mime_type' => $this->fileService->getMimeType($media),
+                    'file_size' => $media->getSize() ?? null,
                     'user_id' => $user->id
                 ]);
             }

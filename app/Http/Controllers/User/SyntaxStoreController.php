@@ -64,13 +64,15 @@ class SyntaxStoreController extends Controller
         return view('user.thinkspace.syntax_store.show_syntax_store', compact('syntaxStore', 'user'));
     }
 
-    public function edit(User $user, SyntaxStore $syntaxStore, Request $request){
+    public function edit(User $user, SyntaxStore $syntaxStore, Request $request)
+    {
 
         return view('user.thinkspace.syntax_store.syntax_store_form', compact('user', 'syntaxStore'));
     }
 
-    public function update(User $user, SyntaxStore $syntaxStore, Request $request){
-         $validated = $request->validate([
+    public function update(User $user, SyntaxStore $syntaxStore, Request $request)
+    {
+        $validated = $request->validate([
             'title' => 'required',
             'editor_content' => 'required',
             'submit_status' => 'required|in:publish,draft',
@@ -78,7 +80,7 @@ class SyntaxStoreController extends Controller
 
         $syntaxStore->title = $validated['title'];
         $syntaxStore->preview_text = $this->editorService->jsonToPlainText($validated['editor_content']);
-        $syntaxStore->content =$validated['editor_content'];
+        $syntaxStore->content = $validated['editor_content'];
         $syntaxStore->status = $validated['submit_status'];
 
         $syntaxStore->save();
@@ -110,6 +112,7 @@ class SyntaxStoreController extends Controller
                     'file_name'     => $this->fileService->getFileName($uploadedFile),
                     'file_path'     => $filePath,
                     'mime_type'     => $this->fileService->getMimeType($uploadedFile),
+                    'file_size'     => $uploadedFile->getSize() ?? null,
                     'fileable_type' => SyntaxStore::class,
                     'fileable_id'   => null,
                 ]);

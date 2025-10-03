@@ -68,7 +68,7 @@
                 </li>
                 <li>
                     <a href="#creative" data-bs-toggle="collapse">
-                        <i data-feather="copy"></i>
+                        <i class='bx bx-notepad fs-5'></i>
                         <span> Think Pad </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -118,6 +118,26 @@
                             </li>
                             <li>
                                 <a class='tp-link' href='#'>Talk History</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="menu-title mt-2">Orbit Zone</li>
+                <li>
+                    <a href="#folder-insights" data-bs-toggle="collapse">
+                        <i class="bx bx-folder fs-5"></i>
+                        <span> Folder Factory </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="folder-insights">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a class='tp-link' href='#'>Upload File</a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.folder-factory') }}'>Folder List</a>
                             </li>
 
                         </ul>
