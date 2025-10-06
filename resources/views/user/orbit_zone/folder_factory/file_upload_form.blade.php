@@ -8,7 +8,7 @@
 
 @section('content')
     <div class="content-page">
-        <div class="content">
+        <div class="content files">
             <div class="container-xxl">
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
@@ -25,11 +25,19 @@
 
                 <div class="row">
                     <div class="col">
-
-
                         <div class="card file-upload-card">
                             <div class="card-body">
 
+                                <div class="mb-3">
+                                    <label for="pick-folder" class="form-label">Select Folder</label>
+
+                                    <select class="form-select" aria-label="Default select example">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                                </select>
+                                </div>
 
                                 <div class="mb-3 image-area" id="uploadFileArea">
                                     <label for="filesUpload" class="form-label">Upload File</label>
@@ -55,7 +63,7 @@
                                                     <div class="flex-shrink-0 me-3">
                                                         <div class="avatar-sm bg-light rounded">
                                                             <img data-dz-thumbnail class="img-fluid rounded d-block"
-                                                                src="{{ config('constants.default_upload_file_dropzone_image') }}"
+                                                                src="{{ config('constants.DEFAULT_UPLOAD_FILE_DROPZONE_IMAGE') }}"
                                                                 alt="Dropzone-Image" />
                                                         </div>
                                                     </div>
@@ -116,7 +124,7 @@
                                     <div class="col-md-4 d-flex align-items-center">
                                         <div class="h-100 w-100 align-content-center me-1">
                                             <div class="progress rounded-0">
-                                                <div class="progress-bar bg-secondary progress-bar-striped progress-bar-animated"
+                                                <div class="progress-bar bg-dark progress-bar-striped progress-bar-animated"
                                                     role="progressbar" style="width: 75%" aria-valuenow="75"
                                                     aria-valuemin="0" aria-valuemax="100" id="progress_bar"></div>
                                             </div>

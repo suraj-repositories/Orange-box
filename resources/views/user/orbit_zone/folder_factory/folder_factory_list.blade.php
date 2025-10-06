@@ -60,7 +60,7 @@
                                                         </svg>
                                                     </div>
                                                     <div class="title-area">
-                                                            <a href="#">
+                                                            <a href="{{ authRoute('user.folder-factory.files.index', ['slug' =>  $folderFactory->slug]) }}">
                                                             <div class="title"> {{ $folderFactory->name }}</div>
                                                         </a>
                                                             <div class="sub-title">

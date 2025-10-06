@@ -11,3 +11,15 @@ composer dump-autoload
 ```
 
 
+### Feature 
+
+- Digestions
+- Think pad
+- syntax store
+
+- folder factory
+
+- to do 
+- project status management
+- projects 
+- 

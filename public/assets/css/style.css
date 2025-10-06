@@ -660,3 +660,75 @@ p{
     height: 48px;
     pointer-events: none;
 }
+
+
+/* BEGIN - plain-datatable */
+.plain-datatable .dataTables_wrapper thead tr th{
+    display: none;
+}
+.plain-datatable .dataTables_wrapper .dataTables_length,
+.plain-datatable .dataTables_wrapper .dataTables_filter,
+.plain-datatable .dataTables_wrapper .dataTables_info,
+.plain-datatable .dataTables_wrapper .dataTables_paginate
+{
+    display: none;
+}
+/* END - plain-datatable *//* Remove default accordion arrow */
+.plain-accordion .accordion-button::after {
+    display: none;
+}
+
+/* Flex layout for desktop */
+.plain-accordion .accordion-button {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+}
+
+.plain-accordion .file-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.plain-accordion .accordion-button .icon {
+    flex: 0 0 auto;
+    font-size: 1.2rem;
+}
+
+.plain-accordion .accordion-button .name {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .plain-accordion .accordion-button .type,
+    .plain-accordion .accordion-button .size,
+    .plain-accordion .accordion-button .date,
+    .plain-accordion .accordion-button .action {
+        display: none;
+    }
+}
+
+.plain-accordion .accordion-body .details {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.plain-accordion .accordion-button{
+    cursor: default;
+}
+.plain-accordion .accordion-body {
+    padding-left: 50px;
+}
+
+.plain-accordion .accordion-item {
+    border-radius: 0 !important;
+}
+.w-fit-content{
+    min-width: fit-content;
+}

@@ -52,6 +52,14 @@ class FolderFactoryController extends Controller
         return view('user.orbit_zone.folder_factory.folder_factory_list', compact('icons', 'folderFactories', 'totalFilesAndSize'));
     }
 
+    public function showFiles(User $user, $slug, Request $request){
+        $folderFactory = FolderFactory::where('slug', $slug)->where('user_id', $user->id)->first();
+        if(!$folderFactory){
+            abort(404, 'Folder not exists!');
+        }
+        return view('user.orbit_zone.folder_factory.folder_factory_files_list', compact('folderFactory'));
+    }
+
     public function create()
     {
         return view('user.orbit_zone.folder_factory.file_upload_form');

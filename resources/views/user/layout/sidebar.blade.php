@@ -134,7 +134,7 @@
                     <div class="collapse" id="folder-insights">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='#'>Upload File</a>
+                                <a class='tp-link' href='{{ authRoute('user.folder-factory.create') }}'>Upload File</a>
                             </li>
                             <li>
                                 <a class='tp-link' href='{{ authRoute('user.folder-factory') }}'>Folder List</a>
