@@ -61,7 +61,7 @@
                                                     </div>
                                                     <div class="title-area">
                                                             <a href="{{ authRoute('user.folder-factory.files.index', ['slug' =>  $folderFactory->slug]) }}">
-                                                            <div class="title"> {{ $folderFactory->name }}</div>
+                                                            <div class="title text-dark"> {{ $folderFactory->name }}</div>
                                                         </a>
                                                             <div class="sub-title">
                                                                 <small class="text-dark fw-bold" title="{{ $folderFactory->files_sum_file_size ?? 0 }} Bytes">
