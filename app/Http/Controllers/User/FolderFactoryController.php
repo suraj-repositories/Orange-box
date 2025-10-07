@@ -10,13 +10,14 @@ use App\Models\User;
 use App\Services\FileService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class FolderFactoryController extends Controller
 {
-    //
     protected $fileService;
 
     public function __construct(FileService $fileService)
@@ -49,20 +50,26 @@ class FolderFactoryController extends Controller
             )
             ->first();
 
-        return view('user.orbit_zone.folder_factory.folder_factory_list', compact('icons', 'folderFactories', 'totalFilesAndSize'));
+        $totalFiles = $totalFilesAndSize->total_files;
+        $totalSize = $this->fileService->getFormattedSize($totalFilesAndSize->total_size);
+
+        return view('user.orbit_zone.folder_factory.folder_factory_list', compact('icons', 'folderFactories', 'totalFiles', 'totalSize'));
     }
 
-    public function showFiles(User $user, $slug, Request $request){
+    public function showFiles(User $user, $slug, Request $request)
+    {
         $folderFactory = FolderFactory::where('slug', $slug)->where('user_id', $user->id)->first();
-        if(!$folderFactory){
+        if (!$folderFactory) {
             abort(404, 'Folder not exists!');
         }
         return view('user.orbit_zone.folder_factory.folder_factory_files_list', compact('folderFactory'));
     }
 
-    public function create()
+    public function create(User $user)
     {
-        return view('user.orbit_zone.folder_factory.file_upload_form');
+        $folderFactories = FolderFactory::where('user_id', $user->id)->orderBy('name', 'asc')->get();
+
+        return view('user.orbit_zone.folder_factory.file_upload_form', compact('folderFactories'));
     }
 
     public function store(User $user, Request $request)
@@ -88,75 +95,172 @@ class FolderFactoryController extends Controller
         return redirect()->back()->with('success', 'Folder Created Successfully!');
     }
 
+    public function destroy(User $user, FolderFactory $folderFactory, Request $request){
+        Gate::authorize('delete', $folderFactory);
+
+        $folderFactory->delete();
+
+        if ($request->isJson() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Folder factory destroyed successfully!'
+            ]);
+        }
+        return redirect()->back()->with('success', 'Folder factory destroyed successfully!');
+    }
+
     /* ================================ BEGIN - CHUNK UPLOAD ================================*/
+
 
     public function uploadStatus(Request $request)
     {
-        $fileName = $request->query('fileName');
-        if (!$fileName) {
-            return response()->json(['error' => 'Invalid file name'], 400);
+        $uploadId = $request->query('uploadId');
+        if (!$uploadId) {
+            return response()->json(['error' => 'Invalid upload ID'], 400);
         }
 
         $disk = Storage::disk('private');
-        $tempDir = $disk->path('files/temp/' . $fileName);
+        $tempDir = $disk->path('files/temp/' . $uploadId);
 
         if (!file_exists($tempDir)) {
             return response()->json(['uploadedChunks' => []]);
         }
 
         $uploadedChunks = array_diff(scandir($tempDir), ['.', '..']);
-        return response()->json(['uploadedChunks' => array_map('intval', $uploadedChunks)]);
+        $uploadedChunks = array_map('intval', $uploadedChunks);
+        sort($uploadedChunks);
+        return response()->json(['uploadedChunks' => $uploadedChunks]);
     }
 
-
-
-    public function uploadChunk(Request $request)
+    public function uploadChunk(User $user, Request $request)
     {
-        $fileName = $request->get('fileName');
-        $chunkIndex = $request->get('chunkIndex');
-        $totalChunks = $request->get('totalChunks');
+        $fileNameRaw = $request->get('fileName');
+        $chunkIndexRaw = $request->get('chunkIndex');
+        $totalChunksRaw = $request->get('totalChunks');
+        $folderIdRaw = $request->get('folderId');
+        $uploadId = $request->get('uploadId');
 
-        if (!$fileName || $chunkIndex === null || !$totalChunks || !$request->hasFile('file')) {
-            return response()->json(['error' => 'Invalid request'], 400);
+        if (!$uploadId) {
+            return response()->json(['error' => 'Missing uploadId'], 400);
+        }
+
+        if (!$fileNameRaw) {
+            return response()->json(['error' => 'Missing fileName'], 400);
+        }
+
+        if ($chunkIndexRaw === null || $chunkIndexRaw === '') {
+            return response()->json(['error' => 'Missing chunkIndex'], 400);
+        }
+
+        if ($totalChunksRaw === null || $totalChunksRaw === '') {
+            return response()->json(['error' => 'Missing totalChunks'], 400);
+        }
+
+        if (!$request->hasFile('file')) {
+            return response()->json(['error' => 'Missing file payload'], 400);
+        }
+
+        $chunkIndex = is_numeric($chunkIndexRaw) ? (int)$chunkIndexRaw : null;
+        $totalChunks = is_numeric($totalChunksRaw) ? (int)$totalChunksRaw : 0;
+        $fileName = (string)$fileNameRaw;
+        $folderId = $folderIdRaw ? (int)$folderIdRaw : null;
+
+        if (!is_int($chunkIndex) || $chunkIndex < 0) {
+            return response()->json(['error' => 'Invalid chunkIndex'], 400);
+        }
+
+        if ($totalChunks <= 0) {
+            return response()->json(['error' => 'Invalid totalChunks'], 400);
         }
 
         $disk = Storage::disk('private');
-        $tempDir = $disk->path('files/temp/' . $fileName);
+        $tempDir = $disk->path('files/temp/' . $uploadId);
 
-        if (!file_exists($tempDir)) {
-            mkdir($tempDir, 0777, true);
-        }
+        $folderCacheKey   = "upload_folder_{$user->id}_{$uploadId}";
+        $progressCacheKey = "upload_progress_{$user->id}_{$uploadId}";
 
-        $file = $request->file('file');
-        $file->move($tempDir, $chunkIndex);
-
-        if (count(scandir($tempDir)) - 2 === (int) $totalChunks) {
-            $finalFileName = "F-" . rand(100, 999) . $fileName;
-            $finalPath = $disk->path('files/' . $finalFileName);
-
-            $finalFile = fopen($finalPath, 'w');
-
-            for ($i = 0; $i < $totalChunks; $i++) {
-                $chunkPath = $tempDir . '/' . $i;
-                $chunk = fopen($chunkPath, 'r');
-                while ($data = fread($chunk, 1024)) {
-                    fwrite($finalFile, $data);
-                }
-                fclose($chunk);
-                unlink($chunkPath);
+        if ($chunkIndex === 0) {
+            if (!$folderId) {
+               return response()->json(['error' => 'Missing folderId for initial chunk'], 400);
             }
 
-            fclose($finalFile);
-            rmdir($tempDir);
+            $folder = FolderFactory::where('id', $folderId)->where('user_id', $user->id)->first();
+            if (!$folder) {
+               return response()->json(['error' => 'Folder not found or not allowed'], 403);
+            }
+
+            Cache::put($folderCacheKey, $folder->id, 3600);
+            Cache::put($progressCacheKey, 0, 3600);
+
+            if (!file_exists($tempDir)) {
+                if (!@mkdir($tempDir, 0777, true) && !is_dir($tempDir)) {
+                    return response()->json(['error' => 'Server error creating temp dir'], 500);
+                }
+            }
+        } else {
+            $cachedFolderId = Cache::get($folderCacheKey);
+            if (!$cachedFolderId) {
+                return response()->json(['error' => 'Upload session expired or not initialized (missing chunk 0)'], 400);
+            }
+            $folderId = $cachedFolderId;
+        }
+
+        try {
+            $uploaded = $request->file('file')->move($tempDir, (string)$chunkIndex);
+            if ($uploaded === false) {
+                return response()->json(['error' => 'Failed to save chunk'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to save chunk', 'details' => $e->getMessage()], 500);
+        }
+
+        if (!Cache::has($progressCacheKey)) {
+            Cache::put($progressCacheKey, 1, 3600);
+        } else {
+            Cache::increment($progressCacheKey);
+        }
+
+        $currentProgress = Cache::get($progressCacheKey, 0);
+
+        if ($currentProgress >= $totalChunks) {
+            $finalFileName = 'F-' . Str::uuid() . '-' . $fileName;
+            $finalPath = $disk->path('files/' . $finalFileName);
+
+            try {
+                $finalFile = fopen($finalPath, 'w');
+                for ($i = 0; $i < $totalChunks; $i++) {
+                    $chunkPath = $tempDir . '/' . $i;
+                    if (!file_exists($chunkPath)) {
+                        fclose($finalFile);
+                        return response()->json(['error' => "Missing chunk {$i} during merge"], 500);
+                    }
+                    $chunk = fopen($chunkPath, 'r');
+                    while ($data = fread($chunk, 1024 * 1024)) {
+                        fwrite($finalFile, $data);
+                    }
+                    fclose($chunk);
+                    @unlink($chunkPath);
+                }
+                fclose($finalFile);
+                @rmdir($tempDir);
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to merge chunks', 'details' => $e->getMessage()], 500);
+            }
 
             $mimeType = $this->fileService->getFileMimeTypeByPath($finalPath);
 
             File::create([
-                'file_path' => 'files/' . $finalFileName,
-                'file_name' => substr($fileName, strpos($fileName, '_x_') + 3),
-                'mime_type' => $mimeType,
-                'file_size' => $disk->size('files/' . $finalFileName) ?? null,
+                'user_id'       => $user->id,
+                'file_path'     => 'files/' . $finalFileName,
+                'file_name'     => $fileName,
+                'mime_type'     => $mimeType,
+                'file_size'     => $disk->size('files/' . $finalFileName) ?? null,
+                'fileable_type' => FolderFactory::class,
+                'fileable_id'   => $folderId,
             ]);
+
+            Cache::forget($folderCacheKey);
+            Cache::forget($progressCacheKey);
 
             return response()->json(['message' => 'Upload complete']);
         }
@@ -164,24 +268,6 @@ class FolderFactoryController extends Controller
         return response()->json(['message' => 'Chunk uploaded']);
     }
 
-
-    public function cancelUpload(Request $request)
-    {
-        $fileName = $request->input('fileName');
-        if (!$fileName) {
-            return response()->json(['error' => 'Invalid file name'], 400);
-        }
-
-        $disk = Storage::disk('private');
-        $dir = $disk->path('files/temp/' . $fileName);
-
-        $this->fileService->deleteDirectoryIfExists($dir);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'File upload canceled!'
-        ]);
-    }
 
     /* ================================ CHUNK UPLOAD ================================ */
 }

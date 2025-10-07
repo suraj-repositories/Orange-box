@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Comment;
 use App\Models\File;
+use App\Models\FolderFactory;
 use App\Observers\CommentObserver;
 use App\Policies\FilePolicy;
+use App\Policies\FolderFactoryPolicy;
 use App\Services\EditorJsService;
 use App\Services\FileService;
 use App\Services\Impl\EditorJsServiceImpl;
@@ -34,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
         Gate::policy(File::class, FilePolicy::class);
+        Gate::policy(FolderFactory::class, FolderFactoryPolicy::class);
 
         Comment::observe(CommentObserver::class);
 

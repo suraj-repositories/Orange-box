@@ -33,20 +33,44 @@
                     <div class="card mt-4 shadow-sm syntax-store-show-card show-card">
                         <div class="card-header">
                             <div class="d-flex flex-wrap w-100 align-items-center">
-                                <h4 class="card-title mb-0">{{ $folderFactories->total() ?? 'Unknown' }} Folders - {{ $totalFilesAndSize->file_count ?? 0}} Files - {{ $totalFilesAndSize->file_size ?? 0}} Bytes </h4>
+                                <h4 class="card-title mb-0 d-flex gap-1">
+                                    <div
+                                        class="p-2 bg-light text-dark border rounded text-center flex-fill d-flex align-items-center gap-2">
+                                        <div class="fs-5 fw-bold">{{ $folderFactories->total() ?? 'Unknown' }}</div>
+                                        <div class="fs-6">Folders</div>
+                                    </div>
+                                    <div
+                                        class="p-2 bg-light text-dark border rounded text-center flex-fill d-flex align-items-center  gap-2">
+                                        <div class="fs-5 fw-bold">{{ $totalFiles ?? 0 }}</div>
+                                        <div class="fs-6">Files</div>
+                                    </div>
+                                    <div
+                                        class="p-2 bg-light text-dark border rounded text-center flex-fill d-flex align-items-center  gap-2">
+                                        @php
+                                            $sizeParts = explode(' ', $totalSize ?? '0 Bytes');
+                                            $sizeNumber = $sizeParts[0] ?? '0';
+                                            $sizeUnit = $sizeParts[1] ?? '';
+                                        @endphp
+                                        <div class="fs-5 fw-bold">{{ $sizeNumber }}</div>
+                                        <div class="fs-6">{{ $sizeUnit }}</div>
+                                    </div>
+                                </h4>
+
+
                                 <div class="ms-auto fw-semibold">
-                                    <button type="button" class="btn btn-light btn-sm border center-content gap-1" data-bs-toggle="modal"
-                                        data-bs-target="#create-folder-modal">
-                                        <i class="bx bx-plus"></i> <div> New</div>
+                                    <button type="button" class="btn btn-light btn-sm border center-content gap-1"
+                                        data-bs-toggle="modal" data-bs-target="#create-folder-modal">
+                                        <i class="bx bx-plus"></i>
+                                        <div> New</div>
                                     </button>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="row g-3">
+                            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
 
                                 @forelse ($folderFactories as $folderFactory)
-                                    <div class="col col-md-6 col-lg-4">
+                                    <div class="col">
                                         <div class="folder-service-box folder-card rounded-0 border" style="border: none">
                                             <div class="card-body">
                                                 <div class="image-with-title">
@@ -60,19 +84,53 @@
                                                         </svg>
                                                     </div>
                                                     <div class="title-area">
-                                                            <a href="{{ authRoute('user.folder-factory.files.index', ['slug' =>  $folderFactory->slug]) }}">
+                                                        <a
+                                                            href="{{ authRoute('user.folder-factory.files.index', ['slug' => $folderFactory->slug]) }}">
                                                             <div class="title text-dark"> {{ $folderFactory->name }}</div>
                                                         </a>
-                                                            <div class="sub-title">
-                                                                <small class="text-dark fw-bold" title="{{ $folderFactory->files_sum_file_size ?? 0 }} Bytes">
-                                                                    {{ $folderFactory->readable_file_size ?? 0 }}
-                                                                </small>
-                                                                <small class="text-muted ms-1">
-                                                                    <i class="bx bx-calendar"></i>
-                                                                    {{ $folderFactory->updated_at->diffForHumans() }}
-                                                                </small>
+                                                        <div class="sub-title">
+                                                            <small class="text-dark fw-bold"
+                                                                title="{{ $folderFactory->files_sum_file_size ?? 0 }} Bytes">
+                                                                {{ $folderFactory->readable_file_size ?? 0 }}
+                                                            </small>
+                                                            <small class="text-muted ms-1">
+                                                                <i class="bx bx-calendar"></i>
+                                                                {{ $folderFactory->updated_at->diffForHumans() }}
+                                                            </small>
+
+                                                            <div class="folder-actions">
+                                                                <div class="dropdown">
+                                                                    <a class="dropdown-toggle center-content text-dark "
+                                                                        type="button" data-bs-toggle="dropdown"
+                                                                        aria-expanded="false">
+                                                                        <i class='bx bx-dots-vertical-rounded fs-5'></i>
+                                                                    </a>
+
+                                                                    <ul class="dropdown-menu dropdown-menu-lg-end">
+                                                                        <li><a class="dropdown-item"
+                                                                                href="{{ authRoute('user.folder-factory.files.index', ['slug' => $folderFactory->slug]) }}">
+                                                                                <i class='bx bx-show-alt me-1'></i> Visit
+                                                                            </a>
+                                                                        </li>
+                                                                        <li><a class="dropdown-item" href="#"><i
+                                                                                    class='bx bx-edit me-1'></i> Edit
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <button
+                                                                                class="dropdown-item text-danger bg-light-danger delete-folder-button"
+                                                                                data-folder-factory-id="{{ $folderFactory->id }}"><i
+                                                                                    class='bx bx-trash me-1'></i>
+                                                                                Delete</button>
+                                                                        </li>
+
+                                                                    </ul>
+                                                                </div>
                                                             </div>
+
+
                                                         </div>
+                                                    </div>
                                                 </div>
 
                                                 {{-- <div class="actions">
@@ -162,5 +220,5 @@
 @endsection
 
 @section('js')
-
+    <script src="{{ asset('assets/js/pages/folder-factory-list.js') }}"></script>
 @endsection

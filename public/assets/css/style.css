@@ -237,6 +237,8 @@
     text-align: left;
 }
 
+
+
 .action-container {
     display: flex;
     align-items: center;
@@ -543,40 +545,46 @@
 }
 
 .comment-section .icon-btn .svg-icon.active {
-  display: none !important;
+    display: none !important;
 }
 
 .comment-section .icon-btn .svg-icon.inactive {
-  display: inline !important;
+    display: inline !important;
 }
 
 .comment-section .icon-btn.filled .svg-icon.active {
-  display: inline !important;
+    display: inline !important;
 }
 
 .comment-section .icon-btn.filled .svg-icon.inactive {
-  display: none !important;
+    display: none !important;
 }
 
 /* End : comment section css */
-p{
+p {
     color: var(--bs-dark-text-emphasis);
 }
-.note-frame{
+
+.note-frame {
     color: #39383c !important;
 }
-.resize-none{
+
+.resize-none {
     resize: none;
 }
-.center-content{
+
+.center-content {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.ob-text-wrap{
+
+.ob-text-wrap {
     word-break: break-all;
 }
-
+.folder-factory .folder-card{
+    position: relative;
+}
 .folder-factory .folder-card .card-body {
     padding: 15px 10px;
     display: flex;
@@ -589,6 +597,8 @@ p{
     justify-content: center;
     gap: 8px;
 }
+
+
 
 .folder-factory .folder-card .actions {
     display: flex;
@@ -663,17 +673,19 @@ p{
 
 
 /* BEGIN - plain-datatable */
-.plain-datatable .dataTables_wrapper thead tr th{
+.plain-datatable .dataTables_wrapper thead tr th {
     display: none;
 }
+
 .plain-datatable .dataTables_wrapper .dataTables_length,
 .plain-datatable .dataTables_wrapper .dataTables_filter,
 .plain-datatable .dataTables_wrapper .dataTables_info,
-.plain-datatable .dataTables_wrapper .dataTables_paginate
-{
+.plain-datatable .dataTables_wrapper .dataTables_paginate {
     display: none;
 }
-/* END - plain-datatable *//* Remove default accordion arrow */
+
+/* END - plain-datatable */
+/* Remove default accordion arrow */
 .plain-accordion .accordion-button::after {
     display: none;
 }
@@ -705,6 +717,7 @@ p{
 }
 
 @media (max-width: 768px) {
+
     .plain-accordion .accordion-button .type,
     .plain-accordion .accordion-button .size,
     .plain-accordion .accordion-button .date,
@@ -719,9 +732,11 @@ p{
     flex-wrap: wrap;
     align-items: center;
 }
-.plain-accordion .accordion-button{
+
+.plain-accordion .accordion-button {
     cursor: default;
 }
+
 .plain-accordion .accordion-body {
     padding-left: 50px;
 }
@@ -729,6 +744,116 @@ p{
 .plain-accordion .accordion-item {
     border-radius: 0 !important;
 }
-.w-fit-content{
+
+.w-fit-content {
     min-width: fit-content;
+}
+
+.select2-container--bootstrap-5 .select2-selection {
+    border-color: #ececec !important;
+}
+
+.img-badge-30 {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border: 1px solid #d8d8d8;
+    object-fit: contain;
+}
+
+.img-badge-40 {
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border: 1px solid #d8d8d8;
+    object-fit: contain;
+}
+
+.img-badge-50 {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border: 1px solid #d8d8d8;
+    object-fit: contain;
+}
+
+.img-badge-60 {
+    width: 60px;
+    height: 60px;
+    background-color: white;
+    border: 1px solid #d8d8d8;
+    object-fit: contain;
+}
+
+.accordion-item .list-icon {
+    font-size: 35px;
+    padding: 2px;
+}
+
+.cursor-default {
+    cursor: default;
+}
+
+.min-w-100 {
+    min-width: 100px;
+}
+
+.min-w-150 {
+    min-width: 150px;
+}
+
+.min-w-200 {
+    min-width: 200px;
+}
+
+.deleting {
+    background: var(--bs-danger-bg-subtle);
+    cursor: not-allowed;
+     border-color: var(--bs-danger) !important;
+
+}
+
+.deleting .accordion-button {
+    color: var(--bs-danger);
+
+}
+.deleting .text-dark,
+.deleting .text-muted
+{
+    color: var(--bs-danger) !important;
+}
+.deleting img {
+    border-color: var(--bs-danger);
+    background: var(--bs-danger-bg-subtle);
+}
+
+.delete-error {
+    background: var(--bs-warning-bg-subtle);
+
+}
+
+.delete-error .accordion-button {
+    color: var(--bs-warning);
+}
+
+.delete-error img {
+    border-color: var(--bs-warning);
+    background: var(--bs-warning-bg-subtle);
+}
+
+.border-bottom-primary-3 {
+    border-bottom: 2px solid #789aff9a !important;
+}
+
+.loadable::before {
+    content: "$";
+    position: relative;
+    top: 2;
+    left: 2;
+}
+
+.folder-card .folder-actions {
+    position: absolute;
+    right: 10px;
+    top: 38%;
 }

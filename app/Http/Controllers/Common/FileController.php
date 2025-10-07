@@ -22,11 +22,35 @@ class FileController extends Controller
         $this->fileService = $fileService;
     }
 
-    public function store(Request $request) {}
+    public function show(Request $request, File $file)
+    {
+        if ($request->user()->cannot('view', $file)) {
+            abort(403, 'Unauthorized access');
+        }
+
+        if (!Storage::disk('private')->exists($file->file_path)) {
+            abort(404);
+        }
+
+        return Storage::disk('private')->response($file->file_path);
+    }
+
+    public function download($id)
+    {
+        $file = File::findOrFail($id);
+        if (!auth()->user()->can('view', $file)) {
+            abort(403, 'Unauthorized');
+        }
+        $path = $file->file_path;
+
+        if (!Storage::disk('private')->exists($path)) {
+            abort(404);
+        }
+        return Storage::disk('private')->download($path, $file->file_name);
+    }
 
     public function destroy(File $file, Request $request)
     {
-
         Gate::authorize('delete', $file);
 
         $file->delete();
@@ -121,5 +145,6 @@ class FileController extends Controller
 
         return redirect()->back();
     }
+
 
 }

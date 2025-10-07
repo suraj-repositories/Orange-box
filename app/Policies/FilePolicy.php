@@ -16,6 +16,15 @@ class FilePolicy
         //
     }
 
+    public function view(User $user, File $file)
+    {
+         if($user->hasRole('admin')){
+            return true;
+        }
+        return $file->user_id === $user->id;
+    }
+
+
     public function delete(User $user, File $file)
     {
         if($user->hasRole('admin')){
@@ -26,6 +35,6 @@ class FilePolicy
             return $file->fileable->user_id === $user->id;
         }
 
-        return false;
+         return $file->user_id === $user->id;
     }
 }

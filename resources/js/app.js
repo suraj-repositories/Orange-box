@@ -27,6 +27,7 @@ import 'prismjs/components/prism-markup-templating';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-css';
 
+
 const LANGUAGES = ['javascript', 'php', 'python', 'markup', 'bash', 'css'];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -230,9 +231,6 @@ function enableEditorJsPreview(previewSelector) {
         console.error("Error :", error);
     }
 }
-
-
-
 function editorJsonToHtml(savedData) {
     const output = document.createElement("div");
     output.classList.add("editorjs-preview");
@@ -396,7 +394,6 @@ function editorJsonToHtml(savedData) {
 
     return output;
 }
-
 function decodeEntities(str) {
     const el = document.createElement("textarea");
     el.innerHTML = str;

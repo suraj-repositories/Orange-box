@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FolderFactory extends Model
 {
+    use SoftDeletes;
+
     //
     protected $fillable = [
         'user_id',
@@ -13,6 +16,21 @@ class FolderFactory extends Model
         'slug',
         'name'
     ];
+
+    protected static function booted()
+    {
+        static::deleting(function ($digest) {
+            if ($digest->isForceDeleting()) {
+                $digest->files()->withTrashed()->forceDelete();
+            } else {
+                $digest->files()->delete();
+            }
+        });
+
+        static::restoring(function ($digest) {
+            $digest->files()->withTrashed()->restore();
+        });
+    }
 
     public function files()
     {

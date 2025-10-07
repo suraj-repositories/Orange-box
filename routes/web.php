@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-     return view('welcome');
+    return view('welcome');
 
     // $fileName = "abc.txt";
     // $fileName = pathinfo($fileName)['filename'] . "(".  5 .  ")" . (isset(pathinfo($fileName)['extension']) ? '.' . pathinfo($fileName)['extension'] : '');
@@ -20,13 +20,14 @@ Route::get('/log-me-out', function () {
 
 Route::get('/testing', [TestingController::class, 'testing']);
 
-Route::controller(FileController::class)->middleware('auth')->group(function(){
+Route::controller(FileController::class)->middleware('auth')->group(function () {
     Route::delete('file/{file}', 'destroy')->name('file.delete');
     Route::patch('file/{file}', 'rename')->name('file.rename');
-
+    Route::get('/secure-file/{file}', [FileController::class, 'show'])->name('secure.file.show')->middleware('signed');
+    Route::get('/file/download/{id}', [FileController::class, 'download'])->name('file.download');
     Route::post('/file/delete-by-path', 'destroyEditorFileByPath')->name('file.path.delete');
 });
 
-Route::get('/test', function(){
+Route::get('/test', function () {
     dd(Auth::user());
 });
