@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     enableOpenFolderButton("#OpenSelectedFolderBtn");
+
 });
 
 function enableOpenFolderButton(selector) {
@@ -28,3 +29,4 @@ function enableOpenFolderButton(selector) {
     }
 
 }
+

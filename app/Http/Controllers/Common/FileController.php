@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use SweetAlert2\Laravel\Swal;
 
 class FileController extends Controller
@@ -146,5 +147,25 @@ class FileController extends Controller
         return redirect()->back();
     }
 
+    public function ajaxRename(File $file, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'new_name' => 'nullable|max:255|string'
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+        Gate::authorize('update', $file);
+        $file->file_name = $request->new_name;
+        $file->save();
+
+        return response()->json([
+            'status' => "success",
+            'message' => 'File Rename successfully!'
+        ]);
+    }
 }

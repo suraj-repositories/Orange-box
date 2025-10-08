@@ -201,6 +201,18 @@
     animation: scale-in 0.2s ease-out;
 }
 
+.modal.show .modal-dialog {
+  transform: none;
+  transition: none;
+}
+.modal.fade .modal-dialog {
+   transform: none;
+  transition: none;
+}
+.active > .page-link, .page-link.active{
+    top: -1px;
+}
+
 .rename-modal .modal-header {
     border: none;
 }

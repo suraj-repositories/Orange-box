@@ -30,7 +30,7 @@
 
             <div class="row">
                 <div class="col-12">
-                    <div class="card mt-4 shadow-sm syntax-store-show-card show-card">
+                    <div class="card mt-3 shadow-sm syntax-store-show-card show-card">
                         <div class="card-header">
                             <div class="d-flex flex-wrap w-100 align-items-center">
                                 <h4 class="card-title mb-0 d-flex gap-1">
@@ -58,8 +58,8 @@
 
 
                                 <div class="ms-auto fw-semibold">
-                                    <button type="button" class="btn btn-light btn-sm border center-content gap-1"
-                                        data-bs-toggle="modal" data-bs-target="#create-folder-modal">
+                                    <button type="button" id="create-folder-factory"
+                                        class="btn btn-light btn-sm border center-content gap-1">
                                         <i class="bx bx-plus"></i>
                                         <div> New</div>
                                     </button>
@@ -112,9 +112,13 @@
                                                                                 <i class='bx bx-show-alt me-1'></i> Visit
                                                                             </a>
                                                                         </li>
-                                                                        <li><a class="dropdown-item" href="#"><i
-                                                                                    class='bx bx-edit me-1'></i> Edit
-                                                                            </a>
+                                                                        <li><button
+                                                                                class="dropdown-item edit-form-factory-btn"
+                                                                                data-ob-folder-factory-id="{{ $folderFactory->id }}"
+                                                                                data-ob-folder-factory-name="{{ $folderFactory->name }}"
+                                                                                data-ob-folder-factory-icon="{{ $folderFactory->icon_id }}">
+                                                                                <i class='bx bx-edit me-1'></i> Edit
+                                                                            </button>
                                                                         </li>
                                                                         <li>
                                                                             <button
@@ -145,6 +149,8 @@
                                 @endforelse
 
 
+                            </div>
+                            <div class="mt-3">
                                 {{ $folderFactories->links() }}
                             </div>
                         </div>
@@ -161,14 +167,14 @@
     <!-- Footer Start -->
     @include('layout.components.copyright')
     <!-- end Footer -->
-    <div class="modal fade folder-factory" id="create-folder-modal" tabindex="-1"
-        aria-labelledby="create-folder-modalLabel" aria-hidden="true">
+    <div class="modal fade folder-factory" id="folder-factory-form-modal" tabindex="-1"
+        aria-labelledby="folder-factory-form-title" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ authRoute('user.folder-factory.save') }}" method="post">
+                <form id="folder-factory-form" action="#" method="post">
                     @csrf
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="create-folder-modalLabel">Create Folder</h1>
+                        <h1 class="modal-title fs-5" id="folder-factory-form-title">Create Folder</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -209,7 +215,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="submit" class="btn btn-primary" id="save-btn">Create</button>
                     </div>
                 </form>
             </div>

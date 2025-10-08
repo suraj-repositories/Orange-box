@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class FolderFactoryController extends Controller
@@ -74,7 +75,7 @@ class FolderFactoryController extends Controller
 
     public function store(User $user, Request $request)
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => [
                 'required',
                 'max:255',
@@ -86,16 +87,69 @@ class FolderFactoryController extends Controller
             'icon' => 'nullable|integer|exists:icons,id',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'field' => $validator->errors()->keys()[0],
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
         $folderFactory = FolderFactory::create([
-            'name' => $validated['name'],
+            'name' => $request->name,
             'user_id' => $user->id,
-            'icon_id' => $validated['icon'] ?? null,
-            'slug' => Str::slug($validated['name'])
+            'icon_id' => $request->icon ?? null,
+            'slug' => Str::slug($request->name)
         ]);
-        return redirect()->back()->with('success', 'Folder Created Successfully!');
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Folder Created Successfully!',
+            'folderFactory' => $folderFactory,
+        ]);
     }
 
-    public function destroy(User $user, FolderFactory $folderFactory, Request $request){
+    public function update(User $user, FolderFactory $folderFactory, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => [
+                'required',
+                'max:255',
+                'string',
+                Rule::unique('folder_factories')
+                    ->ignore($folderFactory->id)
+                    ->where(function ($query) use ($user) {
+                    return $query->where('user_id', $user->id);
+                }),
+            ],
+            'icon' => 'nullable|integer|exists:icons,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'field' => $validator->errors()->keys()[0],
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        Gate::authorize('update', $folderFactory);
+
+        $folderFactory->name = $request->name;
+        $folderFactory->icon_id = $request->icon;
+        $folderFactory->slug =  Str::slug($request->name);
+        $folderFactory->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Folder Updated Successfully!',
+            'folderFactory' => $folderFactory,
+        ]);
+    }
+
+
+    public function destroy(User $user, FolderFactory $folderFactory, Request $request)
+    {
         Gate::authorize('delete', $folderFactory);
 
         $folderFactory->delete();
@@ -181,12 +235,12 @@ class FolderFactoryController extends Controller
 
         if ($chunkIndex === 0) {
             if (!$folderId) {
-               return response()->json(['error' => 'Missing folderId for initial chunk'], 400);
+                return response()->json(['error' => 'Missing folderId for initial chunk'], 400);
             }
 
             $folder = FolderFactory::where('id', $folderId)->where('user_id', $user->id)->first();
             if (!$folder) {
-               return response()->json(['error' => 'Folder not found or not allowed'], 403);
+                return response()->json(['error' => 'Folder not found or not allowed'], 403);
             }
 
             Cache::put($folderCacheKey, $folder->id, 3600);

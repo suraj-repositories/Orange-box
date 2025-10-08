@@ -37,4 +37,12 @@ class FilePolicy
 
          return $file->user_id === $user->id;
     }
+
+      public function update(User $user, File $file): bool
+    {
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+        return $file->user_id === $user->id;
+    }
 }

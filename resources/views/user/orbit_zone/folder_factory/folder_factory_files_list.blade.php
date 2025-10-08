@@ -7,7 +7,6 @@
     <div class="content-page">
         <div class="content">
 
-            <!-- Start Content-->
             <div class="container-xxl">
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
@@ -73,7 +72,7 @@
                                                     <div class="size me-2 w-fit-content min-w-100 text-center">
                                                         {{ $file->size() ?? '0 Bytes' }}</div>
                                                     <small
-                                                        class="date me-2 w-fit-content min-w-100 text-center">{{ $file->created_at->diffForHumans() }}</small>
+                                                        class="date me-2 w-fit-content min-w-100 text-center">{{ $file->updated_at->diffForHumans() }}</small>
                                                 </div>
                                             </h2>
                                             <div id="collapse-{{ $loop->iteration }}" class="accordion-collapse collapse"
@@ -90,7 +89,7 @@
                                                             <li><strong>Size :</strong> {{ $file->size() ?? '0 Bytes' }}
                                                             </li>
                                                             <li><strong>Creation date :</strong>
-                                                                {{ $file->created_at->diffForHumans() }}
+                                                                {{ $file->updated_at->diffForHumans() }}
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -98,17 +97,17 @@
                                                     <!-- Actions -->
                                                     <h6 class="mb-2">Actions</h6>
                                                     <div class="action d-flex gap-2 flex-wrap">
-                                                        <a class="btn btn-outline-primary btn-sm"
+                                                        <a class="btn btn-outline-primary btn-sm d-flex align-items-center"
                                                             href="{{ $file->getFileUrl() }}" target="_blank">
-                                                            <i class='bx bx-show-alt'></i> View
+                                                            <i class='bx bx-show'></i>&nbsp;View
                                                         </a>
                                                         <a class="btn btn-outline-success btn-sm"
                                                             href="{{ route('file.download', $file->id) }}">
                                                             <i class='bx bx-download'></i> Download
                                                         </a>
-                                                        <a class="btn btn-outline-warning btn-sm" href="javascript:void(0)">
+                                                        <button class="btn btn-outline-warning btn-sm rename-file-btn" data-ob-file-id="{{ $file->id }}">
                                                             <i class='bx bx-rename'></i> Rename
-                                                        </a>
+                                                        </button>
                                                         <button class="btn btn-outline-danger btn-sm delete-file-button"
                                                             data-file-id="{{ $file->id }}">
                                                             <i class='bx bx-trash-alt'></i> Delete

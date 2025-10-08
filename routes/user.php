@@ -66,6 +66,7 @@ Route::controller(CommentController::class)->group(function () {
 Route::controller(FolderFactoryController::class)->group(function () {
     Route::get('folder-factory', 'index')->name('folder-factory');
     Route::post('folder-factory', 'store')->name('folder-factory.save');
+    Route::post('folder-factory/{folderFactory}', 'update')->name('folder-factory.update');
     Route::delete('folder-factory/{folderFactory}', 'destroy')->name('folder-factory.delete');
     Route::get('folder-factory/files/create', 'create')->name('folder-factory.files.create');
     Route::get('folder-factory/{slug}/files', 'showFiles')->name('folder-factory.files.index');
