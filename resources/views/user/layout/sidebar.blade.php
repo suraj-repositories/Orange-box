@@ -68,7 +68,7 @@
                 </li>
                 <li>
                     <a href="#creative" data-bs-toggle="collapse">
-                        <i class='bx bx-notepad fs-5'></i>
+                        <i class="bi bi-clipboard2 fs-5"></i>
                         <span> Think Pad </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -105,24 +105,7 @@
                     </div>
                 </li>
 
-                <li>
-                    <a href="#talk-insights" data-bs-toggle="collapse">
-                        <i class="bi bi-file-earmark-text"></i>
-                        <span> Talk Tracker </span>
-                        <span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse" id="talk-insights">
-                        <ul class="nav-second-level">
-                            <li>
-                                <a class='tp-link' href='#'>Create Talks</a>
-                            </li>
-                            <li>
-                                <a class='tp-link' href='#'>Talk History</a>
-                            </li>
 
-                        </ul>
-                    </div>
-                </li>
 
                 <li class="menu-title mt-2">Orbit Zone</li>
                 <li>
@@ -138,6 +121,26 @@
                             </li>
                             <li>
                                 <a class='tp-link' href='{{ authRoute('user.folder-factory') }}'>Folder List</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="menu-title mt-2">Project Tracker</li>
+                <li>
+                    <a href="#project-zone" data-bs-toggle="collapse">
+                        <i class='bx bx-cube-alt fs-5' ></i>
+                        <span> Project Board </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="project-zone">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.project-board.create') }}'>Create Project</a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.project-board') }}'>Project List</a>
                             </li>
 
                         </ul>

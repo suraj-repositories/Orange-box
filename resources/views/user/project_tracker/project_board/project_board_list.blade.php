@@ -1,0 +1,81 @@
+@extends('user.layout.layout')
+
+@section('title', Route::is('user.project-board') ? 'Project Board' : '🟢🟢🟢')
+
+@section('content')
+    <div class="content-page">
+        <div class="content">
+
+            <!-- Start Content-->
+            <div class="container-xxl">
+
+                <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
+                    <div class="flex-grow-1">
+                        <h4 class="fs-18 fw-semibold m-0">Project Board List</h4>
+                    </div>
+
+                    <div class="text-end">
+                        <ol class="breadcrumb m-0 py-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Project Board</a></li>
+                            <li class="breadcrumb-item active">List</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 g-2">
+                @forelse ($projectBoards as $projectBoard)
+                    <div class="col">
+                        <div class="card d-flex flex-column h-100">
+                            <img class="card-img-top rounded-top" src="{{ $projectBoard->thumbnail_url }}"
+                                onerror="this.onerror=null;this.src='https://placehold.co/400x300';"
+                                alt="">
+
+                            <div class="card-body flex-grow-1">
+                                <h4 class="card-title">{{ $projectBoard->title }}</h4>
+                                <p class="card-text text-muted mb-0">
+                                    {{ $projectBoard->description }}
+                                </p>
+                            </div>
+
+                            <div class="card-footer mt-auto">
+                                <div class="action-container d-flex justify-content-between align-items-center">
+                                    <div class="ago-string">
+                                        <strong>Created: </strong> {{ $projectBoard->created_at->diffForHumans() }}
+                                    </div>
+                                    <div class="action-buttons d-flex gap-1">
+                                        <a href="#" class="info"><i class='bx bx-info-circle'></i></a>
+                                        <a href="#" class="edit"><i class='bx bx-edit'></i></a>
+                                        <form action="#" method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit" class="delete btn-no-style">
+                                                <i class='bx bx-trash'></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                @empty
+                    <x-no-data />
+                @endforelse
+
+
+            </div>
+
+            {{ $projectBoards->links() }}
+
+        </div> <!-- content -->
+
+        <!-- Footer Start -->
+        @include('layout.components.copyright')
+        <!-- end Footer -->
+
+    </div>
+
+    <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/daily-digest.js') }}"></script>
+@endsection

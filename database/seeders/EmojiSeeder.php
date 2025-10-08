@@ -20,17 +20,17 @@ class EmojiSeeder extends Seeder
 
             $category = EmojiCategory::firstOrCreate(['name' => $categoryName]);
 
-            $emojiData = array_map(
-                fn($emoji, $index) => [
+            $emojiData = [];
+
+            foreach ($emojis as $emoji => $name) {
+                $emojiData[] = [
                     'emoji_category_id' => $category->id,
-                    'name' => $categoryName . 'Emoji' . ($index + 1),
+                    'name' => $name,
                     'emoji' => $emoji,
                     'created_at' => now(),
                     'updated_at' => now(),
-                ],
-                $emojis,
-                array_keys($emojis)
-            );
+                ];
+            }
 
             Emoji::insert($emojiData);
         }

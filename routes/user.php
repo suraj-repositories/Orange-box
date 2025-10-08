@@ -4,6 +4,7 @@ use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\FolderFactoryController;
+use App\Http\Controllers\User\ProjectBoardController;
 use App\Http\Controllers\User\SyntaxStoreController;
 use App\Http\Controllers\User\ThinkPadController;
 use App\Models\FolderFactory;
@@ -70,8 +71,15 @@ Route::controller(FolderFactoryController::class)->group(function () {
     Route::delete('folder-factory/{folderFactory}', 'destroy')->name('folder-factory.delete');
     Route::get('folder-factory/files/create', 'create')->name('folder-factory.files.create');
     Route::get('folder-factory/{slug}/files', 'showFiles')->name('folder-factory.files.index');
-
     Route::get('/ff-files/upload/status', 'uploadStatus')->name('folder-factory.file.upload.status');
     Route::post('/ff-files/upload', 'uploadChunk')->name('folder-factory.files.upload.chunk');
     Route::post('/ff-files/upload/cancel', 'cancelUpload')->name('folder-factory.files.upload.cancel');
+});
+
+Route::controller(ProjectBoardController::class)->group(function () {
+    Route::get('project-board', 'index')->name('project-board');
+    Route::get('project-board/create', 'create')->name('project-board.create');
+    Route::post('project-board', 'store')->name('project-board.store');
+    Route::get('project-board/{projectBoard}', 'edit')->name('project-board.edit');
+    Route::post('project-board/{projectBoard}', 'update')->name('project-board.update');
 });

@@ -174,15 +174,14 @@
                 <li class="dropdown notification-list topbar-dropdown">
                     <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#"
                         role="button" aria-haspopup="false" aria-expanded="false">
-                        <img src="{{asset('assets/images/users/user-11.jpg')}}" alt="user-image" class="rounded-circle user-image">
-                        <span class="pro-user-name ms-1">
-                            Christian <i class="mdi mdi-chevron-down"></i>
+                        <img src="{{ auth()->user()->profilePicture() }}" alt="user-image" class="rounded-circle user-image">
+                        <span class="pro-user-name ms-1"> {{ auth()->user()->name() }} <i class="mdi mdi-chevron-down"></i>
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
                         <!-- item-->
                         <div class="dropdown-header noti-title">
-                            <h6 class="text-overflow m-0">Welcome !</h6>
+                            <h6 class="text-overflow m-0">Welcome {{ auth()->user()->name() }}!</h6>
                         </div>
 
                         <!-- item-->

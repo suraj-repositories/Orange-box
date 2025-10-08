@@ -869,3 +869,13 @@ p {
     right: 10px;
     top: 38%;
 }
+
+/* BEGIN -  project section */
+.card-img-top {
+  width: 100%;
+  aspect-ratio: 4/3;
+  width: height ratio;
+  object-fit: cover;
+}
+
+/* end -  project section */

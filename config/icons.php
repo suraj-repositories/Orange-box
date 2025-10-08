@@ -12,5 +12,5 @@ return [
         "cat" => "/assets/icons/ob-svg/folder/folder-8.svg",
         "doc" => "/assets/icons/ob-svg/folder/folder-9.svg",
         "puzzle" => "/assets/icons/ob-svg/folder/folder-10.svg",
-    ]
+    ],
 ];
