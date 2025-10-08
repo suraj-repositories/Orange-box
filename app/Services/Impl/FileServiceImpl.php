@@ -5,10 +5,10 @@ namespace App\Services\Impl;
 use App\Services\FileService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class FileServiceImpl implements FileService
 {
-
 
     public function uploadFile(UploadedFile $file, string $folder = "uploads", string $disk = "public"): string
     {
@@ -18,6 +18,7 @@ class FileServiceImpl implements FileService
         $uniqueFileName = pathinfo($this->getFileName($file), PATHINFO_FILENAME) . '-' . time() . '-' . uniqid() . '.' . $this->getExtension($file);
         return $file->storeAs($folder, $uniqueFileName, $disk);
     }
+
 
     public function fileExists($filePath, $disk = 'public')
     {
@@ -34,6 +35,14 @@ class FileServiceImpl implements FileService
             return 1;
         }
         return 0;
+    }
+
+    function deleteAllIfExists(array $filePaths): int{
+        $deleted = 0;
+        foreach($filePaths as $filePath){
+            $deleted += $this->deleteIfExists($filePath);
+        }
+        return $deleted;
     }
 
     public function getFileName(UploadedFile $file): string

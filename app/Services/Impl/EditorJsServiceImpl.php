@@ -40,4 +40,24 @@ class EditorJsServiceImpl implements EditorJsService
         $plain = trim(preg_replace('/\s+/', ' ', $text));
         return mb_substr($plain, 0, $size);
     }
+
+    function extractFiles($json)
+    {
+        $data = is_string($json) ? json_decode($json, true) : $json;
+        if (!$data || empty($data['blocks'])) return '';
+
+        $usedFilePaths = [];
+
+        if (isset($data['blocks']) && is_array($data['blocks'])) {
+            foreach ($data['blocks'] as $block) {
+                if ($block['type'] === 'image' && isset($block['data']['file']['url'])) {
+                    $url = $block['data']['file']['url'];
+                    $relativePath = parse_url($url, PHP_URL_PATH);
+                    $usedFilePaths[] = preg_replace('#^storage/#', '', ltrim($relativePath, '/'));
+                }
+            }
+        }
+
+        return $usedFilePaths;
+    }
 }

@@ -30,17 +30,32 @@ class File extends Model
     }
     public function getFileUrl()
     {
-        if (Storage::disk('public')->exists($this->file_path)) {
-            return url('storage/' . $this->file_path);
-        } else if (Storage::disk('private')->exists($this->file_path)) {
+        if ($this->file_path && Storage::disk('public')->exists($this->file_path)) {
+            return asset('storage/' . $this->file_path);
+        }
+
+        if ($this->file_path && Storage::disk('private')->exists($this->file_path)) {
             return URL::temporarySignedRoute(
                 'secure.file.show',
                 now()->addMinutes(10),
                 ['file' => $this->id]
             );
         }
-        // return config('constants')['DEFAULT_NO_FILE_IMAGE'];
+
         return 'https://placehold.co/50x90';
+    }
+
+    public function getRelativePath()
+    {
+        if (!$this->file_path) {
+            return null;
+        }
+
+        if (str_starts_with($this->file_path, '/')) {
+            return $this->file_path;
+        }
+
+        return '/storage/' . $this->file_path;
     }
 
     public function extension()

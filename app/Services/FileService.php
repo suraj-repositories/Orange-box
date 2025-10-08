@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
+use Ramsey\Uuid\Type\Integer;
 
 interface FileService
 {
@@ -11,6 +12,8 @@ interface FileService
     function fileExists($filePath, string $disk = "public");
 
     function deleteIfExists($filePath);
+
+    function deleteAllIfExists(array $filePaths): int;
 
     function getFileName(UploadedFile $file): string;
 

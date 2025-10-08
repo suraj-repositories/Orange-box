@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\EditorJsService;
 use Illuminate\Http\Request;
 use App\Services\FileService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use SweetAlert2\Laravel\Swal;
 
@@ -52,11 +53,28 @@ class SyntaxStoreController extends Controller
             'user_id' => $user->id
         ]);
 
-        Swal::success([
-            'title' => 'Success!',
-            'text' => 'Syntax Created Successfully!'
-        ]);
-        return redirect()->back()->with(['store' => $store]);
+
+        $usedFilePaths = $this->editorService->extractFiles($validated['editor_content']);
+        $unusedFiles = File::where('user_id', $user->id)
+            ->where('is_temp', true)
+            ->whereNotIn('file_path', $usedFilePaths)
+            ->select('id', 'file_path', 'is_temp', 'file_name')
+            ->get();
+
+        DB::transaction(function () use ($store, $user, $usedFilePaths, $unusedFiles) {
+            File::where('user_id', $user->id)->whereIn('file_path', $usedFilePaths)->update([
+                'is_temp' => false,
+                'fileable_id' => $store->id,
+                'fileable_type' => SyntaxStore::class,
+            ]);
+
+            $unusedIds = $unusedFiles->pluck('id');
+            $unusedPaths = $unusedFiles->pluck('file_path')->toArray();;
+            $this->fileService->deleteAllIfExists($unusedPaths);
+            File::whereIn('id', $unusedIds)->forceDelete();
+        });
+
+        return redirect()->to(authRoute('user.syntax-store.show', ['syntaxStore' => $store]));
     }
 
     public function show(User $user, SyntaxStore $syntaxStore, Request $request)
@@ -78,19 +96,44 @@ class SyntaxStoreController extends Controller
             'submit_status' => 'required|in:publish,draft',
         ]);
 
-        $syntaxStore->title = $validated['title'];
-        $syntaxStore->preview_text = $this->editorService->jsonToPlainText($validated['editor_content']);
-        $syntaxStore->content = $validated['editor_content'];
-        $syntaxStore->status = $validated['submit_status'];
+        $syntaxStore->update([
+            'title'         => $validated['title'],
+            'preview_text'  => $this->editorService->jsonToPlainText($validated['editor_content']),
+            'content'       => $validated['editor_content'],
+            'status'        => $validated['submit_status'],
+        ]);
 
-        $syntaxStore->save();
+        $usedFilePaths = $this->editorService->extractFiles($validated['editor_content']);
 
+        $unusedFiles = File::where('user_id', $user->id)
+            ->where('fileable_type', SyntaxStore::class)
+            ->where('fileable_id', $syntaxStore->id)
+            ->whereNotIn('file_path', $usedFilePaths)
+            ->get(['id', 'file_path']);
+
+        DB::transaction(function () use ($syntaxStore, $usedFilePaths, $unusedFiles) {
+            File::whereIn('file_path', $usedFilePaths)->update([
+                'is_temp'       => false,
+                'fileable_id'   => $syntaxStore->id,
+                'fileable_type' => SyntaxStore::class,
+            ]);
+
+            $unusedIds = $unusedFiles->pluck('id');
+            $unusedPaths = $unusedFiles->pluck('file_path')->toArray();
+
+            $this->fileService->deleteAllIfExists($unusedPaths);
+            File::whereIn('id', $unusedIds)->forceDelete();
+        });
+
+        dd($request->all());
         Swal::success([
             'title' => 'Success!',
             'text' => 'Syntax Updated Successfully!'
         ]);
+
         return redirect()->to(authRoute('user.syntax-store.show', ['syntaxStore' => $syntaxStore]));
     }
+
 
     public function storeEditorImages(User $user, Request $request)
     {
@@ -103,7 +146,7 @@ class SyntaxStoreController extends Controller
         }
 
         $uploadedFile = $request->file('image');
-        $filePath = $this->fileService->uploadFile($uploadedFile, 'think_pad');
+        $filePath = $this->fileService->uploadFile($uploadedFile, 'syntax_store');
 
         if ($filePath) {
             try {
@@ -115,12 +158,13 @@ class SyntaxStoreController extends Controller
                     'file_size'     => $uploadedFile->getSize() ?? null,
                     'fileable_type' => SyntaxStore::class,
                     'fileable_id'   => null,
+                    'is_temp'   => true
                 ]);
 
                 return response()->json([
                     'success' => 1,
                     'file' => [
-                        'url'    => $file->getFileUrl(),
+                        'url'    => $file->getRelativePath(),
                     ]
                 ]);
             } catch (\Exception $e) {
