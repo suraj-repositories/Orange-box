@@ -1,0 +1,90 @@
+ <div class="card overflow-hidden">
+     <div class="card-header">
+         <div class="d-flex align-items-center">
+             <div class="rounded-2 me-2 widget-icons-sections">
+                 <i data-feather="crosshair" class="widgets-icons"></i>
+             </div>
+             <h5 class="card-title mb-0">Project Modules</h5>
+
+             <div class="ms-auto fw-semibold d-flex gap-1">
+                 <a href="{{ authRoute('user.project-board.modules.create', ['slug' => $projectBoard->slug]) }}"
+                     class="btn btn-light btn-sm border center-content gap-1">
+                     <i class="bx bx-plus fs-5"></i>
+                     <div> New</div>
+                 </a>
+
+                 @if (!Route::is('user.project-board.modules.index'))
+                      <a href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}"
+                     class="btn btn-light btn-sm border center-content gap-1">
+                     <i class='bx bx-list-ul fs-5'></i>
+                     <div> Show All</div>
+                 </a>
+                 @endif
+             </div>
+         </div>
+     </div>
+
+     <div class="card-body p-0">
+         <div class="table-responsive">
+             <table class="table table-traffic mb-0">
+
+                 <thead>
+                     <tr>
+                         <th>No</th>
+                         <th>Section Name</th>
+                         <th>Created Date</th>
+                         <th>Number of Task</th>
+                         <th>Deadline</th>
+                         <th>Project</th>
+                         <th>Assignee</th>
+                     </tr>
+                 </thead>
+
+                 @forelse($modules as $module)
+                     <tr>
+                         <td>
+                             <input type="checkbox" class="form-check-input m-0 align-middle" aria-label="Select task"
+                                 checked>
+                         </td>
+                         <td>
+                             <a href="#" class="text-reset"> {{ $module->name }} </a>
+                         </td>
+                         <td class="text-nowrap text-reset">
+                             <i data-feather="calendar" style="height: 18px; width: 18px;" class="me-1"></i>
+                             {{ date('F d, Y', strtotime($module->created_at)) }}
+                         </td>
+                         <td>
+                             <a href="#" class="text-reset">
+                                 <i data-feather="check" style="height: 18px; width: 18px;" class="me-1"></i>
+                                 4/8
+                             </a>
+                         </td>
+                         <td class="text-nowrap text-reset">
+                             <i data-feather="calendar" style="height: 18px; width: 18px;" class="me-1"></i>
+                             June 10, 2024
+                         </td>
+                         <td>
+                             <a href="#" class="text-reset">
+                                 <i data-feather="folder" style="height: 18px; width: 18px;" class="me-1"></i>
+                                 2
+                             </a>
+                         </td>
+                         <td>
+                             <img src="/assets/images/users/user-11.jpg" class="avatar avatar-sm rounded-2" />
+                         </td>
+                     </tr>
+                 @empty
+                     <tr>
+                         <td colspan="7">
+                             <x-no-data />
+                         </td>
+                     </tr>
+                 @endforelse
+
+             </table>
+         </div>
+         {{ $modules->links() }}
+     </div>
+ </div>
+
+

@@ -185,9 +185,9 @@
                         </div>
 
                         <!-- item-->
-                        <a class='dropdown-item notify-item' href='pages-profile.html'>
+                        <a class='dropdown-item notify-item' href='{{ authRoute('user.profile.index') }}'>
                             <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
-                            <span>My Account</span>
+                            <span>My Profile</span>
                         </a>
 
                         <!-- item-->

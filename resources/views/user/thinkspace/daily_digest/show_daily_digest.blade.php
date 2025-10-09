@@ -114,7 +114,6 @@
                                     <div id="description-area" class="rich-editor-content ">
                                         @if ($dailyDigest->description)
                                         {!! Str::markdown($dailyDigest->description) !!}
-                                            {{-- {!! $dailyDigest->description !!} --}}
                                         @endif
                                     </div>
                                     <br>

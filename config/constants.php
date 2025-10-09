@@ -6,6 +6,7 @@ return [
     "DEFAULT_DIGESTION_SHOW_IMAGE" => "/assets/images/svg/not-available-500.svg",
     "DEFAULT_NO_FILE_IMAGE" => "/assets/images/svg/not-available-500.svg",
     "DEFAULT_UPLOAD_FILE_DROPZONE_IMAGE" => "/assets/images/defaults/file-check-100.png",
+    "DEFAULT_PROJECT_THUMBNAIL" => "/assets/images/defaults/not-available-500.svg",
 
     "TAG_COLORS" => [
         [

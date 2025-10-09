@@ -11,18 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('project_board_teams', function (Blueprint $table) {
+        Schema::create('project_module_users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_board_id')
+            $table->foreignId('project_module_id')
                 ->constrained()
                 ->onDelete('cascade');
             $table->foreignId('user_id')
                 ->constrained()
                 ->onDelete('cascade');
-            $table->enum('role', ['owner', 'member', 'viewer'])->default('member');
-            $table->boolean('is_accepted')->default(true);
+            $table->enum('role', ['editor', 'member', 'viewer'])->default('member');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index('project_module_id');
+            $table->index('user_id');
+            $table->unique(['project_module_id', 'user_id']);
         });
     }
 
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('project_board_teams');
+        Schema::dropIfExists('project_module_users');
     }
 };

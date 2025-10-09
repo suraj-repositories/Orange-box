@@ -12,6 +12,8 @@ use App\Services\EditorJsService;
 use App\Services\FileService;
 use App\Services\Impl\EditorJsServiceImpl;
 use App\Services\Impl\FileServiceImpl;
+use App\Services\Impl\MarkdownServiceImpl;
+use App\Services\MarkdownService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
@@ -27,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         //
         $this->app->singleton(FileService::class, FileServiceImpl::class);
         $this->app->singleton(EditorJsService::class, EditorJsServiceImpl::class);
+        $this->app->singleton(MarkdownService::class, MarkdownServiceImpl::class);
     }
 
     /**

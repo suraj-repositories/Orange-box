@@ -146,11 +146,6 @@
                                     </div>
                                 </form>
 
-                                @if (!empty($projectBoard))
-                                    @foreach ($media as $file)
-                                        <x-modals.rename-modal :modalId="$file['file_id']" :prevResourceName="$file['file_name']" :formActionUrl="route('file.rename', $file['file_id'])" />
-                                    @endforeach
-                                @endif
                             </div>
 
                         </div>

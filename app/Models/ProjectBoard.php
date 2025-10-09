@@ -14,6 +14,7 @@ class ProjectBoard extends Model
     protected $fillable = [
         'title',
         'description',
+        'preview_text',
         'slug',
         'status',
         'start_date',
@@ -67,5 +68,10 @@ class ProjectBoard extends Model
     public function getThumbnailUrlAttribute()
     {
         return $this->thumbnail ? asset('storage/' . $this->thumbnail) : asset('images/default-thumbnail.png');
+    }
+
+    public function modules()
+    {
+        return $this->hasMany(ProjectModule::class);
     }
 }

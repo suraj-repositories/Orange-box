@@ -4,7 +4,9 @@ use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\FolderFactoryController;
+use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ProjectBoardController;
+use App\Http\Controllers\User\ProjectModuleController;
 use App\Http\Controllers\User\SyntaxStoreController;
 use App\Http\Controllers\User\ThinkPadController;
 use App\Models\FolderFactory;
@@ -80,6 +82,17 @@ Route::controller(ProjectBoardController::class)->group(function () {
     Route::get('project-board', 'index')->name('project-board');
     Route::get('project-board/create', 'create')->name('project-board.create');
     Route::post('project-board', 'store')->name('project-board.store');
-    Route::get('project-board/{projectBoard}', 'edit')->name('project-board.edit');
+    Route::get('project-board/{projectBoard}/edit', 'edit')->name('project-board.edit');
     Route::post('project-board/{projectBoard}', 'update')->name('project-board.update');
+    Route::get('project-board/{slug}', 'show')->name('project-board.show');
+});
+
+Route::controller(ProjectModuleController::class)->group(function () {
+    Route::get('project-board/{slug}/modules', 'index')->name('project-board.modules.index');
+    Route::get('project-board/{slug}/modules/create', 'create')->name('project-board.modules.create');
+    Route::post('project-board/{slug}/modules', 'store')->name('project-board.modules.save');
+});
+
+Route::controller(ProfileController::class)->group(function () {
+    Route::get('profile', 'index')->name('profile.index');
 });

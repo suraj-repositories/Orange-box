@@ -57,7 +57,7 @@ class User extends Authenticatable
     }
 
     public function profilePicture(){
-        return "https://placehold.co/100/6E92FF/ffffff?text=S";
+        return "https://placehold.co/100/6E92FF/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
     }
 
 

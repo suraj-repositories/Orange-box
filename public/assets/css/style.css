@@ -202,14 +202,17 @@
 }
 
 .modal.show .modal-dialog {
-  transform: none;
-  transition: none;
+    transform: none;
+    transition: none;
 }
+
 .modal.fade .modal-dialog {
-   transform: none;
-  transition: none;
+    transform: none;
+    transition: none;
 }
-.active > .page-link, .page-link.active{
+
+.active>.page-link,
+.page-link.active {
     top: -1px;
 }
 
@@ -234,6 +237,10 @@
 
 .rename-modal .modal-content {
     border-radius: 0px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 .rename-modal .modal-dialog {
@@ -594,9 +601,11 @@ p {
 .ob-text-wrap {
     word-break: break-all;
 }
-.folder-factory .folder-card{
+
+.folder-factory .folder-card {
     position: relative;
 }
+
 .folder-factory .folder-card .card-body {
     padding: 15px 10px;
     display: flex;
@@ -821,7 +830,7 @@ p {
 .deleting {
     background: var(--bs-danger-bg-subtle);
     cursor: not-allowed;
-     border-color: var(--bs-danger) !important;
+    border-color: var(--bs-danger) !important;
 
 }
 
@@ -829,11 +838,12 @@ p {
     color: var(--bs-danger);
 
 }
+
 .deleting .text-dark,
-.deleting .text-muted
-{
+.deleting .text-muted {
     color: var(--bs-danger) !important;
 }
+
 .deleting img {
     border-color: var(--bs-danger);
     background: var(--bs-danger-bg-subtle);
@@ -872,10 +882,113 @@ p {
 
 /* BEGIN -  project section */
 .card-img-top {
-  width: 100%;
-  aspect-ratio: 4/3;
-  width: height ratio;
-  object-fit: cover;
+    width: 100%;
+    aspect-ratio: 4/3;
+    width: height ratio;
+    object-fit: cover;
 }
+
+.truncate-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    max-height: calc(1.5em * 2);
+}
+
+.truncate-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    max-height: calc(1.5em * 3);
+}
+
+.truncate-4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    max-height: calc(1.5em * 4);
+}
+
+/*contact slip style*/
+.chip {
+    display: inline-block;
+    padding: 0 15px 0 25px;
+    height: 40px;
+    font-size: 14px;
+    line-height: 36px;
+    border-radius: 25px;
+    border: 1px solid var(--bs-gray-300);
+}
+
+.circle-40 {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    list-style-type: 40px;
+    font-size: 25px;
+    border: 1px solid #dee2e6;
+}
+
+.chip img {
+    float: left;
+    margin: 0 10px 0 -25px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+.chip .closebtn {
+    padding-left: 10px;
+    color: #888;
+    font-weight: bold;
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.chip .closebtn:hover {
+    color: #000;
+}
+
+.pick-user-model #user-results {
+    display: flex;
+    flex-direction: column;
+    gap:0.20rem;
+}
+
+.pick-user-model .user-item {
+ display: flex;
+  align-items: center;
+  padding: 6px;
+  color: inherit;
+  border-radius: 5px;
+  border: 1px solid transparent;
+
+}
+
+.pick-user-model .user-item:hover {
+   border: 1px solid var(--bs-gray-300);
+}
+
+.pick-user-model .user-item img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #dee2e6;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.pick-user-model .user-item span {
+    font-weight: 600;
+}
+
 
 /* end -  project section */
