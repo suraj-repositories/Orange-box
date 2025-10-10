@@ -54,6 +54,19 @@ return [
             "code"  => "#964B00",
             "label" => "Brown",
         ],
-    ]
+    ],
+
+    "PROJECT_MODULE_TYPES" => [
+        'Development',
+        'Testing',
+        'Design',
+        'Research',
+        'Documentation',
+        'Deployment',
+        'Maintenance',
+        'Analytics',
+        'UI/UX',
+        'Other'
+    ],
 
 ];

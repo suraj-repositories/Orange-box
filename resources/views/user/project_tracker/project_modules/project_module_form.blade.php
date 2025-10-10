@@ -11,7 +11,6 @@
 @section('content')
     <div class="content-page">
         <div class="content">
-
             <!-- Start Content-->
             <div class="container-xxl">
 
@@ -22,12 +21,16 @@
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board') }}">Project Module</a>
-                            </li>
+                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board') }}">Project Board</a></li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}">Project
+                                    Module</a></li>
                             <li class="breadcrumb-item active">{{ empty($module) ? 'Create' : 'Edit' }}</li>
                         </ol>
                     </div>
                 </div>
+
+                <x-alert-component />
 
                 <!-- General Form -->
                 <div class="row">
@@ -68,18 +71,14 @@
                                                 </span>
                                                 <select class="form-select" id="type-input" name="type">
                                                     <option value="" selected disabled>-- Select Type --</option>
-                                                    <option value="development">Development</option>
-                                                    <option value="testing">Testing</option>
-                                                    <option value="design">Design</option>
-                                                    <option value="research">Research</option>
-                                                    <option value="documentation">Documentation</option>
-                                                    <option value="deployment">Deployment</option>
-                                                    <option value="maintenance">Maintenance</option>
-                                                    <option value="analytics">Analytics</option>
-                                                    <option value="ui-ux">UI/UX</option>
-                                                    <option value="other">Other</option>
+                                                    @foreach ($types as $type)
+                                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
+                                            @error('type')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
 
                                         <!-- Description -->
@@ -91,13 +90,60 @@
                                             @enderror
                                         </div>
 
+                                        <!-- Start Date -->
+                                        <div class="col col-12 col-md-6 mb-3">
+                                            <label for="start-date-input" class="form-label">Start Date</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                                                <input type="date" class="form-control" id="start-date-input"
+                                                    name="start_date"
+                                                    value="{{ old('start_date', $module->start_date ?? '') }}">
+                                            </div>
+                                            @error('start_date')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+
+                                        <!-- End Date -->
+                                        <div class="col col-12 col-md-6 mb-3">
+                                            <label for="end-date-input" class="form-label">End Date</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
+                                                <input type="date" class="form-control" id="end-date-input"
+                                                    name="end_date"
+                                                    value="{{ old('end_date', $module->end_date ?? '') }}">
+                                            </div>
+                                            @error('end_date')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+
                                         <!-- Team Member -->
                                         <div class="col-12 mb-3">
                                             <label for="description-input" class="form-label">Team Members</label>
 
                                             <div class="d-flex flex-wrap gap-2">
+
+                                                @if (session('users'))
+                                                    @foreach (session('users') as $user)
+                                                        <div class="chip" data-ob-uid="{{ $user->id }}">
+                                                            <img src="{{ $user->avatar }}" alt="{{ $user->username }}"
+                                                                width="96" height="96">
+                                                            {{ $user->username }}
+                                                            <input type="hidden" name="user[]"
+                                                                alue="{{ $user->id }}">
+                                                            <span class="closebtn"
+                                                                onclick="this.parentElement.remove()">&times;</span>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+
                                                 <div class="circle-40 cursor-pointer pick-user-btn">+</div>
                                             </div>
+
+                                            @error('user')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
 
                                             <x-modals.user-picker-modal />
                                         </div>
@@ -126,7 +172,7 @@
                                                 </div>
 
                                             </div>
-                                            @error('media-files')
+                                            @error('media_files')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
 

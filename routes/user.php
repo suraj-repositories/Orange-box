@@ -91,6 +91,7 @@ Route::controller(ProjectModuleController::class)->group(function () {
     Route::get('project-board/{slug}/modules', 'index')->name('project-board.modules.index');
     Route::get('project-board/{slug}/modules/create', 'create')->name('project-board.modules.create');
     Route::post('project-board/{slug}/modules', 'store')->name('project-board.modules.save');
+    Route::get('project-board/{slug}/modules/{module}', 'show')->name('project-board.modules.show');
 });
 
 Route::controller(ProfileController::class)->group(function () {

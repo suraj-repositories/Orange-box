@@ -88,7 +88,7 @@ function fetchUsers(username) {
 
 function createSearchResultUser(user, onuserpick) {
     const userItem = document.createElement('a');
-    userItem.href = '#';
+    userItem.href = 'javascript::void()';
     userItem.className = 'user-item';
     userItem.addEventListener('click', onuserpick);
 
@@ -131,7 +131,7 @@ function createUserChip(user) {
     closeBtn.className = 'closebtn';
     closeBtn.innerHTML = '&times;';
     closeBtn.onclick = function () {
-        chip.style.display = 'none';
+        chip.remove();
     }
 
     chip.appendChild(img);

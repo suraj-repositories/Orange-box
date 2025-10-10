@@ -5193,6 +5193,7 @@ fieldset:disabled .btn {
     --bs-breadcrumb-divider-color: var(--bs-secondary-color);
     --bs-breadcrumb-item-padding-x: 0.3rem;
     --bs-breadcrumb-item-active-color: var(--bs-secondary-color);
+    --bs-breadcrumb-divider: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E");
     display: flex;
     flex-wrap: wrap;
     padding: var(--bs-breadcrumb-padding-y) var(--bs-breadcrumb-padding-x);
@@ -5200,7 +5201,7 @@ fieldset:disabled .btn {
     font-size: var(--bs-breadcrumb-font-size);
     list-style: none;
     background-color: var(--bs-breadcrumb-bg);
-    border-radius: var(--bs-breadcrumb-border-radius)
+    border-radius: var(--bs-breadcrumb-border-radius)''
 }
 
 .breadcrumb-item+.breadcrumb-item {

@@ -11,17 +11,19 @@
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">Project Module</h4>
+                        <h4 class="fs-18 fw-semibold m-0">Project Modules</h4>
                     </div>
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board') }}">Project Board</a></li>
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board') }}">Project Modules</a></li>
+                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}">Project Board</a></li>
+                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}">Project Modules</a></li>
                             <li class="breadcrumb-item active">List</li>
                         </ol>
                     </div>
                 </div>
+
+                <x-alert-component />
 
                 <div class="row">
                     <div class="col-md-12">

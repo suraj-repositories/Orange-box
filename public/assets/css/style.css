@@ -989,6 +989,51 @@ p {
 .pick-user-model .user-item span {
     font-weight: 600;
 }
-
+.avatar-list-stacked {
+  display: flex;
+  align-items: center;
+}
+.avatar-list-stacked .avatar {
+  margin-inline-end: -.45rem;
+  border-width: 2px;
+  border-color: transparent;
+  vertical-align: middle;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition-duration: .2s;
+  transition-timing-function: linear;
+}
+.avatar-rounded, .avatar-rounded img {
+  border-radius: 9999px !important;
+}
+.avatar {
+  position: relative;
+  display: inline-flex;
+  height: 2.625rem;
+  width: 2.625rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: .25rem;
+  font-weight: 500;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+ .avatar-rounded img {
+  border-radius: 9999px !important;
+}
+.avatar img {
+  height: 100%;
+  width: 100%;
+  border-radius: .25rem;
+}
+.avatar-list-stacked .avatar:hover {
+  z-index: 1;
+  --tw-scale-x: 1.15;
+  --tw-scale-y: 1.15;
+  transform: translate(0,0) rotate(0) skew(0) skewY(0) scaleX(1.15) scaleY(1.15);
+  border-width: 2px;
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
+}
 
 /* end -  project section */

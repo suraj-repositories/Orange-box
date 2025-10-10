@@ -14,11 +14,11 @@
                  </a>
 
                  @if (!Route::is('user.project-board.modules.index'))
-                      <a href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}"
-                     class="btn btn-light btn-sm border center-content gap-1">
-                     <i class='bx bx-list-ul fs-5'></i>
-                     <div> Show All</div>
-                 </a>
+                     <a href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}"
+                         class="btn btn-light btn-sm border center-content gap-1">
+                         <i class='bx bx-list-ul fs-5'></i>
+                         <div> Show All</div>
+                     </a>
                  @endif
              </div>
          </div>
@@ -34,6 +34,7 @@
                          <th>Section Name</th>
                          <th>Created Date</th>
                          <th>Number of Task</th>
+
                          <th>Deadline</th>
                          <th>Project</th>
                          <th>Assignee</th>
@@ -59,9 +60,14 @@
                                  4/8
                              </a>
                          </td>
+
                          <td class="text-nowrap text-reset">
-                             <i data-feather="calendar" style="height: 18px; width: 18px;" class="me-1"></i>
-                             June 10, 2024
+                             @if (!empty($module->end_date))
+                                 <i data-feather="calendar" style="height: 18px; width: 18px;" class="me-1"></i>
+                                <small> {{ date('F d, Y', strtotime($module->end_date)) }}</small>
+                             @else
+                                <p class="mx-auto">-</p>
+                            @endif
                          </td>
                          <td>
                              <a href="#" class="text-reset">
@@ -70,7 +76,24 @@
                              </a>
                          </td>
                          <td>
-                             <img src="/assets/images/users/user-11.jpg" class="avatar avatar-sm rounded-2" />
+                             <div class="avatar-list-stacked">
+                                 @php
+                                     $projectModuleUsers = $module->limitedUsers;
+                                 @endphp
+
+                                 @foreach ($projectModuleUsers as $projectModuleUser)
+                                     <span class="avatar avatar-rounded">
+                                         <img src="{{ $projectModuleUser->user->profilePicture() }}" alt="img">
+                                     </span>
+                                 @endforeach
+
+                                 @if ($module->project_module_users_count > 3)
+                                     <a class="avatar bg-dark avatar-rounded text-white" href="javascript:void(0);">
+                                         +{{ $module->project_module_users_count - 3 }}
+                                     </a>
+                                 @endif
+                             </div>
+                             {{-- <img src="/assets/images/users/user-11.jpg" class="avatar avatar-sm rounded-2" /> --}}
                          </td>
                      </tr>
                  @empty
@@ -86,5 +109,3 @@
          {{ $modules->links() }}
      </div>
  </div>
-
-

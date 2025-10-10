@@ -11,7 +11,7 @@
                  <div class="search-wrapper mb-4">
                      <div class="input-group border rounded-pill shadow-sm">
                          <span class="input-group-text bg-transparent border-0 ps-3 pe-0">
-                             <i class="bi bi-search text-muted fs-4"></i>
+                             <i class="bi bi-search text-muted fs-5"></i>
                          </span>
                          <input type="search" class="form-control border-0 shadow-none rounded-pill pe-4"
                              placeholder="Search users..." aria-label="Search users">

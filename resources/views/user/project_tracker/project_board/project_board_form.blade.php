@@ -64,7 +64,7 @@
                                         <div class="col col-12 col-md-6 mb-3">
                                             <label for="thumbnail-input" class="form-label">Thumbnail Image</label>
                                             <div class="input-group">
-                                                <span class="input-group-text"><i class='bx bx-image-alt fs-5'></i></span>
+                                                <span class="input-group-text"><i class="bi bi-image"></i></i></span>
                                                 <input type="file" class="form-control" accept="image/*"
                                                     id="thumbnail-input" name="thumbnail">
                                             </div>
@@ -81,7 +81,7 @@
                                         <div class="col col-12 col-md-6 mb-3">
                                             <label for="color-tag-input" class="form-label">Color Tag</label>
                                             <div class="input-group">
-                                                <span class="input-group-text"><i class='bx bx-palette fs-5'></i></span>
+                                                <span class="input-group-text"><i class="bi bi-palette"></i></span>
                                                 <select class="form-select" name="color_tag">
                                                     <option selected disabled>--select a color tag--</option>
                                                     @foreach ($tagColors as $tag)
@@ -110,8 +110,7 @@
                                         <div class="col col-12 col-md-6 mb-3">
                                             <label for="start-date-input" class="form-label">Start Date</label>
                                             <div class="input-group">
-                                                <span class="input-group-text"><i
-                                                        class="bi bi-calendar-date-fill"></i></span>
+                                                <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
                                                 <input type="date" class="form-control" id="start-date-input"
                                                     name="start_date"
                                                     value="{{ old('start_date', $projectBoard->start_date ?? '') }}">
@@ -125,8 +124,7 @@
                                         <div class="col col-12 col-md-6 mb-3">
                                             <label for="end-date-input" class="form-label">End Date</label>
                                             <div class="input-group">
-                                                <span class="input-group-text"><i
-                                                        class="bi bi-calendar-date-fill"></i></span>
+                                                <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
                                                 <input type="date" class="form-control" id="end-date-input"
                                                     name="end_date"
                                                     value="{{ old('end_date', $projectBoard->end_date ?? '') }}">

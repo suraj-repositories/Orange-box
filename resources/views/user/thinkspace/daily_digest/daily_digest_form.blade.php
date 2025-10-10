@@ -108,7 +108,7 @@
                                                 </div>
 
                                             </div>
-                                            @error('media-files')
+                                            @error('media_files')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
 

@@ -27,11 +27,18 @@ class ProjectModuleListComponent extends Component
     public function render(): View|Closure|string
     {
         $modules  = null;
+        $query = $this->projectBoard
+            ->modules()
+            ->withCount('projectModuleUsers')
+            ->with('limitedUsers');
+
         if (empty($this->limit)) {
-            $modules = $this->projectBoard->modules()->paginate(10);
+            $modules = $query->paginate(10);
         } else {
-            $modules = $this->projectBoard->modules()->paginate($this->limit);
+            $modules = $query->paginate($this->limit);
         }
+
+
         return view('components.project.project-module-list-component', compact('modules'));
     }
 }

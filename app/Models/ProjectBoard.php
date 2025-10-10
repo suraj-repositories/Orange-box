@@ -74,4 +74,16 @@ class ProjectBoard extends Model
     {
         return $this->hasMany(ProjectModule::class);
     }
+
+    public function tasks()
+    {
+        return $this->hasManyThrough(
+            Task::class,
+            ProjectModuleTask::class,
+            'project_module_id',
+            'id',
+            'id',
+            'task_id'
+        );
+    }
 }
