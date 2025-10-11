@@ -29,28 +29,29 @@ class SyntaxStore extends Model
 
     protected static function booted()
     {
+
         static::creating(function ($thinkPad) {
             if (empty($thinkPad->uuid)) {
                 $thinkPad->uuid = (string) Str::uuid();
             }
+        });
 
-            static::deleting(function ($digest) {
-                if ($digest->isForceDeleting()) {
-                    $digest->files()->withTrashed()->forceDelete();
-                } else {
-                    $digest->files()->delete();
-                }
-            });
+        static::deleting(function ($digest) {
+            if ($digest->isForceDeleting()) {
+                $digest->files()->withTrashed()->forceDelete();
+            } else {
+                $digest->files()->delete();
+            }
+        });
 
-            static::restoring(function ($digest) {
-                $digest->files()->withTrashed()->restore();
-            });
+        static::restoring(function ($digest) {
+            $digest->files()->withTrashed()->restore();
         });
     }
 
-     public function files()
+
+    public function files()
     {
         return $this->morphMany(File::class, 'fileable');
     }
-
 }

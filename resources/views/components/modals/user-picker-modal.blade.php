@@ -9,7 +9,7 @@
 
              <div class="modal-body">
                  <div class="search-wrapper mb-4">
-                     <div class="input-group border rounded-pill shadow-sm">
+                     <div class="input-group border rounded shadow-sm">
                          <span class="input-group-text bg-transparent border-0 ps-3 pe-0">
                              <i class="bi bi-search text-muted fs-5"></i>
                          </span>
@@ -19,9 +19,7 @@
                  </div>
 
                  <div id="user-pick-results">
-
                  </div>
-
              </div>
 
              <div class="modal-footer border-0">

@@ -1036,4 +1036,12 @@ p {
   border-color: rgb(255 255 255 / var(--tw-border-opacity, 1));
 }
 
+.ck.ck-toolbar.ck-toolbar_grouping > .ck-toolbar__items{
+    flex-wrap: wrap !important;
+}
+
+.input-group .select2-selection.select2-selection--single{
+   border-color: #d5d5d5 !important;
+}
+
 /* end -  project section */

@@ -85,3 +85,7 @@
     <script src="{{ asset('assets/js/pages/add-media.js') }}"></script>
     <script src="{{ asset('assets/js/pages/project-board.js') }}"></script>
 @endsection
+
+@section('js')
+    <script src="{{ asset("assets/js/pages/task_list.js") }}"></script>
+@endsection

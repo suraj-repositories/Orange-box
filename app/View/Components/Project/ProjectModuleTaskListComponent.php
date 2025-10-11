@@ -17,8 +17,11 @@ class ProjectModuleTaskListComponent extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(?ProjectBoard $projectBoard = null, ?ProjectModule $projectModule = null, $limit = null)
-    {
+    public function __construct(
+        ?ProjectBoard $projectBoard,
+        ?ProjectModule $projectModule,
+        $limit = null
+    ) {
         //
         $this->projectBoard = $projectBoard;
         $this->projectModule = $projectModule;
@@ -32,13 +35,12 @@ class ProjectModuleTaskListComponent extends Component
     {
         $tasks = collect();
 
-        if (!empty($this->projectBoard)) {
-            $tasks = $this->projectBoard->tasks()->orderBy('id', 'desc')->take(10)->get();
+        if ($this->projectModule?->exists) {
+            $tasks = $this->projectModule->tasks()->paginate(10);
+        } elseif ($this->projectBoard?->exists) {
+            $tasks = $this->projectBoard->tasks()->latest()->take($this->limit ?? 10)->get();
         }
 
-        if (!empty($this->projectModule)) {
-            $tasks = $this->projectModule->tasks()->paginate(10);
-        }
         return view('components.project.project-module-task-list-component', compact('tasks'));
     }
 }

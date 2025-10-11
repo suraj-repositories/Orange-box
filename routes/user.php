@@ -7,6 +7,7 @@ use App\Http\Controllers\User\FolderFactoryController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ProjectBoardController;
 use App\Http\Controllers\User\ProjectModuleController;
+use App\Http\Controllers\User\ProjectModuleTaskController;
 use App\Http\Controllers\User\SyntaxStoreController;
 use App\Http\Controllers\User\ThinkPadController;
 use App\Models\FolderFactory;
@@ -92,6 +93,14 @@ Route::controller(ProjectModuleController::class)->group(function () {
     Route::get('project-board/{slug}/modules/create', 'create')->name('project-board.modules.create');
     Route::post('project-board/{slug}/modules', 'store')->name('project-board.modules.save');
     Route::get('project-board/{slug}/modules/{module}', 'show')->name('project-board.modules.show');
+});
+
+Route::controller(ProjectModuleTaskController::class)->group(function () {
+    Route::get('project-board/{slug}/modules/{module}/tasks/create', 'createNested')->name('project-board.modules.tasks.createNested');
+    Route::post('project-board/{slug}/modules/{module}/tasks', 'store')->name('project-board.modules.tasks.store');
+
+    Route::get('tasks/create', 'createGlobal') ->name('tasks.create');
+    Route::post('tasks', 'store') ->name('tasks.store');
 });
 
 Route::controller(ProfileController::class)->group(function () {

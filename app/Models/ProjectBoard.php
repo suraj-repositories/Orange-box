@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class ProjectBoard extends Model
 {
     //
-    use SoftDeletes;
+    use SoftDeletes, HasRelationships;
 
     protected $fillable = [
         'title',
@@ -77,13 +78,19 @@ class ProjectBoard extends Model
 
     public function tasks()
     {
-        return $this->hasManyThrough(
+        return $this->hasManyDeep(
             Task::class,
-            ProjectModuleTask::class,
-            'project_module_id',
-            'id',
-            'id',
-            'task_id'
+            [ProjectModule::class, ProjectModuleTask::class],
+            [
+                'project_board_id',
+                'project_module_id',
+                'id'
+            ],
+            [
+                'id',
+                'id',
+                'task_id'
+            ]
         );
     }
 }

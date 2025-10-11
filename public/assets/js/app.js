@@ -187,8 +187,8 @@ class App {
         }
     }
 
-    initResizeableTextArea(){
-       const textAreas = document.querySelectorAll('textarea[resizeable="true"]');
+    initResizeableTextArea() {
+        const textAreas = document.querySelectorAll('textarea[resizeable="true"]');
 
         if (!textAreas.length) return;
         textAreas.forEach(textArea => {
@@ -204,24 +204,25 @@ class App {
 
     }
 
+
 }
 
-class Utility{
+class Utility {
 
-    static setUrlParam(key, value){
+    static setUrlParam(key, value) {
         const currentUrl = window.location.href;
         const url = new URL(currentUrl);
         url.searchParams.set(key, value);
         window.history.pushState({}, '', url);
     }
 
-    static getUrlParam(key){
+    static getUrlParam(key) {
         const currentUrl = window.location.href;
         const url = new URL(currentUrl);
-        return  url.searchParams.get(key);
+        return url.searchParams.get(key);
     }
 
-    static beforeCloseTabWaitFor(inProgress, message = "Running... Leave?"){
+    static beforeCloseTabWaitFor(inProgress, message = "Running... Leave?") {
         if (inProgress) {
             e.preventDefault();
             if (!confirm(message)) e.preventDefault();
@@ -249,9 +250,9 @@ class Utility{
         const remainingSeconds = seconds % 60;
 
         return { days, hours, minutes, seconds: remainingSeconds };
-      }
+    }
 
-    static formatTimeFromSeconds(seconds){
+    static formatTimeFromSeconds(seconds) {
         const days = Math.floor(seconds / (24 * 60 * 60));
         const hours = Math.floor((seconds % (24 * 60 * 60)) / (60 * 60));
         const minutes = Math.floor((seconds % (60 * 60)) / 60);

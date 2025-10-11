@@ -48,7 +48,7 @@
                                  checked>
                          </td>
                          <td>
-                             <a href="#" class="text-reset"> {{ $module->name }} </a>
+                             <a href="{{ authRoute('user.project-board.modules.show', ['slug' => $projectBoard->slug, 'module' =>  $module->slug]) }}" class="text-reset"> {{ $module->name }} </a>
                          </td>
                          <td class="text-nowrap text-reset">
                              <i data-feather="calendar" style="height: 18px; width: 18px;" class="me-1"></i>
