@@ -89,18 +89,38 @@ Route::controller(ProjectBoardController::class)->group(function () {
 });
 
 Route::controller(ProjectModuleController::class)->group(function () {
+
     Route::get('project-board/{slug}/modules', 'index')->name('project-board.modules.index');
-    Route::get('project-board/{slug}/modules/create', 'create')->name('project-board.modules.create');
+    Route::get('project-board/{slug}/modules/create', 'createNested')->name('project-board.modules.create');
     Route::post('project-board/{slug}/modules', 'store')->name('project-board.modules.save');
     Route::get('project-board/{slug}/modules/{module}', 'show')->name('project-board.modules.show');
+
+    Route::get('project-board/{slug}/modules/{module}/edit', 'editNested')->name('project-board.modules.edit');;
+    Route::post('project-board/{slug}/modules/{module}', 'update')->name('project-board.modules.update');
+
+    Route::delete('project-board/{slug}/modules/{module}', 'destroy')->name('project-board.modules.delete');
+
+    Route::get('modules', 'index')->name('modules.index');
+    Route::get('modules/create', 'create')->name('modules.create');
+    Route::post('modules', 'store')->name('modules.save');
+
+    Route::get('modules/{module}/edit', 'edit')->name('modules.edit');
+    Route::post('modules/{module}', 'update')->name('modules.update');
+
 });
 
 Route::controller(ProjectModuleTaskController::class)->group(function () {
     Route::get('project-board/{slug}/modules/{module}/tasks/create', 'createNested')->name('project-board.modules.tasks.createNested');
     Route::post('project-board/{slug}/modules/{module}/tasks', 'store')->name('project-board.modules.tasks.store');
 
-    Route::get('tasks/create', 'createGlobal') ->name('tasks.create');
-    Route::post('tasks', 'store') ->name('tasks.store');
+    Route::get('project-board/{slug}/modules/{module}/tasks/{task}/edit', 'editNested')->name('project-board.modules.tasks.editNested');
+    Route::post('project-board/{slug}/modules/{module}/tasks/{task}', 'update')->name('project-board.modules.tasks.update');
+
+    Route::get('tasks/create', 'createGlobal')->name('tasks.create');
+    Route::post('tasks', 'store')->name('tasks.store');
+    Route::post('tasks/{task}', 'update')->name('tasks.update');
+
+    Route::delete('tasks/{task}', 'destroy')->name('tasks.delete');
 });
 
 Route::controller(ProfileController::class)->group(function () {

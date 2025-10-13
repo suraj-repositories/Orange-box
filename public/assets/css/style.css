@@ -1044,4 +1044,16 @@ p {
    border-color: #d5d5d5 !important;
 }
 
+.priority-low{
+    color: var(--bs-success);
+}
+.priority-medium{
+    color: rgb(255, 225, 94);
+}
+.priority-high{
+    color: orange;
+}
+.priority-urgent{
+    color: var(--bs-danger);
+}
 /* end -  project section */

@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: __DIR__ . '/../routes/web.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
-            then: function(){
-                Route::middleware(['web'])->group(base_path('routes/auth.php'));
-                Route::middleware(['web', 'admin'])->prefix('admin')->name('admin.')->group(base_path('routes/admin.php'));
-                Route::middleware(['web', 'editor'])->prefix('e/{userid?}')->name('editor.')->group(base_path('routes/editor.php'));
-                Route::middleware(['web', 'user'])->prefix('{userid?}')->name('user.')->group(base_path('routes/user.php'));
-            },
+        then: function () {
+            Route::prefix('api')->name('api.')->group(base_path('routes/api.php'));
+            Route::middleware(['web'])->group(base_path('routes/auth.php'));
+            Route::middleware(['web', 'admin'])->prefix('admin')->name('admin.')->group(base_path('routes/admin.php'));
+            Route::middleware(['web', 'editor'])->prefix('e/{userid?}')->name('editor.')->group(base_path('routes/editor.php'));
+            Route::middleware(['web', 'user'])->prefix('{userid?}')->name('user.')->group(base_path('routes/user.php'));
+        },
     )
     ->withMiddleware(function (Middleware $middleware) {
         //
@@ -25,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'user' => App\Http\Middleware\UserMiddleware::class,
 
         ]);
+        $middleware->statefulApi();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

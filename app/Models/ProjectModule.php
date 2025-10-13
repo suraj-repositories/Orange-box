@@ -27,6 +27,11 @@ class ProjectModule extends Model
         'is_active' => 'boolean',
     ];
 
+    protected $append = [
+        'task_count',
+        'completed_task_count'
+    ];
+
     protected static function booted()
     {
         static::creating(function ($projectModule) {
@@ -45,6 +50,11 @@ class ProjectModule extends Model
         return $this->morphMany(File::class, 'fileable');
     }
 
+    public function projectBoard()
+    {
+        return $this->belongsTo(ProjectBoard::class);
+    }
+
     public function projectModuleUsers()
     {
         return $this->hasMany(ProjectModuleUser::class);
@@ -57,6 +67,15 @@ class ProjectModule extends Model
             ->take(3);
     }
 
+    public function assignees()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'project_module_users',
+            'project_module_id',
+            'user_id'
+        );
+    }
     public static function generateUniqueSlug($module, $userId, $ignoreId = null)
     {
         $baseSlug = Str::slug($module->name);
@@ -94,5 +113,14 @@ class ProjectModule extends Model
             'id',
             'task_id'
         );
+    }
+
+    public function getTaskCountAttribute()
+    {
+        return $this->tasks->count();
+    }
+    public function getCompletedTaskCountAttribute()
+    {
+        return $this->tasks->where('status', 'completed')->count();
     }
 }

@@ -62,4 +62,26 @@ class Task extends Model
     {
         return $this->hasOne(ProjectModuleTask::class);
     }
+    public function module()
+    {
+        return $this->hasOneThrough(
+            ProjectModule::class,
+            ProjectModuleTask::class,
+            'task_id',
+            'id',
+            'id',
+            'project_module_id'
+        );
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function assignedUser()
+    {
+        return $this->belongsTo(User::class, 'assigned_to', 'id');
+    }
 }

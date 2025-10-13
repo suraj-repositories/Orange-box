@@ -146,6 +146,42 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="#project-module" data-bs-toggle="collapse">
+                        <i class='bx bxs-cube-alt fs-5'></i>
+                        <span> Project Module </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="project-module">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.modules.create') }}'>Create Module</a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.modules.index') }}'>Project Module List</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    <a href="#project-task" data-bs-toggle="collapse">
+                       <i class='bx bx-target-lock fs-5'></i>
+                        <span> Project Tasks </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="project-task">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.tasks.create') }}'>Create Task</a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.project-board') }}'>Task List</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
 
 
                 {{-- <li>
@@ -155,9 +191,21 @@
                     </a>
                 </li> --}}
 
-                <li class="menu-title mt-2">General</li>
-
+                <li class="menu-title mt-2">Account</li>
                 <li>
+                    <a class='tp-link' href='calendar'>
+                        <i data-feather="user"></i>
+                        <span> My Profile </span>
+                    </a>
+                </li>
+                <li>
+                    <a class='tp-link' href='calendar'>
+                        <i data-feather="settings"></i>
+                        <span> Settings </span>
+                    </a>
+                </li>
+
+                {{-- <li>
                     <a href="#sidebarBaseui" data-bs-toggle="collapse">
                         <i data-feather="package"></i>
                         <span> Components </span>
@@ -408,7 +456,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
             </ul>
 

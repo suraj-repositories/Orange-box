@@ -12,7 +12,10 @@ class ProjectBoard extends Model
     //
     use SoftDeletes, HasRelationships;
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
+
         'title',
         'description',
         'preview_text',

@@ -1,6 +1,6 @@
 @extends('user.layout.layout')
 
-@section('title', Route::is('user.project-board.modules.index') ? 'Project Modules' : '🟢🟢🟢')
+@section('title', (Route::is('user.project-board.modules.index') || Route::is('user.modules.index'))? 'Project Modules' : '🟢🟢🟢')
 
 @section('content')
     <div class="content-page">
@@ -16,8 +16,16 @@
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}">Project Board</a></li>
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}">Project Modules</a></li>
+                            @if (!empty($projectBoard))
+                                <li class="breadcrumb-item"><a
+                                        href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}">Project
+                                        Board</a></li>
+                                <li class="breadcrumb-item"><a
+                                        href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}">Project
+                                        Modules</a></li>
+                            @else
+                                <li class="breadcrumb-item"><a href="#">Project Modules</a></li>
+                            @endif
                             <li class="breadcrumb-item active">List</li>
                         </ol>
                     </div>
@@ -27,8 +35,8 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-list-component :project-board="$projectBoard" :limit='10'/>
-                  </div>
+                        <x-project.project-module-list-component :project-board="$projectBoard" :limit='10' />
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,5 +52,5 @@
 
 @section('js')
 
-<script src="{{ asset("assets/js/pages/project-module.js") }}"></script>
+    <script src="{{ asset('assets/js/pages/project-module.js') }}"></script>
 @endsection

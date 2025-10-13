@@ -7,13 +7,15 @@
              <h5 class="card-title mb-0">Project Modules</h5>
 
              <div class="ms-auto fw-semibold d-flex gap-1">
-                 <a href="{{ authRoute('user.project-board.modules.create', ['slug' => $projectBoard->slug]) }}"
+                 <a href="{{
+                    empty($projectBoard) ? authRoute('user.modules.create') : authRoute('user.project-board.modules.create', ['slug' => $projectBoard->slug])
+                    }}"
                      class="btn btn-light btn-sm border center-content gap-1">
                      <i class="bx bx-plus fs-5"></i>
                      <div> New</div>
                  </a>
 
-                 @if (!Route::is('user.project-board.modules.index'))
+                 @if (!Route::is('user.project-board.modules.index') && !Route::is('user.modules.index'))
                      <a href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}"
                          class="btn btn-light btn-sm border center-content gap-1">
                          <i class='bx bx-list-ul fs-5'></i>
@@ -31,10 +33,12 @@
                  <thead>
                      <tr>
                          <th>No</th>
-                         <th>Section Name</th>
+                         @if(Route::is('user.modules.index'))
+                         <th>Project Name</th>
+                         @endif
+                         <th>Module Name</th>
                          <th>Created Date</th>
                          <th>Number of Task</th>
-
                          <th>Deadline</th>
                          <th>Project</th>
                          <th>Assignee</th>
@@ -47,8 +51,13 @@
                              <input type="checkbox" class="form-check-input m-0 align-middle" aria-label="Select task"
                                  checked>
                          </td>
+                           @if(Route::is('user.modules.index'))
                          <td>
-                             <a href="{{ authRoute('user.project-board.modules.show', ['slug' => $projectBoard->slug, 'module' =>  $module->slug]) }}" class="text-reset"> {{ $module->name }} </a>
+                            <a class="text-reset" href="{{ authRoute('user.project-board.show', ['slug'=> $module->projectBoard->slug]) }}">{{$module->projectBoard->title}}</a>
+                         </td>
+                         @endif
+                         <td>
+                             <a href="{{ authRoute('user.project-board.modules.show', ['slug' => $module->projectBoard->slug, 'module' =>  $module->slug]) }}" class="text-reset"> {{ $module->name }} </a>
                          </td>
                          <td class="text-nowrap text-reset">
                              <i data-feather="calendar" style="height: 18px; width: 18px;" class="me-1"></i>
@@ -57,7 +66,7 @@
                          <td>
                              <a href="#" class="text-reset">
                                  <i data-feather="check" style="height: 18px; width: 18px;" class="me-1"></i>
-                                 4/8
+                                 {{ $module->completed_task_count }}/{{ $module->task_count }}
                              </a>
                          </td>
 
@@ -83,7 +92,7 @@
 
                                  @foreach ($projectModuleUsers as $projectModuleUser)
                                      <span class="avatar avatar-rounded">
-                                         <img src="{{ $projectModuleUser->user->profilePicture() }}" alt="img">
+                                         <img src="{{ $projectModuleUser->user->profilePicture() }}" alt="img" title="{{ $projectModuleUser->user->username }}">
                                      </span>
                                  @endforeach
 
@@ -106,6 +115,6 @@
 
              </table>
          </div>
-         {{ $modules->links() }}
+         <div class="mx-3 my-3">{{ $modules->links() }}</div>
      </div>
  </div>

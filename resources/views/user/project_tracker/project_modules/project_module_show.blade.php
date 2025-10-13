@@ -15,9 +15,13 @@
                     </div>
 
                     <div class="text-end">
-                       <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}">Project Board</a></li>
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}">Modules</a></li>
+                        <ol class="breadcrumb m-0 py-0">
+                            <li class="breadcrumb-item"><a
+                                    href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}">Project
+                                    Board</a></li>
+                            <li class="breadcrumb-item"><a
+                                    href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}">Modules</a>
+                            </li>
                             <li class="breadcrumb-item active">Show</li>
                         </ol>
                     </div>
@@ -31,11 +35,30 @@
                                 <h5 class="mb-0 fw-bold">
                                     {{ $projectModule->name }}
                                 </h5>
-                                <button class="btn btn-sm bg-light border" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#projectDescription{{ $projectModule->id }}" aria-expanded="false"
-                                    aria-controls="projectDescription{{ $projectModule->id }}">
-                                    Description
-                                </button>
+
+                                <div class="action-container m-0 gap-1">
+
+
+                                    <a href="#" data-bs-toggle="collapse" title="Description"
+                                        data-bs-target="#projectDescription{{ $projectModule->id }}" aria-expanded="false"
+                                        aria-controls="projectDescription{{ $projectModule->id }}" class="info ms-0">
+                                      <i class='bx bx-info-circle'></i>
+                                    </a>
+
+                                    <a href="{{ authRoute('user.project-board.modules.edit', ['slug' => $projectBoard->slug, 'module'=> $projectModule->slug ]) }}" class="edit">
+                                        <i class='bx bx-edit'></i>
+                                    </a>
+                                    <form action="#" method="post">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button type="submit" class="delete btn-no-style">
+                                            <i class='bx bx-trash'></i>
+                                        </button>
+                                    </form>
+                                    {{-- <div class="more">
+                                        <i class='bx bx-dots-vertical-rounded' ></i>
+                                    </div> --}}
+                                </div>
                             </div>
 
                             <div class="collapse" id="projectDescription{{ $projectModule->id }}">
@@ -62,7 +85,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                       <x-project.project-module-task-list-component :project-module="$projectModule" :limit='10'/>
+                        <x-project.project-module-task-list-component :project-board="$projectBoard" :project-module="$projectModule"
+                            :limit='10' />
                     </div>
                 </div>
             </div> <!-- container-fluid -->

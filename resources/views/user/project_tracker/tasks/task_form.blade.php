@@ -4,7 +4,7 @@
     Route::is('user.project-board.modules.tasks.createNested') || Route::is('user.tasks.create')
     ? 'Create
     Task'
-    : (Route::is('user.project-board.edit')
+    : (Route::is('user.project-board.modules.tasks.editNested')
     ? 'Edit Task'
     : '🟢🟢🟢'))
 
@@ -45,9 +45,88 @@
                             </div>
 
                             <div class="card-body">
-                                <form action="{{ authRoute('user.project-board.modules.tasks.store', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}" method="POST" enctype="multipart/form-data">
+                                @php
+                                    $submitUrl = null;
+                                    if(!empty($projectBoards) && !empty($projectModules)){
+                                            $submitUrl = empty($task)
+                                                ? authRoute('user.tasks.store')
+                                                : authRoute('user.tasks.update', [
+                                                    'task' => $task,
+                                        ]);
+                                    }else{
+                                        $submitUrl = empty($task)
+                                                ? authRoute('user.project-board.modules.tasks.store', [
+                                                    'slug' => $projectBoard->slug,
+                                                    'module' => $projectModule->slug,
+                                                ])
+                                                : authRoute('user.project-board.modules.tasks.update', [
+                                                    'slug' => $projectBoard->slug,
+                                                    'module' => $projectModule->slug,
+                                                    'task' => $task,
+                                        ]);
+                                    }
+                                @endphp
+
+                                <form action="{{ $submitUrl }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
+
+                                        @if (!empty($projectBoards) && !empty($projectModules))
+                                            <div class="col col-12 col-md-12 mb-3">
+                                                <label for="pick-project" class="form-label">Select Project Board</label>
+                                                <div class="d-flex">
+                                                    <select class="form-select select2-with-image" id="pick-project"
+                                                        name="project_board">
+                                                        <option value="" selected disabled>Select Project</option>
+                                                        @foreach ($projectBoards as $board)
+                                                            <option value="{{ $board->id }}"
+                                                                data-image="{{ $board->thumbnail_url }}"
+                                                                {{ !empty($projectModule) && $projectModule->projectBoard->id == $board->id ? 'selected' : '' }}>
+                                                                {{ $board->title }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <a href="#" id="redirect-link" class="d-none"></a>
+                                                    <button id="OpenSelectedProjectBtn"
+                                                        class="btn bg-light border ms-1 p-0 center-content px-2 text-primary "
+                                                        title="Open Project"><i class='bx bx-link fs-4'></i></button>
+
+                                                </div>
+                                                @error('project_board')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                            <div class="col col-12 col-md-12 mb-3">
+                                                <label for="pick-module" class="form-label">Select Project Module</label>
+                                                <div class="d-flex">
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text">
+                                                            <i class='bx bxs-cube-alt fs-5'></i>
+                                                        </span>
+                                                        <select class="form-select select2-with-image" id="select-module"
+                                                            name="project_module">
+                                                            <option value="" disabled>-- Choose a Team Member --
+                                                            </option>
+                                                            @foreach ($projectModules as $module)
+                                                                <option value="{{ $module->id }}"
+                                                                    {{ !empty($projectModule) && $projectModule->id == $module->id ? 'selected' : '' }}>
+                                                                    {{ $module->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <a href="#" id="redirect-link" class="d-none"></a>
+                                                    <button id="OpenSelectedProjectBtn"
+                                                        class="btn bg-light border ms-1 p-0 center-content px-2 text-primary "
+                                                        title="Open Project"><i class='bx bx-link fs-4'></i></button>
+
+                                                </div>
+                                                @error('project_board')
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </div>
+                                        @endif
+
                                         <div class="col col-12 col-md-12 mb-3">
                                             <label for="title-input" class="form-label">Task title</label>
                                             <div class="input-group">
@@ -61,13 +140,14 @@
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
-
-
-
                                         <!-- Description -->
                                         <div class="col col-12 col-md-12 mb-3">
                                             <label for="editor" class="form-label">Description</label>
-                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3">{{ old('description', $task->description ?? '') }}</textarea>
+                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3"
+                                                data-markdown="{{ !empty($task) ? $task->description : '' }}">
+                                               {{ !empty($task) ? trim($task->description) : '' }}
+                                           </textarea>
+
                                             @error('description')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
@@ -80,13 +160,18 @@
                                                 <span class="input-group-text">
                                                     <i class='bx bx-user fs-5'></i>
                                                 </span>
-                                                <select class="form-select select2-with-image" id="assigned-to-input" name="assigned_to">
-                                                    <option value="" selected disabled>-- Choose a Team Member --
+                                                <select class="form-select select2-with-image" id="assigned-to-input"
+                                                    name="assigned_to">
+                                                    <option value="" disabled>-- Choose a Team Member --
                                                     </option>
-                                                    @foreach ($projectModule->projectModuleUsers as $moduleUser)
-                                                        <option data-image="{{ $moduleUser->user->profilePicture() }}" value="{{ $moduleUser->user->id }}">
-                                                            {{ $moduleUser->user->username }}</option>
-                                                    @endforeach
+                                                    @if (!empty($projectModule))
+                                                        @foreach ($projectModule->projectModuleUsers as $moduleUser)
+                                                            <option data-image="{{ $moduleUser->user->profilePicture() }}"
+                                                                value="{{ $moduleUser->user->id }}"
+                                                                {{ !empty($task) && $task->assigned_to == $moduleUser->user->id ? 'selected' : '' }}>
+                                                                {{ $moduleUser->user->username }}</option>
+                                                        @endforeach
+                                                    @endif
                                                 </select>
                                             </div>
                                             @error('assigned_to')
@@ -103,11 +188,19 @@
                                                     <i class='bx bx-pyramid fs-5'></i>
                                                 </span>
                                                 <select class="form-select" id="priority-input" name="priority">
-                                                    <option value="" selected disabled>-- Select Priority --</option>
-                                                    <option value="low">🟢 Low</option>
-                                                    <option value="medium">🟡 Medium</option>
-                                                    <option value="high">🟠 High</option>
-                                                    <option value="urgent">🔴 Urgent</option>
+                                                    <option value="" disabled>Select Priority</option>
+                                                    <option value="low"
+                                                        {{ !empty($task) && $task->priority == 'low' ? 'selected' : '' }}>
+                                                        🟢 Low</option>
+                                                    <option value="medium"
+                                                        {{ !empty($task) && $task->priority == 'medium' ? 'selected' : '' }}>
+                                                        🟡 Medium</option>
+                                                    <option value="high"
+                                                        {{ !empty($task) && $task->priority == 'high' ? 'selected' : '' }}>
+                                                        🟠 High</option>
+                                                    <option value="urgent"
+                                                        {{ !empty($task) && $task->priority == 'urgent' ? 'selected' : '' }}>
+                                                        🔴 Urgent</option>
                                                 </select>
                                             </div>
                                             @error('priority')
@@ -132,7 +225,7 @@
 
 
                                         <div class="col col-md-12 mb-3">
-                                            <label for="title-input" class="form-label">Module Documents</label>
+                                            <label for="title-input" class="form-label">Task Documents</label>
                                             <br>
                                             <input type="file" class="hide" name="media_files[]" id="media-input"
                                                 multiple>
@@ -162,7 +255,7 @@
                                             <div id="card-view-container"
                                                 class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5 row-cols-xxl-6 g-3 media-upload-preview image-cards card-view-container">
 
-                                                @if (!empty($dailyDigest))
+                                                @if (!empty($task))
                                                     @foreach ($media as $file)
                                                         @if ($file['is_image'])
                                                             <div class="col" data-ob-deleteable-card="true">
@@ -260,7 +353,7 @@
                                         </div>
                                         <div class="col-12 mt-2">
                                             <button class="btn btn-primary" type="submit">
-                                                Save Module
+                                                Save Task
                                             </button>
                                         </div>
 
@@ -291,4 +384,5 @@
 @section('js')
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/lib-config/select2.init.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/task_create.js') }}"> </script>
 @endsection

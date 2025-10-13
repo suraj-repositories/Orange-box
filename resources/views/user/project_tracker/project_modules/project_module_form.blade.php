@@ -1,13 +1,17 @@
 @extends('user.layout.layout')
 
 @section('title',
-    Route::is('user.project-board.modules.create')
+    Route::is('user.project-board.modules.create') || Route::is('user.modules.create')
     ? 'Create Project Module'
-    : (Route::is('user.project-board.edit')
+    : (Route::is('user.project-board.modules.edit') || Route::is('user.modules.edit')
     ? 'Edit
     Project Module'
     : '🟢🟢🟢'))
 
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2-bootstrap-theme.min.css') }}">
+@endsection
 @section('content')
     <div class="content-page">
         <div class="content">
@@ -16,16 +20,21 @@
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">{{ empty($module) ? 'Create' : 'Edit' }} Project Module</h4>
+                        <h4 class="fs-18 fw-semibold m-0">{{ empty($projectModule) ? 'Create' : 'Edit' }} Project Module</h4>
                     </div>
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board') }}">Project Board</a></li>
-                            <li class="breadcrumb-item"><a
-                                    href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}">Project
-                                    Module</a></li>
-                            <li class="breadcrumb-item active">{{ empty($module) ? 'Create' : 'Edit' }}</li>
+                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board') }}">Project Board</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a
+                                    href="{{ !empty($projectBoard) ? authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) : '' }}">
+                                    Project Module
+                                </a>
+
+                            </li>
+                            <li class="breadcrumb-item active">{{ empty($projectModule) ? 'Create' : 'Edit' }}</li>
                         </ol>
                     </div>
                 </div>
@@ -38,16 +47,64 @@
                         <div class="card">
 
                             <div class="card-header">
-                                <h5 class="card-title mb-0">{{ empty($module) ? 'Create' : 'Edit' }} Project Module
+                                <h5 class="card-title mb-0">{{ empty($projectModule) ? 'Create' : 'Edit' }} Project Module
                                 </h5>
                             </div>
 
                             <div class="card-body">
-                                <form
-                                    action="{{ !empty($module) ? authRoute('project-board.modules.save', ['slug' => $projectBoard->slug]) : authRoute('user.project-board.modules.save', ['slug' => $projectBoard->slug]) }}"
-                                    method="POST" enctype="multipart/form-data">
+
+                                @php
+                                    if (!empty($projectModule)) {
+                                        $action = !empty($projectBoard)
+                                            ? authRoute('user.project-board.modules.update', [
+                                                'slug' => $projectBoard->slug,
+                                                'module' => $projectModule->slug,
+                                            ])
+                                            : authRoute('user.modules.update', ['module' => $projectModule->slug]);
+                                    } else {
+                                        $action = !empty($projectBoard)
+                                            ? authRoute('user.project-board.modules.save', [
+                                                'slug' => $projectBoard->slug,
+                                            ])
+                                            : authRoute('user.modules.save');
+                                    }
+                                @endphp
+
+                                <form action="{{ $action }}" method="POST" enctype="multipart/form-data">
+
+
                                     @csrf
                                     <div class="row">
+
+                                        @if (!empty($projectBoards))
+                                            <div class="col col-12 col-md-12 mb-3">
+
+                                                <label for="pick-project" class="form-label">Select Project</label>
+
+                                                <div class="d-flex">
+                                                    <select class="form-select select2-with-image" id="pick-project" name="project_board">
+                                                        <option value="" selected disabled>Select Project</option>
+                                                        @foreach ($projectBoards as $board)
+                                                            <option value="{{ $board->id }}"
+                                                                data-image="{{ $board->thumbnail_url }}"
+                                                                {{ (!empty($projectModule) && $projectModule->projectBoard->id == $board->id) ? 'selected' : '' }}
+                                                                >
+                                                                {{ $board->title }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <a href="#" id="redirect-link" class="d-none"></a>
+                                                    <button id="OpenSelectedProjectBtn"
+                                                        class="btn bg-light border ms-1 p-0 center-content px-2 text-primary "
+                                                        title="Open Project"><i class='bx bx-link fs-4'></i></button>
+
+                                                </div>
+                                                @error('project_board')
+                                                    <small class="text-danger">{{$message}}</small>
+                                                @enderror
+                                            </div>
+                                        @endif
+
                                         <div class="col col-12 col-md-6 mb-3">
                                             <label for="name-input" class="form-label">Module Name</label>
                                             <div class="input-group">
@@ -55,7 +112,7 @@
                                                         class="bi bi-journal-bookmark-fill"></i></span>
                                                 <input type="text" class="form-control" placeholder="Enter name"
                                                     id="name-input" name="name"
-                                                    value="{{ old('name', $module->name ?? '') }}">
+                                                    value="{{ old('name', $projectModule->name ?? '') }}">
                                             </div>
                                             @error('name')
                                                 <small class="text-danger">{{ $message }}</small>
@@ -72,7 +129,7 @@
                                                 <select class="form-select" id="type-input" name="type">
                                                     <option value="" selected disabled>-- Select Type --</option>
                                                     @foreach ($types as $type)
-                                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                                        <option value="{{ $type->id }}" {{ old('type', $projectModule->project_module_type_id ?? '') == $type->id ? 'selected' : '' }}>{{ $type->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -84,7 +141,7 @@
                                         <!-- Description -->
                                         <div class="col col-12 col-md-12 mb-3">
                                             <label for="editor" class="form-label">Description</label>
-                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3">{{ old('description', $module->description ?? '') }}</textarea>
+                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3" data-markdown="{{ !empty($projectModule) ? $projectModule->description : '' }}">{{ old('description', $projectModule->description ?? '') }}</textarea>
                                             @error('description')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
@@ -97,7 +154,7 @@
                                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
                                                 <input type="date" class="form-control" id="start-date-input"
                                                     name="start_date"
-                                                    value="{{ old('start_date', $module->start_date ?? '') }}">
+                                                    value="{{ old('start_date', $projectModule->start_date ?? '') }}">
                                             </div>
                                             @error('start_date')
                                                 <small class="text-danger">{{ $message }}</small>
@@ -111,7 +168,7 @@
                                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
                                                 <input type="date" class="form-control" id="end-date-input"
                                                     name="end_date"
-                                                    value="{{ old('end_date', $module->end_date ?? '') }}">
+                                                    value="{{ old('end_date', $projectModule->end_date ?? '') }}">
                                             </div>
                                             @error('end_date')
                                                 <small class="text-danger">{{ $message }}</small>
@@ -123,15 +180,15 @@
                                             <label for="description-input" class="form-label">Team Members</label>
 
                                             <div class="d-flex flex-wrap gap-2">
-
-                                                @if (session('users'))
-                                                    @foreach (session('users') as $user)
+                                                @php $users = empty($projectModule) ? session('users') : $projectModule->assignees; @endphp
+                                                @if ($users)
+                                                    @foreach ($users as $user)
                                                         <div class="chip" data-ob-uid="{{ $user->id }}">
-                                                            <img src="{{ $user->avatar }}" alt="{{ $user->username }}"
+                                                            <img src="{{ $user->profilePicture() }}" alt="{{ $user->username }}"
                                                                 width="96" height="96">
                                                             {{ $user->username }}
                                                             <input type="hidden" name="user[]"
-                                                                alue="{{ $user->id }}">
+                                                                value="{{ $user->id }}">
                                                             <span class="closebtn"
                                                                 onclick="this.parentElement.remove()">&times;</span>
                                                         </div>
@@ -141,7 +198,7 @@
                                                 <div class="circle-40 cursor-pointer pick-user-btn">+</div>
                                             </div>
 
-                                            @error('user')
+                                            @error('user[]')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
 
@@ -180,7 +237,7 @@
                                             <div id="card-view-container"
                                                 class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-5 row-cols-xxl-6 g-3 media-upload-preview image-cards card-view-container">
 
-                                                @if (!empty($dailyDigest))
+                                                @if (!empty($projectModule))
                                                     @foreach ($media as $file)
                                                         @if ($file['is_image'])
                                                             <div class="col" data-ob-deleteable-card="true">
@@ -285,6 +342,12 @@
                                     </div>
                                 </form>
 
+                                @if (!empty($projectModule))
+                                    @foreach ($media as $file)
+                                        <x-modals.rename-modal :modalId="$file['file_id']" :prevResourceName="$file['file_name']" :formActionUrl="route('file.rename', $file['file_id'])" />
+                                    @endforeach
+                                @endif
+
                             </div>
 
                         </div>
@@ -307,4 +370,9 @@
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/add-media.js') }}"></script>
     <script src="{{ asset('assets/js/pages/user-select.js') }}"></script>
+@endsection
+
+@section('js')
+    <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/lib-config/select2.init.js') }}"></script>
 @endsection

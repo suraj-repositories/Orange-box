@@ -34,7 +34,11 @@
                                 alt="">
 
                             <div class="card-body flex-grow-1 pb-0">
-                                <h4 class="card-title truncate-3">{{ $projectBoard->title }}</h4>
+                                <a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}">
+                                    <h4 class="card-title truncate-3">
+                                        {{ $projectBoard->title }}
+                                    </h4>
+                                </a>
                                 <p class="card-text text-muted mb-0 truncate-3">
                                     {{ $projectBoard->preview_text }}
                                 </p>
@@ -46,7 +50,8 @@
                                         <strong>Created: </strong> {{ $projectBoard->created_at->diffForHumans() }}
                                     </div>
                                     <div class="action-buttons d-flex gap-1">
-                                        <a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}" class="info"><i class='bx bx-info-circle'></i></a>
+                                        <a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}"
+                                            class="info"><i class='bx bx-info-circle'></i></a>
                                         <a href="#" class="edit"><i class='bx bx-edit'></i></a>
                                         <form action="#" method="post">
                                             @method('DELETE')

@@ -3,6 +3,7 @@
 namespace App\View\Components\Project;
 
 use App\Models\ProjectBoard;
+use App\Models\ProjectModule;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -14,7 +15,7 @@ class ProjectModuleListComponent extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(ProjectBoard $projectBoard, $limit = null)
+    public function __construct(?ProjectBoard $projectBoard, $limit = null)
     {
         //
         $this->projectBoard = $projectBoard;
@@ -27,15 +28,20 @@ class ProjectModuleListComponent extends Component
     public function render(): View|Closure|string
     {
         $modules  = null;
-        $query = $this->projectBoard
-            ->modules()
-            ->withCount('projectModuleUsers')
-            ->with('limitedUsers');
+        if (!empty($this->projectBoard)) {
+            $query = $this->projectBoard
+                ->modules()
+                ->withCount('projectModuleUsers')
+                ->with('limitedUsers');
+        } else {
+            $query = ProjectModule::withCount('projectModuleUsers')
+                ->with('limitedUsers');
+        }
 
         if (empty($this->limit)) {
-            $modules = $query->paginate(10);
+            $modules = $query->orderBy('id', 'desc')->paginate(10);
         } else {
-            $modules = $query->paginate($this->limit);
+            $modules = $query->orderBy('id', 'desc')->paginate($this->limit);
         }
 
 
