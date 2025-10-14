@@ -7,29 +7,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProjectModuleTask extends Model
 {
-    //
     use SoftDeletes;
 
-    protected $fillable = [
-        'project_module_id',
-        'task_id',
-    ];
+    protected $fillable = ['project_module_id', 'task_id'];
 
     protected static function booted()
     {
-        static::deleting(function ($projectModuleTask) {
-            Model::withoutEvents(function () use ($projectModuleTask) {
-                if ($projectModuleTask->isForceDeleting()) {
-                    $projectModuleTask->task()->withTrashed()->get()->each->forceDelete();
+        static::deleting(function ($pivot) {
+            Model::withoutEvents(function () use ($pivot) {
+                if ($pivot->isForceDeleting()) {
+                    $pivot->task()->withTrashed()->get()->each->forceDelete();
                 } else {
-                    $projectModuleTask->task()->get()->each->delete();
+                    $pivot->task()->get()->each->delete();
                 }
             });
         });
 
-        static::restoring(function ($projectModuleTask) {
-            Model::withoutEvents(function () use ($projectModuleTask) {
-                $projectModuleTask->task()->withTrashed()->get()->each->restore();
+        static::restoring(function ($pivot) {
+            Model::withoutEvents(function () use ($pivot) {
+                $pivot->task()->withTrashed()->get()->each->restore();
             });
         });
     }
@@ -38,6 +34,7 @@ class ProjectModuleTask extends Model
     {
         return $this->belongsTo(Task::class);
     }
+
     public function module()
     {
         return $this->belongsTo(ProjectModule::class);

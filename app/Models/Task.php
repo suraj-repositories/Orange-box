@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 
 class Task extends Model
 {
-    //
     use SoftDeletes;
 
     protected $fillable = [
@@ -29,32 +28,29 @@ class Task extends Model
     {
         return 'uuid';
     }
+
     protected static function booted()
     {
         static::creating(function ($task) {
-            if (empty($task->uuid)) {
-                $task->uuid = (string) Str::uuid();
-            }
+            if (empty($task->uuid)) $task->uuid = (string) Str::uuid();
         });
 
         static::deleting(function ($task) {
-            if ($task->isForceDeleting()) {
-                Model::withoutEvents(function () use ($task) {
+            Model::withoutEvents(function () use ($task) {
+                if ($task->isForceDeleting()) {
                     $task->files()->withTrashed()->get()->each->forceDelete();
-                    $task->projectModuleTask()->withTrashed()->forceDelete();
-                });
-            } else {
-                Model::withoutEvents(function () use ($task) {
+                    $task->projectModuleTask()->withTrashed()->get()->each->forceDelete();
+                } else {
                     $task->files()->get()->each->delete();
-                    $task->projectModuleTask()->delete();
-                });
-            }
+                    $task->projectModuleTask()->get()->each->delete();
+                }
+            });
         });
 
         static::restoring(function ($task) {
             Model::withoutEvents(function () use ($task) {
                 $task->files()->withTrashed()->get()->each->restore();
-                $task->projectModuleTask()->withTrashed()->restore();
+                $task->projectModuleTask()->withTrashed()->get()->each->restore();
             });
         });
     }
@@ -69,6 +65,16 @@ class Task extends Model
         return $this->hasOne(ProjectModuleTask::class);
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function assignedUser()
+    {
+        return $this->belongsTo(User::class, 'assigned_to', 'id');
+    }
+
     public function module()
     {
         return $this->hasOneThrough(
@@ -79,15 +85,5 @@ class Task extends Model
             'id',
             'project_module_id'
         );
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function assignedUser()
-    {
-        return $this->belongsTo(User::class, 'assigned_to', 'id');
     }
 }

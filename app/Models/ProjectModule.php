@@ -23,24 +23,19 @@ class ProjectModule extends Model
         'end_date',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
+    protected $casts = ['is_active' => 'boolean'];
 
-    protected $appends = [
-        'task_count',
-        'completed_task_count'
-    ];
+    protected $appends = ['task_count', 'completed_task_count'];
 
     protected static function booted()
     {
-        static::creating(function ($projectModule) {
-            $projectModule->slug = self::generateUniqueSlug($projectModule, $projectModule->user_id);
+        static::creating(function ($module) {
+            $module->slug = self::generateUniqueSlug($module, $module->user_id);
         });
 
-        static::updating(function ($projectModule) {
-            if ($projectModule->isDirty('name')) {
-                $projectModule->slug = self::generateUniqueSlug($projectModule, $projectModule->user_id, $projectModule->id);
+        static::updating(function ($module) {
+            if ($module->isDirty('name')) {
+                $module->slug = self::generateUniqueSlug($module, $module->user_id, $module->id);
             }
         });
 
@@ -51,19 +46,36 @@ class ProjectModule extends Model
                 $module->projectModuleTasks()->withTrashed()->get()->each->forceDelete();
             } else {
                 $module->files()->get()->each->delete();
-
                 $module->projectModuleUsers()->get()->each->delete();
                 $module->projectModuleTasks()->get()->each->delete();
             }
         });
 
         static::restoring(function ($module) {
-            Model::withoutEvents(function () use ($module) {
-                $module->files()->withTrashed()->get()->each->restore();
-                $module->projectModuleUsers()->withTrashed()->get()->each->restore();
-                $module->projectModuleTasks()->withTrashed()->get()->each->restore();
-            });
+            $module->files()->withTrashed()->get()->each->restore();
+            $module->projectModuleUsers()->withTrashed()->get()->each->restore();
+            $module->projectModuleTasks()->withTrashed()->get()->each->restore();
         });
+    }
+
+    public static function generateUniqueSlug($module, $userId, $ignoreId = null)
+    {
+        $baseSlug = Str::slug($module->name);
+        $slug = $baseSlug;
+        $count = 1;
+        $projectId = $module->project_board_id ?? null;
+
+        while (self::where('slug', $slug)
+            ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
+            ->where('project_board_id', $projectId)
+            ->where('user_id', $userId)
+            ->exists()
+        ) {
+            $slug = "{$baseSlug}-{$count}";
+            $count++;
+        }
+
+        return $slug;
     }
 
     public function files()
@@ -97,27 +109,6 @@ class ProjectModule extends Model
             'user_id'
         );
     }
-    public static function generateUniqueSlug($module, $userId, $ignoreId = null)
-    {
-        $baseSlug = Str::slug($module->name);
-
-        $slug = $baseSlug;
-        $count = 1;
-        $projectId = $module->project_board_id ?? null;
-        $userId = $module->created_by ?? null;
-
-        while (self::where('slug', $slug)
-            ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
-            ->where('project_board_id', $projectId)
-            ->where('user_id', $userId)
-            ->exists()
-        ) {
-            $slug = "{$baseSlug}-{$count}";
-            $count++;
-        }
-
-        return $slug;
-    }
 
     public function projectModuleTasks()
     {
@@ -126,22 +117,16 @@ class ProjectModule extends Model
 
     public function tasks()
     {
-        return $this->hasManyThrough(
-            Task::class,
-            ProjectModuleTask::class,
-            'project_module_id',
-            'id',
-            'id',
-            'task_id'
-        );
+        return $this->hasManyThrough(Task::class, ProjectModuleTask::class, 'project_module_id', 'id', 'id', 'task_id');
     }
 
     public function getTaskCountAttribute()
     {
-        return $this->tasks->count();
+        return $this->tasks()->count();
     }
+
     public function getCompletedTaskCountAttribute()
     {
-        return $this->tasks->where('status', 'completed')->count();
+        return $this->tasks()->where('status', 'completed')->count();
     }
 }
