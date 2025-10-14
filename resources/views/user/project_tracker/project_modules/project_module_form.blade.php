@@ -94,7 +94,7 @@
                                                         @endforeach
                                                     </select>
                                                     <a href="#" id="redirect-link" class="d-none"></a>
-                                                    <button id="OpenSelectedProjectBtn"
+                                                    <button type="button" id="OpenSelectedProjectBtn"
                                                         class="btn bg-light border ms-1 p-0 center-content px-2 text-primary "
                                                         title="Open Project"><i class='bx bx-link fs-4'></i></button>
 

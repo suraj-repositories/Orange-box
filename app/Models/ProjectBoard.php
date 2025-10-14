@@ -50,6 +50,20 @@ class ProjectBoard extends Model
                 $project->slug = self::generateUniqueSlug($project->title, $project->user_id, $project->id);
             }
         });
+
+        static::deleting(function ($project) {
+                if ($project->isForceDeleting()) {
+                    $project->modules()->withTrashed()->get()->each->forceDelete();
+                } else {
+                    $project->modules()->get()->each->delete();
+                }
+        });
+
+        static::restoring(function ($project) {
+            Model::withoutEvents(function () use ($project) {
+                $project->modules()->withTrashed()->get()->each->restore();
+            });
+        });
     }
 
     public static function generateUniqueSlug($title, $userId, $ignoreId = null)

@@ -29,29 +29,35 @@ class Task extends Model
     {
         return 'uuid';
     }
-
     protected static function booted()
     {
-
-        static::creating(function ($thinkPad) {
-            if (empty($thinkPad->uuid)) {
-                $thinkPad->uuid = (string) Str::uuid();
+        static::creating(function ($task) {
+            if (empty($task->uuid)) {
+                $task->uuid = (string) Str::uuid();
             }
         });
 
-        static::deleting(function ($digest) {
-            if ($digest->isForceDeleting()) {
-                $digest->files()->withTrashed()->forceDelete();
+        static::deleting(function ($task) {
+            if ($task->isForceDeleting()) {
+                Model::withoutEvents(function () use ($task) {
+                    $task->files()->withTrashed()->get()->each->forceDelete();
+                    $task->projectModuleTask()->withTrashed()->forceDelete();
+                });
             } else {
-                $digest->files()->delete();
+                Model::withoutEvents(function () use ($task) {
+                    $task->files()->get()->each->delete();
+                    $task->projectModuleTask()->delete();
+                });
             }
         });
 
-        static::restoring(function ($digest) {
-            $digest->files()->withTrashed()->restore();
+        static::restoring(function ($task) {
+            Model::withoutEvents(function () use ($task) {
+                $task->files()->withTrashed()->get()->each->restore();
+                $task->projectModuleTask()->withTrashed()->restore();
+            });
         });
     }
-
 
     public function files()
     {
@@ -62,6 +68,7 @@ class Task extends Model
     {
         return $this->hasOne(ProjectModuleTask::class);
     }
+
     public function module()
     {
         return $this->hasOneThrough(
@@ -73,7 +80,6 @@ class Task extends Model
             'project_module_id'
         );
     }
-
 
     public function user()
     {

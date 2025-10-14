@@ -52,8 +52,8 @@
                                     <div class="action-buttons d-flex gap-1">
                                         <a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}"
                                             class="info"><i class='bx bx-info-circle'></i></a>
-                                        <a href="#" class="edit"><i class='bx bx-edit'></i></a>
-                                        <form action="#" method="post">
+                                        <a href="{{ authRoute('user.project-board.edit', ['slug' => $projectBoard->slug]) }}" class="edit"><i class='bx bx-edit'></i></a>
+                                        <form action="{{ authRoute('user.project-board.delete', ['slug' => $projectBoard->slug]) }}" method="post">
                                             @method('DELETE')
                                             @csrf
                                             <button type="submit" class="delete btn-no-style">

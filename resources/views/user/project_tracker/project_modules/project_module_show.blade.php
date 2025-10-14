@@ -37,9 +37,7 @@
                                 </h5>
 
                                 <div class="action-container m-0 gap-1">
-
-
-                                    <a href="#" data-bs-toggle="collapse" title="Description"
+                                    <a href="javascript::void(0)" data-bs-toggle="collapse" title="Description"
                                         data-bs-target="#projectDescription{{ $projectModule->id }}" aria-expanded="false"
                                         aria-controls="projectDescription{{ $projectModule->id }}" class="info ms-0">
                                       <i class='bx bx-info-circle'></i>

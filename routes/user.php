@@ -83,9 +83,10 @@ Route::controller(ProjectBoardController::class)->group(function () {
     Route::get('project-board', 'index')->name('project-board');
     Route::get('project-board/create', 'create')->name('project-board.create');
     Route::post('project-board', 'store')->name('project-board.store');
-    Route::get('project-board/{projectBoard}/edit', 'edit')->name('project-board.edit');
-    Route::post('project-board/{projectBoard}', 'update')->name('project-board.update');
+    Route::get('project-board/{slug}/edit', 'edit')->name('project-board.edit');
+    Route::post('project-board/{slug}', 'update')->name('project-board.update');
     Route::get('project-board/{slug}', 'show')->name('project-board.show');
+    Route::delete('project-board/{slug}', 'destroy')->name('project-board.delete');
 });
 
 Route::controller(ProjectModuleController::class)->group(function () {

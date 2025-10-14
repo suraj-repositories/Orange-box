@@ -27,7 +27,7 @@ class ProjectModule extends Model
         'is_active' => 'boolean',
     ];
 
-    protected $append = [
+    protected $appends = [
         'task_count',
         'completed_task_count'
     ];
@@ -42,6 +42,27 @@ class ProjectModule extends Model
             if ($projectModule->isDirty('name')) {
                 $projectModule->slug = self::generateUniqueSlug($projectModule, $projectModule->user_id, $projectModule->id);
             }
+        });
+
+        static::deleting(function ($module) {
+            if ($module->isForceDeleting()) {
+                $module->files()->withTrashed()->get()->each->forceDelete();
+                $module->projectModuleUsers()->withTrashed()->get()->each->forceDelete();
+                $module->projectModuleTasks()->withTrashed()->get()->each->forceDelete();
+            } else {
+                $module->files()->get()->each->delete();
+
+                $module->projectModuleUsers()->get()->each->delete();
+                $module->projectModuleTasks()->get()->each->delete();
+            }
+        });
+
+        static::restoring(function ($module) {
+            Model::withoutEvents(function () use ($module) {
+                $module->files()->withTrashed()->get()->each->restore();
+                $module->projectModuleUsers()->withTrashed()->get()->each->restore();
+                $module->projectModuleTasks()->withTrashed()->get()->each->restore();
+            });
         });
     }
 
@@ -123,5 +144,4 @@ class ProjectModule extends Model
     {
         return $this->tasks->where('status', 'completed')->count();
     }
-
 }

@@ -22,6 +22,8 @@
                     </div>
                 </div>
 
+                <x-alert-component />
+
                 <!-- General Form -->
                 <div class="row">
                     <div class="col-12">
@@ -30,11 +32,27 @@
                                 <h5 class="mb-0 fw-bold">
                                     {{ $projectBoard->title }}
                                 </h5>
-                                <button class="btn btn-sm bg-light border" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#projectDescription{{ $projectBoard->id }}" aria-expanded="false"
-                                    aria-controls="projectDescription{{ $projectBoard->id }}">
-                                    Description
-                                </button>
+                                <div class="action-container m-0 gap-1">
+                                    <a href="javascript::void(0)" class="text-reset" data-bs-toggle="collapse"
+                                        data-bs-target="#projectDescription{{ $projectBoard->id }}" aria-expanded="false"
+                                        aria-controls="projectDescription{{ $projectBoard->id }}">
+                                        <i class='bx bx-info-circle'></i>
+                                    </a>
+
+                                    <a href="{{ authRoute('user.project-board.edit', ['slug' => $projectBoard->slug]) }}" class="edit">
+                                        <i class='bx bx-edit'></i>
+                                    </a>
+                                    <form action="{{ authRoute('user.project-board.delete', ['slug' => $projectBoard->slug]) }}" method="post">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button type="submit" class="delete btn-no-style">
+                                            <i class='bx bx-trash'></i>
+                                        </button>
+                                    </form>
+                                    {{-- <div class="more">
+                                        <i class='bx bx-dots-vertical-rounded' ></i>
+                                    </div> --}}
+                                </div>
                             </div>
 
                             <div class="collapse" id="projectDescription{{ $projectBoard->id }}">
@@ -61,13 +79,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-list-component :project-board="$projectBoard" :limit='10'/>
-                  </div>
+                        <x-project.project-module-list-component :project-board="$projectBoard" :limit='10' />
+                    </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-task-list-component :project-board="$projectBoard" :limit='10'/>
+                        <x-project.project-module-task-list-component :project-board="$projectBoard" :limit='10' />
                     </div>
                 </div>
             </div> <!-- container-fluid -->
@@ -87,5 +105,5 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset("assets/js/pages/task_list.js") }}"></script>
+    <script src="{{ asset('assets/js/pages/task_list.js') }}"></script>
 @endsection

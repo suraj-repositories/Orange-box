@@ -239,6 +239,8 @@ class ProjectModuleController extends Controller
 
             $projectBoard = null;
             if ($slug) {
+
+                dd($slug, $user->id);
                 $projectBoard = ProjectBoard::where('user_id', $user->id)
                     ->where('slug', $slug)
                     ->first();

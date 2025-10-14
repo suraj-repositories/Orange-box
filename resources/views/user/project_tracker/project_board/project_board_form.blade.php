@@ -39,7 +39,7 @@
                             </div>
 
                             <div class="card-body">
-                                <form action="{{ !empty($projectBoard) ? authRoute('user.project-board.update', ['projectBoard' => $projectBoard]) : authRoute('user.project-board.store') }}"
+                                <form action="{{ !empty($projectBoard) ? authRoute('user.project-board.update', ['slug' => $projectBoard->slug]) : authRoute('user.project-board.store') }}"
                                     method="POST" enctype="multipart/form-data" >
                                     @csrf
 
@@ -100,7 +100,7 @@
                                         <!-- Description -->
                                         <div class="col col-12 col-md-12 mb-3">
                                             <label for="editor" class="form-label">Description</label>
-                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3">{{ old('description', $projectBoard->description ?? '') }}</textarea>
+                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3" data-markdown="{{ old('description', $projectBoard->description ?? '') }}">{{ old('description', $projectBoard->description ?? '') }}</textarea>
                                             @error('description')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
