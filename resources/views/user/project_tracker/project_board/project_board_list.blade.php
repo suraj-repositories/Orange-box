@@ -35,9 +35,9 @@
 
                             <div class="card-body flex-grow-1 pb-0">
                                 <a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}">
-                                    <h4 class="card-title truncate-3">
+                                    <h6 class="fw-bold truncate-3">
                                         {{ $projectBoard->title }}
-                                    </h4>
+                                    </h6>
                                 </a>
                                 <p class="card-text text-muted mb-0 truncate-3">
                                     {{ $projectBoard->preview_text }}

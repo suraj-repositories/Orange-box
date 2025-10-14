@@ -17,7 +17,7 @@
         @elseif(Auth::user()->hasRole('user'))
             <a href="{{ authRoute('user.dashboard') }}">Dashboard</a>
         @endif
-        <form action="{{ route('logout') }}" method="POST">
+        <form action="{{ route('auth.logout') }}" method="POST">
             @csrf<button type="submit">Logout</button></form>
     @endauth
     @guest

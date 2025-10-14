@@ -7,6 +7,7 @@ use App\Models\ProjectModule;
 use App\Models\Task;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class ProjectModuleTaskListComponent extends Component
@@ -38,7 +39,10 @@ class ProjectModuleTaskListComponent extends Component
         if ($this->projectModule?->exists) {
             $tasks = $this->projectModule->tasks()->paginate(10);
         } elseif ($this->projectBoard?->exists) {
-            $tasks = $this->projectBoard->tasks()->latest()->take($this->limit ?? 10)->get();
+            $tasks = $this->projectBoard->tasks()->latest()->take($this->limit ?? 10)->paginate();
+        } else {
+            $user = Auth::user();
+            $tasks = Task::where('user_id', $user->id)->paginate(10);
         }
 
         return view('components.project.project-module-task-list-component', compact('tasks'));

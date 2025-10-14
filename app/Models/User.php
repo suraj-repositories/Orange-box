@@ -54,13 +54,17 @@ class User extends Authenticatable
         ];
     }
 
-    public function name(){
+    public function name()
+    {
         return $this->username;
     }
 
-    public function profilePicture(){
+    public function profilePicture()
+    {
         return "https://placehold.co/100/6E92FF/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
     }
-
-
+    public function getAvatarAttribute($value)
+    {
+        return "https://placehold.co/100/6E92FF/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
+    }
 }

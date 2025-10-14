@@ -123,4 +123,5 @@ class ProjectModule extends Model
     {
         return $this->tasks->where('status', 'completed')->count();
     }
+
 }

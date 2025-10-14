@@ -19,12 +19,16 @@
                  </a>
 
 
-                 @if (!Route::is('user.project-board.modules.index'))
-                     <a href="#" class="btn btn-light btn-sm border center-content gap-1">
+                 @if (!Route::is('user.tasks.index'))
+                     <a href="{{authRoute('user.tasks.index')}}" class="btn btn-light btn-sm border center-content gap-1">
                          <i class='bx bx-list-ul fs-5'></i>
                          <div> Show All</div>
                      </a>
                  @endif
+                 <a href="#" class="btn btn-light btn-sm border center-content gap-1">
+                     <i class='bx bx-filter-alt fs-5'></i>
+                     <div> Filter</div>
+                 </a>
              </div>
          </div>
      </div>
@@ -83,11 +87,16 @@
                                  <a href="#" class="info ms-0 ">
                                      <i class='bx bx-info-circle fs-4'></i>
                                  </a>
-
-                                 <a href="{{ authRoute('user.project-board.modules.tasks.editNested', ['slug' => $projectBoard->slug, 'module' => $task->module->slug, 'task' => $task->uuid]) }}"
+                                 @php
+                                    $editRoute = (!empty($projectBoard) && $projectBoard->exists) ? authRoute('user.project-board.modules.tasks.editNested', ['slug' => $projectBoard->slug, 'module' => $task->module->slug, 'task' => $task->uuid])
+                                    :
+                                        authRoute('user.tasks.edit', ['task' => $task]);
+                                 @endphp
+                                 <a href="{{ $editRoute }}"
                                      class="edit">
                                      <i class='bx bx-edit fs-4'></i>
                                  </a>
+
                                  <form action="{{ authRoute('user.tasks.delete', ['task' => $task]) }}" method="post">
                                      @method('DELETE')
                                      @csrf
@@ -124,6 +133,10 @@
                  @endforelse
 
              </table>
+
+             <div class="m-3 mb-0">
+                 {{ $tasks->links() }}
+             </div>
          </div>
      </div>
  </div>

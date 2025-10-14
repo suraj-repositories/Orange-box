@@ -30,7 +30,8 @@ class ProjectBoard extends Model
     ];
 
     protected $appends = [
-        'thumbnail_url'
+        'thumbnail_url',
+        'public_url'
     ];
 
     public function user()
@@ -72,6 +73,12 @@ class ProjectBoard extends Model
     public function getThumbnailUrlAttribute()
     {
         return $this->thumbnail ? asset('storage/' . $this->thumbnail) : asset('images/default-thumbnail.png');
+    }
+
+
+    public function getPublicUrlAttribute()
+    {
+        return authRoute('user.project-board.show', ['slug' => $this->slug]);
     }
 
     public function modules()

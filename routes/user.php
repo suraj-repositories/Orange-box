@@ -89,7 +89,6 @@ Route::controller(ProjectBoardController::class)->group(function () {
 });
 
 Route::controller(ProjectModuleController::class)->group(function () {
-
     Route::get('project-board/{slug}/modules', 'index')->name('project-board.modules.index');
     Route::get('project-board/{slug}/modules/create', 'createNested')->name('project-board.modules.create');
     Route::post('project-board/{slug}/modules', 'store')->name('project-board.modules.save');
@@ -116,8 +115,11 @@ Route::controller(ProjectModuleTaskController::class)->group(function () {
     Route::get('project-board/{slug}/modules/{module}/tasks/{task}/edit', 'editNested')->name('project-board.modules.tasks.editNested');
     Route::post('project-board/{slug}/modules/{module}/tasks/{task}', 'update')->name('project-board.modules.tasks.update');
 
-    Route::get('tasks/create', 'createGlobal')->name('tasks.create');
+    Route::get('tasks', 'index')->name('tasks.index');
     Route::post('tasks', 'store')->name('tasks.store');
+    Route::get('tasks/create', 'createGlobal')->name('tasks.create');
+
+    Route::get('tasks/{task}/edit', 'editGlobal')->name('tasks.edit');
     Route::post('tasks/{task}', 'update')->name('tasks.update');
 
     Route::delete('tasks/{task}', 'destroy')->name('tasks.delete');

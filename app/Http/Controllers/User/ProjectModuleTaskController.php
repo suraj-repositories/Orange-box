@@ -21,7 +21,10 @@ class ProjectModuleTaskController extends Controller
     {
         $this->fileService = $fileService;
     }
-
+    public function index()
+    {
+        return view('user.project_tracker.tasks.task_list');
+    }
 
     public function createNested(User $user, $slug, $module, Request $request)
     {
@@ -48,16 +51,14 @@ class ProjectModuleTaskController extends Controller
     public function createGlobal(User $user, Request $request)
     {
         $projectBoards = ProjectBoard::where('user_id', $user->id)->get();
-        $projectModules = ProjectModule::where('user_id', $user->id)->get();
 
         return view('user.project_tracker.tasks.task_form', [
-            'projectBoards' => $projectBoards,
-            'projectModules' => $projectModules
+            'projectBoards' => $projectBoards
         ]);
     }
 
 
-    public function store(User $user, $slug = null, $module = null, Request $request)
+    public function store(Request $request, User $user, $slug = null, $module = null)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -67,8 +68,8 @@ class ProjectModuleTaskController extends Controller
             'due_date' => 'nullable|date',
             'media_files' => 'nullable|array',
             'media_files.*' => 'file|max:' . config('validation_rules.max_file_size'),
-            'project_board_id' => 'nullable|exists:project_boards,id',
-            'project_module_id' => 'nullable|exists:project_modules,id',
+            'project_board' => 'nullable|exists:project_boards,id',
+            'project_module' => 'nullable|exists:project_modules,id',
         ]);
 
         if ($slug && $module) {
@@ -77,8 +78,8 @@ class ProjectModuleTaskController extends Controller
             $validated['project_board_id'] = $board->id;
             $validated['project_module_id'] = $module->id;
         } else {
-            $validated['project_board_id'] = $request->project_board_id;
-            $validated['project_module_id'] = $request->project_module_id;
+            $validated['project_board_id'] = $request->project_board;
+            $validated['project_module_id'] = $request->project_module;
         }
 
         $task = Task::create([
@@ -146,9 +147,29 @@ class ProjectModuleTaskController extends Controller
         ]);
     }
 
-    public function update(User $user, $slug, $module, Task $task, Request $request)
+    public function editGlobal(User $user, Task $task, Request $request)
+    {
+        $projectBoards = ProjectBoard::where('user_id', $user->id)->get();
+
+        $projectModule = $task->module;
+        $projectBoard = $projectModule->projectBoard;
+
+
+
+        $media = $this->fileService->getMediaMetadata($task->files);
+        return view('user.project_tracker.tasks.task_form', [
+            'projectBoards' => $projectBoards,
+            'projectBoard' => $projectBoard,
+            'projectModule' => $projectModule,
+            'task' => $task,
+            'media' => $media
+        ]);
+    }
+
+    public function update(Request $request, User $user, Task $task, $slug = null, $module = null)
     {
         Gate::authorize('update', $task);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -157,8 +178,8 @@ class ProjectModuleTaskController extends Controller
             'due_date' => 'nullable|date',
             'media_files' => 'nullable|array',
             'media_files.*' => 'file|max:' . config('validation_rules.max_file_size'),
-            'project_board_id' => 'nullable|exists:project_boards,id',
-            'project_module_id' => 'nullable|exists:project_modules,id',
+            'project_board' => 'nullable|exists:project_boards,id',
+            'project_module' => 'nullable|exists:project_modules,id',
         ]);
 
         if ($slug && $module) {
@@ -167,8 +188,8 @@ class ProjectModuleTaskController extends Controller
             $validated['project_board_id'] = $board->id;
             $validated['project_module_id'] = $module->id;
         } else {
-            $validated['project_board_id'] = $request->project_board_id;
-            $validated['project_module_id'] = $request->project_module_id;
+            $validated['project_board_id'] = $request->project_board;
+            $validated['project_module_id'] = $request->project_module;
         }
 
         $task->update([

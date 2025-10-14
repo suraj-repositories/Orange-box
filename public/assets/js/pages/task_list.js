@@ -11,8 +11,6 @@ function enableModuleTaskCreation(selector) {
     if (!btn) return;
 
     btn.addEventListener('click', () => {
-
-
         const oldForm = modal.querySelector("#module-task-form");
         oldForm.replaceWith(oldForm.cloneNode(true));
 

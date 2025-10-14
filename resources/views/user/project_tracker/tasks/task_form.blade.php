@@ -4,7 +4,7 @@
     Route::is('user.project-board.modules.tasks.createNested') || Route::is('user.tasks.create')
     ? 'Create
     Task'
-    : (Route::is('user.project-board.modules.tasks.editNested')
+    : (Route::is('user.project-board.modules.tasks.editNested') || Route::is('user.tasks.edit')
     ? 'Edit Task'
     : '🟢🟢🟢'))
 
@@ -47,7 +47,7 @@
                             <div class="card-body">
                                 @php
                                     $submitUrl = null;
-                                    if(!empty($projectBoards) && !empty($projectModules)){
+                                    if(!empty($projectBoards)){
                                             $submitUrl = empty($task)
                                                 ? authRoute('user.tasks.store')
                                                 : authRoute('user.tasks.update', [
@@ -71,23 +71,23 @@
                                     @csrf
                                     <div class="row">
 
-                                        @if (!empty($projectBoards) && !empty($projectModules))
+                                        @if (!empty($projectBoards))
                                             <div class="col col-12 col-md-12 mb-3">
                                                 <label for="pick-project" class="form-label">Select Project Board</label>
-                                                <div class="d-flex">
-                                                    <select class="form-select select2-with-image" id="pick-project"
-                                                        name="project_board">
+                                                <div class="d-flex select-box">
+                                                    <select class="form-select select2-with-image" id="pick-project" name="project_board">
                                                         <option value="" selected disabled>Select Project</option>
                                                         @foreach ($projectBoards as $board)
                                                             <option value="{{ $board->id }}"
                                                                 data-image="{{ $board->thumbnail_url }}"
-                                                                {{ !empty($projectModule) && $projectModule->projectBoard->id == $board->id ? 'selected' : '' }}>
+                                                                data-public-url="{{ $board->public_url }}"
+                                                                {{ !empty($projectBoard) && $projectBoard->id == $board->id ? 'selected' : '' }}>
                                                                 {{ $board->title }}
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                    <a href="#" id="redirect-link" class="d-none"></a>
-                                                    <button id="OpenSelectedProjectBtn"
+                                                    <a href="#" class="d-none redirect-link" target="_blank"></a>
+                                                    <button type="button" id="OpenSelectedProjectBtn"
                                                         class="btn bg-light border ms-1 p-0 center-content px-2 text-primary "
                                                         title="Open Project"><i class='bx bx-link fs-4'></i></button>
 
@@ -98,27 +98,28 @@
                                             </div>
                                             <div class="col col-12 col-md-12 mb-3">
                                                 <label for="pick-module" class="form-label">Select Project Module</label>
-                                                <div class="d-flex">
+                                                <div class="d-flex select-box">
                                                     <div class="input-group flex-nowrap">
                                                         <span class="input-group-text">
                                                             <i class='bx bxs-cube-alt fs-5'></i>
                                                         </span>
-                                                        <select class="form-select select2-with-image" id="select-module"
+                                                        <select class="form-select select2-with-image" id="select-module" data-selected-value="{{ !empty($projectModule) ? $projectModule->id : '' }}"
                                                             name="project_module">
-                                                            <option value="" disabled>-- Choose a Team Member --
-                                                            </option>
-                                                            @foreach ($projectModules as $module)
-                                                                <option value="{{ $module->id }}"
-                                                                    {{ !empty($projectModule) && $projectModule->id == $module->id ? 'selected' : '' }}>
-                                                                    {{ $module->name }}
-                                                                </option>
-                                                            @endforeach
+                                                            <option value="" disabled>-- Choose a Team Member -- </option>
+                                                            @if (!empty($projectModule))
+                                                                @foreach ($projectBoard->modules as $module)
+                                                                        <option value="{{ $module->name }}"
+                                                                                data-public-url="{{ authRoute('user.project-board.modules.show', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}"
+                                                                                {{ $projectModule->id == $module->id ? 'selected' : '' }}
+                                                                            >{{ $module->name }}</option>
+                                                                @endforeach
+                                                            @endif
                                                         </select>
                                                     </div>
-                                                    <a href="#" id="redirect-link" class="d-none"></a>
-                                                    <button id="OpenSelectedProjectBtn"
+                                                    <a href="#" class="d-none redirect-link"  target="_blank"></a>
+                                                    <button type="button" id="OpenSelectedModuleBtn"
                                                         class="btn bg-light border ms-1 p-0 center-content px-2 text-primary "
-                                                        title="Open Project"><i class='bx bx-link fs-4'></i></button>
+                                                        title="Open Module"><i class='bx bx-link fs-4'></i></button>
 
                                                 </div>
                                                 @error('project_board')
@@ -160,7 +161,7 @@
                                                 <span class="input-group-text">
                                                     <i class='bx bx-user fs-5'></i>
                                                 </span>
-                                                <select class="form-select select2-with-image" id="assigned-to-input"
+                                                <select class="form-select select2-with-image" id="assigned-to-input" data-selected-value="{{ !empty($task) ? $task->assigned_to : '' }}"
                                                     name="assigned_to">
                                                     <option value="" disabled>-- Choose a Team Member --
                                                     </option>

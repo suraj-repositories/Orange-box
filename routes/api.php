@@ -8,10 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('project-board/{projectBoard}/modules', [ProjectBoardController::class, 'getModules'])->name('project-board.modules');
-
-    Route::get('project-modules/{projectModule}/assignees', [ProjectModuleController::class, 'getAssignees'])->name('project-module.getAssignees');
-});
+  });
 
 Route::post('/tokens/create', function (Request $request) {
     $token = $request->user()->createToken($request->token_name);
