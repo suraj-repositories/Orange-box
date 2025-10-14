@@ -82,12 +82,14 @@
                                             <label for="color-tag-input" class="form-label">Color Tag</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-palette"></i></span>
+
+
                                                 <select class="form-select" name="color_tag">
                                                     <option selected disabled>--select a color tag--</option>
                                                     @foreach ($tagColors as $tag)
-                                                        <option value="{{ $tag->code }}"
-                                                            {{ old('color_tag', $projectBoard->color_tag ?? '') == $tag->code ? 'selected' : '' }}>
-                                                            {{ $tag->emoji }} {{ $tag->label }}
+                                                        <option value="{{ $tag->id }}"
+                                                            {{ old('color_tag', $projectBoard->color_tag_id ?? '') == $tag->id ? 'selected' : '' }}>
+                                                            {{ $tag->emoji }} {{ $tag->name }}
                                                         </option>
                                                     @endforeach
                                                 </select>

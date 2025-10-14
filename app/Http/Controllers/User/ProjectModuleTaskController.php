@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\ProjectBoard;
 use App\Models\ProjectModule;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\FileService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class ProjectModuleTaskController extends Controller
@@ -165,62 +167,61 @@ class ProjectModuleTaskController extends Controller
             'media' => $media
         ]);
     }
+    public function update(UpdateTaskRequest $request, User $user, Task $task)
+    {
+        return $this->handleTaskUpdate($request, $user, $task);
+    }
+    public function updateNested(UpdateTaskRequest $request, User $user, $slug, $moduleSlug, Task $task)
+    {
+        return $this->handleTaskUpdate($request, $user, $task, $slug, $moduleSlug);
+    }
 
-    public function update(Request $request, User $user, Task $task, $slug = null, $module = null)
+    protected function handleTaskUpdate(UpdateTaskRequest $request, User $user, Task $task, $slug = null, $moduleSlug = null)
     {
         Gate::authorize('update', $task);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'priority' => 'required|in:low,medium,high,urgent',
-            'assigned_to' => 'nullable|exists:users,id',
-            'due_date' => 'nullable|date',
-            'media_files' => 'nullable|array',
-            'media_files.*' => 'file|max:' . config('validation_rules.max_file_size'),
-            'project_board' => 'nullable|exists:project_boards,id',
-            'project_module' => 'nullable|exists:project_modules,id',
-        ]);
+        $validated = $request->validated();
 
-        if ($slug && $module) {
-            $board = ProjectBoard::where('slug', $slug)->firstOrFail();
-            $module = $board->modules()->where('slug', $module)->firstOrFail();
-            $validated['project_board_id'] = $board->id;
-            $validated['project_module_id'] = $module->id;
-        } else {
-            $validated['project_board_id'] = $request->project_board;
-            $validated['project_module_id'] = $request->project_module;
-        }
-
-        $task->update([
-            'title' => $validated['title'],
-            'description' => $validated['description'] ?? null,
-            'priority' => $validated['priority'],
-            'assigned_to' => $validated['assigned_to'] ?? null,
-            'due_date' => $validated['due_date'] ?? null,
-        ]);
-
-        $task->projectModuleTask()->updateOrCreate(
-            ['task_id' => $task->id],
-            ['project_module_id' => $validated['project_module_id']]
-        );
-
-        if ($request->has('media_files')) {
-            $media = $request->media_files;
-            $files = is_array($media) ? $media : [$media];
-
-            foreach ($files as $file) {
-                $task->files()->create([
-                    'file_path' => $this->fileService->uploadFile($file, 'think_pad'),
-                    'file_name' => $this->fileService->getFileName($file),
-                    'mime_type' => $this->fileService->getMimeType($file),
-                    'file_size' => $file->getSize() ?? null,
-                    'user_id' => $user->id,
-                ]);
+        DB::transaction(function () use ($validated, $task, $user, $slug, $moduleSlug) {
+            if ($slug && $moduleSlug) {
+                $board = ProjectBoard::where('slug', $slug)->firstOrFail();
+                $module = $board->modules()->where('slug', $moduleSlug)->firstOrFail();
+                $validated['project_board_id'] = $board->id;
+                $validated['project_module_id'] = $module->id;
+            } else {
+                $validated['project_board_id'] = $validated['project_board'] ?? null;
+                $validated['project_module_id'] = $validated['project_module'] ?? null;
             }
-        }
 
-        return redirect()->back()->with('success', 'Task updated successfully!');
+            $task->update([
+                'title' => $validated['title'],
+                'description' => $validated['description'] ?? null,
+                'priority' => $validated['priority'],
+                'assigned_to' => $validated['assigned_to'] ?? null,
+                'due_date' => $validated['due_date'] ?? null,
+            ]);
+
+            $task->projectModuleTask()->updateOrCreate(
+                ['task_id' => $task->id],
+                ['project_module_id' => $validated['project_module_id']]
+            );
+
+            if (!empty($validated['media_files'])) {
+                foreach ($validated['media_files'] as $file) {
+                    $task->files()->create([
+                        'file_path' => $this->fileService->uploadFile($file, 'think_pad'),
+                        'file_name' => $this->fileService->getFileName($file),
+                        'mime_type' => $this->fileService->getMimeType($file),
+                        'file_size' => $file->getSize() ?? null,
+                        'user_id' => $user->id,
+                    ]);
+                }
+            }
+        });
+
+        return redirect()
+            ->back()
+            ->with('success', 'Task updated successfully!');
     }
 
     public function destroy(User $user, Task $task, Request $request)

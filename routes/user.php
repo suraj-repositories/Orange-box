@@ -105,8 +105,7 @@ Route::controller(ProjectModuleController::class)->group(function () {
     Route::post('modules', 'store')->name('modules.save');
 
     Route::get('modules/{module}/edit', 'edit')->name('modules.edit');
-    Route::post('modules/{module}', 'update')->name('modules.update');
-
+    Route::post('modules/{module}', 'updateGlobal')->name('modules.update');
 });
 
 Route::controller(ProjectModuleTaskController::class)->group(function () {
@@ -114,7 +113,7 @@ Route::controller(ProjectModuleTaskController::class)->group(function () {
     Route::post('project-board/{slug}/modules/{module}/tasks', 'store')->name('project-board.modules.tasks.store');
 
     Route::get('project-board/{slug}/modules/{module}/tasks/{task}/edit', 'editNested')->name('project-board.modules.tasks.editNested');
-    Route::post('project-board/{slug}/modules/{module}/tasks/{task}', 'update')->name('project-board.modules.tasks.update');
+    Route::post('project-board/{slug}/modules/{module}/tasks/{task}', 'updateNested')->whereUuid('task')->name('project-board.modules.tasks.update');
 
     Route::get('tasks', 'index')->name('tasks.index');
     Route::post('tasks', 'store')->name('tasks.store');

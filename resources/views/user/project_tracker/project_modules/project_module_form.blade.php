@@ -181,6 +181,7 @@
 
                                             <div class="d-flex flex-wrap gap-2">
                                                 @php $users = empty($projectModule) ? session('users') : $projectModule->assignees; @endphp
+
                                                 @if ($users)
                                                     @foreach ($users as $user)
                                                         <div class="chip" data-ob-uid="{{ $user->id }}">

@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateProjectModuleRequest;
 use App\Models\ProjectBoard;
 use App\Models\ProjectModule;
 use App\Models\ProjectModuleType;
-use App\Models\ProjectModuleUser;
 use App\Models\User;
-use Illuminate\Support\Str;
 use App\Services\FileService;
-use Carbon\Carbon;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -205,128 +202,109 @@ class ProjectModuleController extends Controller
         return view("user.project_tracker.project_modules.project_module_form", compact('projectBoards', 'types', 'projectModule', 'media'));
     }
 
-    public function update(Request $request, User $user, $moduleSlug, $slug = null)
+    public function update(UpdateProjectModuleRequest $request, User $user, string $slug, string $moduleSlug)
     {
         try {
-            $validated = $request->validate([
-                'name' => 'required|max:255|string',
-                'type' => 'required|exists:project_module_types,id',
-                'description' => 'nullable|max:3000|string',
-                'user' => 'nullable|array',
-                'user.*' => 'exists:users,id',
-                'media_files' => 'nullable|array',
-                'media_files.*' => 'file|max:' . config('validation_rules.max_file_size'),
-                'project_board' => 'nullable|exists:project_boards,id',
-                'start_date' => [
-                    'nullable',
-                    'date',
-                    function ($_, $value, $fail) use ($request) {
-                        if ($request->filled('end_date') && $value > $request->end_date) {
-                            $fail('The start date must be before or equal to the end date.');
-                        }
-                    },
-                ],
-                'end_date' => [
-                    'nullable',
-                    'date',
-                    function ($_, $value, $fail) use ($request) {
-                        if ($request->filled('start_date') && $value < $request->start_date) {
-                            $fail('The end date must be after or equal to the start date.');
-                        }
-                    },
-                ],
-            ]);
+            $validated = $request->validated();
 
-            $projectBoard = null;
-            if ($slug) {
+            $module = $this->updateProjectModule($validated, $user, $slug, $moduleSlug);
 
-                dd($slug, $user->id);
-                $projectBoard = ProjectBoard::where('user_id', $user->id)
-                    ->where('slug', $slug)
-                    ->first();
-                if (!$projectBoard) {
-                    return redirect()->back()->with(['error' => 'Project Not Exists!']);
-                }
-            } else {
-                $projectBoard = ProjectBoard::where('user_id', $user->id)
-                    ->where('id', $validated['project_board'] ?? 0)
-                    ->first();
-                if (!$projectBoard) {
-                    return back()->withInput()->withErrors(['project_board' => 'Project board is required!']);
-                }
-            }
+            return redirect()
+                ->to(authRoute('user.project-board.modules.show', [
+                    'slug' => $module->projectBoard->slug,
+                    'module' => $module->slug
+                ]))
+                ->with('success', 'Module Updated Successfully!');
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Something went wrong: ' . $e->getMessage());
+        }
+    }
 
-            $module = ProjectModule::where('project_board_id', $projectBoard->id)
+    public function updateGlobal(UpdateProjectModuleRequest $request, User $user, string $moduleSlug)
+    {
+        try {
+            $validated = $request->validated();
+
+            $module = ProjectModule::with('projectBoard')
+                ->where('user_id', $user->id)
                 ->where('slug', $moduleSlug)
                 ->firstOrFail();
 
-            DB::transaction(function () use ($module, $validated, $user) {
+            $module = $this->updateProjectModule($validated, $user, $module->projectBoard->slug, $moduleSlug);
 
-
-                $module->name = $validated['name'];
-                $module->description = $validated['description'] ?? null;
-                $module->project_module_type_id = $validated['type'] ?? null;
-                $module->start_date = $validated['start_date'] ?? null;
-                $module->end_date = $validated['end_date'] ?? null;
-                $module->save();
-
-                if (!empty($validated['media_files'])) {
-                    foreach ($validated['media_files'] as $file) {
-                        $module->files()->create([
-                            'file_path' => $this->fileService->uploadFile($file, 'daily_digests'),
-                            'file_name' => $this->fileService->getFileName($file),
-                            'mime_type' => $this->fileService->getMimeType($file),
-                            'file_size' => $file->getSize() ?? null,
-                            'user_id' => $user->id,
-                        ]);
-                    }
-                }
-
-                $incomingUserIds = array_values(array_unique(array_map('intval', $validated['user'] ?? [])));
-
-                $currentUserIds = $module->projectModuleUsers()
-                    ->pluck('user_id')
-                    ->map(fn($v) => (int) $v)
-                    ->toArray();
-
-                $toAttach = array_values(array_diff($incomingUserIds, $currentUserIds));
-                $toDetach = array_values(array_diff($currentUserIds, $incomingUserIds));
-
-                if (!empty($toDetach)) {
-                    $module->projectModuleUsers()->whereIn('user_id', $toDetach)->delete();
-                }
-
-                if (!empty($toAttach)) {
-                    $now = now();
-                    $rows = array_map(fn($userId) => [
-                        'project_module_id' => $module->id,
-                        'user_id' => $userId,
-                        'created_at' => $now,
-                        'updated_at' => $now,
-                    ], $toAttach);
-
-                    DB::table('project_module_users')->insertOrIgnore($rows);
-                }
-            });
-
-            return redirect()->to(authRoute('user.project-board.modules.show', ['slug' => $module->projectBoard->slug, 'module' => $module->slug]))->with('success', 'Module Updated Successfully!');
-        } catch (ValidationException $e) {
-            $selectedUsers = collect();
-            if ($request->filled('user')) {
-                $selectedUsers = User::whereIn('id', $request->user)
-                    ->select('id', 'username', 'avatar')
-                    ->get();
-            }
-
-            return back()
-                ->withErrors($e->errors())
-                ->withInput()
-                ->with(['users' => $selectedUsers]);
+            return redirect()
+                ->to(authRoute('user.project-board.modules.show', [
+                    'slug' => $module->projectBoard->slug,
+                    'module' => $module->slug
+                ]))
+                ->with('success', 'Module Updated Successfully!');
         } catch (\Throwable $e) {
-            return redirect()->back()
-                ->with(['error' => 'Something went wrong: ' . $e->getMessage()]);
+            return back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
+
+    private function updateProjectModule(array $validated, User $user, ?string $slug, string $moduleSlug)
+    {
+        $projectBoard = $slug
+            ? ProjectBoard::where('user_id', $user->id)->where('slug', $slug)->first()
+            : ProjectBoard::where('user_id', $user->id)->where('id', $validated['project_board'] ?? 0)->first();
+
+        if (!$projectBoard) {
+            throw new \Exception('Project board not found or not accessible.');
+        }
+
+        $module = ProjectModule::where('project_board_id', $projectBoard->id)
+            ->where('slug', $moduleSlug)
+            ->firstOrFail();
+
+        DB::transaction(function () use ($module, $validated, $user) {
+
+            $module->fill([
+                'name' => $validated['name'],
+                'description' => $validated['description'] ?? null,
+                'project_module_type_id' => $validated['type'] ?? null,
+                'start_date' => $validated['start_date'] ?? null,
+                'end_date' => $validated['end_date'] ?? null,
+            ])->save();
+
+            if (!empty($validated['media_files'])) {
+                foreach ($validated['media_files'] as $file) {
+                    $module->files()->create([
+                        'file_path' => $this->fileService->uploadFile($file, 'daily_digests'),
+                        'file_name' => $this->fileService->getFileName($file),
+                        'mime_type' => $this->fileService->getMimeType($file),
+                        'file_size' => $file->getSize() ?? null,
+                        'user_id' => $user->id,
+                    ]);
+                }
+            }
+
+            $incomingUserIds = array_values(array_unique(array_map('intval', $validated['user'] ?? [])));
+            $currentUserIds = $module->projectModuleUsers()->pluck('user_id')->map(fn($v) => (int) $v)->toArray();
+
+            $toAttach = array_diff($incomingUserIds, $currentUserIds);
+            $toDetach = array_diff($currentUserIds, $incomingUserIds);
+
+            if ($toDetach) {
+                $module->projectModuleUsers()->whereIn('user_id', $toDetach)->delete();
+            }
+
+            if ($toAttach) {
+                $now = now();
+                $rows = array_map(fn($id) => [
+                    'project_module_id' => $module->id,
+                    'user_id' => $id,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ], $toAttach);
+
+                DB::table('project_module_users')->insertOrIgnore($rows);
+            }
+        });
+
+        return $module;
+    }
+
 
     public function destroy(User $user, $slug, $module, Request $request)
     {

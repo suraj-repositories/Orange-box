@@ -68,6 +68,30 @@
                                                 <img src="{{ $projectBoard->thumbnail_url }}"
                                                     class="img-fluid rounded shadow-sm" alt="Thumbnail"
                                                     onerror="this.onerror=null;this.src='https://placehold.co/400x300';">
+
+
+                                                <div class="row g-2 mt-2">
+                                                    <div class="col-6">
+                                                        <div class="label label-info w-100" title="Start Date">
+                                                            {{ $projectBoard->start_date }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                          <div class="label label-danger w-100" title="Deadline Date">
+                                                             {{ $projectBoard->end_date }}
+                                                          </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="label label-primary w-100" title="Created At">
+                                                             Created At - {{ date('M d, Y h:ia', strtotime($projectBoard->created_at)) }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="label label-warning w-100" title="Deadline Timer">
+                                                            Remaining - {{ $projectBoard->created_at }}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -22,7 +22,7 @@ class ProjectBoard extends Model
         'user_id',
         'progress',
         'thumbnail',
-        'color_tag',
+        'color_tag_id',
     ];
 
     protected $appends = ['thumbnail_url', 'public_url'];
@@ -103,5 +103,9 @@ class ProjectBoard extends Model
     public function getPublicUrlAttribute()
     {
         return authRoute('user.project-board.show', ['slug' => $this->slug]);
+    }
+
+    public function colorTag(){
+        return $this->belongsTo(ColorTag::class);
     }
 }

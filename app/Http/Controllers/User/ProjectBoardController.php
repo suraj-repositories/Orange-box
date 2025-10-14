@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\ColorTag;
 use App\Models\FolderFactory;
 use App\Models\ProjectBoard;
 use App\Models\User;
@@ -25,14 +26,13 @@ class ProjectBoardController extends Controller
 
     public function index(User $user)
     {
-        $projectBoards = ProjectBoard::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(15);
+        $projectBoards = ProjectBoard::with('colorTag')->where('user_id', $user->id)->orderBy('id', 'desc')->paginate(15);
         return view('user.project_tracker.project_board.project_board_list', compact('projectBoards'));
     }
 
     public function create()
     {
-        $tagColors = collect(config('constants.TAG_COLORS'))
-            ->map(fn($tag) => (object) $tag);;
+        $tagColors = ColorTag::get();
 
         return view('user.project_tracker.project_board.project_board_form', compact('tagColors'));
     }
@@ -42,7 +42,7 @@ class ProjectBoardController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'color_tag' => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'color_tag' => ['nullable', 'exists:color_tags,id'],
             'description' => 'nullable|string|max:3000',
             'start_date' => [
                 'nullable',
@@ -68,11 +68,12 @@ class ProjectBoardController extends Controller
             'user_id' => $user->id,
             'preview_text' => $markdownService->toPlainText($validated['description']),
             'thumbnail' => $request->hasFile('thumbnail') ? $this->fileService->uploadFile($request->file('thumbnail'), 'project_board') : null,
+            'color_tag_id' => $validated['color_tag']
         ]);
 
         ProjectBoard::create($data);
 
-        return redirect()->back()->with('success', 'Project Board Created Successfully!');
+        return redirect()->to(authRoute('user.project-board'))->with('success', 'Project Board Created Successfully!');
     }
 
     public function show(User $user, $slug, Request $request)
@@ -92,8 +93,7 @@ class ProjectBoardController extends Controller
         if (!$projectBoard) {
             abort(404, "Project Not Found!");
         }
-        $tagColors = collect(config('constants.TAG_COLORS'))
-            ->map(fn($tag) => (object) $tag);;
+         $tagColors = ColorTag::get();
 
         return view('user.project_tracker.project_board.project_board_form', compact('projectBoard', 'tagColors'));
     }
@@ -108,7 +108,7 @@ class ProjectBoardController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'color_tag' => ['nullable', 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/'],
+            'color_tag' => ['nullable', 'exists:color_tags,id'],
             'description' => 'nullable|string|max:3000',
             'start_date' => [
                 'nullable',
@@ -138,7 +138,7 @@ class ProjectBoardController extends Controller
 
         $data = [
             'title' => $validated['title'],
-            'color_tag' => $validated['color_tag'] ?? $projectBoard->color_tag,
+            'color_tag_id' => $validated['color_tag'] ?? $projectBoard->color_tag_id,
             'description' => $validated['description'] ?? null,
             'preview_text' => $this->markdownService->toPlainText($validated['description'] ?? ''),
             'start_date' => $validated['start_date'] ?? null,

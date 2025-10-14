@@ -107,7 +107,8 @@ class ProjectModule extends Model
             'project_module_users',
             'project_module_id',
             'user_id'
-        );
+        )->wherePivotNull('deleted_at')
+        ->whereNull('users.deleted_at');
     }
 
     public function projectModuleTasks()
