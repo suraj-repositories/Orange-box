@@ -1529,3 +1529,81 @@ p {
 }
 
 /* END -  project module */
+
+/* BEGIN -  sub task list */
+.timeline-1 {
+    position: relative;
+}
+
+.timeline-1::after {
+    content: "";
+    background: #b9b9b95c;
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 13px;
+
+}
+
+.timeline-1 .timeline-data {
+    padding-left: 50px;
+    position: relative;
+}
+
+.timeline-1 .timeline-data .card {
+    border: 1px dashed #a0a0a0;
+}
+
+.timeline-1 .timeline-data .card:before {
+    content: "";
+    position: absolute;
+    top: 12px;
+    right: 100%;
+    height: 0;
+    width: 0;
+    border: 10px solid #ff101000;
+    border-right: 10px solid #d4d4d4;
+}
+
+.timeline-1 .timeline-data .number-circle {
+    position: absolute;
+    z-index: 5;
+    left: -6px;
+   border: 1px solid #d5d5d5;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 38px;
+    top: 5px;
+    font-size: 19px;
+    background: var(--bs-white);
+     color: var(--bs-primary);
+    border-color: var(--bs-primary);
+
+}
+
+
+.timeline-1 .timeline-data .card .card-header {
+
+    padding: 10px;
+}
+
+.timeline-1 .timeline-data .card .card-body {
+    padding: 10px;
+}
+.timeline-1 .timeline-data .card .card-footer {
+    padding: 10px;
+    padding-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.avatar.avatar-sm{
+    width: 30px;
+    height: 30px;
+}
+
+/* END -  sub task list */
