@@ -83,7 +83,8 @@ class ProjectBoardController extends Controller
         if (!$projectBoard) {
             abort(404, "Project Not Found!");
         }
-        return view('user.project_tracker.project_board.project_board-show', compact('projectBoard'));
+
+        return view('user.project_tracker.project_board.project_board_show', compact('projectBoard'));
     }
 
     public function edit(User $user, $slug, Request $request)

@@ -100,7 +100,6 @@ class ProjectModule extends Model
             ->take(3);
     }
 
-
     public function assignees()
     {
         return $this->belongsToMany(

@@ -11,6 +11,8 @@ class ProjectBoard extends Model
 {
     use SoftDeletes, HasRelationships;
 
+    protected $table = "project_boards";
+
     protected $fillable = [
         'title',
         'description',
@@ -105,7 +107,14 @@ class ProjectBoard extends Model
         return authRoute('user.project-board.show', ['slug' => $this->slug]);
     }
 
-    public function colorTag(){
+    public function colorTag()
+    {
         return $this->belongsTo(ColorTag::class);
+    }
+
+    public function users()
+    {
+        return $this->hasManyDeepFromRelations($this->modules(), (new ProjectModule)->assignees())
+                ->distinct('users.id');
     }
 }

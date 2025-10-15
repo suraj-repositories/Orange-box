@@ -24,6 +24,11 @@ class Task extends Model
         'uuid',
     ];
 
+    protected $appends = [
+        'priority_color',
+        'status_color',
+    ];
+
     public function getRouteKeyName()
     {
         return 'uuid';
@@ -85,5 +90,27 @@ class Task extends Model
             'id',
             'project_module_id'
         );
+    }
+
+    public function getPriorityColorAttribute()
+    {
+        $priorityColors = [
+            'low' => 'green',
+            'medium' => 'yellow',
+            'high' => 'orange',
+            'urgent' => 'red',
+        ];
+
+        return $priorityColors[$this->priority] ?? "white";
+    }
+    public function getStatusColorAttribute()
+    {
+        $statusColors = [
+            'pending' => 'yellow',
+            'in_progress' => 'blue',
+            'completed' => 'green',
+            'on_hold' => 'black',
+        ];
+        return $statusColors[$this->status] ?? "white";
     }
 }

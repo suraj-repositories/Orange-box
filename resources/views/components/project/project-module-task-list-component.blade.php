@@ -56,7 +56,7 @@
                                  checked readonly>
                          </td>
                          <td>
-                             <a href="#" class="text-dark truncate-2">{{ $task->title }} </a>
+                             <a href="{{ authRoute('user.tasks.show', ['task' => $task]) }}" class="text-dark truncate-2">{{ $task->title }} </a>
                          </td>
                          <td class="text-nowrap text-reset">
                              <i data-feather="calendar" style="height: 18px; width: 18px;" class="me-1"></i>
@@ -84,7 +84,7 @@
                          </td>
                          <td>
                              <div class="action-container m-0 gap-1">
-                                 <a href="#" class="info ms-0 ">
+                                 <a href="{{ authRoute('user.tasks.show', ['task' => $task]) }}" class="info ms-0 ">
                                      <i class='bx bx-info-circle fs-4'></i>
                                  </a>
                                  @php

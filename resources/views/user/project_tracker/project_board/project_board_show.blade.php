@@ -1,7 +1,9 @@
 @extends('user.layout.layout')
 
 @section('title', Route::is('user.project-board.show') ? 'Project Board' : '🟢🟢🟢')
-
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.css') }}">
+@endsection
 @section('content')
     <div class="content-page">
         <div class="content">
@@ -77,11 +79,30 @@
                                                 </div>
                                             @endif
                                             <div class="description p-2 rich-editor-content overflow-auto">
-                                                {!! Str::markdown($projectBoard->description) !!}
+                                                {!! Str::markdown($projectBoard->description ?? "") !!}
                                             </div>
+
+
+                                            @php $assignees = $projectBoard->users; @endphp
+
+                                            @if ($assignees && $assignees->isNotEmpty())
+                                                <h6 class="mt-3 fw-bold">Team Members</h6>
+
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    @foreach ($assignees as $user)
+                                                        <div class="chip pe-3" data-ob-uid="{{ $user->id }}">
+                                                            <img src="{{ $user->profilePicture() }}"
+                                                                alt="{{ $user->username }}" width="96" height="96">
+                                                            {{ $user->username }}
+                                                        </div>
+                                                    @endforeach
+
+                                                </div>
+                                            @endif
+
                                         </div>
                                         <div class="col-12 col-md-4">
-                                            <div class="text-center">
+                                            <div class="text-center" data-image-preview="true" data-image-downloadable="true">
                                                 <img src="{{ $projectBoard->thumbnail_url }}"
                                                     class="img-fluid rounded shadow-sm" alt="Thumbnail"
                                                     onerror="this.onerror=null;this.src='https://placehold.co/400x300';">
@@ -156,4 +177,6 @@
 
 @section('js')
     <script src="{{ asset('assets/js/pages/task_list.js') }}"></script>
+
+    <script src="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.js') }}"></script>
 @endsection

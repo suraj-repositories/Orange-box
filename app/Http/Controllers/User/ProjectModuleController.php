@@ -134,7 +134,12 @@ class ProjectModuleController extends Controller
                 }
             }
 
-            return redirect()->back()->with('success', 'Module Created Successfully!');
+            return redirect()
+                ->to(authRoute('user.project-board.modules.show', [
+                    'slug' => $projectBoard->slug,
+                    'module' => $projectModule->slug
+                ]))
+                ->with('success', 'Module Created Successfully!');
         } catch (ValidationException $e) {
             $selectedUsers = collect();
             if ($request->filled('user')) {

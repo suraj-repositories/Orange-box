@@ -120,7 +120,7 @@ class ProjectModuleTaskController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Task created successfully!');
+        return redirect()->to(authRoute('user.tasks.show', ['task' => $task]))->with('success', 'Task created successfully!');
     }
 
     public function editNested(User $user, $slug, $module, Task $task, Request $request)
@@ -220,7 +220,7 @@ class ProjectModuleTaskController extends Controller
         });
 
         return redirect()
-            ->back()
+            ->to(authRoute('user.tasks.show', ['task' => $task]))
             ->with('success', 'Task updated successfully!');
     }
 
@@ -229,5 +229,25 @@ class ProjectModuleTaskController extends Controller
         Gate::authorize('delete', $task);
         $task->delete();
         return redirect()->back()->with('success', 'Task Deleted Successfully!');
+    }
+    public function show(User $user, Task $task, Request $request)
+    {
+        $task->load(['module.projectBoard', 'files']);
+
+        $imageFiles = $task->files->filter(function ($file) {
+            return str_starts_with($file->mime_type, 'image/');
+        });
+
+        $otherFiles = $task->files->filter(function ($file) {
+            return !str_starts_with($file->mime_type, 'image/');
+        });
+
+        return view('user.project_tracker.tasks.task_show', [
+            'task' => $task,
+            'projectModule' => $task->module,
+            'projectBoard' => $task->module->projectBoard,
+            'imageFiles' => $imageFiles,
+            'otherFiles' => $otherFiles
+        ]);
     }
 }

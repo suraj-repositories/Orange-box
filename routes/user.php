@@ -123,6 +123,7 @@ Route::controller(ProjectModuleTaskController::class)->group(function () {
     Route::post('tasks/{task}', 'update')->name('tasks.update');
 
     Route::delete('tasks/{task}', 'destroy')->name('tasks.delete');
+    Route::get('tasks/{task}', 'show')->name('tasks.show');
 });
 
 Route::controller(ProfileController::class)->group(function () {
