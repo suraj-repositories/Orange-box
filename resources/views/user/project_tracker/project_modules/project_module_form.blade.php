@@ -81,19 +81,20 @@
 
                                                 <label for="pick-project" class="form-label">Select Project</label>
 
-                                                <div class="d-flex">
+                                                <div class="d-flex select-box">
                                                     <select class="form-select select2-with-image" id="pick-project" name="project_board">
                                                         <option value="" selected disabled>Select Project</option>
                                                         @foreach ($projectBoards as $board)
                                                             <option value="{{ $board->id }}"
                                                                 data-image="{{ $board->thumbnail_url }}"
+                                                                data-public-url="{{ authRoute('user.project-board.show', ['slug' => $board->slug]) }}"
                                                                 {{ (!empty($projectModule) && $projectModule->projectBoard->id == $board->id) ? 'selected' : '' }}
                                                                 >
                                                                 {{ $board->title }}
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                    <a href="#" id="redirect-link" class="d-none"></a>
+                                                    <a href="#" id="redirect-link" class="d-none redirect-link" target="_blank"></a>
                                                     <button type="button" id="OpenSelectedProjectBtn"
                                                         class="btn bg-light border ms-1 p-0 center-content px-2 text-primary "
                                                         title="Open Project"><i class='bx bx-link fs-4'></i></button>
@@ -376,4 +377,5 @@
 @section('js')
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/lib-config/select2.init.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/project-module-form.js') }}"></script>
 @endsection

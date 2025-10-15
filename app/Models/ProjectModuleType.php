@@ -11,7 +11,11 @@ class ProjectModuleType extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name', 'slug', 'status'
+        'name', 'slug', 'status', 'color_tag_id'
     ];
+
+    public function colorTag(){
+        return $this->belongsTo(ColorTag::class);
+    }
 
 }

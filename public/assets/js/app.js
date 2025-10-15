@@ -8,6 +8,7 @@ class App {
         this.initMenu();
         this.initControls();
         this.initResizeableTextArea();
+        this.initImage3Gallery();
     }
 
     initComponents() {
@@ -204,7 +205,18 @@ class App {
 
     }
 
+    initImage3Gallery() {
+        document.querySelectorAll('.image-3-gallery').forEach(container => {
+            const wrappers = container.querySelectorAll('.img-wrapper');
+            const total = wrappers.length;
 
+            if (total > 3) {
+                container.classList.add('has-more-content');
+                const thirdWrapper = container.querySelector('.img-wrapper:nth-child(3)');
+                thirdWrapper.setAttribute('data-remaining-count', total - 3);
+            }
+        });
+    }
 }
 
 class Utility {

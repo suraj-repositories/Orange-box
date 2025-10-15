@@ -385,5 +385,5 @@
 @section('js')
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/lib-config/select2.init.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/task_create.js') }}"> </script>
+    <script src="{{ asset('assets/js/pages/task-create.js') }}"> </script>
 @endsection

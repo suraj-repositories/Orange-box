@@ -63,6 +63,9 @@ class File extends Model
         if ($this->file_path && Storage::disk('private')->exists($this->file_path)) {
             return strtoupper(pathinfo($this->file_path, PATHINFO_EXTENSION)) ?: null;
         }
+        if ($this->file_path && Storage::disk('public')->exists($this->file_path)) {
+            return strtoupper(pathinfo($this->file_path, PATHINFO_EXTENSION)) ?: null;
+        }
         return null;
     }
 

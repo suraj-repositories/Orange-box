@@ -52,7 +52,7 @@ class ProjectModuleController extends Controller
 
     public function create(User $user, Request $request)
     {
-        $projectBoards = ProjectBoard::where('user_id', $user->id)->select('id', 'title', 'thumbnail')->get();
+        $projectBoards = ProjectBoard::where('user_id', $user->id)->select('id', 'title', 'thumbnail', 'slug')->get();
         $types = ProjectModuleType::select('id', 'name')->get();
         return view("user.project_tracker.project_modules.project_module_form", compact('projectBoards', 'types'));
     }
@@ -155,7 +155,7 @@ class ProjectModuleController extends Controller
 
     public function show(User $user, $slug, $module, Request $request)
     {
-        $projectBoard = ProjectBoard::where('user_id', $user->id)
+        $projectBoard = ProjectBoard::with(['modules.files', 'modules.projectModuleType', 'modules.projectModuleType.colorTag'])->where('user_id', $user->id)
             ->where('slug', $slug)
             ->first();
         if (!$projectBoard) {
@@ -167,7 +167,15 @@ class ProjectModuleController extends Controller
             abort(404, "Module Not Found!");
         }
 
-        return view('user.project_tracker.project_modules.project_module_show', compact('projectModule', 'projectBoard'));
+        $imageFiles = $projectModule->files->filter(function ($file) {
+            return str_starts_with($file->mime_type, 'image/');
+        });
+
+        $otherFiles = $projectModule->files->filter(function ($file) {
+            return !str_starts_with($file->mime_type, 'image/');
+        });
+
+        return view('user.project_tracker.project_modules.project_module_show', compact('projectModule', 'projectBoard', 'imageFiles', 'otherFiles'));
     }
 
     public function editNested(User $user, $slug, $module, Request $request)

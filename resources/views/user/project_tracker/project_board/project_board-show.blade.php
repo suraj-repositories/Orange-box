@@ -28,7 +28,8 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card border-0 shadow-sm mb-3">
-                            <div class="card-header d-flex align-items-center justify-content-between flex-wrap">
+                            <div
+                                class="card-header d-flex align-items-center justify-content-between flex-wrap border-double-5 border-{{ strtolower($projectBoard->colorTag?->name ?? '') }}">
                                 <h5 class="mb-0 fw-bold">
                                     {{ $projectBoard->title }}
                                 </h5>
@@ -39,10 +40,13 @@
                                         <i class='bx bx-info-circle'></i>
                                     </a>
 
-                                    <a href="{{ authRoute('user.project-board.edit', ['slug' => $projectBoard->slug]) }}" class="edit">
+                                    <a href="{{ authRoute('user.project-board.edit', ['slug' => $projectBoard->slug]) }}"
+                                        class="edit">
                                         <i class='bx bx-edit'></i>
                                     </a>
-                                    <form action="{{ authRoute('user.project-board.delete', ['slug' => $projectBoard->slug]) }}" method="post">
+                                    <form
+                                        action="{{ authRoute('user.project-board.delete', ['slug' => $projectBoard->slug]) }}"
+                                        method="post">
                                         @method('DELETE')
                                         @csrf
                                         <button type="submit" class="delete btn-no-style">
@@ -56,9 +60,22 @@
                             </div>
 
                             <div class="collapse" id="projectDescription{{ $projectBoard->id }}">
-                                <div class="card-body">
+                                <div class="card-body border-double-5 border-{{ strtolower($projectBoard->colorTag?->name ?? '') }}">
                                     <div class="row g-3 align-items-start">
                                         <div class="col-12 col-md-8">
+                                            @php
+                                                $colorTag = $projectBoard->colorTag;
+                                            @endphp
+
+                                            @if ($colorTag)
+                                                <div class="d-flex mb-2">
+                                                    <div
+                                                        class="badge badge-{{ strtolower($colorTag->name ?? '') }} d-flex align-items-center p-2">
+                                                        <span class="badge-circle me-1"></span>
+                                                        <span>{{ $colorTag->name }}</span>
+                                                    </div>
+                                                </div>
+                                            @endif
                                             <div class="description p-2 rich-editor-content overflow-auto">
                                                 {!! Str::markdown($projectBoard->description) !!}
                                             </div>
@@ -71,26 +88,35 @@
 
 
                                                 <div class="row g-2 mt-2">
-                                                    <div class="col-6">
-                                                        <div class="label label-info w-100" title="Start Date">
-                                                            {{ $projectBoard->start_date }}
+                                                    @if (!empty($projectBoard->start_date))
+                                                        <div class="col-{{ empty($projectBoard->end_date) ? '12' : '6' }}">
+                                                            <div class="label label-info w-100" title="Start Date">
+                                                                @if (empty($projectBoard->end_date))
+                                                                    <strong>Start Date -</strong>
+                                                                @endif
+                                                                {{ date('M d, Y', strtotime($projectBoard->start_date)) }}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-6">
-                                                          <div class="label label-danger w-100" title="Deadline Date">
-                                                             {{ $projectBoard->end_date }}
-                                                          </div>
-                                                    </div>
+                                                    @endif
+
+                                                    @if (!empty($projectBoard->end_date))
+                                                        <div
+                                                            class="col-{{ empty($projectBoard->start_date) ? '12' : '6' }}">
+                                                            <div class="label label-danger w-100" title="Deadline Date">
+                                                                @if (empty($projectBoard->start_date))
+                                                                    <strong>Deadline Date -</strong>
+                                                                @endif
+                                                                {{ date('M d, Y', strtotime($projectBoard->end_date)) }}
+                                                            </div>
+                                                        </div>
+                                                    @endif
                                                     <div class="col-12">
-                                                        <div class="label label-primary w-100" title="Created At">
-                                                             Created At - {{ date('M d, Y h:ia', strtotime($projectBoard->created_at)) }}
+                                                        <div class="label label-primary w-100" title="Created Date">
+                                                            <strong>Created At -</strong>
+                                                            {{ date('M d, Y h:i a', strtotime($projectBoard->created_at)) }}
                                                         </div>
                                                     </div>
-                                                    <div class="col-12">
-                                                        <div class="label label-warning w-100" title="Deadline Timer">
-                                                            Remaining - {{ $projectBoard->created_at }}
-                                                        </div>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>

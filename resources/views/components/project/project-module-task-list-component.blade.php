@@ -56,7 +56,7 @@
                                  checked readonly>
                          </td>
                          <td>
-                             <a href="#" class="text-reset truncate-1">{{ $task->title }} </a>
+                             <a href="#" class="text-dark truncate-2">{{ $task->title }} </a>
                          </td>
                          <td class="text-nowrap text-reset">
                              <i data-feather="calendar" style="height: 18px; width: 18px;" class="me-1"></i>

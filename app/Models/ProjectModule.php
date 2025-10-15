@@ -100,6 +100,7 @@ class ProjectModule extends Model
             ->take(3);
     }
 
+
     public function assignees()
     {
         return $this->belongsToMany(
@@ -129,5 +130,9 @@ class ProjectModule extends Model
     public function getCompletedTaskCountAttribute()
     {
         return $this->tasks()->where('status', 'completed')->count();
+    }
+
+    public function  projectModuleType(){
+        return $this->belongsTo(projectModuleType::class);
     }
 }
