@@ -19,6 +19,10 @@ class SubTask extends Model
         'uuid'
     ];
 
+    protected $appends = [
+        'status_color'
+    ];
+
     public function getRouteKeyName()
     {
         return 'uuid';
@@ -67,4 +71,16 @@ class SubTask extends Model
             return !str_starts_with($file->mime_type, 'image/');
         });;
     }
+
+      public function getStatusColorAttribute()
+    {
+        $statusColors = [
+            'pending' => 'yellow',
+            'in_progress' => 'blue',
+            'completed' => 'green',
+            'on_hold' => 'black',
+        ];
+        return $statusColors[$this->status] ?? "white";
+    }
+
 }

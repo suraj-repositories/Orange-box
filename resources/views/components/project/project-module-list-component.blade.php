@@ -33,10 +33,10 @@
                  <thead>
                      <tr>
                          <th>No</th>
+                         <th>Module Name</th>
                          @if(Route::is('user.modules.index'))
                          <th>Project Name</th>
                          @endif
-                         <th>Module Name</th>
                          <th>Created Date</th>
                          <th>Number of Task</th>
                          <th>Deadline</th>
@@ -48,17 +48,18 @@
                  @forelse($modules as $module)
                      <tr>
                          <td>
-                             <input type="checkbox" class="form-check-input m-0 align-middle" aria-label="Select task"
-                                 checked>
+                             {{-- <input type="checkbox" class="form-check-input m-0 align-middle" aria-label="Select task"
+                                 checked> --}}
+                                 {{ $modules->firstItem() + $loop->iteration - 1 }}
                          </td>
-                           @if(Route::is('user.modules.index'))
-                         <td>
-                            <a class="text-reset" href="{{ authRoute('user.project-board.show', ['slug'=> $module->projectBoard->slug]) }}">{{$module->projectBoard->title}}</a>
-                         </td>
-                         @endif
                          <td>
                              <a href="{{ authRoute('user.project-board.modules.show', ['slug' => $module->projectBoard->slug, 'module' =>  $module->slug]) }}" class="text-reset"> {{ $module->name }} </a>
-                         </td>
+                            </td>
+                            @if(Route::is('user.modules.index'))
+                          <td>
+                             <a class="text-reset" href="{{ authRoute('user.project-board.show', ['slug'=> $module->projectBoard->slug]) }}">{{$module->projectBoard->title}}</a>
+                          </td>
+                          @endif
                          <td class="text-nowrap text-reset">
                              <i data-feather="calendar" style="height: 18px; width: 18px;" class="me-1"></i>
                              {{ date('F d, Y', strtotime($module->created_at)) }}
@@ -107,7 +108,7 @@
                      </tr>
                  @empty
                      <tr>
-                         <td colspan="7">
+                         <td colspan="{{ Route::is('user.modules.index') ? '8' : '7' }}">
                              <x-no-data />
                          </td>
                      </tr>

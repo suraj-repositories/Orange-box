@@ -25,10 +25,6 @@
                          <div> Show All</div>
                      </a>
                  @endif
-                 <a href="#" class="btn btn-light btn-sm border center-content gap-1">
-                     <i class='bx bx-filter-alt fs-5'></i>
-                     <div> Filter</div>
-                 </a>
              </div>
          </div>
      </div>
@@ -52,8 +48,9 @@
                  @forelse ($tasks as $task)
                      <tr>
                          <td>
-                             <input type="checkbox" class="form-check-input m-0 align-middle" aria-label="Select task"
-                                 checked readonly>
+                             {{-- <input type="checkbox" class="form-check-input m-0 align-middle" aria-label="Select task"
+                                 checked readonly> --}}
+                                 {{ $tasks->firstItem() + $loop->iteration - 1 }}
                          </td>
                          <td>
                              <a href="{{ authRoute('user.tasks.show', ['task' => $task]) }}" class="text-dark truncate-2">{{ $task->title }} </a>
@@ -73,7 +70,7 @@
                              </div>
                          </td>
                          <td class="text-nowrap">
-                             {{ ucfirst($task->status) }}
+                             {{ ucwords(str_replace('_', ' ', $task->status ?? "")) }}
                          </td>
                          <td>
                              @php $assignee = $task->assignedUser; @endphp

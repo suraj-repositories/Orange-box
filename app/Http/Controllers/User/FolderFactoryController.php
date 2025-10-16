@@ -51,8 +51,8 @@ class FolderFactoryController extends Controller
             )
             ->first();
 
-        $totalFiles = $totalFilesAndSize->total_files;
-        $totalSize = $this->fileService->getFormattedSize($totalFilesAndSize->total_size);
+        $totalFiles = $totalFilesAndSize?->total_files ?? 0;
+        $totalSize = $this->fileService->getFormattedSize($totalFilesAndSize?->total_size ?? 0);
 
         return view('user.orbit_zone.folder_factory.folder_factory_list', compact('icons', 'folderFactories', 'totalFiles', 'totalSize'));
     }

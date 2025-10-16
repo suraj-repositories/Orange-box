@@ -85,7 +85,7 @@
                                                 <div
                                                     class="badge badge-{{ strtolower($task->status_color ?? '') }} d-flex align-items-center p-2">
                                                     <span class="badge-circle me-1"></span>
-                                                    <span><strong>Status -</strong> {{ ucfirst($task->status) }}</span>
+                                                    <span><strong>Status -</strong> {{ ucwords(str_replace('_', ' ', $task->status ?? "")) }}</span>
                                                 </div>
 
                                                 <a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}"

@@ -107,6 +107,8 @@ Route::controller(ProjectModuleController::class)->group(function () {
 
     Route::get('modules/{module}/edit', 'edit')->name('modules.edit');
     Route::post('modules/{module}', 'updateGlobal')->name('modules.update');
+    Route::get('modules/{module}', 'showGlobal')->name('modules.show');
+
 });
 
 Route::controller(ProjectModuleTaskController::class)->group(function () {

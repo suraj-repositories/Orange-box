@@ -6,6 +6,7 @@ use App\Models\ProjectBoard;
 use App\Models\ProjectModule;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
 class ProjectModuleListComponent extends Component
@@ -35,6 +36,7 @@ class ProjectModuleListComponent extends Component
                 ->with('limitedUsers');
         } else {
             $query = ProjectModule::withCount('projectModuleUsers')
+                ->where('user_id', Auth::user()->id)
                 ->with('limitedUsers');
         }
 

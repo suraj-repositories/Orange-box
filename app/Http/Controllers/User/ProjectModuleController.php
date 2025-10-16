@@ -183,6 +183,16 @@ class ProjectModuleController extends Controller
         return view('user.project_tracker.project_modules.project_module_show', compact('projectModule', 'projectBoard', 'imageFiles', 'otherFiles'));
     }
 
+    public function showGlobal(User $user, $module, Request $request)
+    {
+        $projectModule =  ProjectModule::where('slug', $module)->where('user_id', $user->id)->first();
+        if (!$projectModule) {
+            abort(404, "Module Not Found!");
+        }
+
+        return redirect()->to(authRoute('user.project-board.modules.show', ['slug' => $projectModule->projectBoard->slug, 'module' => $projectModule->slug]));
+    }
+
     public function editNested(User $user, $slug, $module, Request $request)
     {
         $projectBoard = ProjectBoard::where('user_id', $user->id)

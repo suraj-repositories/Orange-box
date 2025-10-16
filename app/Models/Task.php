@@ -117,6 +117,7 @@ class Task extends Model
         return $statusColors[$this->status] ?? "white";
     }
 
+
     public function subTasks(){
         return $this->hasMany(SubTask::class);
     }

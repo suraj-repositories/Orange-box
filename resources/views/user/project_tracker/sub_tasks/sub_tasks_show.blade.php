@@ -7,7 +7,8 @@
              <h5 class="card-title mb-0">Sub Tasks</h5>
 
              <div class="ms-auto fw-semibold d-flex gap-1">
-                 <a class="btn btn-light btn-sm border center-content gap-1" id="new-sub-task-btn" data-submit-url="{{ authRoute('user.tasks.sub_task.store', ['task' => $task]) }}">
+                 <a class="btn btn-light btn-sm border center-content gap-1" id="new-sub-task-btn"
+                     data-submit-url="{{ authRoute('user.tasks.sub_task.store', ['task' => $task]) }}">
                      <i class="bx bx-plus fs-5"></i>
                      <div> Add</div>
                  </a>
@@ -16,8 +17,7 @@
              <div class="modal fade" id="sub_task_form_modal" tabindex="-1" aria-labelledby="sub_task_form_title"
                  aria-hidden="true">
                  <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                     <form action="#" method="POST"
-                         enctype="multipart/form-data">
+                     <form action="#" method="POST" enctype="multipart/form-data">
                          @csrf
                          <div class="modal-content">
                              <div class="modal-header">
@@ -56,7 +56,7 @@
 
                                                  <!-- Pending -->
                                                  <input type="radio" class="btn-check" name="status" value="pending"
-                                                     id="status-pending" autocomplete="off" >
+                                                     id="status-pending" autocomplete="off">
                                                  <label
                                                      class="status-btn status-pending rounded-circle circle-40 d-flex align-items-center justify-content-center p-2"
                                                      for="status-pending" title="Pending">
@@ -109,8 +109,9 @@
                                              <small class="text-danger">{{ $message }}</small>
                                          @enderror
 
-                                         <div id="list-view-container" class="media-upload-preview mt-3 list-view-container">
-                                          </div>
+                                         <div id="list-view-container"
+                                             class="media-upload-preview mt-3 list-view-container">
+                                         </div>
 
 
                                      </div>
@@ -137,11 +138,15 @@
                              <div class="d-flex align-items-center">
                                  <img src="{{ $subTask->user->avatar }}" alt="_"
                                      class="rounded-circle avatar avatar-sm me-1">
-                                 <span class="d-flex w-100">
-                                     <div>{{ $subTask->user->name() }}</div>
+                                 <span class="d-flex w-100 align-items-center">
+                                     <div class="me-auto">{{ $subTask->user->name() }}</div>
                                      @if ($subTask->created_at != $subTask->updated_at)
-                                         <small class="ms-auto px-2">(Edited)</small>
+                                         <small class="px-2">(Edited)</small>
                                      @endif
+                                     <div class="badge badge-{{ strtolower($subTask->status_color ?? '') }} d-flex align-items-center p-2">
+                                         <span class="badge-circle me-1"></span>
+                                         <span>{{ ucwords(str_replace('_', ' ', $subTask->status ?? ""))  }}</span>
+                                     </div>
                                  </span>
                              </div>
                          </div>
@@ -204,16 +209,15 @@
                              </div>
                              <div class="action-container m-0 gap-1">
 
-                                 <a href="javascript:void(0);"
-                                        class="edit edit-sub-task-btn"
-                                        data-submit-url="{{ authRoute('user.sub_task.update', [ 'subTask' => $subTask]) }}"
-                                        data-subtask-description="{{ $subTask->description ?? "" }}"
-                                        data-subtask-status="{{ $subTask->status ?? "" }}"
-                                        data-subtask-files="{{ $subTask->files->select('formatted_file_size', 'extension', 'file_url', 'file_name', 'extension_icon', 'id') }}"
-                                        >
+                                 <a href="javascript:void(0);" class="edit edit-sub-task-btn"
+                                     data-submit-url="{{ authRoute('user.sub_task.update', ['subTask' => $subTask]) }}"
+                                     data-subtask-description="{{ $subTask->description ?? '' }}"
+                                     data-subtask-status="{{ $subTask->status ?? '' }}"
+                                     data-subtask-files="{{ $subTask->files->select('formatted_file_size', 'extension', 'file_url', 'file_name', 'extension_icon', 'id') }}">
                                      <i class='bx bx-edit'></i>
                                  </a>
-                                 <form action="{{ authRoute('user.sub_task.delete', ['subTask' => $subTask]) }}" method="post">
+                                 <form action="{{ authRoute('user.sub_task.delete', ['subTask' => $subTask]) }}"
+                                     method="post">
                                      @method('DELETE')
                                      @csrf
                                      <button type="submit" class="delete btn-no-style">
