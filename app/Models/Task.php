@@ -45,9 +45,11 @@ class Task extends Model
                 if ($task->isForceDeleting()) {
                     $task->files()->withTrashed()->get()->each->forceDelete();
                     $task->projectModuleTask()->withTrashed()->get()->each->forceDelete();
+                    $task->subTasks()->withTrashed()->get()->each->forceDelete();
                 } else {
                     $task->files()->get()->each->delete();
                     $task->projectModuleTask()->get()->each->delete();
+                    $task->subTasks()->get()->each->delete();
                 }
             });
         });
@@ -56,6 +58,7 @@ class Task extends Model
             Model::withoutEvents(function () use ($task) {
                 $task->files()->withTrashed()->get()->each->restore();
                 $task->projectModuleTask()->withTrashed()->get()->each->restore();
+                $task->subTasks()->withTrashed()->get()->each->restore();
             });
         });
     }
@@ -112,5 +115,9 @@ class Task extends Model
             'on_hold' => 'black',
         ];
         return $statusColors[$this->status] ?? "white";
+    }
+
+    public function subTasks(){
+        return $this->hasMany(SubTask::class);
     }
 }

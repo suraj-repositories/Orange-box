@@ -8,6 +8,7 @@ use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ProjectBoardController;
 use App\Http\Controllers\User\ProjectModuleController;
 use App\Http\Controllers\User\ProjectModuleTaskController;
+use App\Http\Controllers\User\SubTaskController;
 use App\Http\Controllers\User\SyntaxStoreController;
 use App\Http\Controllers\User\ThinkPadController;
 use App\Models\FolderFactory;
@@ -125,6 +126,14 @@ Route::controller(ProjectModuleTaskController::class)->group(function () {
     Route::delete('tasks/{task}', 'destroy')->name('tasks.delete');
     Route::get('tasks/{task}', 'show')->name('tasks.show');
 });
+
+Route::controller(SubTaskController::class)->group(function () {
+    Route::post('tasks/{task}/sub-tasks', 'store')->name('tasks.sub_task.store');
+    Route::delete('sub-tasks/{subTask}', 'destroy')->name('sub_task.delete');
+    Route::post('sub-tasks/{subTask}', 'update')->name('sub_task.update');
+
+});
+
 
 Route::controller(ProfileController::class)->group(function () {
     Route::get('profile', 'index')->name('profile.index');

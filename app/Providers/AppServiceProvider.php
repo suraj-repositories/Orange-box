@@ -7,12 +7,14 @@ use App\Models\File;
 use App\Models\FolderFactory;
 use App\Models\ProjectBoard;
 use App\Models\ProjectModule;
+use App\Models\SubTask;
 use App\Models\Task;
 use App\Observers\CommentObserver;
 use App\Policies\FilePolicy;
 use App\Policies\FolderFactoryPolicy;
 use App\Policies\ProjectBoardPolicy;
 use App\Policies\ProjectModulePolicy;
+use App\Policies\SubTaskPolicy;
 use App\Policies\TaskPolicy;
 use App\Services\EditorJsService;
 use App\Services\FileService;
@@ -49,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Task::class, TaskPolicy::class);
         Gate::policy(ProjectBoard::class, ProjectBoardPolicy::class);
         Gate::policy(ProjectModule::class, ProjectModulePolicy::class);
+        Gate::policy(SubTask::class, SubTaskPolicy::class);
 
         Comment::observe(CommentObserver::class);
 

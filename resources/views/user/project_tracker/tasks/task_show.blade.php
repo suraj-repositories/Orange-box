@@ -28,6 +28,8 @@
                     </div>
                 </div>
 
+                <x-alert-component />
+
                 <!-- General Form -->
                 <div class="row">
                     <div class="col-12">
@@ -197,122 +199,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card sub_tasks">
-                            <div class="card-header">
-                                <div class="card-title">Sub Tasks</div>
-                            </div>
-                            <div class="card-body">
-                                <div class="timeline-1">
-                               @for ($i = 0 ; $i < 3; $i++)
-                                    <div class="timeline-data">
-                                        <div class="number-circle">{{ $i + 1 }}</div>
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="https://placehold.co/100/6E92FF/ffffff?text=U"
-                                                        alt="user-image" class="rounded-circle avatar avatar-sm me-1">
-                                                    <span class="d-flex w-100">
-                                                        <div>John doe</div>
-                                                        <small class="ms-auto px-2">(edited)</small>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing
-                                                    elit. Quaerat architecto cupiditate quos, dolores eligendi consequatur
-                                                    excepturi cumque inventore rem ipsam.</p>
-
-                                                <div class="row">
-                                                    <div class="col-12 col-sm-6 col-md-3">
-                                                        <div class="image-3-gallery" data-image-preview="true"
-                                                            data-image-downloadable="true">
-                                                            <div class="img-wrapper">
-                                                                <img src="https://placehold.co/600x400" data-title=""
-                                                                    alt="">
-                                                            </div>
-                                                            <div class="img-wrapper">
-                                                                <img src="https://placehold.co/600x400" data-title=""
-                                                                    alt="">
-                                                            </div>
-                                                            <div class="img-wrapper">
-                                                                <img src="https://placehold.co/600x400" data-title=""
-                                                                    alt="">
-                                                            </div>
-                                                            <div class="img-wrapper">
-                                                                <img src="https://placehold.co/600x400" data-title=""
-                                                                    alt="">
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12 col-sm-6 col-md 6">
-                                                        <div class="file-list row g-2">
-                                                            <div class="col-12 col-lg-6">
-                                                                <div
-                                                                    class="file-item d-flex align-items-center gap-2 p-2 py-1 border rounded text-reset w-100">
-                                                                    <i class="bi bi-file fs-3"></i>
-                                                                    <span
-                                                                        class="file-name flex-grow-1 truncate-2 fs-8">file.svg</span>
-                                                                    <small
-                                                                        class="file-size text-muted ms-auto w-fit-content fs-8">(10MB)</small>
-                                                                    <div class="file-actions">
-                                                                        <a href="#" target="_blank"><i
-                                                                                class='bx bx-link-external'></i></a>
-                                                                        <a href="#" download><i
-                                                                                class='bx bxs-download'></i></a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <!-- Repeat this block for more files -->
-                                                            <div class="col-12 col-lg-6">
-                                                                <div
-                                                                    class="file-item d-flex align-items-center gap-2 p-2 py-1 border rounded text-reset w-100">
-                                                                    <i class="bi bi-file fs-3"></i>
-                                                                    <span
-                                                                        class="file-name flex-grow-1 truncate-2 fs-8">image.png</span>
-                                                                    <small
-                                                                        class="file-size text-muted ms-auto w-fit-content fs-8">(2MB)</small>
-                                                                    <div class="file-actions">
-                                                                        <a href="#" target="_blank"><i
-                                                                                class='bx bx-link-external'></i></a>
-                                                                        <a href="#" download><i
-                                                                                class='bx bxs-download'></i></a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <div class="card-footer">
-                                                <div class="d-flex align-items-center text-reset">
-                                                    <i class='bx bx-calendar-week fs-5 me-1'></i>
-                                                    <small> 3 days ago</small>
-                                                </div>
-                                                <div class="action-container m-0 gap-1">
-
-                                                    <a href=" " class="edit">
-                                                        <i class='bx bx-edit'></i>
-                                                    </a>
-                                                    <form action=" " method="post">
-                                                        @method('DELETE')
-                                                        @csrf
-                                                        <button type="submit" class="delete btn-no-style">
-                                                            <i class='bx bx-trash'></i>
-                                                        </button>
-                                                    </form>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endfor
-                                </div>
-                            </div>
-                        </div>
+                        @include('user.project_tracker.sub_tasks.sub_tasks_show')
                     </div>
                 </div>
             </div> <!-- container-fluid -->
@@ -329,5 +216,5 @@
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/add-media.js') }}"></script>
     <script src="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.js') }}"></script>
-
+    <script src="{{asset('assets/js/pages/sub-task-form.js')}}"></script>
 @endsection

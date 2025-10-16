@@ -232,7 +232,7 @@ class ProjectModuleTaskController extends Controller
     }
     public function show(User $user, Task $task, Request $request)
     {
-        $task->load(['module.projectBoard', 'files']);
+        $task->load(['module.projectBoard', 'files', 'subTasks', 'subTasks.files', 'subTasks.user']);
 
         $imageFiles = $task->files->filter(function ($file) {
             return str_starts_with($file->mime_type, 'image/');

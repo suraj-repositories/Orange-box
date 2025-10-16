@@ -84,22 +84,26 @@ function enableMediaInput(select) {
 function updateListView(file) {
     let listRowHTML = `<div class="card border-0 rounded-0 list-row-card" data-media-files-index="${MEDIA_FILES.length - 1}">
                         <div class="horizontal-viewer">
-                            <div class="icon"><i class="bi ${fileService.getIconFromExtension(fileService.getExtension(file))}"></i></div>
-                            <div class="name text-truncate">${fileService.getName(file)}</div>
-                            <div class="type">${fileService.getExtension(file)}</div>
-                            <div class="size">${fileService.getSize(file)}</div>
-                            <div class="action">
-                                <a class="show" href="javascript:void(0)"
-                                    data-bs-toggle="tooltip" data-bs-title="View" data-ob-view="view-file"><i
-                                        class='bx bx-show-alt'></i></a>
-                                <!--
-                                <a class="rename" href="javascript:void(0)"
-                                    data-bs-toggle="tooltip" data-bs-title="Rename"><i
-                                        class='bx bx-rename'></i></a>
-                                -->
-                                <a class="delete" href="javascript:void(0)" data-og-dismiss="list-item-card"
-                                    data-bs-toggle="tooltip" data-bs-title="Delete" ><i
-                                        class='bx bx-trash-alt'></i></a>
+                            <div class="list-title">
+                                <div class="icon"><i class="bi ${fileService.getIconFromExtension(fileService.getExtension(file))}"></i></div>
+                                <div class="name text-truncate">${fileService.getName(file)}</div>
+                            </div>
+                            <div class="list-data">
+                                <div class="type">${fileService.getExtension(file)}</div>
+                                <div class="size">${fileService.getSize(file)}</div>
+                                <div class="action">
+                                    <a class="show" href="javascript:void(0)"
+                                        data-bs-toggle="tooltip" data-bs-title="View" data-ob-view="view-file"><i
+                                            class='bx bx-show-alt'></i></a>
+                                    <!--
+                                    <a class="rename" href="javascript:void(0)"
+                                        data-bs-toggle="tooltip" data-bs-title="Rename"><i
+                                            class='bx bx-rename'></i></a>
+                                    -->
+                                    <a class="delete" href="javascript:void(0)" data-og-dismiss="list-item-card"
+                                        data-bs-toggle="tooltip" data-bs-title="Delete" ><i
+                                            class='bx bx-trash-alt'></i></a>
+                                </div>
                             </div>
         </div>
     </div>`;
@@ -210,11 +214,14 @@ function updateCardsView(file) {
 
     let appliedCard = null;
     if (fileService.setImageOnView(file, imageCard.querySelector('img'))) {
-        cardViewContainer.appendChild(imageCard);
+        if (cardViewContainer) {
+            cardViewContainer.appendChild(imageCard);
+        }
         appliedCard = imageCard;
     } else {
-        console.log(iconCard);
-        cardViewContainer.appendChild(iconCard);
+        if (cardViewContainer) {
+            cardViewContainer.appendChild(iconCard);
+        }
         appliedCard = iconCard;
 
     }

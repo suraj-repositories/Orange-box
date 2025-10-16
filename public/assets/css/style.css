@@ -229,7 +229,10 @@
     border-radius: 0px;
     padding: 10px;
 }
-
+.relative-l-1{
+    position: relative;
+    left: 1px;
+}
 .rename-modal .modal-body {
     padding-top: 0;
     padding-bottom: 0;
@@ -881,7 +884,9 @@ p {
 }
 
 
-
+.mh-70-vh{
+    max-height: 70vh !important;
+}
 /* BEGIN -  project section */
 .card-img-top {
     width: 100%;
@@ -1431,7 +1436,7 @@ p {
 
 .badge-yellow {
     --badge-bgcolor: #fff9c2;
-    --badge-color: #d0bb0a;
+    --badge-color: #f98f66;
 }
 
 .badge-green {
@@ -1606,4 +1611,61 @@ p {
     height: 30px;
 }
 
+.status-radios .status-btn {
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.status-radios .status-btn.status-pending {
+    background-color: #ebf1ff94;
+    color: #537aef;
+    border-color: #436ff1;
+}
+.status-radios .status-btn.status-pending:hover,
+.status-radios input:checked + .status-btn.status-pending {
+    background-color: #537aef;
+    color: #fff;
+}
+
+.status-radios .status-btn.status-hold {
+    background-color: #fffbf799;
+    color: #fdb24f;
+    border-color: #faa73b;
+}
+.status-radios .status-btn.status-hold:hover,
+.status-radios input:checked + .status-btn.status-hold {
+    background-color: #fdb24f;
+    color: #fff;
+}
+
+.status-radios .status-btn.status-progress {
+    background-color: #fffef8;
+    color: #dfb612;
+    border-color: #e9d900;
+}
+.status-radios .status-btn.status-progress:hover,
+.status-radios input:checked + .status-btn.status-progress {
+    background-color: #ffe711;
+    color: #555;
+}
+
+.status-radios .status-btn.status-completed {
+    background-color: #eaffed;
+    color: #35b751;
+    border-color: #35b751;
+}
+.status-radios .status-btn.status-completed:hover,
+.status-radios input:checked + .status-btn.status-completed {
+    background-color: #35b751;
+    color: #fff;
+}
+
+.list-row-card.deleting,
+.list-row-card.deleting .type,
+.list-row-card.deleting .size{
+    color: #660404;
+}
 /* END -  sub task list */
+
+

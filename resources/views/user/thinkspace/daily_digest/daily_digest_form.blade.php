@@ -58,7 +58,7 @@
                                             @enderror
                                         </div>
                                         <div class="col col-12 col-md-6 mb-3">
-                                            <label for="sub_title-input" class="form-label">sub_title</label>
+                                            <label for="sub_title-input" class="form-label">Sub title</label>
 
                                             <div class="input-group">
                                                 <span class="input-group-text" id="basic-addon1">

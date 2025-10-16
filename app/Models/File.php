@@ -24,10 +24,18 @@ class File extends Model
         'fileable_id',
     ];
 
+    protected $appends = [
+        'file_url',
+        'extension_icon',
+        'formatted_file_size',
+        'extension'
+    ];
+
     public function fileable()
     {
         return $this->morphTo();
     }
+
     public function getFileUrl()
     {
         if ($this->file_path && Storage::disk('public')->exists($this->file_path)) {
@@ -43,6 +51,10 @@ class File extends Model
         }
 
         return 'https://placehold.co/50x90';
+    }
+
+    public function getFileUrlAttribute(){
+        return $this->getFileUrl() ?? "";
     }
 
     public function getRelativePath()
@@ -69,15 +81,27 @@ class File extends Model
         return null;
     }
 
+    public function getExtensionAttribute(){
+        return $this->extension();
+    }
+
     public function extensionIcon()
     {
         $fileService = new FileServiceImpl();
         return $fileService->getIconFromExtension(pathinfo($this->file_path, PATHINFO_EXTENSION) ?? null);
     }
 
+    public function getExtensionIconAttribute(){
+        return $this->extensionIcon();
+    }
+
     public function size()
     {
         $fileService = new FileServiceImpl();
         return $fileService->getFormattedSize($this->file_size);
+    }
+
+    public function getFormattedFileSizeAttribute(){
+        return $this->size();
     }
 }
