@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\FileDeleted;
 use App\Services\Impl\FileServiceImpl;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,6 +31,13 @@ class File extends Model
         'formatted_file_size',
         'extension'
     ];
+
+    protected static function booted()
+    {
+        static::deleted(function ($file) {
+            event(new FileDeleted($file));
+        });
+    }
 
     public function fileable()
     {
