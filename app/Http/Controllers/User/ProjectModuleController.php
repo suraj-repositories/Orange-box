@@ -26,7 +26,6 @@ class ProjectModuleController extends Controller
     //
     public function index(Request $request, User $user, $slug = null)
     {
-
         $projectBoard = null;
         if (!empty($slug)) {
             $projectBoard = ProjectBoard::where('user_id', $user->id)->where('slug', $slug)->first();
@@ -44,7 +43,11 @@ class ProjectModuleController extends Controller
         }
 
         $projectModules = $query->orderBy('id', 'desc')->paginate();
-        return view("user.project_tracker.project_modules.project_module_list", compact('projectBoard', 'projectModules'));
+        return view("user.project_tracker.project_modules.project_module_list", [
+            'title' => 'Project Modules',
+            'projectModules' => $projectModules,
+            'projectBoard' => $projectBoard,
+        ]);
     }
 
     public function createNested(User $user, $slug, Request $request)
@@ -191,7 +194,15 @@ class ProjectModuleController extends Controller
 
         $tasks = $projectModule->tasks()->paginate(10);
 
-        return view('user.project_tracker.project_modules.project_module_show', compact('projectModule', 'projectBoard', 'imageFiles', 'otherFiles', 'tasks'));
+        return view('user.project_tracker.project_modules.project_module_show',[
+                'title'         => $projectModule->name,
+                'projectModule' => $projectModule,
+                'projectBoard'  => $projectBoard,
+                'imageFiles'    => $imageFiles,
+                'otherFiles'    => $otherFiles,
+                'tasks'         => $tasks,
+            ]
+        );
     }
 
     public function showGlobal(User $user, $module, Request $request)

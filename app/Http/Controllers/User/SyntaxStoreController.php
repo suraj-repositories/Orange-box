@@ -11,6 +11,7 @@ use App\Services\EditorJsService;
 use Illuminate\Http\Request;
 use App\Services\FileService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 use SweetAlert2\Laravel\Swal;
 
@@ -79,17 +80,19 @@ class SyntaxStoreController extends Controller
 
     public function show(User $user, SyntaxStore $syntaxStore, Request $request)
     {
+        Gate::authorize('view', $syntaxStore);
         return view('user.thinkspace.syntax_store.show_syntax_store', compact('syntaxStore', 'user'));
     }
 
     public function edit(User $user, SyntaxStore $syntaxStore, Request $request)
     {
-
+        Gate::authorize('update', $syntaxStore);
         return view('user.thinkspace.syntax_store.syntax_store_form', compact('user', 'syntaxStore'));
     }
 
     public function update(User $user, SyntaxStore $syntaxStore, Request $request)
     {
+        Gate::authorize('update', $syntaxStore);
         $validated = $request->validate([
             'title' => 'required',
             'editor_content' => 'required',
@@ -125,7 +128,7 @@ class SyntaxStoreController extends Controller
             File::whereIn('id', $unusedIds)->forceDelete();
         });
 
-        dd($request->all());
+
         Swal::success([
             'title' => 'Success!',
             'text' => 'Syntax Updated Successfully!'
@@ -279,9 +282,7 @@ class SyntaxStoreController extends Controller
 
     public function destroy(User $user, SyntaxStore $syntaxStore)
     {
-        if ($syntaxStore->user_id != $user->id && !$user->hasRole('admin')) {
-            abort(403, "Access Denied!");
-        }
+        Gate::authorize('delete', $syntaxStore);
 
         DeleteCommentableCommentsJob::dispatch(
             get_class($syntaxStore),

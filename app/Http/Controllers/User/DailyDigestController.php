@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Rules\DescriptionLength;
 use App\Services\FileService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use SweetAlert2\Laravel\Swal;
 
 class DailyDigestController extends Controller
@@ -96,10 +97,7 @@ class DailyDigestController extends Controller
      */
     public function show(User $user, DailyDigest $dailyDigest)
     {
-        if ($dailyDigest->user_id != $user->id && !$user->hasRole('admin')) {
-            abort(403, "Access Denied!");
-        }
-
+        Gate::authorize('view', $dailyDigest);
         $media = $this->fileService->getMediaMetadata($dailyDigest->files);
 
         return view('user.thinkspace.daily_digest.show_daily_digest', compact('dailyDigest', 'media'));
@@ -110,10 +108,7 @@ class DailyDigestController extends Controller
      */
     public function edit(User $user, DailyDigest $dailyDigest)
     {
-        if ($dailyDigest->user_id != $user->id && !$user->hasRole('admin')) {
-            abort(403, "Access Denied!");
-        }
-
+        Gate::authorize('update', $dailyDigest);
         $media = $this->fileService->getMediaMetadata($dailyDigest->files);
         return view('user.thinkspace.daily_digest.daily_digest_form', compact('dailyDigest', 'media'));
     }
@@ -124,10 +119,7 @@ class DailyDigestController extends Controller
     public function update(User $user, DailyDigest $dailyDigest, Request $request)
     {
         //
-        if ($dailyDigest->user_id != $user->id && !$user->hasRole('admin')) {
-            abort(403, "Access Denied!");
-        }
-
+        Gate::authorize('update', $dailyDigest);
         $validated = $request->validate([
             'title' => 'required|string',
             'sub_title' => 'nullable|string',
@@ -176,10 +168,7 @@ class DailyDigestController extends Controller
      */
     public function destroy(User $user, DailyDigest $dailyDigest)
     {
-        //
-        if ($dailyDigest->user_id != $user->id && !$user->hasRole('admin')) {
-            abort(403, "Access Denied!");
-        }
+        Gate::authorize('delete', $dailyDigest);
 
         DeleteCommentableCommentsJob::dispatch(
             get_class($dailyDigest),

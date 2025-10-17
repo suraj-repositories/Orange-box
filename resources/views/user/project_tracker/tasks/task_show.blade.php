@@ -1,6 +1,6 @@
 @extends('user.layout.layout')
 
-@section('title', Route::is('user.tasks.show') ? 'Task' : '🟢🟢🟢')
+@section('title', $title ?? '🟢🟢🟢')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.css') }}">
@@ -15,7 +15,8 @@
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">Task</h4>
+                        <h4 class="fs-18 fw-semibold m-0">
+                            {{ request()->attributes->get('is_collaboration') ? 'Collaboration ' : '' }}Task</h4>
                     </div>
 
                     <div class="text-end">
@@ -45,29 +46,30 @@
                                         aria-controls="projectDescription{{ $task->id }}" class="info ms-0">
                                         <i class='bx bx-info-circle'></i>
                                     </a>
-                                    @php
-                                        $editRoute =
-                                            !empty($projectBoard) && $projectBoard->exists
-                                                ? authRoute('user.project-board.modules.tasks.editNested', [
-                                                    'slug' => $projectBoard->slug,
-                                                    'module' => $task->module->slug,
-                                                    'task' => $task->uuid,
-                                                ])
-                                                : authRoute('user.tasks.edit', ['task' => $task]);
-                                    @endphp
-                                    <a href="{{ $editRoute }}" class="edit">
-                                        <i class='bx bx-edit'></i>
-                                    </a>
-                                    <form action="{{ authRoute('user.tasks.delete', ['task' => $task]) }}" method="post">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button type="submit" class="delete btn-no-style">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
-                                    </form>
-                                    {{-- <div class="more">
-                                        <i class='bx bx-dots-vertical-rounded' ></i>
-                                    </div> --}}
+
+                                    @if (!request()->attributes->get('is_collaboration'))
+                                        @php
+                                            $editRoute =
+                                                !empty($projectBoard) && $projectBoard->exists
+                                                    ? authRoute('user.project-board.modules.tasks.editNested', [
+                                                        'slug' => $projectBoard->slug,
+                                                        'module' => $task->module->slug,
+                                                        'task' => $task->uuid,
+                                                    ])
+                                                    : authRoute('user.tasks.edit', ['task' => $task]);
+                                        @endphp
+                                        <a href="{{ $editRoute }}" class="edit">
+                                            <i class='bx bx-edit'></i>
+                                        </a>
+                                        <form action="{{ authRoute('user.tasks.delete', ['task' => $task]) }}"
+                                            method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit" class="delete btn-no-style">
+                                                <i class='bx bx-trash'></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
 
@@ -85,15 +87,16 @@
                                                 <div
                                                     class="badge badge-{{ strtolower($task->status_color ?? '') }} d-flex align-items-center p-2">
                                                     <span class="badge-circle me-1"></span>
-                                                    <span><strong>Status -</strong> {{ ucwords(str_replace('_', ' ', $task->status ?? "")) }}</span>
+                                                    <span><strong>Status -</strong>
+                                                        {{ ucwords(str_replace('_', ' ', $task->status ?? '')) }}</span>
                                                 </div>
 
-                                                <a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}"
+                                                <a href="{{ authRoute(request()->attributes->get('is_collaboration') ? 'user.collab.project-board.show' : 'user.project-board.show', ['slug' => $projectBoard->slug]) }}"
                                                     class="project-module-project-link text-reset">
                                                     <i class="bx bx-link-external fs-6 me-1"></i>
                                                     <span><strong>Project -</strong> {{ $projectBoard->title }}</span>
                                                 </a>
-                                                <a href="{{ authRoute('user.project-board.modules.show', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}"
+                                                <a href="{{ authRoute(request()->attributes->get('is_collaboration') ? 'user.collab.modules.show' : 'user.project-board.modules.show', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}"
                                                     class="project-module-project-link text-reset">
                                                     <i class="bx bx-link-external fs-6 me-1"></i>
                                                     <span><strong>Module -</strong> {{ $projectModule->name }}</span>
@@ -162,9 +165,7 @@
 
 
                                             @if ($otherFiles->isNotEmpty())
-
                                                 <h6 class="mt-3 fw-bold">Other Files</h6>
-
                                                 <div class="file-list d-flex align-items-center flex-column gap-1">
                                                     @foreach ($otherFiles as $file)
                                                         <div
@@ -216,5 +217,5 @@
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/add-media.js') }}"></script>
     <script src="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.js') }}"></script>
-    <script src="{{asset('assets/js/pages/sub-task-form.js')}}"></script>
+    <script src="{{ asset('assets/js/pages/sub-task-form.js') }}"></script>
 @endsection

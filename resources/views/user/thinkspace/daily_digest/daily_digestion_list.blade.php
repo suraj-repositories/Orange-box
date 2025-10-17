@@ -45,19 +45,24 @@
                                         <i class='bx bx-info-circle'></i>
                                     </a>
 
-                                    <a href="{{ authRoute('user.daily-digest.edit', ['dailyDigest' => $dailyDigest]) }}"
-                                        class="edit">
-                                        <i class='bx bx-edit'></i>
-                                    </a>
-                                    <form
-                                        action="{{ authRoute('user.daily-digest.delete', ['dailyDigest' => $dailyDigest]) }}"
-                                        method="post">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button type="submit" class="delete btn-no-style">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
-                                    </form>
+                                   @can('update', $dailyDigest)
+                                        <a href="{{ authRoute('user.daily-digest.edit', ['dailyDigest' => $dailyDigest]) }}"
+                                            class="edit">
+                                            <i class='bx bx-edit'></i>
+                                        </a>
+                                    @endcan
+
+                                    @can('delete', $dailyDigest)
+                                        <form
+                                            action="{{ authRoute('user.daily-digest.delete', ['dailyDigest' => $dailyDigest]) }}"
+                                            method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit" class="delete btn-no-style">
+                                                <i class='bx bx-trash'></i>
+                                            </button>
+                                        </form>
+                                    @endcan
                                     {{-- <div class="more">
                                         <i class='bx bx-dots-vertical-rounded' ></i>
                                     </div> --}}
@@ -71,7 +76,7 @@
 
             </div>
 
-            {{ $digestions->links() }}
+            {{ $digestions->withQueryString()->links() }}
 
         </div> <!-- content -->
 

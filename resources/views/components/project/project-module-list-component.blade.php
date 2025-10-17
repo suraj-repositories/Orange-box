@@ -7,16 +7,21 @@
              <h5 class="card-title mb-0">Project Modules</h5>
 
              <div class="ms-auto fw-semibold d-flex gap-1">
-                 <a href="{{ authRoute($projectBoard?->slug ? 'user.project-board.modules.create' : 'user.modules.create', [
-                     'slug' => $projectBoard?->slug,
-                 ]) }}"
-                     class="btn btn-light btn-sm border center-content gap-1">
-                     <i class="bx bx-plus fs-5"></i>
-                     <div> New</div>
-                 </a>
 
-                 @if (!Route::is('user.project-board.modules.index') && !Route::is('user.modules.index'))
-                     <a href="{{ authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}"
+                 @if (!request()->attributes->get('is_collaboration'))
+                     <a href="{{ authRoute($projectBoard?->slug ? 'user.project-board.modules.create' : 'user.modules.create', [
+                         'slug' => $projectBoard?->slug,
+                     ]) }}"
+                         class="btn btn-light btn-sm border center-content gap-1">
+                         <i class="bx bx-plus fs-5"></i>
+                         <div> New</div>
+                     </a>
+                 @endif
+
+                 @if (!Route::is('user.project-board.modules.index') && !Route::is('user.modules.index') && !empty($projectBoard->slug))
+                     <a href="{{ request()->attributes->get('is_collaboration') ?
+                     authRoute('user.collab.modules.index', ['project' => $projectBoard->slug]) :
+                     authRoute('user.project-board.modules.index', ['slug' => $projectBoard->slug]) }}"
                          class="btn btn-light btn-sm border center-content gap-1">
                          <i class='bx bx-list-ul fs-5'></i>
                          <div> Show All</div>
@@ -27,6 +32,13 @@
      </div>
 
      <div class="card-body p-0">
+         <div class="d-flex gap-2 ps-2">
+             @if (request()->filled('project'))
+                 <div class="alert alert-secondary my-2 w-fit p-2">
+                     <strong>Project : </strong>{{ request()->get('project') }}
+                 </div>
+             @endif
+         </div>
          <div class="table-responsive">
              <table class="table table-traffic mb-0">
 
@@ -34,7 +46,7 @@
                      <tr>
                          <th>No</th>
                          <th>Module Name</th>
-                         @if (Route::is('user.modules.index'))
+                         @if (Route::is('user.modules.index') || Route::is('user.collab.modules.index'))
                              <th>Project Name</th>
                          @endif
                          <th>Created Date</th>
@@ -53,13 +65,13 @@
                              {{ $modules->firstItem() + $loop->iteration - 1 }}
                          </td>
                          <td>
-                             <a href="{{ authRoute('user.project-board.modules.show', ['slug' => $module->projectBoard->slug, 'module' => $module->slug]) }}"
+                             <a href="{{ request()->attributes->get('is_collaboration') ? authRoute('user.collab.modules.show', ['slug' => $module->projectBoard->slug, 'module' => $module->slug]) : authRoute('user.project-board.modules.show', ['slug' => $module->projectBoard->slug, 'module' => $module->slug]) }}"
                                  class="text-reset"> {{ $module->name }} </a>
                          </td>
-                         @if (Route::is('user.modules.index'))
+                         @if (Route::is('user.modules.index') || Route::is('user.collab.modules.index'))
                              <td>
                                  <a class="text-reset"
-                                     href="{{ authRoute('user.project-board.show', ['slug' => $module->projectBoard->slug]) }}">{{ $module->projectBoard->title }}</a>
+                                     href="{{ request()->attributes->get('is_collaboration') ? authRoute('user.collab.project-board.show', ['slug' => $module->projectBoard->slug]) : authRoute('user.project-board.show', ['slug' => $module->projectBoard->slug]) }}">{{ $module->projectBoard->title }}</a>
                              </td>
                          @endif
                          <td class="text-nowrap text-reset">
@@ -111,7 +123,8 @@
                      </tr>
                  @empty
                      <tr>
-                         <td colspan="{{ Route::is('user.modules.index') ? '8' : '7' }}">
+                         <td
+                             colspan="{{ Route::is('user.modules.index') || Route::is('user.collab.modules.index') ? '8' : '7' }}">
                              <x-no-data />
                          </td>
                      </tr>
@@ -119,6 +132,6 @@
 
              </table>
          </div>
-         <div class="mx-3 my-3">{{ $modules->links() }}</div>
+         <div class="mx-3 my-3">{{ $modules->withQueryString()->links() }}</div>
      </div>
  </div>

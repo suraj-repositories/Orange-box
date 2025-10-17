@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\User\Collaboration\ProjectBoardController as CollaborationProjectBoardController;
+use App\Http\Controllers\User\Collaboration\ProjectModuleController as CollaborationProjectModuleController;
+use App\Http\Controllers\User\Collaboration\TaskController as CollaborationTaskController;
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
@@ -7,11 +10,10 @@ use App\Http\Controllers\User\FolderFactoryController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ProjectBoardController;
 use App\Http\Controllers\User\ProjectModuleController;
-use App\Http\Controllers\User\ProjectModuleTaskController;
 use App\Http\Controllers\User\SubTaskController;
 use App\Http\Controllers\User\SyntaxStoreController;
+use App\Http\Controllers\User\TaskController;
 use App\Http\Controllers\User\ThinkPadController;
-use App\Models\FolderFactory;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(DashboardController::class)->group(function () {
@@ -67,7 +69,6 @@ Route::controller(CommentController::class)->group(function () {
     Route::post('comments/{comment}/dislike', 'dislike')->name('comments.dislike');
 });
 
-
 Route::controller(FolderFactoryController::class)->group(function () {
     Route::get('folder-factory', 'index')->name('folder-factory');
     Route::post('folder-factory', 'store')->name('folder-factory.save');
@@ -81,25 +82,25 @@ Route::controller(FolderFactoryController::class)->group(function () {
 });
 
 Route::controller(ProjectBoardController::class)->group(function () {
-    Route::get('project-board', 'index')->name('project-board');
-    Route::get('project-board/create', 'create')->name('project-board.create');
-    Route::post('project-board', 'store')->name('project-board.store');
-    Route::get('project-board/{slug}/edit', 'edit')->name('project-board.edit');
-    Route::post('project-board/{slug}', 'update')->name('project-board.update');
-    Route::get('project-board/{slug}', 'show')->name('project-board.show');
-    Route::delete('project-board/{slug}', 'destroy')->name('project-board.delete');
+    Route::get('project-boards', 'index')->name('project-board');
+    Route::get('project-boards/create', 'create')->name('project-board.create');
+    Route::post('project-boards', 'store')->name('project-board.store');
+    Route::get('project-boards/{slug}/edit', 'edit')->name('project-board.edit');
+    Route::post('project-boards/{slug}', 'update')->name('project-board.update');
+    Route::get('project-boards/{slug}', 'show')->name('project-board.show');
+    Route::delete('project-boards/{slug}', 'destroy')->name('project-board.delete');
 });
 
 Route::controller(ProjectModuleController::class)->group(function () {
-    Route::get('project-board/{slug}/modules', 'index')->name('project-board.modules.index');
-    Route::get('project-board/{slug}/modules/create', 'createNested')->name('project-board.modules.create');
-    Route::post('project-board/{slug}/modules', 'store')->name('project-board.modules.save');
-    Route::get('project-board/{slug}/modules/{module}', 'show')->name('project-board.modules.show');
+    Route::get('project-boards/{slug}/modules', 'index')->name('project-board.modules.index');
+    Route::get('project-boards/{slug}/modules/create', 'createNested')->name('project-board.modules.create');
+    Route::post('project-boards/{slug}/modules', 'store')->name('project-board.modules.save');
+    Route::get('project-boards/{slug}/modules/{module}', 'show')->name('project-board.modules.show');
 
-    Route::get('project-board/{slug}/modules/{module}/edit', 'editNested')->name('project-board.modules.edit');;
-    Route::post('project-board/{slug}/modules/{module}', 'update')->name('project-board.modules.update');
+    Route::get('project-boards/{slug}/modules/{module}/edit', 'editNested')->name('project-board.modules.edit');;
+    Route::post('project-boards/{slug}/modules/{module}', 'update')->name('project-board.modules.update');
 
-    Route::delete('project-board/{slug}/modules/{module}', 'destroy')->name('project-board.modules.delete');
+    Route::delete('project-boards/{slug}/modules/{module}', 'destroy')->name('project-board.modules.delete');
 
     Route::get('modules', 'index')->name('modules.index');
     Route::get('modules/create', 'create')->name('modules.create');
@@ -108,15 +109,14 @@ Route::controller(ProjectModuleController::class)->group(function () {
     Route::get('modules/{module}/edit', 'edit')->name('modules.edit');
     Route::post('modules/{module}', 'updateGlobal')->name('modules.update');
     Route::get('modules/{module}', 'showGlobal')->name('modules.show');
-
 });
 
-Route::controller(ProjectModuleTaskController::class)->group(function () {
-    Route::get('project-board/{slug}/modules/{module}/tasks/create', 'createNested')->name('project-board.modules.tasks.createNested');
-    Route::post('project-board/{slug}/modules/{module}/tasks', 'store')->name('project-board.modules.tasks.store');
+Route::controller(TaskController::class)->group(function () {
+    Route::get('project-boards/{slug}/modules/{module}/tasks/create', 'createNested')->name('project-board.modules.tasks.createNested');
+    Route::post('project-boards/{slug}/modules/{module}/tasks', 'store')->name('project-board.modules.tasks.store');
 
-    Route::get('project-board/{slug}/modules/{module}/tasks/{task}/edit', 'editNested')->name('project-board.modules.tasks.editNested');
-    Route::post('project-board/{slug}/modules/{module}/tasks/{task}', 'updateNested')->whereUuid('task')->name('project-board.modules.tasks.update');
+    Route::get('project-boards/{slug}/modules/{module}/tasks/{task}/edit', 'editNested')->name('project-board.modules.tasks.editNested');
+    Route::post('project-boards/{slug}/modules/{module}/tasks/{task}', 'updateNested')->whereUuid('task')->name('project-board.modules.tasks.update');
 
     Route::get('tasks', 'index')->name('tasks.index');
     Route::post('tasks', 'store')->name('tasks.store');
@@ -133,10 +133,23 @@ Route::controller(SubTaskController::class)->group(function () {
     Route::post('tasks/{task}/sub-tasks', 'store')->name('tasks.sub_task.store');
     Route::delete('sub-tasks/{subTask}', 'destroy')->name('sub_task.delete');
     Route::post('sub-tasks/{subTask}', 'update')->name('sub_task.update');
-
 });
-
 
 Route::controller(ProfileController::class)->group(function () {
     Route::get('profile', 'index')->name('profile.index');
+});
+
+Route::prefix('collab')->name('collab.')->middleware('collab')->group(function () {
+    Route::controller(CollaborationProjectBoardController::class)->group(function () {
+        Route::get('project-boards', 'index')->name('project-board.index');
+        Route::get('project-boards/{slug}', 'show')->name('project-board.show');
+    });
+    Route::controller(CollaborationProjectModuleController::class)->group(function () {
+        Route::get('modules', 'index')->name('modules.index');
+        Route::get('project-boards/{slug}/modules/{module}', 'show')->name('modules.show');
+    });
+    Route::controller(CollaborationTaskController::class)->group(function () {
+        Route::get('tasks', 'index')->name('tasks.index');
+        Route::get('tasks/{task}', 'show')->name('tasks.show');
+    });
 });

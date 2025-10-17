@@ -27,7 +27,10 @@ class ProjectBoardController extends Controller
     public function index(User $user)
     {
         $projectBoards = ProjectBoard::with('colorTag')->where('user_id', $user->id)->orderBy('id', 'desc')->paginate(15);
-        return view('user.project_tracker.project_board.project_board_list', compact('projectBoards'));
+        return view('user.project_tracker.project_board.project_board_list', [
+            'title' => "Project Board List",
+            'projectBoards' => $projectBoards,
+        ]);
     }
 
     public function create()
@@ -91,7 +94,12 @@ class ProjectBoardController extends Controller
         $projectModules = $query->orderBy('id', 'desc')->paginate();
         $tasks = $projectBoard->tasks()->latest()->take(10)->paginate();
 
-        return view('user.project_tracker.project_board.project_board_show', compact('projectBoard', 'projectModules', 'tasks'));
+        return view('user.project_tracker.project_board.project_board_show', [
+            'title' => $projectBoard->title,
+            'projectBoard' => $projectBoard,
+            'projectModules' => $projectModules,
+            'tasks' => $tasks
+        ]);
     }
 
     public function edit(User $user, $slug, Request $request)

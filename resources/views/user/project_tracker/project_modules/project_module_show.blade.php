@@ -1,6 +1,6 @@
 @extends('user.layout.layout')
 
-@section('title', Route::is('user.project-board.modules.show') ? 'Project Module' : '🟢🟢🟢')
+@section('title', $title ?? '🟢🟢🟢')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.css') }}">
@@ -15,7 +15,8 @@
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">{{ $projectModule->name }}</h4>
+                        <h4 class="fs-18 fw-semibold m-0">
+                            {{ request()->attributes->get('is_collaboration') ? 'Collaboration ' : '' }} Project Module</h4>
                     </div>
 
                     <div class="text-end">
@@ -47,20 +48,21 @@
                                         <i class='bx bx-info-circle'></i>
                                     </a>
 
-                                    <a href="{{ authRoute('user.project-board.modules.edit', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}"
-                                        class="edit">
-                                        <i class='bx bx-edit'></i>
-                                    </a>
-                                    <form action="{{ authRoute('user.project-board.modules.delete', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}" method="post">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button type="submit" class="delete btn-no-style">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
-                                    </form>
-                                    {{-- <div class="more">
-                                        <i class='bx bx-dots-vertical-rounded' ></i>
-                                    </div> --}}
+                                    @if (!request()->attributes->get('is_collaboration'))
+                                        <a href="{{ authRoute('user.project-board.modules.edit', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}"
+                                            class="edit">
+                                            <i class='bx bx-edit'></i>
+                                        </a>
+                                        <form
+                                            action="{{ authRoute('user.project-board.modules.delete', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}"
+                                            method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit" class="delete btn-no-style">
+                                                <i class='bx bx-trash'></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
 
@@ -83,7 +85,7 @@
                                                     </div>
                                                 @endif
 
-                                                <a href="{{ authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}"
+                                                <a href="{{ authRoute(request()->attributes->get('is_collaboration') ? 'user.collab.project-board.show' : 'user.project-board.show', ['slug' => $projectBoard->slug]) }}"
                                                     class="project-module-project-link text-reset">
                                                     <i class="bx bx-link-external fs-6 me-1"></i>
                                                     <span><strong>Project -</strong> {{ $projectBoard->title }}</span>
@@ -139,10 +141,12 @@
                                         </div>
                                         <div class="col-12 col-md-4">
 
-                                             <div class="image-3-gallery" data-image-preview="true" data-image-downloadable="true">
+                                            <div class="image-3-gallery" data-image-preview="true"
+                                                data-image-downloadable="true">
                                                 @foreach ($imageFiles as $file)
                                                     <div class="img-wrapper">
-                                                        <img src="{{ $file->getFileUrl() }}" data-title="{{ $file->file_name }}" alt="" >
+                                                        <img src="{{ $file->getFileUrl() }}"
+                                                            data-title="{{ $file->file_name }}" alt="">
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -183,7 +187,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-task-list-component :project-board="$projectBoard" :project-module="$projectModule" :tasks="$tasks"/>
+                        <x-project.project-module-task-list-component :project-board="$projectBoard" :project-module="$projectModule"
+                            :tasks="$tasks" />
                     </div>
                 </div>
             </div> <!-- container-fluid -->

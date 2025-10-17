@@ -28,7 +28,8 @@
                     <div class="col-sm-6 col-lg-6">
                         <div class="card d-flex flex-column h-100">
                             <div class="card-header border-0 pb-0">
-                                <a href="{{ authRoute('user.syntax-store.show', ['syntaxStore'=>$item]) }}" class="card-title">{{ $item->title }}</a>
+                                <a href="{{ authRoute('user.syntax-store.show', ['syntaxStore' => $item]) }}"
+                                    class="card-title">{{ $item->title }}</a>
                             </div>
 
                             <div class="card-body flex-grow-1 pb-0 mb-0">
@@ -44,19 +45,26 @@
 
 
                                     <div class="action-buttons d-flex gap-1 h-100 align-items-bottom">
-                                        <a href="{{ authRoute('user.syntax-store.show', ['syntaxStore'=>$item]) }}" class="info">
+                                        <a href="{{ authRoute('user.syntax-store.show', ['syntaxStore' => $item]) }}"
+                                            class="info">
                                             <i class='bx bx-info-circle'></i>
                                         </a>
-                                        <a href="{{ authRoute('user.syntax-store.edit', ['syntaxStore'=>$item]) }}" class="edit">
-                                            <i class='bx bx-edit'></i>
-                                        </a>
-                                        <form action="{{ authRoute('user.syntax-store.delete', ['syntaxStore'=>$item]) }}" method="post">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button type="submit" class="delete btn-no-style">
-                                                <i class='bx bx-trash'></i>
-                                            </button>
-                                        </form>
+                                        @can('update', $item)
+                                            <a href="{{ authRoute('user.syntax-store.edit', ['syntaxStore' => $item]) }}"
+                                                class="edit">
+                                                <i class='bx bx-edit'></i>
+                                            </a>
+                                        @endcan
+                                        @can('delete', $item)
+                                            <form action="{{ authRoute('user.syntax-store.delete', ['syntaxStore' => $item]) }}"
+                                                method="post">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type="submit" class="delete btn-no-style">
+                                                    <i class='bx bx-trash'></i>
+                                                </button>
+                                            </form>
+                                        @endcan
                                     </div>
                                 </div>
                             </div>
@@ -65,16 +73,15 @@
                 @empty
                     <x-no-data />
                 @endforelse
+            </div>
+
         </div>
 
-    </div>
-
-    <!-- Footer Start -->
-    @include('layout.components.copyright')
-    <!-- end Footer -->
+        <!-- Footer Start -->
+        @include('layout.components.copyright')
+        <!-- end Footer -->
 
     </div>
 
 
 @endsection
-

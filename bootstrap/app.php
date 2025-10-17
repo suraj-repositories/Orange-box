@@ -24,6 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => App\Http\Middleware\AdminMiddleware::class,
             'editor' => App\Http\Middleware\EditorMiddleware::class,
             'user' => App\Http\Middleware\UserMiddleware::class,
+            'collab' => App\Http\Middleware\CollaborationRouteMiddleware::class,
 
         ]);
         $middleware->statefulApi();

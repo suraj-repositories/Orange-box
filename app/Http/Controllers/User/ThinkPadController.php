@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Rules\DescriptionLength;
 use App\Services\FileService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use SweetAlert2\Laravel\Swal;
 
 class ThinkPadController extends Controller
@@ -88,7 +89,7 @@ class ThinkPadController extends Controller
 
     public function show(User $user, ThinkPad $thinkPad, Request $request)
     {
-
+        Gate::authorize('view', $thinkPad);
         $media = $this->fileService->getMediaMetadata($thinkPad->files);
 
         return view('user.thinkspace.think_pad.show_think_pad', compact('thinkPad', 'media'));
@@ -96,9 +97,7 @@ class ThinkPadController extends Controller
 
     public function edit(User $user, ThinkPad $thinkPad)
     {
-        if ($thinkPad->user_id != $user->id && !$user->hasRole('admin')) {
-            abort(403, "Access Denied!");
-        }
+         Gate::authorize('update', $thinkPad);
 
         $media = $this->fileService->getMediaMetadata($thinkPad->files);
         return view('user.thinkspace.think_pad.think_pad_form', compact('thinkPad', 'media'));
@@ -106,9 +105,7 @@ class ThinkPadController extends Controller
 
     public function update(User $user, ThinkPad $thinkPad, Request $request)
     {
-        if ($thinkPad->user_id != $user->id && !$user->hasRole('admin')) {
-            abort(403, "Access Denied!");
-        }
+         Gate::authorize('update', $thinkPad);
 
         $validated = $request->validate([
             'title' => 'required|string',
@@ -201,10 +198,7 @@ class ThinkPadController extends Controller
 
     public function destroy(User $user, ThinkPad $thinkPad)
     {
-        //
-        if ($thinkPad->user_id != $user->id && !$user->hasRole('admin')) {
-            abort(403, "Access Denied!");
-        }
+        Gate::authorize('delete', $thinkPad);
 
         DeleteCommentableCommentsJob::dispatch(
             get_class($thinkPad),

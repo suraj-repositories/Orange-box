@@ -1,6 +1,6 @@
 @extends('user.layout.layout')
 
-@section('title', Route::is('user.project-board.show') ? 'Project Board' : '🟢🟢🟢')
+@section('title', $title ?? '🟢🟢🟢')
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.css') }}">
 @endsection
@@ -13,12 +13,14 @@
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">Project Board</h4>
+                        <h4 class="fs-18 fw-semibold m-0">
+                            {{ request()->attributes->get('is_collaboration') ? 'Collaboration ' : '' }} Project Board</h4>
                     </div>
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board') }}">Project Board</a></li>
+                            <li class="breadcrumb-item"><a href="{{ authRoute('user.project-board') }}">Project Board</a>
+                            </li>
                             <li class="breadcrumb-item active">View</li>
                         </ol>
                     </div>
@@ -42,27 +44,30 @@
                                         <i class='bx bx-info-circle'></i>
                                     </a>
 
-                                    <a href="{{ authRoute('user.project-board.edit', ['slug' => $projectBoard->slug]) }}"
-                                        class="edit">
-                                        <i class='bx bx-edit'></i>
-                                    </a>
-                                    <form
-                                        action="{{ authRoute('user.project-board.delete', ['slug' => $projectBoard->slug]) }}"
-                                        method="post">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button type="submit" class="delete btn-no-style">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
-                                    </form>
-                                    {{-- <div class="more">
+                                    @if (!request()->attributes->get('is_collaboration'))
+                                        <a href="{{ authRoute('user.project-board.edit', ['slug' => $projectBoard->slug]) }}"
+                                            class="edit">
+                                            <i class='bx bx-edit'></i>
+                                        </a>
+                                        <form
+                                            action="{{ authRoute('user.project-board.delete', ['slug' => $projectBoard->slug]) }}"
+                                            method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit" class="delete btn-no-style">
+                                                <i class='bx bx-trash'></i>
+                                            </button>
+                                        </form>
+                                        {{-- <div class="more">
                                         <i class='bx bx-dots-vertical-rounded' ></i>
                                     </div> --}}
+                                    @endif
                                 </div>
                             </div>
 
                             <div class="collapse" id="projectDescription{{ $projectBoard->id }}">
-                                <div class="card-body border-double-5 border-{{ strtolower($projectBoard->colorTag?->name ?? '') }}">
+                                <div
+                                    class="card-body border-double-5 border-{{ strtolower($projectBoard->colorTag?->name ?? '') }}">
                                     <div class="row g-3 align-items-start">
                                         <div class="col-12 col-md-8">
                                             @php
@@ -79,7 +84,7 @@
                                                 </div>
                                             @endif
                                             <div class="description p-2 rich-editor-content overflow-auto">
-                                                {!! Str::markdown($projectBoard->description ?? "") !!}
+                                                {!! Str::markdown($projectBoard->description ?? '') !!}
                                             </div>
 
 
@@ -102,7 +107,8 @@
 
                                         </div>
                                         <div class="col-12 col-md-4">
-                                            <div class="text-center" data-image-preview="true" data-image-downloadable="true">
+                                            <div class="text-center" data-image-preview="true"
+                                                data-image-downloadable="true">
                                                 <img src="{{ $projectBoard->thumbnail_url }}"
                                                     class="img-fluid rounded shadow-sm" alt="Thumbnail"
                                                     onerror="this.onerror=null;this.src='https://placehold.co/400x300';">
@@ -150,13 +156,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-list-component :modules="$projectModules" :project-board="$projectBoard"/>
+                        <x-project.project-module-list-component :modules="$projectModules" :project-board="$projectBoard" />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-task-list-component :project-board="$projectBoard" :tasks="$tasks"/>
+                        <x-project.project-module-task-list-component :project-board="$projectBoard" :tasks="$tasks" />
                     </div>
                 </div>
             </div> <!-- container-fluid -->

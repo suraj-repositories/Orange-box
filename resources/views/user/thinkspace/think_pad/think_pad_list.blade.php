@@ -28,8 +28,7 @@
                     <div class="col-sm-6 col-lg-4">
                         <div class="card d-block">
                             <div class="card-header">
-                                <a href="#"
-                                    class="card-title">{{ $thinkPad->title }}</a>
+                                <a href="{{ authRoute('user.think-pad.show', ['thinkPad' => $thinkPad]) }}" class="card-title">{{ $thinkPad->title }}</a>
                             </div>
                             <div class="card-body">
                                 <p class="card-text text-muted mb-0">{{ $thinkPad->sub_title }}</p>
@@ -40,20 +39,26 @@
                                         {{ $thinkPad->created_at->diffForHumans() }}
                                     </div>
 
-                                    <a href="{{ authRoute('user.think-pad.show', ['thinkPad'=> $thinkPad]) }}" class="info">
+                                    <a href="{{ authRoute('user.think-pad.show', ['thinkPad' => $thinkPad]) }}"
+                                        class="info">
                                         <i class='bx bx-info-circle'></i>
                                     </a>
-
-                                    <a href="{{ authRoute('user.think-pad.edit', ['thinkPad'=> $thinkPad]) }}" class="edit">
-                                        <i class='bx bx-edit'></i>
-                                    </a>
-                                    <form action="{{ authRoute('user.think-pad.delete', ['thinkPad'=> $thinkPad]) }}" method="post">
-                                       @method('DELETE')
-                                        @csrf
-                                        <button type="submit" class="delete btn-no-style">
-                                            <i class='bx bx-trash'></i>
-                                        </button>
-                                    </form>
+                                    @can('update', $thinkPad)
+                                        <a href="{{ authRoute('user.think-pad.edit', ['thinkPad' => $thinkPad]) }}"
+                                            class="edit">
+                                            <i class='bx bx-edit'></i>
+                                        </a>
+                                    @endcan
+                                    @can('delete', $thinkPad)
+                                        <form action="{{ authRoute('user.think-pad.delete', ['thinkPad' => $thinkPad]) }}"
+                                            method="post">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button type="submit" class="delete btn-no-style">
+                                                <i class='bx bx-trash'></i>
+                                            </button>
+                                        </form>
+                                    @endcan
                                     {{-- <div class="more">
                                         <i class='bx bx-dots-vertical-rounded' ></i>
                                     </div> --}}
@@ -67,7 +72,7 @@
 
             </div>
 
-            {{ $thinkPads->links() }}
+            {{ $thinkPads->withQueryString()->links() }}
 
         </div> <!-- content -->
 

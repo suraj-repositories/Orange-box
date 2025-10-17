@@ -7,20 +7,21 @@
              <h5 class="card-title mb-0">Recent Tasks</h5>
 
              <div class="ms-auto fw-semibold d-flex gap-1">
-                 <a href="{{ isset($projectBoard) && isset($projectModule) && $projectBoard->exists && $projectModule->exists
-                     ? authRoute('user.project-board.modules.tasks.createNested', [
-                         'slug' => $projectBoard->slug,
-                         'module' => $projectModule->slug,
-                     ])
-                     : authRoute('user.tasks.create') }}"
-                     class="btn btn-light btn-sm border center-content gap-1">
-                     <i class="bx bx-plus fs-5"></i>
-                     <div>New</div>
-                 </a>
-
+                 @if (!request()->attributes->get('is_collaboration'))
+                     <a href="{{ isset($projectBoard) && isset($projectModule) && $projectBoard->exists && $projectModule->exists
+                         ? authRoute('user.project-board.modules.tasks.createNested', [
+                             'slug' => $projectBoard->slug,
+                             'module' => $projectModule->slug,
+                         ])
+                         : authRoute('user.tasks.create') }}"
+                         class="btn btn-light btn-sm border center-content gap-1">
+                         <i class="bx bx-plus fs-5"></i>
+                         <div>New</div>
+                     </a>
+                 @endif
 
                  @if (!Route::is('user.tasks.index'))
-                     <a href="{{ authRoute('user.tasks.index', ['project' => $projectBoard?->slug ?? '', 'module' => $projectModule?->slug ?? '']) }}"
+                     <a href="{{  authRoute(request()->attributes->get('is_collaboration') ? 'user.collab.tasks.index':'user.tasks.index', ['project' => $projectBoard?->slug ?? '', 'module' => $projectModule?->slug ?? '']) }}"
                          class="btn btn-light btn-sm border center-content gap-1">
                          <i class='bx bx-list-ul fs-5'></i>
                          <div> Show All</div>
@@ -68,7 +69,7 @@
                              {{ $tasks->firstItem() + $loop->iteration - 1 }}
                          </td>
                          <td>
-                             <a href="{{ authRoute('user.tasks.show', ['task' => $task]) }}"
+                             <a href="{{ request()->attributes->get('is_collaboration') ? authRoute('user.collab.tasks.show', ['task' => $task]) : authRoute('user.tasks.show', ['task' => $task]) }}"
                                  class="text-dark truncate-2">{{ $task->title }} </a>
                          </td>
                          <td class="text-nowrap text-reset">
@@ -97,46 +98,34 @@
                          </td>
                          <td>
                              <div class="action-container m-0 gap-1">
-                                 <a href="{{ authRoute('user.tasks.show', ['task' => $task]) }}" class="info ms-0 ">
+                                 <a href="{{ request()->attributes->get('is_collaboration') ? authRoute('user.collab.tasks.show', ['task' => $task]) : authRoute('user.tasks.show', ['task' => $task]) }}" class="info ms-0 ">
                                      <i class='bx bx-info-circle fs-4'></i>
                                  </a>
-                                 @php
-                                     $editRoute =
-                                         !empty($projectBoard) && $projectBoard->exists
-                                             ? authRoute('user.project-board.modules.tasks.editNested', [
-                                                 'slug' => $projectBoard->slug,
-                                                 'module' => $task->module->slug,
-                                                 'task' => $task->uuid,
-                                             ])
-                                             : authRoute('user.tasks.edit', ['task' => $task]);
-                                 @endphp
-                                 <a href="{{ $editRoute }}" class="edit">
-                                     <i class='bx bx-edit fs-4'></i>
-                                 </a>
+                                 @if (!request()->attributes->get('is_collaboration'))
+                                     @php
+                                         $editRoute =
+                                             !empty($projectBoard) && $projectBoard->exists
+                                                 ? authRoute('user.project-board.modules.tasks.editNested', [
+                                                     'slug' => $projectBoard->slug,
+                                                     'module' => $task->module->slug,
+                                                     'task' => $task->uuid,
+                                                 ])
+                                                 : authRoute('user.tasks.edit', ['task' => $task]);
+                                     @endphp
+                                     <a href="{{ $editRoute }}" class="edit">
+                                         <i class='bx bx-edit fs-4'></i>
+                                     </a>
 
-                                 <form action="{{ authRoute('user.tasks.delete', ['task' => $task]) }}" method="post">
-                                     @method('DELETE')
-                                     @csrf
-                                     <button type="submit" class="delete btn-no-style">
-                                         <i class='bx bx-trash fs-4'></i>
-                                     </button>
-                                 </form>
+                                     <form action="{{ authRoute('user.tasks.delete', ['task' => $task]) }}"
+                                         method="post">
+                                         @method('DELETE')
+                                         @csrf
+                                         <button type="submit" class="delete btn-no-style">
+                                             <i class='bx bx-trash fs-4'></i>
+                                         </button>
+                                     </form>
+                                 @endif
 
-                                 {{-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-                                     data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Toggle right
-                                     offcanvas</button> --}}
-
-                                 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
-                                     aria-labelledby="offcanvasRightLabel">
-                                     <div class="offcanvas-header">
-                                         <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
-                                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                             aria-label="Close"></button>
-                                     </div>
-                                     <div class="offcanvas-body">
-                                         ...
-                                     </div>
-                                 </div>
                              </div>
                          </td>
                      </tr>
@@ -152,7 +141,7 @@
              </table>
 
              <div class="m-3 mb-0">
-                 {{ $tasks->links() }}
+                 {{ $tasks->withQueryString()->links() }}
              </div>
          </div>
      </div>

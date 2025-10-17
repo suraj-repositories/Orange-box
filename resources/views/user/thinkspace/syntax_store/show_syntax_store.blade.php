@@ -3,7 +3,7 @@
 @section('title', Route::is('user.syntax-store.show') ? 'Syntax Store' : '🟢🟢🟢')
 
 @section('css')
-  <link rel="stylesheet" href="{{ asset('assets/css/syntax-store-editor.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/syntax-store-editor.css') }}">
 @endsection
 
 @section('content')
@@ -99,20 +99,24 @@
                                         <span class="d-none d-sm-block">Comments</span>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link p-2" id="ob_actions_tab" data-bs-toggle="tab" href="#ob_actions"
-                                        role="tab">
-                                        <span class="d-block d-sm-none"><i class="mdi mdi-cog-outline"></i></span>
-                                        <span class="d-none d-sm-block">Actions</span>
-                                    </a>
-                                </li>
+
+                                @canany(['update', 'delete'], $syntaxStore)
+                                    <li class="nav-item">
+                                        <a class="nav-link p-2" id="ob_actions_tab" data-bs-toggle="tab" href="#ob_actions"
+                                            role="tab">
+                                            <span class="d-block d-sm-none"><i class="mdi mdi-cog-outline"></i></span>
+                                            <span class="d-none d-sm-block">Actions</span>
+                                        </a>
+                                    </li>
+                                @endcanany
                             </ul>
 
                             <div class="tab-content text-muted bg-white">
                                 <div class="tab-pane active show pt-4" id="ob_description" role="tabpanel">
                                     <div id="description-area" class="rich-editor-content ">
                                         @if ($syntaxStore->content)
-                                            <div data-ob-preview-type="editorjs" data-ob-content="{{ $syntaxStore->content }}">
+                                            <div data-ob-preview-type="editorjs"
+                                                data-ob-content="{{ $syntaxStore->content }}">
 
                                             </div>
                                         @endif
@@ -125,15 +129,20 @@
 
                                 <div class="tab-pane ob-actions-tab pt-4" id="ob_actions" role="tabpanel">
                                     <div class="d-flex gap-2 mb-2">
-                                        <a href="{{ authRoute('user.syntax-store.edit', ['syntaxStore'=>$syntaxStore]) }}"
-                                            class="action edit"><i class="bx bx-edit"></i></a>
-                                        <form
-                                            action="{{ authRoute('user.syntax-store.delete', ['syntaxStore' => $syntaxStore]) }}"
-                                            method="POST">
-                                            @csrf
-                                            @method('delete')
-                                            <button class="action delete"><i class="bx bx-trash"></i></button>
-                                        </form>
+                                        @can('update', $syntaxStore)
+                                            <a href="{{ authRoute('user.syntax-store.edit', ['syntaxStore' => $syntaxStore]) }}"
+                                                class="action edit"><i class="bx bx-edit"></i></a>
+                                        @endcan
+
+                                        @can('delete', $syntaxStore)
+                                            <form
+                                                action="{{ authRoute('user.syntax-store.delete', ['syntaxStore' => $syntaxStore]) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('delete')
+                                                <button class="action delete"><i class="bx bx-trash"></i></button>
+                                            </form>
+                                        @endcan
 
                                     </div>
                                 </div>

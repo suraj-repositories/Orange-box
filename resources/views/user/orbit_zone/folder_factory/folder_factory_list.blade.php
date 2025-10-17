@@ -151,7 +151,7 @@
 
                             </div>
                             <div class="mt-3">
-                                {{ $folderFactories->links() }}
+                                {{ $folderFactories->withQueryString()->links() }}
                             </div>
                         </div>
                     </div>

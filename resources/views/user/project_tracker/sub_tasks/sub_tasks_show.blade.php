@@ -143,9 +143,10 @@
                                      @if ($subTask->created_at != $subTask->updated_at)
                                          <small class="px-2">(Edited)</small>
                                      @endif
-                                     <div class="badge badge-{{ strtolower($subTask->status_color ?? '') }} d-flex align-items-center p-2">
+                                     <div
+                                         class="badge badge-{{ strtolower($subTask->status_color ?? '') }} d-flex align-items-center p-2">
                                          <span class="badge-circle me-1"></span>
-                                         <span>{{ ucwords(str_replace('_', ' ', $subTask->status ?? ""))  }}</span>
+                                         <span>{{ ucwords(str_replace('_', ' ', $subTask->status ?? '')) }}</span>
                                      </div>
                                  </span>
                              </div>
@@ -209,21 +210,23 @@
                              </div>
                              <div class="action-container m-0 gap-1">
 
-                                 <a href="javascript:void(0);" class="edit edit-sub-task-btn"
-                                     data-submit-url="{{ authRoute('user.sub_task.update', ['subTask' => $subTask]) }}"
-                                     data-subtask-description="{{ $subTask->description ?? '' }}"
-                                     data-subtask-status="{{ $subTask->status ?? '' }}"
-                                     data-subtask-files="{{ $subTask->files->select('formatted_file_size', 'extension', 'file_url', 'file_name', 'extension_icon', 'id') }}">
-                                     <i class='bx bx-edit'></i>
-                                 </a>
-                                 <form action="{{ authRoute('user.sub_task.delete', ['subTask' => $subTask]) }}"
-                                     method="post">
-                                     @method('DELETE')
-                                     @csrf
-                                     <button type="submit" class="delete btn-no-style">
-                                         <i class='bx bx-trash'></i>
-                                     </button>
-                                 </form>
+                                 @if ($subTask->user_id == auth()->id())
+                                     <a href="javascript:void(0);" class="edit edit-sub-task-btn"
+                                         data-submit-url="{{ authRoute('user.sub_task.update', ['subTask' => $subTask]) }}"
+                                         data-subtask-description="{{ $subTask->description ?? '' }}"
+                                         data-subtask-status="{{ $subTask->status ?? '' }}"
+                                         data-subtask-files="{{ $subTask->files->select('formatted_file_size', 'extension', 'file_url', 'file_name', 'extension_icon', 'id') }}">
+                                         <i class='bx bx-edit'></i>
+                                     </a>
+                                     <form action="{{ authRoute('user.sub_task.delete', ['subTask' => $subTask]) }}"
+                                         method="post">
+                                         @method('DELETE')
+                                         @csrf
+                                         <button type="submit" class="delete btn-no-style">
+                                             <i class='bx bx-trash'></i>
+                                         </button>
+                                     </form>
+                                 @endif
 
                              </div>
                          </div>

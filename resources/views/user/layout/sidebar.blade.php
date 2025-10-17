@@ -182,6 +182,27 @@
                         </ul>
                     </div>
                 </li>
+                <li>
+                    <a href="#collaborations" data-bs-toggle="collapse">
+                       <i class='bx bx-donate-heart fs-5'></i>
+                        <span> Collaboration </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="collaborations">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.collab.project-board.index') }}'>Project Board</a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.collab.modules.index') }}'>Modules</a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.collab.tasks.index') }}'>Tasks</a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
 
                 <li class="menu-title mt-2">Account</li>
                 <li>
