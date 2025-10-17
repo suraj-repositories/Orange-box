@@ -84,7 +84,14 @@ class ProjectBoardController extends Controller
             abort(404, "Project Not Found!");
         }
 
-        return view('user.project_tracker.project_board.project_board_show', compact('projectBoard'));
+        $query =  $projectBoard->modules()
+            ->withCount('projectModuleUsers')
+            ->with('limitedUsers');
+
+        $projectModules = $query->orderBy('id', 'desc')->paginate();
+        $tasks = $projectBoard->tasks()->latest()->take(10)->paginate();
+
+        return view('user.project_tracker.project_board.project_board_show', compact('projectBoard', 'projectModules', 'tasks'));
     }
 
     public function edit(User $user, $slug, Request $request)
@@ -94,7 +101,7 @@ class ProjectBoardController extends Controller
         if (!$projectBoard) {
             abort(404, "Project Not Found!");
         }
-         $tagColors = ColorTag::get();
+        $tagColors = ColorTag::get();
 
         return view('user.project_tracker.project_board.project_board_form', compact('projectBoard', 'tagColors'));
     }

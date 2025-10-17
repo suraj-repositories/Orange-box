@@ -183,8 +183,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-task-list-component :project-board="$projectBoard" :project-module="$projectModule"
-                            :limit='10' />
+                        <x-project.project-module-task-list-component :project-board="$projectBoard" :project-module="$projectModule" :tasks="$tasks"/>
                     </div>
                 </div>
             </div> <!-- container-fluid -->

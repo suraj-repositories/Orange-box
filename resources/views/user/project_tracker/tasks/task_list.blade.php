@@ -26,7 +26,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                      <x-project.project-module-task-list-component />
+                      <x-project.project-module-task-list-component :tasks="$tasks" />
                     </div>
                 </div>
             </div>

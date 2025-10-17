@@ -11,16 +11,14 @@ use Illuminate\View\Component;
 
 class ProjectModuleListComponent extends Component
 {
-    public $projectBoard;
-    public $limit;
+    public ?ProjectBoard $projectBoard = null;
+
     /**
      * Create a new component instance.
      */
-    public function __construct(?ProjectBoard $projectBoard, $limit = null)
+    public function __construct(public $modules, ?ProjectBoard $projectBoard = null)
     {
-        //
         $this->projectBoard = $projectBoard;
-        $this->limit = $limit;
     }
 
     /**
@@ -28,25 +26,6 @@ class ProjectModuleListComponent extends Component
      */
     public function render(): View|Closure|string
     {
-        $modules  = null;
-        if (!empty($this->projectBoard)) {
-            $query = $this->projectBoard
-                ->modules()
-                ->withCount('projectModuleUsers')
-                ->with('limitedUsers');
-        } else {
-            $query = ProjectModule::withCount('projectModuleUsers')
-                ->where('user_id', Auth::user()->id)
-                ->with('limitedUsers');
-        }
-
-        if (empty($this->limit)) {
-            $modules = $query->orderBy('id', 'desc')->paginate(10);
-        } else {
-            $modules = $query->orderBy('id', 'desc')->paginate($this->limit);
-        }
-
-
-        return view('components.project.project-module-list-component', compact('modules'));
+        return view('components.project.project-module-list-component');
     }
 }

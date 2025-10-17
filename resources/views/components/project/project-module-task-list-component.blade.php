@@ -20,7 +20,8 @@
 
 
                  @if (!Route::is('user.tasks.index'))
-                     <a href="{{authRoute('user.tasks.index')}}" class="btn btn-light btn-sm border center-content gap-1">
+                     <a href="{{ authRoute('user.tasks.index', ['project' => $projectBoard?->slug ?? '', 'module' => $projectModule?->slug ?? '']) }}"
+                         class="btn btn-light btn-sm border center-content gap-1">
                          <i class='bx bx-list-ul fs-5'></i>
                          <div> Show All</div>
                      </a>
@@ -30,6 +31,20 @@
      </div>
 
      <div class="card-body p-0">
+         <div class="d-flex gap-2 ps-2">
+             @if (request()->filled('project'))
+                 <div class="alert alert-secondary my-2 w-fit p-2">
+                     <strong>Project : </strong>{{ request()->get('project') }}
+                 </div>
+             @endif
+             @if (request()->filled('module'))
+                 <div class="alert alert-success my-2 w-fit p-2">
+                     <strong>Module : </strong>{{ request()->get('module') }}
+                 </div>
+             @endif
+         </div>
+
+
          <div class="table-responsive">
              <table class="table table-traffic mb-0">
 
@@ -50,10 +65,11 @@
                          <td>
                              {{-- <input type="checkbox" class="form-check-input m-0 align-middle" aria-label="Select task"
                                  checked readonly> --}}
-                                 {{ $tasks->firstItem() + $loop->iteration - 1 }}
+                             {{ $tasks->firstItem() + $loop->iteration - 1 }}
                          </td>
                          <td>
-                             <a href="{{ authRoute('user.tasks.show', ['task' => $task]) }}" class="text-dark truncate-2">{{ $task->title }} </a>
+                             <a href="{{ authRoute('user.tasks.show', ['task' => $task]) }}"
+                                 class="text-dark truncate-2">{{ $task->title }} </a>
                          </td>
                          <td class="text-nowrap text-reset">
                              <i data-feather="calendar" style="height: 18px; width: 18px;" class="me-1"></i>
@@ -70,7 +86,7 @@
                              </div>
                          </td>
                          <td class="text-nowrap">
-                             {{ ucwords(str_replace('_', ' ', $task->status ?? "")) }}
+                             {{ ucwords(str_replace('_', ' ', $task->status ?? '')) }}
                          </td>
                          <td>
                              @php $assignee = $task->assignedUser; @endphp
@@ -85,12 +101,16 @@
                                      <i class='bx bx-info-circle fs-4'></i>
                                  </a>
                                  @php
-                                    $editRoute = (!empty($projectBoard) && $projectBoard->exists) ? authRoute('user.project-board.modules.tasks.editNested', ['slug' => $projectBoard->slug, 'module' => $task->module->slug, 'task' => $task->uuid])
-                                    :
-                                        authRoute('user.tasks.edit', ['task' => $task]);
+                                     $editRoute =
+                                         !empty($projectBoard) && $projectBoard->exists
+                                             ? authRoute('user.project-board.modules.tasks.editNested', [
+                                                 'slug' => $projectBoard->slug,
+                                                 'module' => $task->module->slug,
+                                                 'task' => $task->uuid,
+                                             ])
+                                             : authRoute('user.tasks.edit', ['task' => $task]);
                                  @endphp
-                                 <a href="{{ $editRoute }}"
-                                     class="edit">
+                                 <a href="{{ $editRoute }}" class="edit">
                                      <i class='bx bx-edit fs-4'></i>
                                  </a>
 

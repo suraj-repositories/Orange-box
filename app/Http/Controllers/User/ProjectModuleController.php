@@ -33,9 +33,18 @@ class ProjectModuleController extends Controller
             if (!$projectBoard) {
                 abort(404, "Project Not Found!");
             }
+
+            $query =  $projectBoard->modules()
+                ->withCount('projectModuleUsers')
+                ->with('limitedUsers');
+        } else {
+            $query = ProjectModule::withCount('projectModuleUsers')
+                ->where('user_id', $user->id)
+                ->with('limitedUsers');
         }
 
-        return view("user.project_tracker.project_modules.project_module_list", compact('projectBoard'));
+        $projectModules = $query->orderBy('id', 'desc')->paginate();
+        return view("user.project_tracker.project_modules.project_module_list", compact('projectBoard', 'projectModules'));
     }
 
     public function createNested(User $user, $slug, Request $request)
@@ -180,7 +189,9 @@ class ProjectModuleController extends Controller
             return !str_starts_with($file->mime_type, 'image/');
         });
 
-        return view('user.project_tracker.project_modules.project_module_show', compact('projectModule', 'projectBoard', 'imageFiles', 'otherFiles'));
+        $tasks = $projectModule->tasks()->paginate(10);
+
+        return view('user.project_tracker.project_modules.project_module_show', compact('projectModule', 'projectBoard', 'imageFiles', 'otherFiles', 'tasks'));
     }
 
     public function showGlobal(User $user, $module, Request $request)

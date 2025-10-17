@@ -35,7 +35,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-list-component :project-board="$projectBoard" :limit='10' />
+                        <x-project.project-module-list-component :modules="$projectModules" />
                     </div>
                 </div>
             </div>

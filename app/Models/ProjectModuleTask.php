@@ -37,6 +37,6 @@ class ProjectModuleTask extends Model
 
     public function module()
     {
-        return $this->belongsTo(ProjectModule::class);
+        return $this->belongsTo(ProjectModule::class, 'project_module_id', 'id');
     }
 }

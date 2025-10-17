@@ -150,13 +150,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-list-component :project-board="$projectBoard" :limit='10' />
+                        <x-project.project-module-list-component :modules="$projectModules" :project-board="$projectBoard"/>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-task-list-component :project-board="$projectBoard" :limit='10' />
+                        <x-project.project-module-task-list-component :project-board="$projectBoard" :tasks="$tasks"/>
                     </div>
                 </div>
             </div> <!-- container-fluid -->

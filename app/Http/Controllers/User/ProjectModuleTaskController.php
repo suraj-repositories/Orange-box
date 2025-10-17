@@ -23,9 +23,24 @@ class ProjectModuleTaskController extends Controller
     {
         $this->fileService = $fileService;
     }
-    public function index()
+    public function index(User $user, Request $request)
     {
-        return view('user.project_tracker.tasks.task_list');
+        $tasks = Task::with(['projectModuleTask', 'projectModuleTask.module', 'projectModuleTask.module.projectBoard'])
+            ->where('user_id', $user->id)
+            ->orderBy('id', 'desc')
+            ->when($request->filled('module'), function ($query) use ($request) {
+                $query->whereHas('projectModuleTask.module', function ($q) use ($request) {
+                    $q->where('slug', $request->module);
+                });
+            })
+            ->when($request->filled('project'), function ($query) use ($request) {
+                $query->whereHas('projectModuleTask.module.projectBoard', function ($q) use ($request) {
+                    $q->where('slug', $request->project);
+                });
+            })
+            ->paginate();
+
+        return view('user.project_tracker.tasks.task_list', compact('tasks'));
     }
 
     public function createNested(User $user, $slug, $module, Request $request)
