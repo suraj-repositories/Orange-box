@@ -139,7 +139,19 @@ Route::controller(ProfileController::class)->group(function () {
     Route::get('profile', 'index')->name('profile.index');
 });
 
-Route::prefix('collab')->name('collab.')->middleware('collab')->group(function () {
+
+Route::prefix('collab')->name('collab.all.')->middleware('collab')->group(function () {
+    Route::controller(CollaborationProjectBoardController::class)->group(function () {
+        Route::get('project-boards', 'index')->name('project-board.index');
+    });
+    Route::controller(CollaborationProjectModuleController::class)->group(function () {
+        Route::get('modules', 'index')->name('modules.index');
+    });
+    Route::controller(CollaborationTaskController::class)->group(function () {
+        Route::get('tasks', 'index')->name('tasks.index');
+    });
+});
+Route::prefix('collab/{owner?}/')->name('collab.')->middleware('collab')->group(function () {
     Route::controller(CollaborationProjectBoardController::class)->group(function () {
         Route::get('project-boards', 'index')->name('project-board.index');
         Route::get('project-boards/{slug}', 'show')->name('project-board.show');

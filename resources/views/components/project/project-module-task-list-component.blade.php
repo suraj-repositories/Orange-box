@@ -21,7 +21,9 @@
                  @endif
 
                  @if (!Route::is('user.tasks.index'))
-                     <a href="{{  authRoute(request()->attributes->get('is_collaboration') ? 'user.collab.tasks.index':'user.tasks.index', ['project' => $projectBoard?->slug ?? '', 'module' => $projectModule?->slug ?? '']) }}"
+                     <a href="{{  request()->attributes->get('is_collaboration')
+                     ? authRoute( 'user.collab.tasks.index' , ['owner' => $projectBoard->user->username , 'project' => $projectBoard?->slug ?? '', 'module' => $projectModule?->slug ?? ''])
+                     : authRoute( 'user.tasks.index', ['project' => $projectBoard?->slug ?? '', 'module' => $projectModule?->slug ?? '']) }}"
                          class="btn btn-light btn-sm border center-content gap-1">
                          <i class='bx bx-list-ul fs-5'></i>
                          <div> Show All</div>
@@ -33,14 +35,14 @@
 
      <div class="card-body p-0">
          <div class="d-flex gap-2 ps-2">
-             @if (request()->filled('project'))
+               @if (request()->filled('project') && !empty($filter['project']))
                  <div class="alert alert-secondary my-2 w-fit p-2">
-                     <strong>Project : </strong>{{ request()->get('project') }}
+                     <strong>Project : </strong>{{ $filter['project'] }}
                  </div>
              @endif
-             @if (request()->filled('module'))
+             @if (request()->filled('module') && !empty($filter['module']))
                  <div class="alert alert-success my-2 w-fit p-2">
-                     <strong>Module : </strong>{{ request()->get('module') }}
+                     <strong>Module : </strong>{{ $filter['module'] }}
                  </div>
              @endif
          </div>
@@ -69,7 +71,7 @@
                              {{ $tasks->firstItem() + $loop->iteration - 1 }}
                          </td>
                          <td>
-                             <a href="{{ request()->attributes->get('is_collaboration') ? authRoute('user.collab.tasks.show', ['task' => $task]) : authRoute('user.tasks.show', ['task' => $task]) }}"
+                             <a href="{{ request()->attributes->get('is_collaboration') ? authRoute('user.collab.tasks.show', ['owner' => $task->user->username, 'task' => $task]) : authRoute('user.tasks.show', ['task' => $task]) }}"
                                  class="text-dark truncate-2">{{ $task->title }} </a>
                          </td>
                          <td class="text-nowrap text-reset">
@@ -98,7 +100,7 @@
                          </td>
                          <td>
                              <div class="action-container m-0 gap-1">
-                                 <a href="{{ request()->attributes->get('is_collaboration') ? authRoute('user.collab.tasks.show', ['task' => $task]) : authRoute('user.tasks.show', ['task' => $task]) }}" class="info ms-0 ">
+                                 <a href="{{ request()->attributes->get('is_collaboration') ? authRoute('user.collab.tasks.show', ['owner' => $task->user->username, 'task' => $task]) : authRoute('user.tasks.show', ['task' => $task]) }}" class="info ms-0 ">
                                      <i class='bx bx-info-circle fs-4'></i>
                                  </a>
                                  @if (!request()->attributes->get('is_collaboration'))

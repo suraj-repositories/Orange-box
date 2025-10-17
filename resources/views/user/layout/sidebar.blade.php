@@ -191,13 +191,13 @@
                     <div class="collapse" id="collaborations">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.collab.project-board.index') }}'>Project Board</a>
+                                <a class='tp-link' href='{{ authRoute('user.collab.all.project-board.index') }}'>Project Board</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.collab.modules.index') }}'>Modules</a>
+                                <a class='tp-link' href='{{ authRoute('user.collab.all.modules.index') }}'>Modules</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.collab.tasks.index') }}'>Tasks</a>
+                                <a class='tp-link' href='{{ authRoute('user.collab.all.tasks.index') }}'>Tasks</a>
                             </li>
 
                         </ul>

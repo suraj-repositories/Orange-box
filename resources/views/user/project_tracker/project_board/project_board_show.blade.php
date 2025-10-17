@@ -156,13 +156,13 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-list-component :modules="$projectModules" :project-board="$projectBoard" />
+                        <x-project.project-module-list-component :modules="$projectModules" :project-board="$projectBoard" :filter="[]"/>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-task-list-component :project-board="$projectBoard" :tasks="$tasks" />
+                        <x-project.project-module-task-list-component :project-board="$projectBoard" :tasks="$tasks" :filter="[]"/>
                     </div>
                 </div>
             </div> <!-- container-fluid -->

@@ -12,7 +12,7 @@ class ProjectModuleController extends Controller
 {
     //
 
-    public function index(Request $request, User $user, $slug = null)
+    public function index(Request $request, User $user, User $owner = null, $slug = null)
     {
         $projectBoard = null;
         if (!empty($slug)) {
@@ -39,7 +39,7 @@ class ProjectModuleController extends Controller
                 })
                 ->whereHas('projectBoard', function ($q) use ($request) {
                     if ($request->filled('project')) {
-                        $q->where('project_boards.slug', $request->project);
+                        $q->where('project_boards.id', $request->project);
                     }
                 })
                 ->with('limitedUsers');
@@ -47,14 +47,23 @@ class ProjectModuleController extends Controller
 
         $projectModules = $query->orderBy('id', 'desc')->paginate();
 
+        $projectName = null;
+        if($request->filled('project')){
+            $projectName = ProjectBoard::where('id', $request->project)->value('title');
+        }
+
+
         return view("user.project_tracker.project_modules.project_module_list", [
             'title' => 'Collaboration Project Modules',
             'projectModules' => $projectModules,
             'projectBoard' => $projectBoard,
+            'filter' => [
+                'project' => $projectName
+            ]
         ]);
     }
 
-    public function show(User $user, $slug, $module, Request $request)
+    public function show(User $user, User $owner, $slug, $module, Request $request)
     {
         $projectBoard = ProjectBoard::with(['modules.files', 'modules.projectModuleType', 'modules.projectModuleType.colorTag', 'modules.assignees'])
             ->whereHas('users', function ($q) use ($user) {

@@ -29,7 +29,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                      <x-project.project-module-task-list-component :tasks="$tasks" />
+                      <x-project.project-module-task-list-component :tasks="$tasks" :filter="$filter ?? []"/>
                     </div>
                 </div>
             </div>

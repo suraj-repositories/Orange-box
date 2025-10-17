@@ -85,7 +85,9 @@
                                                     </div>
                                                 @endif
 
-                                                <a href="{{ authRoute(request()->attributes->get('is_collaboration') ? 'user.collab.project-board.show' : 'user.project-board.show', ['slug' => $projectBoard->slug]) }}"
+                                                <a href="{{ request()->attributes->get('is_collaboration')
+                                                ? authRoute('user.collab.project-board.show', ['owner' => $projectBoard->user->username, 'slug' => $projectBoard->slug])
+                                                : authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}"
                                                     class="project-module-project-link text-reset">
                                                     <i class="bx bx-link-external fs-6 me-1"></i>
                                                     <span><strong>Project -</strong> {{ $projectBoard->title }}</span>
@@ -188,7 +190,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <x-project.project-module-task-list-component :project-board="$projectBoard" :project-module="$projectModule"
-                            :tasks="$tasks" />
+                            :tasks="$tasks" :filter="[]"/>
                     </div>
                 </div>
             </div> <!-- container-fluid -->

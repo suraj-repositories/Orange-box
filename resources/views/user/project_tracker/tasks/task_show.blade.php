@@ -91,12 +91,16 @@
                                                         {{ ucwords(str_replace('_', ' ', $task->status ?? '')) }}</span>
                                                 </div>
 
-                                                <a href="{{ authRoute(request()->attributes->get('is_collaboration') ? 'user.collab.project-board.show' : 'user.project-board.show', ['slug' => $projectBoard->slug]) }}"
+                                                <a href="{{ request()->attributes->get('is_collaboration')
+                                                ? authRoute('user.collab.project-board.show', ['owner' => $projectBoard->user->username, 'slug' => $projectBoard->slug])
+                                                : authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}"
                                                     class="project-module-project-link text-reset">
                                                     <i class="bx bx-link-external fs-6 me-1"></i>
                                                     <span><strong>Project -</strong> {{ $projectBoard->title }}</span>
                                                 </a>
-                                                <a href="{{ authRoute(request()->attributes->get('is_collaboration') ? 'user.collab.modules.show' : 'user.project-board.modules.show', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}"
+                                                <a href="{{ request()->attributes->get('is_collaboration')
+                                                ? authRoute('user.collab.modules.show', ['owner' =>  $projectBoard->user->username, 'slug' => $projectBoard->slug, 'module' => $projectModule->slug])
+                                                : authRoute('user.project-board.modules.show', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}"
                                                     class="project-module-project-link text-reset">
                                                     <i class="bx bx-link-external fs-6 me-1"></i>
                                                     <span><strong>Module -</strong> {{ $projectModule->name }}</span>

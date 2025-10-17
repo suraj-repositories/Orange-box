@@ -35,7 +35,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-list-component :modules="$projectModules" />
+                        <x-project.project-module-list-component :modules="$projectModules" :filter="$filter ?? []"/>
                     </div>
                 </div>
             </div>

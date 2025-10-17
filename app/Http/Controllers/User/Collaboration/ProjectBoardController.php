@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class ProjectBoardController extends Controller
 {
     //
-    public function index(User $user)
+    public function index(User $user, User $owner = null)
     {
         $projectBoards = ProjectBoard::with(['colorTag', 'users'])
             ->whereHas('users', function ($q) use ($user) {
@@ -25,7 +25,7 @@ class ProjectBoardController extends Controller
         ]);
     }
 
-    public function show(User $user, $slug, Request $request)
+    public function show(User $user, User $owner, $slug, Request $request)
     {
         $projectBoard = ProjectBoard::with(['colorTag', 'users', 'modules.assignees'])
             ->whereHas('users', function ($q) use ($user) {
@@ -37,9 +37,9 @@ class ProjectBoardController extends Controller
         }
 
         $query =  $projectBoard->modules()
-         ->whereHas('assignees', function ($q) use ($user) {
-                    $q->where('users.id', $user->id);
-                })
+            ->whereHas('assignees', function ($q) use ($user) {
+                $q->where('users.id', $user->id);
+            })
             ->withCount('projectModuleUsers')
             ->with('limitedUsers');
 

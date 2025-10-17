@@ -134,4 +134,8 @@ class ProjectModule extends Model
     public function  projectModuleType(){
         return $this->belongsTo(projectModuleType::class);
     }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

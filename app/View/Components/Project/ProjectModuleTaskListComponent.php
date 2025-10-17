@@ -14,12 +14,13 @@ class ProjectModuleTaskListComponent extends Component
 {
     public ?ProjectBoard $projectBoard;
     public ?ProjectModule $projectModule;
-    public $limit;
+
     /**
      * Create a new component instance.
      */
     public function __construct(
         public $tasks,
+        public $filter = [],
         ?ProjectBoard $projectBoard,
         ?ProjectModule $projectModule,
     ) {

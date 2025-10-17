@@ -16,7 +16,7 @@ class ProjectModuleListComponent extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public $modules, ?ProjectBoard $projectBoard = null)
+    public function __construct(public $modules,  public $filter = [], ?ProjectBoard $projectBoard = null)
     {
         $this->projectBoard = $projectBoard;
     }

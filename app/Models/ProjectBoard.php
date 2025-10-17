@@ -117,4 +117,8 @@ class ProjectBoard extends Model
         return $this->hasManyDeepFromRelations($this->modules(), (new ProjectModule)->assignees())
                 ->distinct('users.id');
     }
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }
