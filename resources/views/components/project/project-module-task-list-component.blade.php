@@ -20,7 +20,7 @@
                      </a>
                  @endif
 
-                 @if (!Route::is('user.tasks.index'))
+                 @if (!Route::is('user.tasks.index') && !request()->attributes->get('is_collaboration'))
                      <a href="{{  request()->attributes->get('is_collaboration')
                      ? authRoute( 'user.collab.tasks.index' , ['owner' => $projectBoard->user->username , 'project' => $projectBoard?->slug ?? '', 'module' => $projectModule?->slug ?? ''])
                      : authRoute( 'user.tasks.index', ['project' => $projectBoard?->slug ?? '', 'module' => $projectModule?->slug ?? '']) }}"

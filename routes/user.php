@@ -127,6 +127,7 @@ Route::controller(TaskController::class)->group(function () {
 
     Route::delete('tasks/{task}', 'destroy')->name('tasks.delete');
     Route::get('tasks/{task}', 'show')->name('tasks.show');
+    Route::patch('tasks/{task}/status/{status}', 'updateStatus')->name('tasks.updateStatus');
 });
 
 Route::controller(SubTaskController::class)->group(function () {

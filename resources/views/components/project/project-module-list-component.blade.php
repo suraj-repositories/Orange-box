@@ -53,7 +53,7 @@
                          <th>Created Date</th>
                          <th>Number of Task</th>
                          <th>Deadline</th>
-                         <th>Project</th>
+
                          <th>Assignee</th>
                      </tr>
                  </thead>
@@ -94,12 +94,7 @@
                                  <p class="mx-auto">-</p>
                              @endif
                          </td>
-                         <td>
-                             <a href="#" class="text-reset">
-                                 <i data-feather="folder" style="height: 18px; width: 18px;" class="me-1"></i>
-                                 2
-                             </a>
-                         </td>
+
                          <td>
                              <div class="avatar-list-stacked">
                                  @php

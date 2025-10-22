@@ -123,6 +123,8 @@ class ProjectModuleController extends Controller
             $projectModule->project_module_type_id = $validated['type'] ?? null;
             $projectModule->start_date = $validated['start_date'] ?? null;
             $projectModule->end_date = $validated['end_date'] ?? null;
+
+
             $projectModule->save();
 
             if (!empty($validated['media_files'])) {

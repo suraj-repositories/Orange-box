@@ -69,7 +69,57 @@
                                                 <i class='bx bx-trash'></i>
                                             </button>
                                         </form>
+
                                     @endif
+                                    <div class="dropdown">
+                                            <a class="dropdown-toggle" href="#" role="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class='bx bx-dots-vertical-rounded'></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <form
+                                                        action="{{ authRoute('user.tasks.updateStatus', ['task' => $task->uuid, 'status' => 'completed']) }}"
+                                                        method="POST" class="status-form">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="dropdown-item text-success">Mark
+                                                            Completed</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form
+                                                        action="{{ authRoute('user.tasks.updateStatus', ['task' => $task->uuid, 'status' => 'pending']) }}"
+                                                        method="POST" class="status-form">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="dropdown-item text-warning">Mark
+                                                            Pending</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form
+                                                        action="{{ authRoute('user.tasks.updateStatus', ['task' => $task->uuid, 'status' => 'on_hold']) }}"
+                                                        method="POST" class="status-form">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="dropdown-item text-secondary">Mark On
+                                                            Hold</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form
+                                                        action="{{ authRoute('user.tasks.updateStatus', ['task' => $task->uuid, 'status' => 'in_progress']) }}"
+                                                        method="POST" class="status-form">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="dropdown-item text-info">Mark In
+                                                            Progress</button>
+                                                    </form>
+                                                </li>
+                                            </ul>
+
+                                        </div>
                                 </div>
                             </div>
 
@@ -92,15 +142,22 @@
                                                 </div>
 
                                                 <a href="{{ request()->attributes->get('is_collaboration')
-                                                ? authRoute('user.collab.project-board.show', ['owner' => $projectBoard->user->username, 'slug' => $projectBoard->slug])
-                                                : authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}"
+                                                    ? authRoute('user.collab.project-board.show', [
+                                                        'owner' => $projectBoard->user->username,
+                                                        'slug' => $projectBoard->slug,
+                                                    ])
+                                                    : authRoute('user.project-board.show', ['slug' => $projectBoard->slug]) }}"
                                                     class="project-module-project-link text-reset">
                                                     <i class="bx bx-link-external fs-6 me-1"></i>
                                                     <span><strong>Project -</strong> {{ $projectBoard->title }}</span>
                                                 </a>
                                                 <a href="{{ request()->attributes->get('is_collaboration')
-                                                ? authRoute('user.collab.modules.show', ['owner' =>  $projectBoard->user->username, 'slug' => $projectBoard->slug, 'module' => $projectModule->slug])
-                                                : authRoute('user.project-board.modules.show', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}"
+                                                    ? authRoute('user.collab.modules.show', [
+                                                        'owner' => $projectBoard->user->username,
+                                                        'slug' => $projectBoard->slug,
+                                                        'module' => $projectModule->slug,
+                                                    ])
+                                                    : authRoute('user.project-board.modules.show', ['slug' => $projectBoard->slug, 'module' => $projectModule->slug]) }}"
                                                     class="project-module-project-link text-reset">
                                                     <i class="bx bx-link-external fs-6 me-1"></i>
                                                     <span><strong>Module -</strong> {{ $projectModule->name }}</span>

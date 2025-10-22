@@ -272,4 +272,25 @@ class TaskController extends Controller
         $task->delete();
         return redirect()->back()->with('success', 'Task Deleted Successfully!');
     }
+
+    public function updateStatus(Request $request, User $user, Task $task,string $status)
+    {
+        Gate::authorize('update', $task);
+
+        $allowedStatuses = ['completed', 'pending', 'on_hold', 'in_progress'];
+
+
+        if (!in_array($status, $allowedStatuses)) {
+            return redirect()->back()->with('error', 'Invalid status value.');
+        }
+
+        if ($status === 'completed' && $task->subTasks()->where('status', '!=', 'completed')->exists()) {
+            return redirect()->back()->with('error', 'Cannot mark as completed while some subtasks are still pending.');
+        }
+
+        $task->status = $status;
+        $task->save();
+
+        return redirect()->back()->with('success', "Task marked as " . ucfirst(str_replace('-', ' ', $status)) . ".");
+    }
 }

@@ -14,6 +14,7 @@ class TaskController extends Controller
     public function index(Request $request, User $user, User $owner = null)
     {
         $tasks = Task::with(['projectModuleTask', 'projectModuleTask.module', 'projectModuleTask.module.projectBoard'])
+
             ->where('assigned_to', $user->id)
             ->orderBy('id', 'desc')
             ->when($request->filled('module'), function ($query) use ($request) {
@@ -30,11 +31,11 @@ class TaskController extends Controller
 
         $filter = [];
 
-        if($request->filled('project')){
+        if ($request->filled('project')) {
             $filter['project'] = ProjectBoard::where('id', $request->project)->value('title');
         }
-        if($request->filled('module')){
-             $filter['module'] = ProjectModule::where('id', $request->project)->value('name');
+        if ($request->filled('module')) {
+            $filter['module'] = ProjectModule::where('id', $request->project)->value('name');
         }
 
         return view('user.project_tracker.tasks.task_list', [
@@ -47,7 +48,7 @@ class TaskController extends Controller
     public function show(User $user, User $owner, Task $task, Request $request)
     {
 
-        if($task->assigned_to != $user->id){
+        if ($task->assigned_to != $user->id) {
             abort(404, 'Taks Not Found!');
         }
 

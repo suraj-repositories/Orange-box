@@ -30,44 +30,54 @@ class ProjectModule extends Model
     protected static function booted()
     {
         static::creating(function ($module) {
-            $module->slug = self::generateUniqueSlug($module, $module->user_id);
+            $module->slug = self::generateUniqueSlug(
+                $module->name,
+                $module->user_id,
+                $module->project_board_id
+            );
+
+
         });
 
         static::updating(function ($module) {
             if ($module->isDirty('name')) {
-                $module->slug = self::generateUniqueSlug($module, $module->user_id, $module->id);
+                $module->slug = self::generateUniqueSlug(
+                    $module->name,
+                    $module->user_id,
+                    $module->project_board_id,
+                    $module->id
+                );
             }
         });
 
         static::deleting(function ($module) {
             if ($module->isForceDeleting()) {
-                $module->files()->withTrashed()->get()->each->forceDelete();
-                $module->projectModuleUsers()->withTrashed()->get()->each->forceDelete();
-                $module->projectModuleTasks()->withTrashed()->get()->each->forceDelete();
+                $module->files()->withTrashed()->each->forceDelete();
+                $module->projectModuleUsers()->withTrashed()->each->forceDelete();
+                $module->projectModuleTasks()->withTrashed()->each->forceDelete();
             } else {
-                $module->files()->get()->each->delete();
-                $module->projectModuleUsers()->get()->each->delete();
-                $module->projectModuleTasks()->get()->each->delete();
+                $module->files()->each->delete();
+                $module->projectModuleUsers()->each->delete();
+                $module->projectModuleTasks()->each->delete();
             }
         });
 
         static::restoring(function ($module) {
-            $module->files()->withTrashed()->get()->each->restore();
-            $module->projectModuleUsers()->withTrashed()->get()->each->restore();
-            $module->projectModuleTasks()->withTrashed()->get()->each->restore();
+            $module->files()->withTrashed()->each->restore();
+            $module->projectModuleUsers()->withTrashed()->each->restore();
+            $module->projectModuleTasks()->withTrashed()->each->restore();
         });
     }
 
-    public static function generateUniqueSlug($module, $userId, $ignoreId = null)
+    public static function generateUniqueSlug($name, $userId, $projectBoardId = null, $ignoreId = null)
     {
-        $baseSlug = Str::slug($module->name);
+        $baseSlug = Str::slug($name);
         $slug = $baseSlug;
         $count = 1;
-        $projectId = $module->project_board_id ?? null;
 
         while (self::where('slug', $slug)
             ->when($ignoreId, fn($q) => $q->where('id', '!=', $ignoreId))
-            ->where('project_board_id', $projectId)
+            ->where('project_board_id', $projectBoardId)
             ->where('user_id', $userId)
             ->exists()
         ) {
@@ -77,7 +87,6 @@ class ProjectModule extends Model
 
         return $slug;
     }
-
     public function files()
     {
         return $this->morphMany(File::class, 'fileable');
@@ -108,7 +117,7 @@ class ProjectModule extends Model
             'project_module_id',
             'user_id'
         )->wherePivotNull('deleted_at')
-        ->whereNull('users.deleted_at');
+            ->whereNull('users.deleted_at');
     }
 
     public function projectModuleTasks()
@@ -131,11 +140,13 @@ class ProjectModule extends Model
         return $this->tasks()->where('status', 'completed')->count();
     }
 
-    public function  projectModuleType(){
+    public function  projectModuleType()
+    {
         return $this->belongsTo(projectModuleType::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
