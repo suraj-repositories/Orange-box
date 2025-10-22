@@ -229,10 +229,12 @@
     border-radius: 0px;
     padding: 10px;
 }
-.relative-l-1{
+
+.relative-l-1 {
     position: relative;
     left: 1px;
 }
+
 .rename-modal .modal-body {
     padding-top: 0;
     padding-bottom: 0;
@@ -884,9 +886,10 @@ p {
 }
 
 
-.mh-70-vh{
+.mh-70-vh {
     max-height: 70vh !important;
 }
+
 /* BEGIN -  project section */
 .card-img-top {
     width: 100%;
@@ -1040,7 +1043,9 @@ p {
     width: 100%;
     border-radius: .25rem;
 }
-
+.border-dashed{
+    border-style: dashed !important;
+}
 .avatar-list-stacked .avatar:hover {
     z-index: 1;
     --tw-scale-x: 1.15;
@@ -1575,7 +1580,7 @@ p {
     position: absolute;
     z-index: 5;
     left: -6px;
-   border: 1px solid #d5d5d5;
+    border: 1px solid #d5d5d5;
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -1584,7 +1589,7 @@ p {
     top: 5px;
     font-size: 19px;
     background: var(--bs-white);
-     color: var(--bs-primary);
+    color: var(--bs-primary);
     border-color: var(--bs-primary);
 
 }
@@ -1598,6 +1603,7 @@ p {
 .timeline-1 .timeline-data .card .card-body {
     padding: 10px;
 }
+
 .timeline-1 .timeline-data .card .card-footer {
     padding: 10px;
     padding-top: 0;
@@ -1606,7 +1612,7 @@ p {
     justify-content: space-between;
 }
 
-.avatar.avatar-sm{
+.avatar.avatar-sm {
     width: 30px;
     height: 30px;
 }
@@ -1622,8 +1628,9 @@ p {
     color: #537aef;
     border-color: #436ff1;
 }
+
 .status-radios .status-btn.status-pending:hover,
-.status-radios input:checked + .status-btn.status-pending {
+.status-radios input:checked+.status-btn.status-pending {
     background-color: #537aef;
     color: #fff;
 }
@@ -1633,8 +1640,9 @@ p {
     color: #fdb24f;
     border-color: #faa73b;
 }
+
 .status-radios .status-btn.status-hold:hover,
-.status-radios input:checked + .status-btn.status-hold {
+.status-radios input:checked+.status-btn.status-hold {
     background-color: #fdb24f;
     color: #fff;
 }
@@ -1644,8 +1652,9 @@ p {
     color: #dfb612;
     border-color: #e9d900;
 }
+
 .status-radios .status-btn.status-progress:hover,
-.status-radios input:checked + .status-btn.status-progress {
+.status-radios input:checked+.status-btn.status-progress {
     background-color: #ffe711;
     color: #555;
 }
@@ -1655,17 +1664,125 @@ p {
     color: #35b751;
     border-color: #35b751;
 }
+
 .status-radios .status-btn.status-completed:hover,
-.status-radios input:checked + .status-btn.status-completed {
+.status-radios input:checked+.status-btn.status-completed {
     background-color: #35b751;
     color: #fff;
 }
 
 .list-row-card.deleting,
 .list-row-card.deleting .type,
-.list-row-card.deleting .size{
+.list-row-card.deleting .size {
     color: #660404;
 }
+
 /* END -  sub task list */
 
+.show-password-btn {
+    border: 0;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 7px;
+    z-index: 10;
+}
 
+tr.deleting td,
+tr.deleting th,
+tr.deleting a {
+    background: var(--bs-danger-bg-subtle);
+    color: var(--bs-danger);
+}
+
+.password-options .option-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid var(--bs-gray-300);
+    padding: 20px;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    flex-direction: column;
+}
+
+.password-options .option-circle i {
+    font-size: 44px;
+}
+
+/* start smooth circle progressbar */
+
+
+.circular-progress {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+
+    svg {
+        transform: rotate(270deg);
+    }
+
+    circle {
+        stroke-width: 10;
+        fill: none;
+        stroke-linecap: round;
+    }
+
+    circle:nth-of-type(1) {
+        stroke: #dee2e6;
+    }
+
+    circle:nth-of-type(2) {
+        stroke: var(--bs-warning);
+        stroke-dasharray: 150px;
+        stroke-dashoffset: calc(0.3 * 150px);
+    }
+
+    .pct {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+#slider {
+    margin: 0 50px;
+    width: 50%;
+
+    &::-moz-range-thumb {
+        background-color: var(--bs-warning);
+    }
+
+    &::-webkit-slider-thumb {
+        background-color: var(--bs-warning);
+    }
+
+    &::-ms-thumb {
+        background-color: var(--bs-warning);
+    }
+
+    &:focus {
+        &::-moz-range-thumb {
+            box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(var(--bs-warning), 0.25);
+
+        }
+
+        &::-webkit-slider-thumb {
+            box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(var(--bs-warning), 0.25);
+        }
+
+        &::-ms-thumb {
+            box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(var(--bs-warning), 0.25);
+        }
+    }
+}

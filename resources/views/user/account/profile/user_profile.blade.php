@@ -8,7 +8,6 @@
 @section('content')
    <div class="content-page">
                 <div class="content">
-
                     <!-- Start Content-->
                     <div class="container-xxl">
                         <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
@@ -64,6 +63,12 @@
                                                 <a class="nav-link p-2" id="setting_tab" data-bs-toggle="tab" href="#profile_setting" role="tab">
                                                     <span class="d-block d-sm-none"><i class="mdi mdi-school"></i></span>
                                                     <span class="d-none d-sm-block">Setting</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link p-2" id="setting_tab" data-bs-toggle="tab" href="#profile_setting" role="tab">
+                                                    <span class="d-block d-sm-none"><i class="mdi mdi-school"></i></span>
+                                                    <span class="d-none d-sm-block">Password Locker</span>
                                                 </a>
                                             </li>
                                         </ul>

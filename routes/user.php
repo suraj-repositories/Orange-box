@@ -7,6 +7,7 @@ use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\FolderFactoryController;
+use App\Http\Controllers\User\PasswordLockerController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ProjectBoardController;
 use App\Http\Controllers\User\ProjectModuleController;
@@ -165,4 +166,12 @@ Route::prefix('collab/{owner?}/')->name('collab.')->middleware('collab')->group(
         Route::get('tasks', 'index')->name('tasks.index');
         Route::get('tasks/{task}', 'show')->name('tasks.show');
     });
+});
+
+Route::controller(PasswordLockerController::class)->group(function () {
+    Route::get('password-locker', 'index')->name('password_locker.index');
+    Route::post('password-locker', 'store')->name('password_locker.save');
+    Route::post('password-locker/{passwordLocker}', 'update')->name('password_locker.update');
+    Route::delete('password-locker/{passwordLocker}', 'destroy')->name('password_locker.delete');
+    Route::get('password-locker/{passwordLocker}/reveal-password', 'showPassword')->name('password_locker.showPassword');
 });

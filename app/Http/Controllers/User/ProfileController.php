@@ -12,6 +12,6 @@ class ProfileController extends Controller
     public function index(User $user){
 
 
-        return view('user.account.profile.usre_profile', compact('user'));
+        return view('user.account.profile.user_profile', compact('user'));
     }
 }
