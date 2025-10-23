@@ -51,7 +51,8 @@ class PasswordLockerController extends Controller
             ], 422);
         }
 
-        PasswordLocker::create([
+
+          PasswordLocker::create([
             'user_id' => $user->id,
             'username' => $request->username,
             'password' => Crypt::encryptString($request->password),
@@ -59,6 +60,7 @@ class PasswordLockerController extends Controller
             'expires_at' => $request->expires_at,
             'notes' => !empty($request->notes) ? Crypt::encryptString($request->notes) : null
         ]);
+
 
         return response()->json([
             'status' => 'success',

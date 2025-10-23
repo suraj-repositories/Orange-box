@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Common\FileController;
+use App\Http\Controllers\Common\PasswordLockerAuthController;
+use App\Http\Controllers\Common\PemKeyController;
 use App\Http\Controllers\Common\ProjectBoardController;
 use App\Http\Controllers\Common\ProjectModuleController;
 use App\Http\Controllers\Common\UserController;
@@ -23,12 +25,24 @@ Route::controller(FileController::class)->middleware('auth')->group(function () 
     Route::post('/file/delete-by-path', 'destroyEditorFileByPath')->name('file.path.delete');
 });
 
-Route::controller(UserController::class)->middleware('auth')->group(function(){
+Route::controller(UserController::class)->middleware('auth')->group(function () {
     Route::post('/search/username', 'searchUsers')->name('search.username');
 });
-Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function(){
+Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
     Route::get('project-board/{projectBoard}/modules', [ProjectBoardController::class, 'getModules'])->name('project-board.modules');
     Route::get('project-modules/{projectModule}/assignees', [ProjectModuleController::class, 'getAssignees'])->name('project-module.getAssignees');
 
-});
+    Route::controller(PemKeyController::class)->group(function () {
+        Route::get('pk/generate', 'generateAndDownload')->name('pemkey.generate');
+        Route::get('pk/challenge', 'getChallenge')->name('pemkey.getChallenge');
+        Route::post('pk/verify', 'verifySignature')->name('pemkey.verify');
+    });
 
+    Route::controller(PasswordLockerAuthController::class)->group(function () {
+        Route::post('password-locker/auth/send-otp', 'sendEmailOtp')->name('password_locker.auth.email.send-otp');
+        Route::post('password-locker/auth/verify-otp', 'verifyEmailOtp')->name('password_locker.auth.email.verify-otp');
+    });
+
+
+
+});

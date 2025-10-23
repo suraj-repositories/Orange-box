@@ -41,12 +41,12 @@
                                 <tr>
                                     <th> {{ $passwords->firstItem() + $loop->iteration - 1 }}</th>
                                     <td>{{ $password->username }}</td>
-                                    <td> *******
+                                    <td>
+                                        *******
                                         <a href="javascript:void(0)" class="reveal-password-btn"
-                                            data-ob-show-password-url="{{ authRoute('user.password_locker.showPassword', ['passwordLocker' => $password]) }}">
-                                            <i class='bx bx-show-alt fs-5 text-danger'></i>
+                                            data-password-locker-id="{{ $password->id }}">
+                                            <i class='bx bx-show-alt fs-5 text-dark'></i>
                                         </a>
-
                                     </td>
                                     <td><a href="{{ $password->url }}" target="_blank">{{ $password->domain }}</a></td>
                                     <td>
@@ -142,10 +142,10 @@
                                         <span class="input-group-text"><i class='bx bx-key fs-5'></i></span>
                                         <input type="password" class="form-control pe-4 rounded-end" id="password-input"
                                             name="password" placeholder="Password">
-                                        <a href="javascript:void(0)" class="show-password-btn text-danger"
+                                        <button type="button" class="show-password-btn btn-no-style text-danger"
                                             id="toggle-password">
                                             <i class="bi bi-eye fs-5"></i>
-                                        </a>
+                                    </button>
                                     </div>
                                 </div>
 
@@ -177,7 +177,6 @@
                                         placeholder="Add a note"></textarea>
 
                                 </div>
-
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -241,56 +240,104 @@
                     </div>
                     <div class="modal-body">
 
-                        <div class="d-flex align-items-center justify-content-center password-options gap-2">
+                        <form class="d-none" action="#" id="no-submit-form">
+                            <div class="d-flex align-items-center justify-content-center password-options gap-2">
+                                <div class="password-options  justify-content-center d-flex gap-3">
+                                    <input type="radio" name="keytype" id="pemFile" class="d-none">
+                                    <label class="option-circle" for="pemFile">
+                                        <i class='bx bx-file'></i>
+                                        <span>.pem</span>
+                                    </label>
 
-                            <div class="option-circle">
-                                <i class='bx bx-file'></i>
-                                <span>.pem</span>
-                            </div>
-                            <div class="option-circle">
-                                <i class='bx bx-key'></i>
-                                <span>Key</span>
-                            </div>
-                            <div class="option-circle">
-                                <i class='bx bx-envelope'></i>
-                                <span>Email</span>
-                            </div>
-                            <div class="option-circle">
-                                <i class='bx bxl-android'></i>
-                                <span>App</span>
+                                    <input type="radio" name="keytype" id="key" class="d-none">
+                                    <label class="option-circle" for="key">
+                                        <i class='bx bx-key'></i>
+                                        <span>Key</span>
+                                    </label>
+
+                                    <input type="radio" name="keytype" id="email" class="d-none">
+                                    <label class="option-circle" for="email">
+                                        <i class='bx bx-envelope'></i>
+                                        <span>Email</span>
+                                    </label>
+
+                                    <input type="radio" name="keytype" id="app" class="d-none">
+                                    <label class="option-circle" for="app">
+                                        <i class='bx bxl-android'></i>
+                                        <span>App</span>
+                                    </label>
+                                </div>
                             </div>
 
-                        </div>
+                            <!-- Input groups -->
+                            <div class="my-3 input-group-wrapper" id="pemFileInput">
+                                <div class="input-group">
+                                    <span class="input-group-text fw-bold fs-5 py-1">
+                                        <i class='bx bx-scan'></i>
+                                    </span>
+                                    <input type="file" class="form-control" id="pem-file-input" name="pem"
+                                        accept=".pem">
+                                </div>
+                            </div>
 
-                        <div class="my-3">
-                            <input type="file" class="form-control" name="file" id="">
-                        </div>
+                            <div class="my-3 input-group-wrapper" id="keyInput">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bx bx-lock fs-5"></i></span>
+                                    <input type="password" class="form-control rounded-end pe-35px"
+                                        id="password-input" name="key" placeholder="Master Key">
+                                    <button type="button" class="show-password-btn btn-no-style text-dark me-1"
+                                        id="toggle-password">
+                                        <i class="bi bi-eye fs-5"></i>
+                                </button>
+                                </div>
+                            </div>
 
-                        <div class="d-flex align-items-center">
-                            <div class="w-fit mx-2">
+                            <div class="my-3 input-group-wrapper" id="emailInput">
+                                <div class="row align-items-center g-2">
+                                    <div class="col-12 col-lg-8">
+                                        <div class="input-group">
+                                            <span class="input-group-text fw-bold fs-5 py-1"> @ </span>
+                                            <input type="text" class="form-control" id="otp-input" name="otp"
+                                                placeholder="OTP">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-4">
+                                        <small class="text-muted resend-message d-none"></small>
+                                       <button type="button" class="btn w-100 btn-primary " id="send-email-otp-btn">Send Otp</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="my-3 input-group-wrapper" id="appInput">
+                                <div class="input-group">
+                                    <span class="input-group-text fw-bold fs-5 py-1"><i
+                                            class='bx bx-dialpad fs-6'></i>
+                                    </span>
+                                    <input type="number" class="form-control hide-btns" id="code-input"
+                                        name="code" placeholder="_ _ _  _ _ _">
+                                </div>
+                            </div>
+                        </form>
+                        <div class="d-block" id="reveal-area" class="d-none">
+                            <div class="d-flex align-items-center flex-column gap-3">
                                 <div class="circular-progress">
-                                    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'
-                                        aria-labelledby='title' role='graphic'>
-                                        <title id='title'>svg circular progress bar</title>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
                                         <circle cx="50" cy="50" r="40"></circle>
-                                        <circle cx="50" cy="50" r="40" id='pct-ind'></circle>
+                                        <circle cx="50" cy="50" r="40" id="pct-ind"></circle>
                                     </svg>
-                                    <p class="pct">30</p>
+                                    <p class="pct">15s</p>
+                                </div>
+
+                                <div id="reveal-password-txt"
+                                    class="p-2 fs-6 px-3 border rounded text-wrap badge badge-blue border-primary border-dashed">
+                                    *******
                                 </div>
                             </div>
-
-
-                                <div
-                                    class="p-2 px-3 w-100 border rounded text-wrap badge badge-blue border-primary border-dashed">
-                                    Abc$123#xyZ
-                                </div>
-
                         </div>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-
+                        <button type="button" class="btn btn-primary" id="unlock-btn">Unlock</button>
                     </div>
 
                 </div>

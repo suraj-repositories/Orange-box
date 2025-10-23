@@ -215,7 +215,13 @@
 .page-link.active {
     top: -1px;
 }
-
+input[type=number].hide-btns::-webkit-inner-spin-button,
+input[type=number].hide-btns::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
 .rename-modal .modal-header {
     border: none;
 }
@@ -1698,19 +1704,40 @@ tr.deleting a {
     background: var(--bs-danger-bg-subtle);
     color: var(--bs-danger);
 }
+.password-options {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
 
 .password-options .option-circle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 600;
-    border: 1px solid var(--bs-gray-300);
-    padding: 20px;
-    height: 100px;
-    width: 100px;
-    border-radius: 50%;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--bs-gray-300);
+  padding: 20px;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--bs-gray-600);
+}
+.pe-35px{
+    padding-right: 35px !important;
+}
+.password-options .option-circle i {
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+/* Highlight selected option */
+.password-options input[type="radio"]:checked + .option-circle {
+  border-color: var(--bs-primary);
+  color: var(--bs-primary);
 }
 
 .password-options .option-circle i {
@@ -1719,70 +1746,41 @@ tr.deleting a {
 
 /* start smooth circle progressbar */
 
-
 .circular-progress {
     position: relative;
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-
-    svg {
-        transform: rotate(270deg);
-    }
-
-    circle {
-        stroke-width: 10;
-        fill: none;
-        stroke-linecap: round;
-    }
-
-    circle:nth-of-type(1) {
-        stroke: #dee2e6;
-    }
-
-    circle:nth-of-type(2) {
-        stroke: var(--bs-warning);
-        stroke-dasharray: 150px;
-        stroke-dashoffset: calc(0.3 * 150px);
-    }
-
-    .pct {
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
+    width: 100px;
+    height: 100px;
 }
 
-#slider {
-    margin: 0 50px;
-    width: 50%;
+.circular-progress svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+}
 
-    &::-moz-range-thumb {
-        background-color: var(--bs-warning);
-    }
+.circular-progress circle {
+    stroke-width: 10;
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s ease;
+}
 
-    &::-webkit-slider-thumb {
-        background-color: var(--bs-warning);
-    }
+.circular-progress circle:nth-of-type(1) {
+    stroke: #dee2e6;
+}
 
-    &::-ms-thumb {
-        background-color: var(--bs-warning);
-    }
+.circular-progress circle:nth-of-type(2) {
+    stroke: var(--bs-primary);
+    stroke-dasharray: 251.2;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 0.1s linear;
+}
 
-    &:focus {
-        &::-moz-range-thumb {
-            box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(var(--bs-warning), 0.25);
-
-        }
-
-        &::-webkit-slider-thumb {
-            box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(var(--bs-warning), 0.25);
-        }
-
-        &::-ms-thumb {
-            box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem rgba(var(--bs-warning), 0.25);
-        }
-    }
+.circular-progress .pct {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    font-weight: 600;
 }

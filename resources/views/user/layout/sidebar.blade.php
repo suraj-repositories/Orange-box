@@ -212,6 +212,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ authRoute('user.password_locker.index') }}" class='tp-link' href='calendar'>
+                        <i data-feather="lock"></i>
+                        <span> Password Locker </span>
+                    </a>
+                </li>
+                <li>
                     <a class='tp-link' href='calendar'>
                         <i data-feather="settings"></i>
                         <span> Settings </span>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Common\PemKeyController;
 use App\Http\Controllers\User\Collaboration\ProjectBoardController as CollaborationProjectBoardController;
 use App\Http\Controllers\User\Collaboration\ProjectModuleController as CollaborationProjectModuleController;
 use App\Http\Controllers\User\Collaboration\TaskController as CollaborationTaskController;
@@ -175,3 +176,5 @@ Route::controller(PasswordLockerController::class)->group(function () {
     Route::delete('password-locker/{passwordLocker}', 'destroy')->name('password_locker.delete');
     Route::get('password-locker/{passwordLocker}/reveal-password', 'showPassword')->name('password_locker.showPassword');
 });
+
+
