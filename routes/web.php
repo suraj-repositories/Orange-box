@@ -41,6 +41,7 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
     Route::controller(PasswordLockerAuthController::class)->group(function () {
         Route::post('password-locker/auth/send-otp', 'sendEmailOtp')->name('password_locker.auth.email.send-otp');
         Route::post('password-locker/auth/verify-otp', 'verifyEmailOtp')->name('password_locker.auth.email.verify-otp');
+        Route::post('password-locker/auth/verify-master-key', 'verfiyMasterKey')->name('password_locker.auth.verify_master_key');
     });
 
 

@@ -42,6 +42,7 @@ class Otp extends Model
      */
     public static function verify($userId, $otp)
     {
+
         $record = self::where('user_id', $userId)
                       ->where('otp', $otp)
                       ->whereNull('used_at')

@@ -290,6 +290,8 @@
                                         <i class="bi bi-eye fs-5"></i>
                                 </button>
                                 </div>
+
+                                <small class="text-muted">For better security, always change your master key after every use.</small>
                             </div>
 
                             <div class="my-3 input-group-wrapper" id="emailInput">

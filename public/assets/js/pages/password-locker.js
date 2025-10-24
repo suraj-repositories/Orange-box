@@ -548,7 +548,39 @@ async function handlePemSelection(input, password_locker_id) {
 }
 
 function handleMasterPasswordSelection(input, password_locker_id) {
+ const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+    fetch(route('ajax.password_locker.auth.verify_master_key'), {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+            'x-csrf-token': csrfToken
+        },
+        body: JSON.stringify({
+            master_key : input.value,
+            password_locker_id: password_locker_id
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+           showPassword(data.key);
+        } else {
+            Swal.fire({
+                title: "Oops!",
+                text: data.message,
+                icon: "error"
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            title: "Oops!",
+            text: error,
+            icon: "error"
+        });
+    });
 }
 function handleEmailSelection(input, password_locker_id) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -556,9 +588,10 @@ function handleEmailSelection(input, password_locker_id) {
     fetch(route('ajax.password_locker.auth.email.verify-otp'), {
         method: 'POST',
         headers: {
+            'Content-type': 'application/json',
             'x-csrf-token': csrfToken
         },
-        data: JSON.stringify({
+        body: JSON.stringify({
             otp : input.value,
             password_locker_id: password_locker_id
         })

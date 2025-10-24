@@ -16,6 +16,8 @@ use App\Http\Controllers\User\SubTaskController;
 use App\Http\Controllers\User\SyntaxStoreController;
 use App\Http\Controllers\User\TaskController;
 use App\Http\Controllers\User\ThinkPadController;
+use App\Http\Controllers\User\WorkExperienceController;
+use App\Models\WorkExperience;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(DashboardController::class)->group(function () {
@@ -175,6 +177,13 @@ Route::controller(PasswordLockerController::class)->group(function () {
     Route::post('password-locker/{passwordLocker}', 'update')->name('password_locker.update');
     Route::delete('password-locker/{passwordLocker}', 'destroy')->name('password_locker.delete');
     Route::get('password-locker/{passwordLocker}/reveal-password', 'showPassword')->name('password_locker.showPassword');
+});
+
+Route::controller(WorkExperienceController::class)->group(function () {
+    Route::post('work-experience', 'store')->name('work_experience.save');
+    Route::post('work-experience/{workExperience}', 'update')->name('work_experience.update');
+    Route::delete('work-experience/{workExperience}', 'destroy')->name('work_experience.delete');
+
 });
 
 
