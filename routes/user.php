@@ -7,6 +7,7 @@ use App\Http\Controllers\User\Collaboration\TaskController as CollaborationTaskC
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\EducationController;
 use App\Http\Controllers\User\FolderFactoryController;
 use App\Http\Controllers\User\PasswordLockerController;
 use App\Http\Controllers\User\ProfileController;
@@ -183,7 +184,12 @@ Route::controller(WorkExperienceController::class)->group(function () {
     Route::post('work-experience', 'store')->name('work_experience.save');
     Route::post('work-experience/{workExperience}', 'update')->name('work_experience.update');
     Route::delete('work-experience/{workExperience}', 'destroy')->name('work_experience.delete');
+});
 
+Route::controller(EducationController::class)->group(function () {
+    Route::post('education', 'store')->name('education.save');
+    Route::post('education/{education}', 'update')->name('education.update');
+    Route::delete('education/{education}', 'destroy')->name('education.delete');
 });
 
 

@@ -1830,3 +1830,16 @@ tr.deleting a {
 .actionable-content.deletion-enabled form.delete-form{
     display: block;
 }
+
+.actionable-content .deleting,
+.actionable-content .deleting span,
+.actionable-content .deleting h5,
+.actionable-content .deleting img,
+.actionable-content .deleting a{
+    background: unset;
+    color: var(--bs-danger);
+}
+.actionable-content .deleting .text-dark{
+    background: unset;
+    color: var(--bs-danger-text-emphasis);
+}

@@ -1,6 +1,6 @@
  <div class="row work-experience-component">
 
-     <div class="col-12 mb-3">
+     <div class="col-12">
          <div class="d-flex align-items-center mb-3">
              <h5 class="fs-16 text-dark fw-semibold  text-capitalize">Experience</h5>
              <div class="ms-auto fw-semibold d-flex gap-2 align-items-center">
@@ -29,10 +29,7 @@
                              </label>
                          </li>
                      </ul>
-
-
                  </div>
-
              </div>
          </div>
      </div>
@@ -87,7 +84,7 @@
 
                                  <div class="list-inline-item list-inline-item-second">{{ $experience->duration }}</div>
                              </div>
-                             <p class="mb-0">{{ $experience->description }}</p>
+                             <p class="mb-0 text-dark">{{ $experience->description }}</p>
                          </div>
                      </div>
 
@@ -184,7 +181,7 @@
                                  <label for="company-start-input" class="form-label">Start Date</label>
                                  <div class="input-group">
                                      <span class="input-group-text"><i class='bx bx-calendar fs-5'></i></span>
-                                     <input type="date" class="form-control" id="company-start-input"
+                                     <input type="date" class="form-control" id="company-start-input" max="{{ date("Y-m-d") }}"
                                          name="start_date">
                                  </div>
                              </div>

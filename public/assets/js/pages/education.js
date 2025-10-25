@@ -1,15 +1,15 @@
 
 document.addEventListener('DOMContentLoaded', function () {
-    enableWorkExperienceCreation("#create-work-experience", authRoute('user.work_experience.save'));
-    enableWorkExperienceEditing(".edit-work-experience");
-    enableWorkExperienceDeletion(".delete-work-experience");
-    enableEditingBtns("#work-experience-enable-editing");
-    enableDeleteBtns("#work-experience-enable-deletion");
+    enableWorkExperienceCreation("#create-education", authRoute('user.education.save'));
+    enableWorkExperienceEditing(".edit-education");
+    enableWorkExperienceDeletion(".delete-education");
+    enableEditingBtns("#education-enable-editing");
+    enableDeleteBtns("#education-enable-deletion");
 });
 
 function enableWorkExperienceCreation(selector, submitUrl) {
-    const modal = document.querySelector("#work-experience-form-modal");
-    const modalTitle = modal.querySelector("#work-experience-form-title");
+    const modal = document.querySelector("#education-form-modal");
+    const modalTitle = modal.querySelector("#education-form-title");
     const baseForm = modal.querySelector('form');
 
     const createBtn = document.querySelector(selector);
@@ -21,7 +21,7 @@ function enableWorkExperienceCreation(selector, submitUrl) {
         oldForm.replaceWith(newForm);
 
         modal.setAttribute('data-form-mode', 'create');
-        modalTitle.textContent = "Add Work Experience";
+        modalTitle.textContent = "Add Education";
         newForm.reset();
 
         const saveBtn = newForm.querySelector('button[type="submit"]');
@@ -68,8 +68,8 @@ function enableWorkExperienceCreation(selector, submitUrl) {
 }
 
 function enableWorkExperienceEditing(selector) {
-    const modal = document.querySelector("#work-experience-form-modal");
-    const modalTitle = modal.querySelector("#work-experience-form-title");
+    const modal = document.querySelector("#education-form-modal");
+    const modalTitle = modal.querySelector("#education-form-title");
     const editBtns = document.querySelectorAll(selector);
     if (!editBtns.length) return;
 
@@ -80,10 +80,10 @@ function enableWorkExperienceEditing(selector) {
             oldForm.replaceWith(newForm);
 
             modal.setAttribute('data-form-mode', 'edit');
-            modalTitle.textContent = "Edit Work Experience";
+            modalTitle.textContent = "Edit Education";
 
-            const workExpId = btn.getAttribute('data-work-experience-id');
-            newForm.setAttribute("data-work-experience-id", workExpId);
+            const workExpId = btn.getAttribute('data-education-id');
+            newForm.setAttribute("data-education-id", workExpId);
 
             setDataToForm(newForm, btn.dataset);
 
@@ -92,8 +92,8 @@ function enableWorkExperienceEditing(selector) {
             newForm.addEventListener('submit', (e) => {
                 e.preventDefault();
 
-                const submitUrl = authRoute('user.work_experience.update', {
-                    workExperience: newForm.getAttribute('data-work-experience-id')
+                const submitUrl = authRoute('user.education.update', {
+                    education: newForm.getAttribute('data-education-id')
                 });
 
                 saveBtn.disabled = true;
@@ -185,15 +185,12 @@ function setDataToForm(form, data) {
     if (!form || !data) return;
     form.reset();
 
-    form.querySelector('[name="job_title"]').value = data.jobTitle || '';
-    form.querySelector('[name="employment_type"]').value = data.employmentType || '';
-    form.querySelector('[name="company"]').value = data.company || '';
-    form.querySelector('[name="location"]').value = data.location || '';
+    form.querySelector('[name="institution"]').value = data.institution || '';
+    form.querySelector('[name="degree"]').value = data.degree || '';
+    form.querySelector('[name="field_of_study"]').value = data.fieldOfStudy || '';
+    form.querySelector('[name="grade"]').value = data.grade || '';
     form.querySelector('[name="start_date"]').value = data.startDate || '';
     form.querySelector('[name="end_date"]').value = data.endDate || '';
-
-    const chk = form.querySelector('[name="currently_working"]');
-    if (chk) chk.checked = data.currentlyWorking === 'yes' || data.currentlyWorking === true;
 
     const desc = form.querySelector('[name="description"]');
     if (desc) {
@@ -204,13 +201,13 @@ function setDataToForm(form, data) {
         }
     }
 
-    const logoPreview = form.querySelector('#company-logo-preivew');
+    const logoPreview = form.querySelector('#institution-logo-preivew');
     if (logoPreview) {
         logoPreview.innerHTML = '';
-        if (data.companyLogo) {
+        if (data.institutionLogo) {
             const img = document.createElement('img');
-            img.src = data.companyLogo;
-            img.alt = 'Company Logo';
+            img.src = data.institutionLogo;
+            img.alt = 'Institution Logo';
             img.classList.add('rounded', 'border', 'square-50');
             logoPreview.appendChild(img);
         }
@@ -219,8 +216,8 @@ function setDataToForm(form, data) {
 
 function enableImagePick(input) {
 
-    const modal = document.getElementById("work-experience-form-modal");
-    const imageBox = document.getElementById('company-logo-preivew');
+    const modal = document.getElementById("education-form-modal");
+    const imageBox = document.getElementById('institution-logo-preivew');
 
     const file = input.files[0];
 
@@ -251,7 +248,6 @@ function enableImagePick(input) {
                 }
             }
 
-
         };
 
         reader.readAsDataURL(file);
@@ -265,19 +261,6 @@ function enableImagePick(input) {
 
 }
 
-function enableCurrentlyWorkingCheckbox() {
-    const endDateInput = document.querySelector('input[name="end_date"]');
-    const currentlyWorkingCheck = document.querySelector('#currently-working-input');
-
-    if (currentlyWorkingCheck.checked) {
-        endDateInput.value = "";
-        endDateInput.disabled = true;
-    } else {
-        endDateInput.disabled = false;
-    }
-
-}
-
 function enableDeleteBtns(selector) {
     toggleClassOnView(selector, "deletion-enabled");
 }
@@ -288,13 +271,13 @@ function enableEditingBtns(selector) {
 
 function toggleClassOnView(sourceSelector, className) {
     const input = document.querySelector(sourceSelector);
-    const workExperienceView = document.querySelector("#work_experience_view");
+    const education = document.querySelector("#education_view");
     input.checked = false;
     input.addEventListener('change', () => {
         if (input.checked === true) {
-            workExperienceView.classList.add(className);
+            education.classList.add(className);
         } else {
-            workExperienceView.classList.remove(className);
+            education.classList.remove(className);
 
         }
     });
