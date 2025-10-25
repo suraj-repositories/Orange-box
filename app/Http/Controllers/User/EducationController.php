@@ -22,7 +22,7 @@ class EducationController extends Controller
             'institution_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'degree' => 'required|string|max:100',
             'field_of_study' => 'required|string|max:256',
-            'grade' => 'nullable|string|max:10',
+            'grade' => 'nullable|numeric|min:0|max:100',
             'start_date' => [
                 'required',
                 'date',

@@ -147,12 +147,12 @@
                                 </div>
                             </div>
 
-                            <!-- Grade -->
+                            <!-- GPA -->
                             <div class="col-md-6">
-                                <label for="grade-type" class="form-label">Grade</label>
+                                <label for="grade-type" class="form-label">GPA  </label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class='bx bx-time-five fs-5'></i></span>
-                                    <input type="text" class="form-control" id="grade-input"
+                                    <input type="number" class="form-control" id="grade-input"
                                         name="grade" placeholder="e.g. 7.85">
                                 </div>
                             </div>
