@@ -14,10 +14,9 @@ class ProfileController extends Controller
     //
     public function index(User $user){
 
-
         return view('user.account.profile.user_profile', [
             'user' => $user,
-            'passwords' => PasswordLocker::where('user_id', $user->id)->paginate(),
+            'passwords' => PasswordLocker::where('user_id', $user->id)->paginate(10),
             'experiences' => WorkExperience::where('user_id', $user->id)->orderByDesc('id')->get(),
             'educations' => Education::where('user_id', $user->id)->orderBy('id', 'desc')->get()
         ]);
