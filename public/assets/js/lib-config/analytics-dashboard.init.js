@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!isDashboard) {
         return;
     }
-
+    console.log('here');
     // =====================================
     // Analytics Chart
     // =====================================
@@ -69,7 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     var chart = new ApexCharts(document.querySelector("#website-visitors"), options);
     chart.render();
-
 
     // Conversion Chart
     var options = {
@@ -257,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 show: false
             },
         },
-        colors: ["#FF8600"],
+        colors: ["#ff880093"],
         series: [{
             name: 'Sales',
             data: [145, 96, 108, 140, 130, 150, 170, 138, 114, 128, 138]
@@ -324,6 +323,7 @@ document.addEventListener('DOMContentLoaded', function () {
             mode: 'light'
         },
     };
+    console.log(options);
     var chartOne = new ApexCharts(document.querySelector('#monthly-sales'), options);
     chartOne.render();
 

@@ -3,7 +3,7 @@
 
 @section('content')
 
-    <div class="content-page">
+    <div class="content-page analytics-dashboard">
         <div class="content">
 
             <!-- Start Content-->
@@ -429,5 +429,13 @@
         <!-- end Footer -->
 
     </div>
+
+@endsection
+
+@section('js')
+
+    <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/js/lib-config/stock-prices.js') }}"></script>
+    <script src="{{ asset('assets/js/lib-config/analytics-dashboard.init.js') }}"></script>
 
 @endsection
