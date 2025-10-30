@@ -6,9 +6,9 @@ Website: https://zoyothemes.com/
 File: Apexcharts Bar Chart
 */
 
-// 
+//
 //  Bar Chart
-// 
+//
 
 // Basic Bar Chart
 var options = {
@@ -30,7 +30,7 @@ var options = {
     dataLabels: {
         enabled: false
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     xaxis: {
         categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
             'United States', 'China', 'Germany'
@@ -40,9 +40,9 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#basic_bar_chart"), options);
 chart.render();
 
-// 
+//
 //  Grouped Bar Chart
-// 
+//
 var options = {
     series: [{
         data: [44, 55, 41, 64, 22, 43, 21]
@@ -70,7 +70,7 @@ var options = {
             colors: ['#fff']
         }
     },
-    colors: ["#537AEF", "#343a40"],
+    colors: ["#FF8600", "#343a40"],
     stroke: {
         show: true,
         width: 1,
@@ -87,9 +87,9 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#grouped_bar_chart"), options);
 chart.render();
 
-// 
+//
 // Stacked Bar
-// 
+//
 var options = {
     series: [{
         name: 'Marine Sprite',
@@ -135,7 +135,7 @@ var options = {
     title: {
         text: 'Fiction Books Sales'
     },
-    colors: ['#537AEF', '#963b68', '#eb9d59', '#62B7E5', '#29aa85'],
+    colors: ['#FF8600', '#963b68', '#eb9d59', '#62B7E5', '#29aa85'],
     xaxis: {
         categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
         labels: {
@@ -169,9 +169,9 @@ var chart = new ApexCharts(document.querySelector("#stacked_bar_chart"), options
 chart.render();
 
 
-// 
+//
 // Stacked Bars 100
-// 
+//
 var options = {
     series: [{
         name: 'Marine Sprite',
@@ -201,7 +201,7 @@ var options = {
             horizontal: true,
         },
     },
-    colors: ['#537AEF', '#6c757d', '#29aa85', '#8c57d1', '#29aa85'],
+    colors: ['#FF8600', '#6c757d', '#29aa85', '#8c57d1', '#29aa85'],
     stroke: {
         width: 1,
         colors: ['#fff']
@@ -233,9 +233,9 @@ var chart = new ApexCharts(document.querySelector("#stackedfull_bar_chart"), opt
 chart.render();
 
 
-// 
+//
 // Grouped Stacked Bars Chart
-// 
+//
 
 var options = {
     series: [
@@ -297,7 +297,7 @@ var options = {
     fill: {
         opacity: 1,
     },
-    colors: ['#537AEF', '#5be7bd', '#eb9d59', '#8c57d1'],
+    colors: ['#FF8600', '#5be7bd', '#eb9d59', '#8c57d1'],
     legend: {
         position: 'top',
         horizontalAlign: 'left'
@@ -307,9 +307,9 @@ var chart = new ApexCharts(document.querySelector("#groupedstacked_bar_chart"), 
 chart.render();
 
 
-// 
+//
 // Bar with Negative Values Chart
-// 
+//
 
 var options = {
     series: [{
@@ -331,7 +331,7 @@ var options = {
         stacked: true,
         parentHeightOffset: 0,
     },
-    colors: ["#537AEF", "#8c57d1"],
+    colors: ["#FF8600", "#8c57d1"],
     plotOptions: {
         bar: {
             borderRadius: 5,
@@ -522,9 +522,9 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#markers_bar_chart"), options);
 chart.render();
 
-// 
+//
 // Reversed Bar Chart
-// 
+//
 var options = {
     series: [{
         data: [400, 430, 448, 470, 540, 580, 690]
@@ -555,7 +555,7 @@ var options = {
             }
         }]
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     plotOptions: {
         bar: {
             horizontal: true,
@@ -585,9 +585,9 @@ var chart = new ApexCharts(document.querySelector("#reversed_bar_chart"), option
 chart.render();
 
 
-// 
+//
 // Reversed Bar Chart
-// 
+//
 var options = {
     series: [{
         data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
@@ -607,7 +607,7 @@ var options = {
             },
         }
     },
-    colors: ['#537AEF', '#522c8f', '#8c57d1', '#963b68', '#ec8290', '#29aa85', '#62B7E5', '#5be7bd',
+    colors: ['#FF8600', '#522c8f', '#8c57d1', '#963b68', '#ec8290', '#29aa85', '#62B7E5', '#5be7bd',
         '#963b68', '#eb9d59'
     ],
     dataLabels: {
@@ -665,9 +665,9 @@ var chart = new ApexCharts(document.querySelector("#datalabels_bar_chart"), opti
 chart.render();
 
 
-// 
+//
 // Patterned Bar Chart
-// 
+//
 var options = {
     series: [{
         name: 'Marine Sprite',
@@ -724,7 +724,7 @@ var options = {
             }
         }
     },
-    colors: ["#537AEF", "#8c57d1", "#5be7bd", "#ec8290"],
+    colors: ["#FF8600", "#8c57d1", "#5be7bd", "#ec8290"],
     fill: {
         type: 'pattern',
         opacity: 1,
@@ -748,9 +748,9 @@ chart.render();
 
 
 
-// 
+//
 // Bar with Images Chart
-// 
+//
 var options = {
     series: [{
         name: 'coins',

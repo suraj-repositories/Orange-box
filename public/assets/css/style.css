@@ -1,6 +1,6 @@
 :root,
 [data-bs-theme=light] {
-    --bs-blue: #537AEF;
+    --bs-blue: #FF8600;
     --bs-indigo: #522c8f;
     --bs-purple: #8c57d1;
     --bs-pink: #963b68;
@@ -23,7 +23,7 @@
     --bs-gray-700: #4a5a6b;
     --bs-gray-800: #343a40;
     --bs-gray-900: #001b2f;
-    --bs-primary: #537AEF;
+    --bs-primary: #FF8600;
     --bs-secondary: #8c57d1;
     --bs-success: #29aa85;
     --bs-info: #62B7E5;
@@ -31,7 +31,7 @@
     --bs-danger: #ec8290;
     --bs-light: #f0f4f7;
     --bs-dark: #4a5a6b;
-    --bs-primary-rgb: 83, 122, 239;
+    --bs-primary-rgb: 255, 134, 0;
     --bs-secondary-rgb: 140, 87, 209;
     --bs-success-rgb: 41, 170, 133;
     --bs-info-rgb: 98, 183, 229;
@@ -47,7 +47,7 @@
     --bs-danger-text-emphasis: #5e343a;
     --bs-light-text-emphasis: #4a5a6b;
     --bs-dark-text-emphasis: #4a5a6b;
-    --bs-primary-bg-subtle: #dde4fc;
+    --bs-primary-bg-subtle: #ffa73b8c;
     --bs-secondary-bg-subtle: #e8ddf6;
     --bs-success-bg-subtle: #d4eee7;
     --bs-info-bg-subtle: #e0f1fa;
@@ -87,11 +87,11 @@
     --bs-tertiary-bg: #f8f9fa;
     --bs-tertiary-bg-rgb: 248, 249, 250;
     --bs-heading-color: inherit;
-    --bs-link-color: #537AEF;
-    --bs-link-color-rgb: 83, 122, 239;
+    --bs-link-color: #FF8600;
+    --bs-link-color-rgb: 255, 134, 0;
     --bs-link-decoration: none;
-    --bs-link-hover-color: #4262bf;
-    --bs-link-hover-color-rgb: 66, 98, 191;
+    --bs-link-hover-color: #FC5203;
+    --bs-link-hover-color-rgb: 252, 82, 3;
     --bs-code-color: #963b68;
     --bs-highlight-color: #4a5a6b;
     --bs-highlight-bg: #fbebde;
@@ -112,7 +112,7 @@
     --bs-box-shadow-inset: inset 0 1px 2px rgba(0, 0, 0, 0.075);
     --bs-focus-ring-width: 0;
     --bs-focus-ring-opacity: 0.25;
-    --bs-focus-ring-color: rgba(83, 122, 239, 0.25);
+    --bs-focus-ring-color: rgba(255, 134, 0, 0.25);
     --bs-form-valid-color: #29aa85;
     --bs-form-valid-border-color: #29aa85;
     --bs-form-invalid-color: #ec8290;
@@ -1201,7 +1201,7 @@ p {
 
 .ribbon-3.ribbon-blue {
     --ribbon-bgcolor: #d1ddff;
-    --ribbon-color: #537aef;
+    --ribbon-color: #FF8600;
     --ribbon-shadow-color: #436ff1;
 }
 
@@ -1288,7 +1288,7 @@ p {
 }
 
 .border-blue {
-    border-color: #537aef;
+    border-color: #FF8600;
 }
 
 .border-purple {
@@ -1472,7 +1472,7 @@ p {
 
 .badge-blue {
     --badge-bgcolor: #e6edff;
-    --badge-color: #537aef;
+    --badge-color: #FF8600;
 }
 
 .badge-purple {
@@ -1631,13 +1631,13 @@ p {
 
 .status-radios .status-btn.status-pending {
     background-color: #ebf1ff94;
-    color: #537aef;
+    color: #FF8600;
     border-color: #436ff1;
 }
 
 .status-radios .status-btn.status-pending:hover,
 .status-radios input:checked+.status-btn.status-pending {
-    background-color: #537aef;
+    background-color: #FF8600;
     color: #fff;
 }
 

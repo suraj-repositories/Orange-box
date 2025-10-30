@@ -6,9 +6,9 @@ Website: https://zoyothemes.com/
 File: Apexcharts Treemap Charts
 */
 
-// 
+//
 // Basic Treemap Charts
-// 
+//
 var options = {
     series: [
         {
@@ -71,7 +71,7 @@ var options = {
     legend: {
         show: false
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     chart: {
         height: 350,
         type: 'treemap',
@@ -85,9 +85,9 @@ var chart = new ApexCharts(document.querySelector("#basic_treemap_chart"), optio
 chart.render();
 
 
-// 
+//
 // Multiple Series Charts
-// 
+//
 var options = {
     series: [
         {
@@ -145,7 +145,7 @@ var options = {
         type: 'treemap',
         parentHeightOffset: 0,
     },
-    colors: ["#537AEF", "#eb9d59"],
+    colors: ["#FF8600", "#eb9d59"],
     title: {
         text: 'Multi-dimensional Treemap',
         align: 'center'
@@ -155,9 +155,9 @@ var chart = new ApexCharts(document.querySelector("#multi_series_chart"), option
 chart.render();
 
 
-// 
+//
 // Color Range Chart
-// 
+//
 var options = {
     series: [
         {
@@ -263,9 +263,9 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#color_range_chart"), options);
 chart.render();
 
-// 
+//
 // Distributed Treemap Charts
-// 
+//
 var options = {
     series: [
         {
@@ -338,7 +338,7 @@ var options = {
         align: 'center'
     },
     colors: [
-        '#537AEF',
+        '#FF8600',
         '#522c8f',
         '#8c57d1',
         '#963b68',

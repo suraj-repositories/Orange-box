@@ -64,9 +64,9 @@ var chart = new ApexCharts(document.querySelector("#basic_timeline_chart"), opti
 chart.render();
 
 
-//   
+//
 // Distributed
-// 
+//
 
 var options = {
     series: [
@@ -78,7 +78,7 @@ var options = {
                         new Date('2019-02-27').getTime(),
                         new Date('2019-03-04').getTime()
                     ],
-                    fillColor: '#537AEF'
+                    fillColor: '#FF8600'
                 },
                 {
                     x: 'Design',
@@ -159,9 +159,9 @@ var chart = new ApexCharts(document.querySelector("#distributed_timeline_chart")
 chart.render();
 
 
-//   
+//
 // Multi-series
-// 
+//
 
 var options = {
     series: [
@@ -251,7 +251,7 @@ var options = {
             stops: [50, 0, 100, 100]
         }
     },
-    colors: ['#537AEF', '#6c757d'],
+    colors: ['#FF8600', '#6c757d'],
     xaxis: {
         type: 'datetime'
     },
@@ -263,9 +263,9 @@ var chart = new ApexCharts(document.querySelector("#multi_timeline_chart"), opti
 chart.render();
 
 
-// 
+//
 // Advanced
-// 
+//
 var options = {
     series: [
         {
@@ -413,7 +413,7 @@ var options = {
     stroke: {
         width: 1
     },
-    colors: ['#537AEF', '#001b2f', '#ec8290'],
+    colors: ['#FF8600', '#001b2f', '#ec8290'],
     fill: {
         type: 'solid',
         opacity: 0.6
@@ -426,9 +426,9 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#advanced_timeline_chart"), options);
 chart.render();
 
-//   
+//
 // Multiple series – Group rows
-// 
+//
 
 var options = {
     series: [
@@ -623,7 +623,7 @@ var options = {
         }
     },
     colors: [
-        "#537AEF", "#343a40", "#eb9d59",
+        "#FF8600", "#343a40", "#eb9d59",
         "#522c8f", "#f7b84b", "#4a98f5", "#8D5B4C",
         "#adb5bd", "#1B998B", "#836ccb", "#F46036", "#0ab39c", "#963b68", "#eb9d59", "#62B7E5"
     ],
@@ -671,9 +671,9 @@ var chart = new ApexCharts(document.querySelector("#group_timeline_chart"), opti
 chart.render();
 
 
-// 
+//
 // Dumbbell Chart (Horizontal)
-// 
+//
 var options = {
     series: [
         {
@@ -717,7 +717,7 @@ var options = {
             enabled: false
         }
     },
-    colors: ['#001b2f', '#537AEF'],
+    colors: ['#001b2f', '#FF8600'],
     plotOptions: {
         bar: {
             horizontal: true,

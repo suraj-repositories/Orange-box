@@ -302,7 +302,7 @@ var options = {
         candlestick: {
             colors: {
                 upward: '#ec8290',
-                downward: '#537AEF'
+                downward: '#FF8600'
             }
         }
     },

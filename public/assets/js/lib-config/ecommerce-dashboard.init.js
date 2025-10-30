@@ -26,7 +26,7 @@ var options = {
             enabled: false
         },
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     plotOptions: {
         bar: {
             columnWidth: "40%",
@@ -198,7 +198,7 @@ var options = {
             enabled: false
         },
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     plotOptions: {
         bar: {
             columnWidth: "40%",
@@ -291,7 +291,7 @@ var options = {
             padding: 4
         },
     },
-    colors: ["#1a4de7", "#537AEF", "#dee2e6"],
+    colors: ["#1a4de7", "#FF8600", "#dee2e6"],
     legend: {
         position: 'top',
         show: true,
@@ -371,7 +371,7 @@ var options = {
             }
         }
     },
-    colors: ["#ec8290", "#537AEF", "#8c57d1"],
+    colors: ["#ec8290", "#FF8600", "#8c57d1"],
     dataLabels: {
         enabled: false,
         background: {
@@ -471,7 +471,7 @@ var options = {
             }
         ]
     },
-    colors: ["#537AEF", "#5be7bd"],
+    colors: ["#FF8600", "#5be7bd"],
 };
 var chart = new ApexCharts(document.querySelector("#repeat-customer"), options);
 chart.render();

@@ -32,7 +32,7 @@ var options = {
             show: false
         }
     },
-    colors: ['#537AEF', '#29aa85', '#8c57d1'],
+    colors: ['#FF8600', '#29aa85', '#8c57d1'],
     plotOptions: {
         bar: {
             horizontal: false,
@@ -153,7 +153,7 @@ var options = {
             offsetY: -35
         },
     },
-    colors: ['#537AEF'],
+    colors: ['#FF8600'],
     yaxis: {
         axisBorder: {
             show: false,
@@ -185,9 +185,9 @@ var chart = new ApexCharts(
 chart.render();
 
 
-// 
+//
 // Stacked Columns
-// 
+//
 var options = {
     series: [{
         name: 'PRODUCT A',
@@ -247,7 +247,7 @@ var options = {
             '01/05/2011 GMT', '01/06/2011 GMT'
         ],
     },
-    colors: ['#537AEF', '#522c8f', '#ec8290', '#e68434'],
+    colors: ['#FF8600', '#522c8f', '#ec8290', '#e68434'],
     legend: {
         position: 'right',
         offsetY: 40
@@ -260,9 +260,9 @@ var chart = new ApexCharts(document.querySelector("#stacked_column_chart"), opti
 chart.render();
 
 
-// 
+//
 // Stacked Columns 100
-// 
+//
 var options = {
     series: [{
         name: 'PRODUCT A',
@@ -296,7 +296,7 @@ var options = {
             '2012 Q3', '2012 Q4'
         ],
     },
-    colors: ['#537AEF', '#343a40', '#5be7bd'],
+    colors: ['#FF8600', '#343a40', '#5be7bd'],
     fill: {
         opacity: 1
     },
@@ -310,9 +310,9 @@ var chart = new ApexCharts(document.querySelector("#stacked_100_column_chart"), 
 chart.render();
 
 
-// 
+//
 // Grouped Stacked Columns
-// 
+//
 var options = {
     series: [
         {
@@ -369,7 +369,7 @@ var options = {
     fill: {
         opacity: 1
     },
-    colors: ['#537AEF', '#8c57d1', '#e68434', '#5be7bd'],
+    colors: ['#FF8600', '#8c57d1', '#e68434', '#5be7bd'],
     yaxis: {
         labels: {
             formatter: (val) => {
@@ -386,9 +386,9 @@ var chart = new ApexCharts(document.querySelector("#grouped_column_chart"), opti
 chart.render();
 
 
-// 
+//
 // Dumbbell Chart
-// 
+//
 var options = {
     series: [
         {
@@ -436,7 +436,7 @@ var options = {
         bar: {
             isDumbbell: true,
             columnWidth: 3,
-            dumbbellColors: [['#537AEF', '#343a40']]
+            dumbbellColors: [['#FF8600', '#343a40']]
         }
     },
     legend: {
@@ -445,7 +445,7 @@ var options = {
         position: 'top',
         horizontalAlign: 'left',
         customLegendItems: ['Product A', 'Product B'],
-        color: ['#537AEF'],
+        color: ['#FF8600'],
     },
     fill: {
         type: 'gradient',
@@ -476,9 +476,9 @@ var chart = new ApexCharts(document.querySelector("#dumbbell_column_chart"), opt
 chart.render();
 
 
-// 
+//
 // Column With Markers Chart
-// 
+//
 var options = {
     series: [
         {
@@ -596,7 +596,7 @@ var options = {
             columnWidth: '60%'
         }
     },
-    colors: ['#537AEF', '#8c57d1'],
+    colors: ['#FF8600', '#8c57d1'],
     dataLabels: {
         enabled: false
     },
@@ -605,7 +605,7 @@ var options = {
         showForSingleSeries: true,
         customLegendItems: ['Actual', 'Expected'],
         markers: {
-            fillColors: ['#537AEF', '#8c57d1']
+            fillColors: ['#FF8600', '#8c57d1']
         }
     }
 };
@@ -613,9 +613,9 @@ var chart = new ApexCharts(document.querySelector("#markers_column_chart"), opti
 chart.render();
 
 
-// 
+//
 // Column with Rotated Labels
-// 
+//
 var options = {
     series: [{
         name: 'Servings',
@@ -626,11 +626,11 @@ var options = {
             x: 'Bananas',
             seriesIndex: 0,
             label: {
-                borderColor: '#537AEF',
+                borderColor: '#FF8600',
                 offsetY: 0,
                 style: {
                     color: '#fff',
-                    background: '#537AEF',
+                    background: '#FF8600',
                 },
                 text: 'Bananas are good',
             }
@@ -690,9 +690,9 @@ var chart = new ApexCharts(document.querySelector("#rotated_column_chart"), opti
 chart.render();
 
 
-// 
+//
 // Column with Negative Values
-// 
+//
 var options = {
     series: [{
         name: 'Cash Flow',
@@ -735,7 +735,7 @@ var options = {
             }
         }
     },
-    colors: ["#537AEF", "#62B7E5", "#29aa85"],
+    colors: ["#FF8600", "#62B7E5", "#29aa85"],
     xaxis: {
         type: 'datetime',
         categories: [
@@ -756,9 +756,9 @@ chart.render();
 
 
 
-// 
+//
 // Dynamic Loaded Chart
-// 
+//
 var options = {
     series: [{
         data: [21, 22, 10, 28, 16, 21, 13, 30]
@@ -773,7 +773,7 @@ var options = {
             }
         }
     },
-    colors: ['#537AEF', '#522c8f', '#8c57d1', '#963b68', '#ec8290', "#eb9d59","#29aa85", "#62B7E5"],
+    colors: ['#FF8600', '#522c8f', '#8c57d1', '#963b68', '#ec8290', "#eb9d59","#29aa85", "#62B7E5"],
     plotOptions: {
         bar: {
             columnWidth: '45%',

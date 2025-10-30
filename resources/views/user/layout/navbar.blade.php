@@ -29,7 +29,7 @@
                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                         aria-haspopup="false" aria-expanded="false">
                         <i data-feather="bell" class="noti-icon"></i>
-                        <span class="badge bg-danger rounded-circle noti-icon-badge">9</span>
+                        <span class="badge bg-dark rounded-circle noti-icon-badge">9</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end dropdown-lg">
 

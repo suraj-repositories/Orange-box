@@ -35,7 +35,7 @@
                                                 <div class="overflow-hidden ms-4">
                                                     <h4 class="m-0 text-dark fs-20">{{ $user->name() }}</h4>
                                                     <p class="my-1 text-muted fs-16">Passionate Software Engineer Crafting Innovative Solutions</p>
-                                                    <span class="fs-15"><i class="mdi mdi-message me-2 align-middle"></i>Speaks: <span>English <span class="badge bg-primary-subtle text-primary px-2 py-1 fs-13 fw-normal">native</span> , Bitish, Turkish </span></span>
+                                                    <span class="fs-15"><i class="mdi mdi-message me-2 align-middle"></i>Speaks: <span>English <span class="badge badge-soft-dark text-light px-2 py-1 fs-13 fw-normal">native</span> , Bitish, Turkish </span></span>
                                                 </div>
                                             </div>
                                         </div>

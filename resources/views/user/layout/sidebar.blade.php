@@ -7,18 +7,18 @@
             <div class="logo-box">
                 <a class='logo logo-light' href='index.html'>
                     <span class="logo-sm">
-                        <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
+                        <img src="{{ asset('assets/images/logo-sm.png') }}" alt="">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="24">
+                        <img src="{{ asset('assets/images/logo-light.png') }}" alt="">
                     </span>
                 </a>
                 <a class='logo logo-dark' href='index.html'>
                     <span class="logo-sm">
-                        <img src="{{ asset('assets/images/logo-sm.png') }}" alt="" height="22">
+                        <img src="{{ asset('assets/images/logo-sm.png') }}" alt="">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="24">
+                        <img src="{{ asset('assets/images/logo-dark.png') }}" alt="">
                     </span>
                 </a>
             </div>

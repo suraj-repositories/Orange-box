@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
         labels: [
             '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19', '2020-07-20'
         ],
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         legend: {
             show: false,
         },
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
         labels: [
             '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19', '2020-07-20'
         ],
-        colors: ["#537AEF", "#343a40"],
+        colors: ["#FF8600", "#343a40"],
         legend: {
             show: false,
         },
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 enabled: false
             },
         },
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         plotOptions: {
             bar: {
                 columnWidth: "35%",
@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 show: false
             },
         },
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         series: [{
             name: 'Sales',
             data: [145, 96, 108, 140, 130, 150, 170, 138, 114, 128, 138]
@@ -599,7 +599,7 @@ document.addEventListener('DOMContentLoaded', function () {
         dataLabels: {
             enabled: false
         },
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         legend: {
             show: true,
             position: "top",
@@ -631,7 +631,7 @@ document.addEventListener('DOMContentLoaded', function () {
         series: [{
             data: [5, 17, 1, 24, 4, 10, 18, 20, 13]
         }],
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         tooltip: {
             enabled: false,
         },
@@ -663,7 +663,7 @@ document.addEventListener('DOMContentLoaded', function () {
         series: [{
             data: [27, 8, 33, 41, 16, 13, 30, 4, 37]
         }],
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         tooltip: {
             enabled: false,
         },
@@ -696,7 +696,7 @@ document.addEventListener('DOMContentLoaded', function () {
         series: [{
             data: [10, 13, 10, 4, 17, 3, 23, 22, 19]
         }],
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         tooltip: {
             enabled: false,
         },
@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', function () {
         series: [{
             data: [26, 9, 26, 6, 18, 5, 31, 30, 27]
         }],
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         tooltip: {
             enabled: false,
         },
@@ -761,7 +761,7 @@ document.addEventListener('DOMContentLoaded', function () {
         series: [{
             data: [29, 6, 19, 16, 25, 24, 10, 31, 26, 16]
         }],
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         tooltip: {
             enabled: false,
         },
@@ -793,7 +793,7 @@ document.addEventListener('DOMContentLoaded', function () {
         series: [{
             data: [17, 9, 4, 11, 2, 20, 5, 22, 15, 11],
         }],
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         tooltip: {
             enabled: false,
         },
@@ -824,7 +824,7 @@ document.addEventListener('DOMContentLoaded', function () {
         series: [{
             data: [29, 18, 10, 22, 6, 26, 17, 28, 22, 17],
         }],
-        colors: ["#537AEF"],
+        colors: ["#FF8600"],
         tooltip: {
             enabled: false,
         },

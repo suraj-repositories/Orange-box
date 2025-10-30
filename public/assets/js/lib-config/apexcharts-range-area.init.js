@@ -81,7 +81,7 @@ var options = {
             sizeOffset: 5
         }
     },
-    colors: ['#537AEF'],
+    colors: ['#FF8600'],
     dataLabels: {
         enabled: false
     },
@@ -283,7 +283,7 @@ var options = {
             speed: 500
         }
     },
-    colors: ['#537AEF', '#29aa85', '#537AEF', '#29aa85'],
+    colors: ['#FF8600', '#29aa85', '#FF8600', '#29aa85'],
     dataLabels: {
         enabled: false
     },

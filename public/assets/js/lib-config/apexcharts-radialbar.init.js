@@ -6,9 +6,9 @@ Website: https://zoyothemes.com/
 File: Apexcharts Radialbar Charts
 */
 
-// 
+//
 // Basic Radial Bar Charts
-// 
+//
 var options = {
     series: [70],
     chart: {
@@ -23,16 +23,16 @@ var options = {
             }
         },
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     labels: ['Cricket'],
 };
 
 var chart = new ApexCharts(document.querySelector("#simple_radialbar_chart"), options);
 chart.render();
 
-// 
+//
 // Multiple Radial Bar Charts
-// 
+//
 var options = {
     series: [44, 55, 67, 83],
     chart: {
@@ -67,9 +67,9 @@ var chart = new ApexCharts(document.querySelector("#multiple_radialbar_chart"), 
 chart.render();
 
 
-// 
+//
 // Custom Angle Circle Radial Bar Charts
-// 
+//
 var options = {
     series: [76, 67, 61, 90],
     chart: {
@@ -107,7 +107,7 @@ var options = {
             },
         }
     },
-    colors: ['#537AEF', '#8c57d1', '#ec8290', '#eb9d59'],
+    colors: ['#FF8600', '#8c57d1', '#ec8290', '#eb9d59'],
     labels: ['Vimeo', 'Messenger', 'Facebook', 'LinkedIn'],
     responsive: [{
         breakpoint: 480,
@@ -123,9 +123,9 @@ var chart = new ApexCharts(document.querySelector("#angle_radialbar_chart"), opt
 chart.render();
 
 
-// 
+//
 // Gradient Radial Bar Charts
-// 
+//
 var options = {
     series: [64],
     chart: {
@@ -196,9 +196,9 @@ var chart = new ApexCharts(document.querySelector("#gradient_radialbar_chart"), 
 chart.render();
 
 
-// 
+//
 // Radialbars with Image Radial Bar Charts
-// 
+//
 var options = {
     series: [67],
     chart: {
@@ -246,9 +246,9 @@ var chart = new ApexCharts(document.querySelector("#image_radialbar_chart"), opt
 chart.render();
 
 
-// 
+//
 // Stroked Gauge Radial Bar Charts
-// 
+//
 var options = {
     series: [67],
     chart: {
@@ -257,7 +257,7 @@ var options = {
         parentHeightOffset: 0,
         offsetY: -10
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     plotOptions: {
         radialBar: {
             startAngle: -135,
@@ -300,9 +300,9 @@ var chart = new ApexCharts(document.querySelector("#stroked_radialbar_chart"), o
 chart.render();
 
 
-// 
+//
 // Semi Circle Gauge Radial Bar Charts
-// 
+//
 
 var options = {
     series: [76],

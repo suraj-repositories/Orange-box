@@ -40,7 +40,7 @@ var options = {
     xaxis: {
         type: 'datetime'
     },
-    colors: ['#537AEF', '#8c57d1'],
+    colors: ['#FF8600', '#8c57d1'],
     yaxis: [{
         title: {
             text: 'Website Blog',
@@ -83,7 +83,7 @@ var options = {
     markers: {
         size: 0
     },
-    colors: ['#537AEF', '#343a40'],
+    colors: ['#FF8600', '#343a40'],
     yaxis: [
         {
             title: {
@@ -144,7 +144,7 @@ var options = {
             columnWidth: '50%'
         }
     },
-    colors: ['#537AEF', '#5be7bd', '#963b68'],
+    colors: ['#FF8600', '#5be7bd', '#963b68'],
     fill: {
         opacity: [0.85, 0.25, 1],
         gradient: {
@@ -279,7 +279,7 @@ var options = {
     fill: {
         type: 'solid',
     },
-    colors: ['#537AEF', '#8c57d1'],
+    colors: ['#FF8600', '#8c57d1'],
     markers: {
         size: [6, 0]
     },

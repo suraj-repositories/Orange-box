@@ -56,7 +56,7 @@ var options = {
         type: 'bubble',
         parentHeightOffset: 0,
     },
-    colors: ["#537AEF", "#8c57d1", "#ec8290", "#29aa85"],
+    colors: ["#FF8600", "#8c57d1", "#ec8290", "#29aa85"],
     dataLabels: {
         enabled: false
     },
@@ -79,9 +79,9 @@ var chart = new ApexCharts(document.querySelector("#simple_bubble_chart"), optio
 chart.render();
 
 
-// 
+//
 // 3D Bubble Chart
-// 
+//
 var options = {
     series: [{
         name: 'Product1',
@@ -132,7 +132,7 @@ var options = {
             rotate: 0,
         }
     },
-    colors: ["#537AEF", "#963b68", "#eb9d59", "#62B7E5"],
+    colors: ["#FF8600", "#963b68", "#eb9d59", "#62B7E5"],
     yaxis: {
         max: 70
     },

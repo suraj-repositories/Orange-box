@@ -52,7 +52,7 @@
 
                     <div class="comment-box">
                         <div class="d-flex comment" id="my-comment-edit">
-                            <img class="rounded-circle comment-img" src="https://placehold.co/100/6E92FF/ffffff?text=S"
+                            <img class="rounded-circle comment-img" src="https://placehold.co/100/FF8600/ffffff?text=S"
                                 width="128" height="128">
                             <div class="flex-grow-1 ms-3">
                                 <div class="form-floating comment-compose mb-2">

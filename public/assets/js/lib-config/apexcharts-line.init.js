@@ -35,7 +35,7 @@ var options = {
     stroke: {
         curve: 'straight'
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     title: {
         text: 'Product Trends by Month',
         align: 'left',
@@ -96,7 +96,7 @@ var options = {
         }
     },
     colors: [
-        '#537AEF', 
+        '#FF8600',
         '#001b2f'
     ],
     dataLabels: {
@@ -434,7 +434,7 @@ var options = {
             autoSelected: 'zoom'
         }
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     dataLabels: {
         enabled: false
     },
@@ -564,7 +564,7 @@ var options = {
             }
         }]
     },
-    colors: ["#eb9d59", "#001b2f", "#537AEF"],
+    colors: ["#eb9d59", "#001b2f", "#FF8600"],
     grid: {
         borderColor: '#f1f1f1',
     }
@@ -604,7 +604,7 @@ var options = {
         type: 'line',
         parentHeightOffset: 0,
     },
-    colors: ['#537AEF'],
+    colors: ['#FF8600'],
     dataLabels: {
         enabled: false
     },
@@ -785,7 +785,7 @@ function generateDayWiseTimeSeries(baseval, count, yrange) {
         var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
 
         series.push([x, y]);
-        baseval += 86400000; 
+        baseval += 86400000;
         i++;
     }
     return series;
@@ -903,7 +903,7 @@ var options = {
                 },
                 text: 'Support',
             }
-        }, 
+        },
         {
             y: 8600,
             y2: 9000,
@@ -932,7 +932,7 @@ var options = {
                 },
                 text: 'Anno Test',
             }
-        }, 
+        },
         {
             x: new Date('26 Nov 2017').getTime(),
             x2: new Date('28 Nov 2017').getTime(),
@@ -966,7 +966,7 @@ var options = {
                     color: '#fff',
                     background: '#FF4560',
                 },
-        
+
                 text: 'Point Annotation',
             }
         },
@@ -981,7 +981,7 @@ var options = {
             }
         }]
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     dataLabels: {
         enabled: false
     },
@@ -1040,7 +1040,7 @@ var options = {
             sizeOffset: 4
         }
     },
-    colors: ['#537AEF'],
+    colors: ['#FF8600'],
 };
 var chart = new ApexCharts(document.querySelector("#stepline_line_chart"), options);
 chart.render();
@@ -1088,7 +1088,7 @@ var options = {
         type: 'gradient',
         gradient: {
             shade: 'dark',
-            gradientToColors: [ '#537AEF'],
+            gradientToColors: [ '#FF8600'],
             shadeIntensity: 1,
             type: 'horizontal',
             opacityFrom: 1,
@@ -1108,11 +1108,11 @@ var options = {
     series: [{
         name: 'Peter',
         data: [5, 5, 10, 8, 7, 5, 4, null, null, null, 10, 10, 7, 8, 6, 9]
-    }, 
+    },
     {
         name: 'Johnny',
         data: [10, 15, null, 12, null, 10, 12, 15, null, null, 12, null, 14, null, null, null]
-    }, 
+    },
     {
         name: 'David',
         data: [null, null, null, null, 3, 4, 1, 3, 4, 6, 7, 9, 5, null, null, null]
@@ -1140,7 +1140,7 @@ var options = {
         },
     },
     xaxis: {},
-    colors: ['#537AEF', '#963b68', '#29aa85']
+    colors: ['#FF8600', '#963b68', '#29aa85']
 };
 
 var chart = new ApexCharts(document.querySelector("#missingnull_line_chart"), options);
@@ -1195,7 +1195,7 @@ function getNewSeries(baseval, yrange) {
 }
 
 function resetData() {
-    // Alternatively, you can also reset the data at certain intervals to prevent creating a huge series 
+    // Alternatively, you can also reset the data at certain intervals to prevent creating a huge series
     data = data.slice(data.length - 10, data.length);
 }
 

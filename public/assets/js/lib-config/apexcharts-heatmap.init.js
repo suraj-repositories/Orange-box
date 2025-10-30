@@ -132,7 +132,7 @@ var data = [{
 }
 ]
 data.reverse()
-var colors = ["#537AEF", "#963b68", "#29aa85", "#62B7E5", "#5be7bd", "#ca8a04", "#8c57d1", '#ec8290', '#06b6d4', '#172554', '#8c5e58', '#2176ff', '##cc9a06', '#b02a37', '#3d8bfd']
+var colors = ["#FF8600", "#963b68", "#29aa85", "#62B7E5", "#5be7bd", "#ca8a04", "#8c57d1", '#ec8290', '#06b6d4', '#172554', '#8c5e58', '#2176ff', '##cc9a06', '#b02a37', '#3d8bfd']
 colors.reverse()
 
 
@@ -212,7 +212,7 @@ var options = {
     dataLabels: {
         enabled: false
     },
-    colors: ["#537AEF"],
+    colors: ["#FF8600"],
     title: {
         text: 'HeatMap Chart (Single color)'
     },
@@ -220,9 +220,9 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#basic_heatmap_chart"), options);
 chart.render();
 
-// 
+//
 // Multiple Colors Heatmap Chart
-// 
+//
 var options = {
     series: data,
     chart: {
@@ -255,8 +255,8 @@ chart.render();
 
 
 
-// 
-// Multiple Colors Flipped 
+//
+// Multiple Colors Flipped
 //
 var options = {
     series: [{
@@ -338,7 +338,7 @@ var options = {
                     from: -30,
                     to: 5,
                     name: 'low',
-                    color: '#537AEF'
+                    color: '#FF8600'
                 },
                 {
                     from: 6,
@@ -376,9 +376,9 @@ var chart = new ApexCharts(document.querySelector("#range_colors_chart"), option
 chart.render();
 
 
-// 
-// Rounded Heatmap Charts 
-// 
+//
+// Rounded Heatmap Charts
+//
 var options = {
     series: [{
         name: 'Metric1',
@@ -465,7 +465,7 @@ var options = {
                 {
                     from: 51,
                     to: 100,
-                    color: '#537AEF'
+                    color: '#FF8600'
                 },
                 ],
             },

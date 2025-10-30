@@ -77,7 +77,7 @@
                                             <i class="mdi mdi-calendar-blank-outline ms-2 me-1 align-middle"> </i>
 
                                             <span>Since - <span
-                                                    class="badge bg-primary-subtle text-primary px-2 py-1 fs-13 fw-normal">
+                                                    class="badge badge-soft-dark text-light px-2 py-1 fs-13 fw-normal">
                                                     {{ date('M d, Y', strtotime($dailyDigest->created_at)) }}
                                                 </span>
                                             </span></span>

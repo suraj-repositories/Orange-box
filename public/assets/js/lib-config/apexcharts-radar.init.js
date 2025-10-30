@@ -6,9 +6,9 @@ Website: https://zoyothemes.com/
 File: Apexcharts Radar Charts
 */
 
-// 
+//
 // Basic Radar Chart
-// 
+//
 
 var options = {
     series: [{
@@ -23,7 +23,7 @@ var options = {
     title: {
         text: 'Basic Radar Chart'
     },
-    colors: ['#537AEF'],
+    colors: ['#FF8600'],
     yaxis: {
         stepSize: 20
     },
@@ -35,7 +35,7 @@ var chart = new ApexCharts(document.querySelector("#basic_radar_chart"), options
 chart.render();
 
 
-// 
+//
 // Multiple Series Radar Chart
 //
 var options = {
@@ -60,7 +60,7 @@ var options = {
             top: 1
         }
     },
-    colors: ['#537AEF', '#ec8290', '#5be7bd'],
+    colors: ['#FF8600', '#ec8290', '#5be7bd'],
     title: {
         text: 'Radar Chart - Multi Series'
     },
@@ -84,7 +84,7 @@ var chart = new ApexCharts(document.querySelector("#multiple_radar_chart"), opti
 chart.render();
 
 
-// 
+//
 // Polygon Fill Radar Chart
 //
 
@@ -115,12 +115,12 @@ var options = {
     title: {
         text: 'Radar with Polygon Fill'
     },
-    colors: ['#537AEF'],
-    
+    colors: ['#FF8600'],
+
     markers: {
         size: 4,
         colors: ['#fff'],
-        strokeColor: '#537AEF',
+        strokeColor: '#FF8600',
         strokeWidth: 2,
     },
     tooltip: {

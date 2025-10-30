@@ -20,7 +20,7 @@ var options = {
     legend: {
         position: "bottom",
     },
-    colors: ["#537AEF", "#522c8f", "#5be7bd", "#963b68", "#001b2f"],
+    colors: ["#FF8600", "#522c8f", "#5be7bd", "#963b68", "#001b2f"],
     responsive: [
         {
             breakpoint: 480,
@@ -54,7 +54,7 @@ var options = {
     legend: {
         position: "bottom",
     },
-    colors: ["#537AEF", "#8c57d1", "#e68434", "#29aa85", "#62B7E5"],
+    colors: ["#FF8600", "#8c57d1", "#e68434", "#29aa85", "#62B7E5"],
     responsive: [
         {
             breakpoint: 480,
@@ -86,7 +86,7 @@ var options = {
         parentHeightOffset: 0,
     },
     labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    colors: ["#537AEF", "#62B7E5"],
+    colors: ["#FF8600", "#62B7E5"],
     theme: {
         monochrome: {
             enabled: true,
@@ -120,9 +120,9 @@ chart.render();
 
 
 
-// 
+//
 // Gradient Donut Pie Charts
-// 
+//
 var options = {
     series: [44, 55, 41, 17, 15],
     chart: {
@@ -142,7 +142,7 @@ var options = {
     fill: {
         type: 'gradient',
     },
-    colors: ["#537AEF", "#343a40", "#29aa85", "#ec8290", "#eb9d59"],
+    colors: ["#FF8600", "#343a40", "#29aa85", "#ec8290", "#eb9d59"],
     legend: {
         formatter: function (val, opts) {
             return val + " - " + opts.w.globals.series[opts.seriesIndex]
@@ -167,9 +167,9 @@ var options = {
 var chart = new ApexCharts(document.querySelector("#gradient_donut_pie_chart"), options);
 chart.render();
 
-// 
+//
 // Semi Donut Pie Charts
-// 
+//
 var options = {
     series: [44, 55, 41, 17, 15],
     chart: {
@@ -189,7 +189,7 @@ var options = {
             bottom: -80
         }
     },
-    colors: ["#537AEF", "#8c57d1", "#eb9d59", "#62B7E5", "#343a40"],
+    colors: ["#FF8600", "#8c57d1", "#eb9d59", "#62B7E5", "#343a40"],
     responsive: [{
         breakpoint: 480,
         options: {
@@ -206,9 +206,9 @@ var chart = new ApexCharts(document.querySelector("#semi_donut_pie_chart"), opti
 chart.render();
 
 
-// 
+//
 // Donut with Pattern Pie Chart
-// 
+//
 
 var options = {
     series: [44, 55, 41, 17, 15],
@@ -267,7 +267,7 @@ var options = {
     title: {
         text: "Favourite Movie Type"
     },
-    colors: ["#f0f4f7", "#eb9d59", "#ec8290", "#4a5a6b", "#537AEF"],
+    colors: ["#f0f4f7", "#eb9d59", "#ec8290", "#4a5a6b", "#FF8600"],
     responsive: [{
         breakpoint: 480,
         options: {

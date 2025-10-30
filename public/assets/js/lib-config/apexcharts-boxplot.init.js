@@ -58,7 +58,7 @@ var options = {
     plotOptions: {
         boxPlot: {
             colors: {
-                upper: '#537AEF',
+                upper: '#FF8600',
                 lower: '#4a5a6b'
             }
         }
@@ -68,9 +68,9 @@ var chart = new ApexCharts(document.querySelector("#basic_box_chart"), options);
 chart.render();
 
 
-// 
+//
 // Boxplot Scatter Chart
-// 
+//
 
 var options = {
     series: [
@@ -166,9 +166,9 @@ var chart = new ApexCharts(document.querySelector("#boxplot_scatter_chart"), opt
 chart.render();
 
 
-// 
+//
 // Horizontal BoxPlot
-// 
+//
 var options = {
     series: [
         {

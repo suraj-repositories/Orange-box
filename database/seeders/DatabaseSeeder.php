@@ -16,5 +16,9 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesAndPermissionsSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(EmojiSeeder::class);
+        $this->call(ColorTagSeeder::class);
+        $this->call(IconSeeder::class);
+        $this->call(ProjectModuleTypeSeeder::class);
+        $this->call(SocialMediaPlatformSeeder::class);
     }
 }
