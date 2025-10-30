@@ -1,8 +1,8 @@
 <p align="center"><a href="https://laravel.com" target="_blank">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./public/assets/images/logo-light.png">
-  <source media="(prefers-color-scheme: light)" srcset="./public/assets/images/logo-dark.png">
-  <img alt="sdfsdfsdf." src="./public/assets/images/logo-orange.svg" width="400">
+  <source media="(prefers-color-scheme: dark)" srcset="./public/assets/images/logo-light.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./public/assets/images/logo-dark.svg">
+  <img alt="sdfsdfsdf." src="./public/assets/images/logo-light.svg" width="400">
 </picture> 
 </a>
 </p>
