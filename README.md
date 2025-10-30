@@ -1,4 +1,11 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="https://laravel.com" target="_blank">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./public/assets/images/logo-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="./public/assets/images/logo-light.png">
+  <img alt="sdfsdfsdf." src="./public/assets/images/logo-orange.svg" width="400">
+</picture> 
+</a>
+</p>
 
 
 ## Orange-box
