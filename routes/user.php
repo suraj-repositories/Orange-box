@@ -13,6 +13,7 @@ use App\Http\Controllers\User\PasswordLockerController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ProjectBoardController;
 use App\Http\Controllers\User\ProjectModuleController;
+use App\Http\Controllers\User\SettingsController;
 use App\Http\Controllers\User\SubTaskController;
 use App\Http\Controllers\User\SyntaxStoreController;
 use App\Http\Controllers\User\TaskController;
@@ -192,4 +193,6 @@ Route::controller(EducationController::class)->group(function () {
     Route::delete('education/{education}', 'destroy')->name('education.delete');
 });
 
-
+Route::controller(SettingsController::class)->group(function () {
+    Route::get('settings', 'index')->name('settings.index');
+});

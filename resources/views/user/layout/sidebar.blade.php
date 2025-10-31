@@ -218,7 +218,7 @@
                     </a>
                 </li>
                 <li>
-                    <a class='tp-link' href='calendar'>
+                    <a class='tp-link' href='{{ authRoute('user.settings.index') }}'>
                         <i data-feather="settings"></i>
                         <span> Settings </span>
                     </a>

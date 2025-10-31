@@ -211,7 +211,7 @@
                              <!-- Description -->
                              <div class="col-12">
                                  <label for="editor" class="form-label">Description</label>
-                                 <textarea class="form-control ckeditor ckeditor-minimal" id="editor" name="description" rows="3"
+                                 <textarea class="form-control ckeditor ckeditor-minimal" id="experience-editor" name="description" rows="3"
                                      placeholder="Describe your role, responsibilities, and achievements..."></textarea>
                              </div>
 
@@ -222,7 +222,7 @@
                          <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                              Cancel
                          </button>
-                         <button type="submit" class="btn btn-primary" id="save-btn">
+                         <button type="submit" class="btn btn-primary" id="save-work-experience">
                              Save
                          </button>
                      </div>

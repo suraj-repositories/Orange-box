@@ -10,9 +10,8 @@
                         <div class="col-md-7 mx-auto">
                             <div class="mb-0 border-0 p-md-5 p-lg-0 p-4">
                                 <div class="mb-4 p-0">
-                                    <a class='auth-logo' href='index.html'>
-                                        <img src="assets/images/logo-dark.png" alt="logo-dark" class="mx-auto"
-                                            height="28" />
+                                     <a class='auth-logo' href='/'>
+                                        <img src="{{ asset('assets/images/logo-dark.png') }}" alt="logo-dark" class="mx-auto" />
                                     </a>
                                 </div>
 

@@ -50,7 +50,7 @@
                             <a href="javascript:void(0);"
                                 class="dropdown-item notify-item text-muted link-primary active">
                                 <div class="notify-icon">
-                                    <img src="{{ asset('assets/images/users/user-12.jpg') }}"
+                                    <img src="{{ asset('assets/images/users/user-2.jpg') }}"
                                         class="img-fluid rounded-circle" alt="" />
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between">
@@ -188,7 +188,7 @@
                         </a>
 
                         <!-- item-->
-                        <a class='dropdown-item notify-item' href='auth-lock-screen.html'>
+                        <a class='dropdown-item notify-item' href='{{ route('lock-screen.index') }}'>
                             <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
                             <span>Lock Screen</span>
                         </a>

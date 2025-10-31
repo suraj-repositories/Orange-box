@@ -137,11 +137,11 @@
 
                                 <!-- Password -->
                                 <div class="col-md-6">
-                                    <label for="password-input" class="form-label">Password</label>
+                                    <label for="create-password-input" class="form-label">Password</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class='bx bx-key fs-5'></i></span>
-                                        <input type="password" class="form-control pe-4 rounded-end" id="password-input"
-                                            name="password" placeholder="Password">
+                                        <input type="password" class="form-control pe-4 rounded-end"
+                                            name="password" placeholder="Password" id="create-password-input">
                                         <button type="button" class="show-password-btn btn-no-style text-danger"
                                             id="toggle-password">
                                             <i class="bi bi-eye fs-5"></i>
@@ -173,7 +173,7 @@
                                 <!-- Note -->
                                 <div class="col-12">
                                     <label for="editor" class="form-label">Note</label>
-                                    <textarea class="form-control ckeditor ckeditor-minimal" id="editor" name="notes" rows="2"
+                                    <textarea class="form-control ckeditor ckeditor-minimal" id="locker-editor" name="notes" rows="2"
                                         placeholder="Add a note"></textarea>
 
                                 </div>
@@ -284,9 +284,9 @@
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="bx bx-lock fs-5"></i></span>
                                     <input type="password" class="form-control rounded-end pe-35px"
-                                        id="password-input" name="key" placeholder="Master Key">
+                                          name="key" placeholder="Master Key" id="master-password-input">
                                     <button type="button" class="show-password-btn btn-no-style text-dark me-1"
-                                        id="toggle-password">
+                                        id="toggle-master-password">
                                         <i class="bi bi-eye fs-5"></i>
                                 </button>
                                 </div>

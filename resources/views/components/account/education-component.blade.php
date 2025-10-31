@@ -179,7 +179,7 @@
                             <!-- Description -->
                             <div class="col-12">
                                 <label for="editor" class="form-label">Description</label>
-                                <textarea class="form-control ckeditor ckeditor-minimal" id="editor" name="description" rows="3"
+                                <textarea class="form-control ckeditor ckeditor-minimal" id="education-editor" name="description" rows="3"
                                     placeholder="Describe your role, responsibilities, and achievements..."></textarea>
                             </div>
 
