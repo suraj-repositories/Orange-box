@@ -28,3 +28,13 @@ composer dump-autoload
 - collaboration work on project
 - password locker
 - Personal Portfolio
+
+## Shoutout Libraries And Framework
+
+<p align="center">
+ <img src="https://laravel.com/img/favicon/favicon.ico" title="Laravel" width="48">
+ <img src="https://getbootstrap.com/docs/5.3/assets/img/favicons/favicon.ico" title="Laravel" width="48">
+ <img src="https://editorjs.io/_nuxt/logo.d2a59c1c.svg" title="editorjs"  width="48">
+ <img src="https://summernote.org/favicon.ico" title="summernote" width="48">
+ <img src="https://ckeditor.com/assets/images/favicons/32x32.png" title="Ck editor" width="48">
+</p>
