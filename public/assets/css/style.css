@@ -175,9 +175,15 @@
     --bs-form-invalid-border-color: #ea868f
 }
 
-body.locking{
+body.locking {
     filter: grayscale(1);
 }
+
+.invisible-block {
+    display: block !important;
+    visibility: hidden !important;
+}
+
 /* Open Animation */
 @keyframes scale-in {
     from {
@@ -189,6 +195,14 @@ body.locking{
         transform: scale(1);
         opacity: 1;
     }
+}
+
+.form-range::-moz-range-track {
+    background-color: #ebd8fd;
+}
+
+.form-range:active:-moz-range-thumb {
+    background-color: var(--bs-primary);
 }
 
 .modal.fade:not(.show) {
@@ -1876,6 +1890,38 @@ tr.deleting a {
 .note-editor.note-frame {
     border: 1px solid var(--bs-gray-300) !important;
 }
-.top-4-px{
+
+.top-4-px {
     top: 4px;
+}
+
+
+.skill-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 10px;
+    border: 1px solid var(--bs-gray-400);
+    border-radius: 5px;
+
+}
+
+.skill-badge .skill_name,
+.skill-badge .percentage {
+    font-size: 12px;
+}
+
+.skill-badge .percentage {
+    font-weight: bolder;
+    margin-left: 30px;
+}
+
+.skill-badge .close-btn {
+    color: var(--bs-danger);
+    font-size: 22px;
+    line-height: 16px;
+    cursor: pointer;
+    user-select: none;
+    margin-left: 10px;
 }

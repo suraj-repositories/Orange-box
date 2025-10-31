@@ -10,7 +10,6 @@ class SocialMediaPlatform extends Model
     //
     use SoftDeletes;
 
-
     protected $fillable = [
         'name',
         'uri',

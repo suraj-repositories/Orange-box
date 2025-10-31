@@ -79,7 +79,7 @@
                              <div class="list-inline list-inline-dots mb-2 fs-14">
                                  <div class="list-inline-item">{{ $experience->start_date->format('M Y') }}
                                      <strong>-</strong>
-                                     {{ !empty($experience->currently_working) ? 'Present' : $experience->end_date->format('M Y') }}
+                                     {{ !empty($experience->currently_working) ? 'Present' : $experience->end_date?->format('M Y') }}
                                  </div>
 
                                  <div class="list-inline-item list-inline-item-second">{{ $experience->duration }}</div>

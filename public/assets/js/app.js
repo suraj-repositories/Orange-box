@@ -277,10 +277,25 @@ class App {
             if (textArea.dataset.autoResizeAttached) return;
             textArea.style.overflow = "hidden";
             textArea.rows = 1;
-            textArea.addEventListener("input", () => {
+
+            const resizeTextArea = () => {
+
                 textArea.style.height = "auto";
                 textArea.style.height = textArea.scrollHeight + "px";
-            });
+            }
+
+            textArea.addEventListener("input", resizeTextArea);
+
+            const tab = textArea.closest('.tab-pane');
+            if (tab) {
+                tab.classList.add('invisible-block');
+                resizeTextArea();
+                tab.classList.remove('invisible-block');
+            } else {
+                resizeTextArea();
+            }
+
+
             textArea.dataset.autoResizeAttached = "true";
         });
 

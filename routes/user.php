@@ -18,6 +18,7 @@ use App\Http\Controllers\User\SubTaskController;
 use App\Http\Controllers\User\SyntaxStoreController;
 use App\Http\Controllers\User\TaskController;
 use App\Http\Controllers\User\ThinkPadController;
+use App\Http\Controllers\User\UserSkillController;
 use App\Http\Controllers\User\WorkExperienceController;
 use App\Models\WorkExperience;
 use Illuminate\Support\Facades\Route;
@@ -144,7 +145,16 @@ Route::controller(SubTaskController::class)->group(function () {
 
 Route::controller(ProfileController::class)->group(function () {
     Route::get('profile', 'index')->name('profile.index');
+    Route::put('profile/personal-information', 'updatePersonalInformation')->name('profile.personal_information.update');
+    Route::post('profile/address', 'saveAddress')->name('profile.address.save');
+    Route::post('profile/social-media-links', 'updateSocialMediaLinks')->name('profile.social_media_links.save');
 });
+
+Route::controller(UserSkillController::class)->group(function () {
+    Route::post('profile/user-skill', 'store')->name('profile.user_skill.save');
+    Route::delete('profile/user-skill/{id}', 'destroy')->name('profile.user_skill.delete');
+});
+
 
 
 Route::prefix('collab')->name('collab.all.')->middleware('collab')->group(function () {

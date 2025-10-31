@@ -88,4 +88,16 @@ class User extends Authenticatable
         $lock = $this->screenLocks()->latest()->first();
         return $lock && !$lock->unlocked && (!$lock->expires_at || $lock->expires_at >= now());
     }
+
+    public function details(){
+        return $this->hasOne(UserDetails::class);
+    }
+
+    public function addresses(){
+        return $this->hasMany(UserAddress::class);
+    }
+
+    public function primaryAddress(){
+        return $this->addresses()->where('is_primary', true)->first();
+    }
 }

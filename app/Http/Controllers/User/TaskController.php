@@ -198,8 +198,6 @@ class TaskController extends Controller
         $projectModule = $task->module;
         $projectBoard = $projectModule->projectBoard;
 
-
-
         $media = $this->fileService->getMediaMetadata($task->files);
         return view('user.project_tracker.tasks.task_form', [
             'projectBoards' => $projectBoards,

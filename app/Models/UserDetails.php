@@ -15,6 +15,8 @@ class UserDetails extends Model
         'last_name',
         'gender',
         'contact',
+        'public_email',
+        'bio',
         'user_id',
         'deleted_at'
     ];
