@@ -330,15 +330,15 @@ class PasswordLockerControl {
                 const password_locker_id = unlockBtn.getAttribute('data-password-locker-id');
 
                 switch (inputName) {
-                    case "pem": handlePemSelection(input, password_locker_id);
+                    case "pem": this.handlePemSelection(input, password_locker_id);
                         break;
-                    case "key": handleMasterPasswordSelection(input, password_locker_id);
+                    case "key": this.handleMasterPasswordSelection(input, password_locker_id);
                         break;
-                    case "otp": handleEmailSelection(input, password_locker_id);
+                    case "otp": this.handleEmailSelection(input, password_locker_id);
                         break;
-                    case "code": handleAppSelection(input, password_locker_id);
+                    case "code": this.handleAppSelection(input, password_locker_id);
                         break;
-                    default: handleNoneSelection();
+                    default: this.handleNoneSelection();
                 }
             });
         });
@@ -533,7 +533,7 @@ class PasswordLockerControl {
             }
 
             if (result.status === "success") {
-                showPassword(result.key);
+                this.showPassword(result.key);
             } else {
                 Swal.fire({
                     title: "Oops!",
@@ -570,7 +570,7 @@ class PasswordLockerControl {
             .then(response => response.json())
             .then(data => {
                 if (data.status === "success") {
-                    showPassword(data.key);
+                    this.showPassword(data.key);
                 } else {
                     Swal.fire({
                         title: "Oops!",
@@ -606,7 +606,7 @@ class PasswordLockerControl {
             .then(response => response.json())
             .then(data => {
                 if (data.status === "success") {
-                    showPassword(data.key);
+                    this.showPassword(data.key);
                 } else {
                     Swal.fire({
                         title: "Oops!",

@@ -7,6 +7,7 @@ use App\Mail\PasswordLockerOtpMail;
 use App\Models\MasterKey;
 use App\Models\Otp;
 use App\Models\PasswordLocker;
+use App\Models\UserKey;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,6 @@ use Illuminate\Support\Facades\Mail;
 
 class PasswordLockerAuthController extends Controller
 {
-    //
 
     public function sendEmailOtp()
     {
@@ -93,15 +93,15 @@ class PasswordLockerAuthController extends Controller
     {
         $mk = $request->input('master_key');
         $user = Auth::user();
-        $masterKey = MasterKey::where('user_id', $user->id)->orderByDesc('id')->first();
-        if(!$masterKey){
+        $userKey = UserKey::where('user_id', $user->id)->whereNotNull('master_key')->select('user_id', 'master_key')->orderByDesc('id')->first();
+        if(!$userKey){
             return response()->json([
                 'status' => 'error',
                 'message' => "Master key not set!"
             ], 401);
         }
 
-        if (Hash::check($mk, $masterKey->password)) {
+        if ($userKey->verifyMasterKey($mk)) {
             $encryptedPassword = PasswordLocker::where('user_id', $user->id)->where('id', $request->password_locker_id)->value('password');
 
             if (!empty($encryptedPassword)) {

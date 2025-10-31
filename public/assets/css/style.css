@@ -175,7 +175,9 @@
     --bs-form-invalid-border-color: #ea868f
 }
 
-
+body.locking{
+    filter: grayscale(1);
+}
 /* Open Animation */
 @keyframes scale-in {
     from {

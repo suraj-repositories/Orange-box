@@ -54,7 +54,7 @@ class User extends Authenticatable
         ];
     }
 
-     public function getRouteKeyName()
+    public function getRouteKeyName()
     {
         return 'username';
     }
@@ -72,5 +72,20 @@ class User extends Authenticatable
     public function getAvatarAttribute($value)
     {
         return "https://placehold.co/100/FF8600/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
+    }
+
+    public function keys()
+    {
+        return $this->hasOne(UserKey::class);
+    }
+
+    public function screenLocks(){
+        return $this->hasMany(ScreenLock::class);
+    }
+
+    public function isLocked()
+    {
+        $lock = $this->screenLocks()->latest()->first();
+        return $lock && !$lock->unlocked && (!$lock->expires_at || $lock->expires_at >= now());
     }
 }

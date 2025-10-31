@@ -16,7 +16,8 @@ Route::middleware('guest')->group(function(){
 Route::middleware('auth')->group(function(){
  Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
- Route::get('/lock-screen', [LockScreenController::class, 'index'])->name('lock-screen.index');
- Route::post('/lock-screen', [LockScreenController::class, 'unlock'])->name('unlock');
+ Route::get('/lock-screen', [LockScreenController::class, 'index'])->middleware('lockscreen')->name('lock-screen.index');
+ Route::post('/lock-screen', [LockScreenController::class, 'lock'])->name('lock');
+ Route::put('/lock-screen', [LockScreenController::class, 'unlock'])->name('unlock');
 
 });

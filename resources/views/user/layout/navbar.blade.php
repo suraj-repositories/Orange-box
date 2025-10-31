@@ -188,10 +188,10 @@
                         </a>
 
                         <!-- item-->
-                        <a class='dropdown-item notify-item' href='{{ route('lock-screen.index') }}'>
+                        <button class='dropdown-item notify-item lock_screen_btn'  >
                             <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
                             <span>Lock Screen</span>
-                        </a>
+                        </button>
 
                         <div class="dropdown-divider"></div>
 

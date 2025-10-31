@@ -331,7 +331,7 @@
                                 </div>
 
                                 <div id="reveal-password-txt"
-                                    class="p-2 fs-6 px-3 border rounded text-wrap badge badge-blue border-primary border-dashed">
+                                    class="p-2 fs-6 px-3 border rounded text-wrap badge badge-orange border-primary border-dashed">
                                     *******
                                 </div>
                             </div>

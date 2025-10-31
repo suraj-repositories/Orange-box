@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('master_keys', function (Blueprint $table) {
+        Schema::create('user_keys', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('password');
+            $table->text('master_key')->nullable();
+            $table->text('screen_lock_pin')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('master_keys');
+        Schema::dropIfExists('user_keys');
     }
 };

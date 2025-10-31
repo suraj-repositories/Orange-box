@@ -266,11 +266,11 @@ class EducationControl {
     }
 
     enableEducationDeleteBtns(selector) {
-        toggleClassOnView(selector, "deletion-enabled");
+        this.toggleClassOnView(selector, "deletion-enabled");
     }
 
     enableEducationEditingBtns(selector) {
-        toggleClassOnView(selector, "editing-enabled");
+        this.toggleClassOnView(selector, "editing-enabled");
     }
 
     toggleClassOnView(sourceSelector, className) {

@@ -20,4 +20,8 @@ class UserAddress extends Model
         'country',
         'is_primary',
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

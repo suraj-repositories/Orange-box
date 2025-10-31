@@ -13,9 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         then: function () {
             Route::prefix('api')->name('api.')->group(base_path('routes/api.php'));
             Route::middleware(['web'])->group(base_path('routes/auth.php'));
-            Route::middleware(['web', 'admin'])->prefix('admin')->name('admin.')->group(base_path('routes/admin.php'));
-            Route::middleware(['web', 'editor'])->prefix('e/{userid?}')->name('editor.')->group(base_path('routes/editor.php'));
-            Route::middleware(['web', 'user'])->prefix('{userid?}')->name('user.')->group(base_path('routes/user.php'));
+            Route::middleware(['web', 'admin', 'lockscreen'])->prefix('admin')->name('admin.')->group(base_path('routes/admin.php'));
+            Route::middleware(['web', 'editor', 'lockscreen'])->prefix('e/{userid?}')->name('editor.')->group(base_path('routes/editor.php'));
+            Route::middleware(['web', 'user', 'lockscreen'])->prefix('{userid?}')->name('user.')->group(base_path('routes/user.php'));
         },
     )
     ->withMiddleware(function (Middleware $middleware) {
@@ -25,7 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'editor' => App\Http\Middleware\EditorMiddleware::class,
             'user' => App\Http\Middleware\UserMiddleware::class,
             'collab' => App\Http\Middleware\CollaborationRouteMiddleware::class,
-
+            'lockscreen' => App\Http\Middleware\LockScreenMiddleware::class,
         ]);
         $middleware->statefulApi();
     })

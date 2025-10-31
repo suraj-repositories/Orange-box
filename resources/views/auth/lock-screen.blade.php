@@ -62,6 +62,4 @@
     </div>
 @endsection
 
-@section('js')
-    <script src="{{ asset('assets/js/pages/lock-screen.js') }}"></script>
-@endsection
+

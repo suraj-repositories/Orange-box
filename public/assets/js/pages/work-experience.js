@@ -285,11 +285,11 @@ class WorkExperienceControl {
     }
 
     enableDeleteBtns(selector) {
-        toggleClassOnView(selector, "deletion-enabled");
+        this.toggleClassOnView(selector, "deletion-enabled");
     }
 
     enableEditingBtns(selector) {
-        toggleClassOnView(selector, "editing-enabled");
+        this.toggleClassOnView(selector, "editing-enabled");
     }
 
     toggleClassOnView(sourceSelector, className) {
