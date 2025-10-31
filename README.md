@@ -18,15 +18,13 @@ composer dump-autoload
 ```
 
 
-### Feature 
+### Key Feature 
 
 - Digestions
 - Think pad
-- syntax store
-
-- folder factory
-
-- to do 
-- project status management
-- projects 
+- syntax store 
+- folder factory 
+- project management
+- collaboration work on project
 - password locker
+- Personal Portfolio
