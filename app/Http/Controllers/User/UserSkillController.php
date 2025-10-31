@@ -58,6 +58,7 @@ class UserSkillController extends Controller
 
     public function destroy(User $user, UserSkill $userSkill, Request $request){
 
+
         $userSkill->delete();
         return response()->json([
             'status' => 'success',

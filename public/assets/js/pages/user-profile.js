@@ -93,7 +93,7 @@ class UserSkillControl {
             skillDiv.classList.add('deleting');
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            fetch(authRoute('user.profile.user_skill.delete', { id: skillId }), {
+            fetch(authRoute('user.profile.user_skill.delete', { userSkill: skillId }), {
                 method: 'DELETE',
                 headers: { 'x-csrf-token': csrfToken },
 

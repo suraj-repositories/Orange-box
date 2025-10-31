@@ -152,7 +152,7 @@ Route::controller(ProfileController::class)->group(function () {
 
 Route::controller(UserSkillController::class)->group(function () {
     Route::post('profile/user-skill', 'store')->name('profile.user_skill.save');
-    Route::delete('profile/user-skill/{id}', 'destroy')->name('profile.user_skill.delete');
+    Route::delete('profile/user-skill/{userSkill}', 'destroy')->name('profile.user_skill.delete');
 });
 
 
