@@ -47,6 +47,7 @@ class ProjectBoardController extends Controller
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'color_tag' => ['nullable', 'exists:color_tags,id'],
             'description' => 'nullable|string|max:3000',
+            'budget' => 'nullable|numeric|min:0|decimal:0,2',
             'start_date' => [
                 'nullable',
                 'date',
@@ -69,7 +70,7 @@ class ProjectBoardController extends Controller
 
         $data = array_merge($validated, [
             'user_id' => $user->id,
-            'preview_text' => $markdownService->toPlainText($validated['description']),
+            'preview_text' => $markdownService->toPlainText($validated['description'] ?? ""),
             'thumbnail' => $request->hasFile('thumbnail') ? $this->fileService->uploadFile($request->file('thumbnail'), 'project_board') : null,
             'color_tag_id' => $validated['color_tag']
         ]);
@@ -126,6 +127,7 @@ class ProjectBoardController extends Controller
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'color_tag' => ['nullable', 'exists:color_tags,id'],
             'description' => 'nullable|string|max:3000',
+             'budget' => 'nullable|numeric|min:0|decimal:0,2',
             'start_date' => [
                 'nullable',
                 'date',
@@ -160,6 +162,7 @@ class ProjectBoardController extends Controller
             'start_date' => $validated['start_date'] ?? null,
             'end_date' => $validated['end_date'] ?? null,
             'thumbnail' => $thumbnailPath,
+            'budget' => $validated['budget']
         ];
 
         $projectBoard->update($data);

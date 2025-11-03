@@ -109,7 +109,7 @@
                                         </div>
 
                                         <!-- Start Date -->
-                                        <div class="col col-12 col-md-6 mb-3">
+                                        <div class="col col-12 col-md-4 mb-3">
                                             <label for="start-date-input" class="form-label">Start Date</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
@@ -123,7 +123,7 @@
                                         </div>
 
                                         <!-- End Date -->
-                                        <div class="col col-12 col-md-6 mb-3">
+                                        <div class="col col-12 col-md-4 mb-3">
                                             <label for="end-date-input" class="form-label">End Date</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="bi bi-calendar-event"></i></span>
@@ -132,6 +132,20 @@
                                                     value="{{ old('end_date', $projectBoard->end_date ?? '') }}">
                                             </div>
                                             @error('end_date')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Budget -->
+                                        <div class="col col-12 col-md-4 mb-3">
+                                            <label for="budget-input" class="form-label">Total Budget</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class='bx bx-rupee fs-5'  ></i></span>
+                                                <input type="number" step="0.01" class="form-control" id="budget-input"
+                                                    name="budget"
+                                                    value="{{ old('budget', $projectBoard->budget ?? '') }}">
+                                            </div>
+                                            @error('budget')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>

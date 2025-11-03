@@ -16,7 +16,7 @@ class UserController extends Controller
             abort(403, "Username is required!");
         }
 
-        $users = User::where('username', 'like', "%$request->username%")->select('id', 'username')->take(5)->get();
+        $users = User::where('username', 'like', "%$request->username%")->select('id', 'username', 'avatar')->take(5)->get();
 
         foreach ($users as $user) {
             $user->avatar = $user->profilePicture();

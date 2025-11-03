@@ -25,6 +25,7 @@ class ProjectBoard extends Model
         'progress',
         'thumbnail',
         'color_tag_id',
+        'budget'
     ];
 
     protected $appends = ['thumbnail_url', 'public_url'];

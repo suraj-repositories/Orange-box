@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
@@ -62,15 +63,30 @@ class User extends Authenticatable
 
     public function name()
     {
-        return $this->username;
+        return $this->details?->first_name ?? $this->username;
+    }
+    public function fullname()
+    {
+        return empty($this->details) ? '' : $this->details->first_name . " " . $this->details->last_name;
     }
 
     public function profilePicture()
     {
+        if ($this->avatar && Storage::disk('public')->exists($this->avatar)) {
+            return url('storage/' . $this->avatar);
+        } else if (preg_match('/^https?:\/\//', $this->avatar ?? '')) {
+            return $this->avatar;
+        }
+
         return "https://placehold.co/100/FF8600/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
     }
     public function getAvatarAttribute($value)
     {
+        if ($value && Storage::disk('public')->exists($value)) {
+            return url('storage/' . $value);
+        } else if (preg_match('/^https?:\/\//', $value ?? '')) {
+            return $value;
+        }
         return "https://placehold.co/100/FF8600/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
     }
 
@@ -79,7 +95,8 @@ class User extends Authenticatable
         return $this->hasOne(UserKey::class);
     }
 
-    public function screenLocks(){
+    public function screenLocks()
+    {
         return $this->hasMany(ScreenLock::class);
     }
 
@@ -89,15 +106,18 @@ class User extends Authenticatable
         return $lock && !$lock->unlocked && (!$lock->expires_at || $lock->expires_at >= now());
     }
 
-    public function details(){
+    public function details()
+    {
         return $this->hasOne(UserDetails::class);
     }
 
-    public function addresses(){
+    public function addresses()
+    {
         return $this->hasMany(UserAddress::class);
     }
 
-    public function primaryAddress(){
+    public function primaryAddress()
+    {
         return $this->addresses()->where('is_primary', true)->first();
     }
 }

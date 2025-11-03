@@ -1,6 +1,8 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     new UserSkillControl().init();
+
+    new ProfileImageEditor("#profile_image_edit_btn", ".user_profile_picture").init();
 })
 
 
@@ -124,5 +126,77 @@ class UserSkillControl {
     }
 
 
+}
+
+class ProfileImageEditor {
+
+    constructor(inputElementSelector, reflectorImagesSelector) {
+        this.inputElementSelector = inputElementSelector;
+        this.reflectorImagesSelector = reflectorImagesSelector;
+    }
+
+    init() {
+
+        const input = document.querySelector(this.inputElementSelector);
+        const submitUrl = input.getAttribute('data-image-submit-url');
+
+        if (!submitUrl || !input) {
+            return;
+        }
+        input.addEventListener('change', async () => {
+            const uploadFile = input.files[0];
+            if (!uploadFile) {
+                return;
+            }
+            this.setImageToReflectors(uploadFile);
+            this.uploadImage(uploadFile, submitUrl);
+
+        });
+
+    }
+
+    uploadImage(file, submitUrl) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        let formData = new FormData();
+        formData.append('image', file);
+
+        fetch(submitUrl, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: formData
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+
+                } else {
+                    Swal.fire("Oops!", data.message, "error");
+                }
+            })
+            .catch(error => {
+                Swal.fire("Oops!", error.message, "error");
+            });
+    }
+
+    setImageToReflectors(file) {
+        const reader = new FileReader();
+        const selector = this.reflectorImagesSelector
+        reader.onload = function (e) {
+            const images = document.querySelectorAll(selector);
+            console.log(images);
+            if(!images){
+                return;
+            }
+            images.forEach(img => {
+                img.src = e.target.result;
+            });
+        };
+        reader.readAsDataURL(file);
+    }
 }
 

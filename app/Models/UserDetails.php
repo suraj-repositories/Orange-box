@@ -14,6 +14,7 @@ class UserDetails extends Model
         'first_name',
         'last_name',
         'gender',
+        'tag_line',
         'contact',
         'public_email',
         'bio',

@@ -70,19 +70,28 @@
                                     class="card-body border-double-5 border-{{ strtolower($projectBoard->colorTag?->name ?? '') }}">
                                     <div class="row g-3 align-items-start">
                                         <div class="col-12 col-md-8">
-                                            @php
-                                                $colorTag = $projectBoard->colorTag;
-                                            @endphp
 
-                                            @if ($colorTag)
-                                                <div class="d-flex mb-2">
-                                                    <div
-                                                        class="badge badge-{{ strtolower($colorTag->name ?? '') }} d-flex align-items-center p-2">
-                                                        <span class="badge-circle me-1"></span>
-                                                        <span>{{ $colorTag->name }}</span>
+                                            <div class="d-flex align-items-center">
+                                                @php
+                                                    $colorTag = $projectBoard->colorTag;
+                                                @endphp
+                                                @if ($colorTag)
+                                                    <div class="d-flex mb-2">
+                                                        <div
+                                                            class="badge badge-{{ strtolower($colorTag->name ?? '') }} d-flex align-items-center p-2">
+                                                            <span class="badge-circle me-1"></span>
+                                                            <span>{{ $colorTag->name }}</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            @endif
+                                                @endif
+                                                <div class="d-flex mb-2 ms-2">
+                                                        <div
+                                                            class="badge d-flex align-items-center p-2 project-module-project-link text-reset border">
+                                                              <span><strong>Total Budget&nbsp;:&nbsp;</strong> ₹ {{ number_format($projectBoard->budget) ?? 0 }}</span>
+                                                        </div>
+                                                    </div>
+                                            </div>
+
                                             <div class="description p-2 rich-editor-content overflow-auto">
                                                 {!! Str::markdown($projectBoard->description ?? '') !!}
                                             </div>
@@ -156,13 +165,14 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-list-component :modules="$projectModules" :project-board="$projectBoard" :filter="[]"/>
+                        <x-project.project-module-list-component :modules="$projectModules" :project-board="$projectBoard" :filter="[]" />
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12">
-                        <x-project.project-module-task-list-component :project-board="$projectBoard" :tasks="$tasks" :filter="[]"/>
+                        <x-project.project-module-task-list-component :project-board="$projectBoard" :tasks="$tasks"
+                            :filter="[]" />
                     </div>
                 </div>
             </div> <!-- container-fluid -->

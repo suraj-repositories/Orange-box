@@ -55,6 +55,16 @@
              </div>
 
              <div class="form-group mb-3 row">
+                 <label class="form-label">Tag Line</label>
+                 <div class="col-lg-12 col-xl-12">
+                     <div class="input-group">
+                         <span class="input-group-text"><i class='bx bx-tag-alt fs-5' ></i></span>
+                         <input class="form-control" type="text" placeholder="eg. Passionate Software Engineer Crafting Innovative Solutions" name="tag_line"
+                             value="{{ $personalInfo?->tag_line ?? "" }}">
+                     </div>
+                 </div>
+             </div>
+             <div class="form-group mb-3 row">
                  <label class="form-label">Contact Phone</label>
                  <div class="col-lg-12 col-xl-12">
                      <div class="input-group">

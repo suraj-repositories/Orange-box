@@ -148,6 +148,8 @@ Route::controller(ProfileController::class)->group(function () {
     Route::put('profile/personal-information', 'updatePersonalInformation')->name('profile.personal_information.update');
     Route::post('profile/address', 'saveAddress')->name('profile.address.save');
     Route::post('profile/social-media-links', 'updateSocialMediaLinks')->name('profile.social_media_links.save');
+
+    Route::post('profile/profile-image', 'updateProfileImage')->name('profile.profile_image.save');
 });
 
 Route::controller(UserSkillController::class)->group(function () {

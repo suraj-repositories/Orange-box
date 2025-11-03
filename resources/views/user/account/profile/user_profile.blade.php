@@ -32,13 +32,33 @@
                                     <div class="card-body">
 
                                         <div class="align-items-center">
-                                            <div class="d-flex align-items-center">
-                                                <img src="{{ $user->profilePicture() }}" class="rounded-circle avatar-xxl img-thumbnail float-start" alt="image profile">
+                                            <div class="d-flex align-items-center flex-wrap gap-4 justify-content-center justify-content-sm-start text-center text-sm-start">
+                                                <div class="position-relative">
+                                                    <img src="{{ $user->profilePicture() }}" class="user_profile_picture rounded-circle avatar-xxl img-thumbnail float-start" alt="image profile">
+                                                    <label class="profile-edit-image-label">
+                                                        <i class='bx bx-edit'></i>
+                                                        <input type="file" class="hide" name="profile_picture" id="profile_image_edit_btn" data-image-submit-url="{{ authRoute('user.profile.profile_image.save') }}" accept=".png, .jpg, .jpeg, .avif, .webp, .gif, .svg, .ico">
+                                                    </label>
+                                                </div>
+                                                <div class="overflow-hidden">
+                                                    <h4 class="m-0 text-dark fs-20">{{ $user->fullname() }} <small class="text-primary text-italic">{{ "@"  . $user->username }}</small></h4>
+                                                    <p class="my-1 text-muted fs-16">{{ $user->details?->tag_line ?? "" }}</p>
 
-                                                <div class="overflow-hidden ms-4">
-                                                    <h4 class="m-0 text-dark fs-20">{{ $user->name() }}</h4>
-                                                    <p class="my-1 text-muted fs-16">Passionate Software Engineer Crafting Innovative Solutions</p>
-                                                    <span class="fs-15"><i class="mdi mdi-message me-2 align-middle"></i>Speaks: <span>English <span class="badge badge-soft-dark text-light px-2 py-1 fs-13 fw-normal">native</span> , Bitish, Turkish </span></span>
+
+                                                    @if($address)
+                                                    <span class="fs-15">
+                                                        <i class="mdi mdi-map-marker-outline fs-5 me-1 align-middle"></i>
+                                                        <span>{{$address->city}} {{$address->state}} {{$address->country}}</span>
+                                                    </span>
+                                                    @endif
+                                                    @if(!empty($experties) && count($experties) > 0)
+                                                        <div class="fs-15"><span class="mdi mdi-book-open-page-variant-outline fs-5 me-1"></span>
+                                                        <span>
+                                                            <strong>Expertise In : </strong>
+                                                            {{$experties->keys()->implode(", ")}}
+                                                        </span>
+                                                    </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

@@ -1925,3 +1925,24 @@ tr.deleting a {
     user-select: none;
     margin-left: 10px;
 }
+
+.text-italic {
+    font-style: italic;
+}
+
+.profile-edit-image-label {
+    right: 0;
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 50%;
+    background: var(--bs-light-bg-subtle);
+    width: 35px;
+    height: 36px;
+    border: 1px solid var(--bs-gray-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    cursor: pointer;
+}

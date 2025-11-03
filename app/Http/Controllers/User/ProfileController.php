@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Education;
 use App\Models\PasswordLocker;
+use App\Models\ProjectBoard;
 use App\Models\SocialMediaPlatform;
 use App\Models\User;
 use App\Models\UserAddress;
@@ -12,17 +13,32 @@ use App\Models\UserDetails;
 use App\Models\UserSkill;
 use App\Models\UserSocialMediaLink;
 use App\Models\WorkExperience;
+use App\Services\FileService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
+    protected $fileService;
+
+    public function __construct(FileService $fileService)
+    {
+        $this->fileService = $fileService;
+    }
+
     //
     public function index(User $user)
     {
         $personalInfo = $user->details;
         $primaryAddress = $user->primaryAddress();
         $socialMediaPlatforms = SocialMediaPlatform::orderBy('name', 'ASC')->get();
+        $skills = UserSkill::where('user_id', $user->id)->latest()->pluck('level', 'skill');
+        $arr = $skills->toArray();
+        arsort($arr);
+        $topSkills = collect($arr)->take(6);
+
+        $projects = ProjectBoard::where('user_id', $user->id)->latest()->take(4)->get();
 
         $userSocialMediaLinks = UserSocialMediaLink::where('user_id', $user->id)->get();
 
@@ -40,6 +56,9 @@ class ProfileController extends Controller
             'address' => $primaryAddress,
             'socialMediaPlatforms' => $socialMediaPlatforms,
             'userSocialMediaLinks' =>  $userSocialMediaLinks,
+            'skills' => $skills,
+            'experties' => $topSkills,
+            'projects' => $projects,
             'user_skills' => UserSkill::where('user_id', $user->id)->get(),
             'passwords' => PasswordLocker::where('user_id', $user->id)->paginate(10),
             'experiences' => WorkExperience::where('user_id', $user->id)->orderByDesc('id')->get(),
@@ -53,9 +72,11 @@ class ProfileController extends Controller
             'first_name' => 'nullable|string|max:255',
             'last_name' => 'nullable|string|max:255',
             'gender' => 'nullable|string|in:male,female,other',
+            'tag_line' => 'nullable|string|max:256',
             'contact' => 'nullable|string|max:20',
             'public_email' => 'nullable|email|max:256',
             'bio' => 'nullable|string|max:3000'
+
         ]);
         try {
             $user->details()->updateOrCreate(['user_id' => $user->id], $validated);
@@ -127,5 +148,38 @@ class ProfileController extends Controller
         }
     }
 
+     public function updateProfileImage(User $user, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|mimes:png,jpg,svg,webp,avif,gif,ico|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+
+        try {
+            $this->fileService->deleteIfExists($user->avatar);
+
+            $filePath = $this->fileService->uploadFile($request->file('image'), "users", 'public');
+
+            User::where('id', $user->id)->update(['avatar' => $filePath]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'File uploaded successfully!',
+                'image_url' => asset('storage/' . $filePath)
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error uploading file: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 
 }
