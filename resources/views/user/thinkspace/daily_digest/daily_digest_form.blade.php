@@ -7,7 +7,10 @@
     ? 'Edit
     Daily Digest'
     : '🟢🟢🟢'))
-
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2-bootstrap-theme.min.css') }}">
+@endsection
 @section('content')
     <div class="content-page">
         <div class="content">
@@ -63,7 +66,7 @@
                                             <div class="input-group">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="bi bi-list-nested"></i> </span>
-                                                <input type="text" class="form-control" placeholder="Enter sub_title"
+                                                <input type="text" class="form-control" placeholder="Enter sub title"
                                                     id="sub_title-input" name="sub_title"
                                                     value="{{ !empty($dailyDigest) ? $dailyDigest->sub_title : '' }}">
                                             </div>
@@ -71,10 +74,46 @@
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
+
+                                        <div class="col col-12 col-md-6 mb-3">
+                                            <label for="sub_title-input" class="form-label">
+                                                Visibility
+                                            </label>
+                                            <a tabindex="0" class="text-dark" role="button" data-bs-html="true"
+                                                data-bs-toggle="popover" data-bs-trigger="focus"
+                                                data-bs-custom-class="custom-popover" data-bs-title="Visibility Level"
+                                                data-bs-content="
+                                               <b>Private</b> - Visible to author only
+                                                <br> <b>Protected</b> - Visible for followers
+                                                <br> <b>Unlisted</b> - Visitable by only share link
+                                                 <br> <b>Public</b> - Visible To Everyone
+                                                ">
+                                                <i class="bi bi-info-circle"></i>
+                                            </a>
+
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="bx bx-show-alt"></i> </span>
+                                                <select class="form-select select2-with-image" name="visibility">
+                                                    @foreach (config('icons.visibility') as $visibility => $icon)
+                                                        <option value="{{ $visibility }}"
+                                                            data-image="{{ asset($icon) }}"
+                                                            {{ !empty($dailyDigest) && $dailyDigest->visibility == $visibility ? 'selected' : '' }}>
+                                                            {{ ucfirst($visibility ?? '') }}
+                                                        </option>
+                                                    @endforeach
+
+                                                </select>
+                                            </div>
+                                            @error('visibility')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
                                         <div class="col col-12 col-md-12">
                                             <label for="title-input" class="form-label">Description</label>
 
-                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3" data-markdown="{{ !empty($dailyDigest) ? $dailyDigest->description : '' }}">
+                                            <textarea class="form-control ckeditor" name="description" id="editor" cols="30" rows="3"
+                                                data-markdown="{{ !empty($dailyDigest) ? $dailyDigest->description : '' }}">
                                                 {{ !empty($dailyDigest) ? trim($dailyDigest->description) : '' }}
                                             </textarea>
 
@@ -122,7 +161,8 @@
                                                             <div class="col" data-ob-deleteable-card="true">
                                                                 <div class="card h-100">
                                                                     <div class="img-container">
-                                                                        <img src="{{ $file['file_path'] }}" alt="image">
+                                                                        <img src="{{ $file['file_path'] }}"
+                                                                            alt="image">
                                                                         <div class="hover-actions">
                                                                             <a class="show"
                                                                                 href="{{ $file['file_path'] }}"
@@ -338,7 +378,15 @@
     </div>
 
     @include('layout.extras.ckeditor5')
+
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/add-media.js') }}"></script>
     <script src="{{ asset('assets/js/pages/daily-digest.js') }}"></script>
+
+
+@endsection
+
+@section('js')
+    <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/lib-config/select2.init.js') }}"></script>
 @endsection

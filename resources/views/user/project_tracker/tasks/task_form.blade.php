@@ -167,7 +167,7 @@
                                                     </option>
                                                     @if (!empty($projectModule))
                                                         @foreach ($projectModule->projectModuleUsers as $moduleUser)
-                                                            <option data-image="{{ $moduleUser->user->profilePicture() }}"
+                                                            <option data-image="{{ $moduleUser->user->avatar_url }}"
                                                                 value="{{ $moduleUser->user->id }}"
                                                                 {{ !empty($task) && $task->assigned_to == $moduleUser->user->id ? 'selected' : '' }}>
                                                                 {{ $moduleUser->user->username }}</option>

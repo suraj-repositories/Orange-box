@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Jobs\DeleteCommentableCommentsJob;
 use App\Models\File;
 use App\Models\ThinkPad;
-use App\Models\ThinkSpace;
 use App\Models\User;
 use App\Rules\DescriptionLength;
 use App\Services\FileService;
@@ -27,10 +26,27 @@ class ThinkPadController extends Controller
     //
     public function index()
     {
-        //
-        $thinkPads = ThinkPad::paginate(15);
+        $thinkPads = ThinkPad::where('visibility', 'public')
+            ->where('status', 'published')
+            ->latest()
+            ->paginate(15);
 
-        return view('user.thinkspace.think_pad.think_pad_list', compact('thinkPads'));
+        return view('user.thinkspace.think_pad.think_pad_list',  [
+            'title' => "Public Think Pad",
+            'thinkPads' => $thinkPads,
+        ]);
+    }
+    public function myThinkPads(User $user)
+    {
+        //
+        $thinkPads = ThinkPad::where('user_id', $user->id)
+            ->latest()
+            ->paginate(15);
+
+        return view('user.thinkspace.think_pad.think_pad_list', [
+            'title' => "My Think Pad",
+            'thinkPads' => $thinkPads,
+        ]);
     }
 
     public function create()
@@ -44,6 +60,7 @@ class ThinkPadController extends Controller
         $validated = $request->validate([
             'title' => 'required|string',
             'sub_title' => 'nullable|string',
+            'visibility' => 'nullable|in:private,protected,unlisted,public',
             'description' => ['nullable', 'string', new DescriptionLength()],
             'media_files' => 'nullable|array',
             'media_files.*' => 'file|max:' . config('validation_rules.max_file_size')
@@ -54,6 +71,8 @@ class ThinkPadController extends Controller
         $thinkPad->title = $request->input('title');
         $thinkPad->sub_title = $request->input('sub_title', null);
         $thinkPad->description =  $request->input('description', null);
+        $thinkPad->visibility =  $request->input('visibility', null) ?? 'private';
+        $thinkPad->status = "published";
 
         $thinkPad->save();
 
@@ -97,7 +116,7 @@ class ThinkPadController extends Controller
 
     public function edit(User $user, ThinkPad $thinkPad)
     {
-         Gate::authorize('update', $thinkPad);
+        Gate::authorize('update', $thinkPad);
 
         $media = $this->fileService->getMediaMetadata($thinkPad->files);
         return view('user.thinkspace.think_pad.think_pad_form', compact('thinkPad', 'media'));
@@ -105,11 +124,12 @@ class ThinkPadController extends Controller
 
     public function update(User $user, ThinkPad $thinkPad, Request $request)
     {
-         Gate::authorize('update', $thinkPad);
+        Gate::authorize('update', $thinkPad);
 
         $validated = $request->validate([
             'title' => 'required|string',
             'sub_title' => 'nullable|string',
+            'visibility' => 'nullable|in:private,protected,unlisted,public',
             'description' => ['nullable', 'string', new DescriptionLength()],
             'media_files' => 'nullable|array',
             'media_files.*' => 'file|max:' . config('validation_rules.max_file_size')
@@ -118,6 +138,7 @@ class ThinkPadController extends Controller
         $thinkPad->title = $validated['title'];
         $thinkPad->sub_title = $validated['sub_title'];
         $thinkPad->description = $validated['description'];
+        $thinkPad->visibility = $validated['visibility'] ?? 'private';
 
         if ($request->has('media_files')) {
             $media = $request->media_files;

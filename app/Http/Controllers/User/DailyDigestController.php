@@ -28,9 +28,26 @@ class DailyDigestController extends Controller
     public function index()
     {
         //
-        $digestions = DailyDigest::paginate(9);
+        $digestions = DailyDigest::where('visibility', 'public')->latest()->paginate(9);
 
-        return view('user.thinkspace.daily_digest.daily_digestion_list', compact('digestions'));
+        return view('user.thinkspace.daily_digest.daily_digestion_list', [
+            'title' => "Public Daily Digestions",
+            'digestions' => $digestions
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function myDigestions(User $user)
+    {
+        //
+        $digestions = DailyDigest::where('user_id', $user->id)->latest()->paginate(9);
+
+        return view('user.thinkspace.daily_digest.daily_digestion_list', [
+            'title' => "My Daily Digestions",
+            'digestions' => $digestions
+        ]);
     }
 
     /**
@@ -51,6 +68,7 @@ class DailyDigestController extends Controller
         $validated = $request->validate([
             'title' => 'required|string',
             'sub_title' => 'nullable|string',
+            'visibility' => 'nullable|in:private,protected,unlisted,public',
             'description' => ['nullable', 'string', new DescriptionLength()],
             'media_files' => 'nullable|array',
             'media_files.*' => 'file|max:' . config('validation_rules.max_file_size')
@@ -60,7 +78,8 @@ class DailyDigestController extends Controller
         $dailyDigest->user_id = $user->id;
         $dailyDigest->title = $request->input('title');
         $dailyDigest->sub_title = $request->input('sub_title', null);
-        $dailyDigest->description =  $request->input('description', null);
+        $dailyDigest->description =  $request->input('description', null) ;
+        $dailyDigest->visibility =  $request->input('visibility', null)?? 'private';
         $dailyDigest->save();
 
         if ($request->has('media_files')) {
@@ -123,6 +142,7 @@ class DailyDigestController extends Controller
         $validated = $request->validate([
             'title' => 'required|string',
             'sub_title' => 'nullable|string',
+            'visibility' => 'nullable|in:private,protected,unlisted,public',
             'description' => ['nullable', 'string', new DescriptionLength()],
             'media_files' => 'nullable|array',
             'media_files.*' => 'file|max:' . config('validation_rules.max_file_size')
@@ -131,6 +151,7 @@ class DailyDigestController extends Controller
         $dailyDigest->title = $validated['title'];
         $dailyDigest->sub_title = $validated['sub_title'];
         $dailyDigest->description = $validated['description'];
+        $dailyDigest->visibility = $validated['visibility'] ?? 'private';
 
         if ($request->has('media_files')) {
             $media = $request->media_files;

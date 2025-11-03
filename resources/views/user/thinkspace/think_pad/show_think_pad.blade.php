@@ -28,7 +28,12 @@
                 <div class="col-12">
                     <div class="card mt-3 think-pad-show-card show-card">
 
-                        <div class="card-body">
+                        <div class="card-body position-relative">
+
+                            <div class="visibility-badge">
+                                <span class="icon"><img src="{{ $thinkPad->visibility_icon }}" class="icon-20" alt="" title="{{ ucfirst( $thinkPad->visibility ??"") }}"></span>
+                                <span class="text">{{ ucfirst( $thinkPad->visibility ??"") }}</span>
+                            </div>
 
                             <div class="align-items-center">
                                 <div class="d-flex flex-column flex-md-row align-items-center">

@@ -42,6 +42,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = [
+        'avatar_url',
+    ];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -80,9 +84,11 @@ class User extends Authenticatable
 
         return "https://placehold.co/100/FF8600/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
     }
-    public function getAvatarAttribute($value)
-    {
+    public function getAvatarUrlAttribute()
+    {   $value = $this->avatar;
+
         if ($value && Storage::disk('public')->exists($value)) {
+
             return url('storage/' . $value);
         } else if (preg_match('/^https?:\/\//', $value ?? '')) {
             return $value;

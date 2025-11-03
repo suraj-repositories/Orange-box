@@ -26,7 +26,11 @@
                 <div class="col-12">
                     <div class="card mt-3 daily-digest-show-card show-card">
 
-                        <div class="card-body">
+                        <div class="card-body position-relative">
+                            <div class="visibility-badge">
+                                <span class="icon"><img src="{{ $dailyDigest->visibility_icon }}" class="icon-20" alt="" title="{{ ucfirst( $dailyDigest->visibility ??"") }}"></span>
+                                <span class="text">{{ ucfirst( $dailyDigest->visibility ??"") }}</span>
+                            </div>
 
                             <div class="align-items-center">
                                 <div class="d-flex flex-column flex-md-row align-items-center">
@@ -44,8 +48,6 @@
                                             <div class="emoji">{{ config('constants')['DEFAULT_DIGEST_EMOJI'] }}</div>
                                         </div>
                                     @endif
-
-
 
                                     <div class="overflow-hidden mt-3 mt-md-0 ms-md-4">
                                         <h4 class="m-0 text-dark fs-20">{{ $dailyDigest->title }}</h4>

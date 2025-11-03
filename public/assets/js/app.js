@@ -90,6 +90,7 @@ class App {
         this.initResizeableTextArea();
         this.initImage3Gallery();
         this.initTabSpecificUrl();
+        this.dismissablePopOvers();
     }
 
     initComponents() {
@@ -203,6 +204,16 @@ class App {
                 $('body').removeClass('fullscreen-enable');
             }
         }
+    }
+    dismissablePopOvers() {
+        const isPopOvers = document.querySelector('.popover-dismiss');
+        if(!isPopOvers){
+            return;
+        }
+
+        const popover = new bootstrap.Popover('.popover-dismiss', {
+            trigger: 'focus'
+        })
     }
 
     initMenu() {

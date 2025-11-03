@@ -13,4 +13,11 @@ return [
         "doc" => "/assets/icons/ob-svg/folder/folder-9.svg",
         "puzzle" => "/assets/icons/ob-svg/folder/folder-10.svg",
     ],
+    'visibility' => [
+
+        'private' => '/assets/icons/ob-svg/visibility/private.svg',
+        'protected' => '/assets/icons/ob-svg/visibility/protected.svg',
+        'unlisted' => '/assets/icons/ob-svg/visibility/unlisted.svg',
+        'public' => '/assets/icons/ob-svg/visibility/public.svg',
+    ]
 ];

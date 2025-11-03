@@ -29,6 +29,7 @@ Route::controller(DashboardController::class)->group(function () {
 
 Route::controller(DailyDigestController::class)->group(function () {
     Route::get('daily-digest', 'index')->name('daily-digest');
+    Route::get('daily-digest/me', 'myDigestions')->name('daily-digest.me');
     Route::get('daily-digest/create', 'create')->name('daily-digest.create');
     Route::post('daily-digest', 'store')->name('daily-digest.store');
     Route::get('daily-digest/{dailyDigest}', 'show')->name('daily-digest.show');
@@ -41,6 +42,7 @@ Route::controller(DailyDigestController::class)->group(function () {
 
 Route::controller(ThinkPadController::class)->group(function () {
     Route::get('think-pad', 'index')->name('think-pad');
+    Route::get('think-pad/me', 'myThinkPads')->name('think-pad.me');
     Route::get('think-pad/create', 'create')->name('think-pad.create');
     Route::post('think-pad', 'store')->name('think-pad.store');
     Route::post('think-pad/editor/images/store', 'storeEditorImages')->name('think-pad.editor.images.store');
@@ -54,6 +56,7 @@ Route::controller(ThinkPadController::class)->group(function () {
 
 Route::controller(SyntaxStoreController::class)->group(function () {
     Route::get('syntax-store', 'index')->name('syntax-store');
+    Route::get('syntax-store/me', 'mySyntaxStores')->name('syntax-store.me');
     Route::get('syntax-store/create', 'create')->name('syntax-store.create');
     Route::post('syntax-store/store', 'store')->name('syntax-store.store');
     Route::get('syntax-store/{syntaxStore}', 'show')->name('syntax-store.show');

@@ -1,6 +1,6 @@
 @extends('user.layout.layout')
 
-@section('title', Route::is('user.daily-digest') ? 'Daily Digest' : '🟢🟢🟢')
+@section('title', $title ?? '🟢🟢🟢')
 
 @section('content')
     <div class="content-page">
@@ -11,7 +11,7 @@
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">Daily Digestions List</h4>
+                        <h4 class="fs-18 fw-semibold m-0">{{ $title }}</h4>
                     </div>
 
                     <div class="text-end">
@@ -27,9 +27,13 @@
                 @forelse ($digestions as $dailyDigest)
                     <div class="col-sm-6 col-lg-4">
                         <div class="card d-block">
-                            <div class="card-header">
+                            <div class="card-header d-flex align-items-center">
                                 <a href="{{ authRoute('user.daily-digest.show', ['dailyDigest' => $dailyDigest]) }}"
                                     class="card-title">{{ $dailyDigest->title }}</a>
+                                @if (str_contains(request()->route()->getName(), 'me'))
+                                    <img class="ms-auto icon-20" src="{{ $dailyDigest->visibility_icon }}" alt=""
+                                        title="{{ ucfirst($dailyDigest->visibility ?? '') }}">
+                                @endif
                             </div>
                             <div class="card-body">
                                 <p class="card-text text-muted mb-0">{{ $dailyDigest->sub_title }}</p>
@@ -45,7 +49,7 @@
                                         <i class='bx bx-info-circle'></i>
                                     </a>
 
-                                   @can('update', $dailyDigest)
+                                    @can('update', $dailyDigest)
                                         <a href="{{ authRoute('user.daily-digest.edit', ['dailyDigest' => $dailyDigest]) }}"
                                             class="edit">
                                             <i class='bx bx-edit'></i>
@@ -63,14 +67,13 @@
                                             </button>
                                         </form>
                                     @endcan
-                                    {{-- <div class="more">
-                                        <i class='bx bx-dots-vertical-rounded' ></i>
-                                    </div> --}}
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 @empty
+                <x-no-data />
                 @endforelse
 
 

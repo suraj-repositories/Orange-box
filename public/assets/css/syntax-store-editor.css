@@ -58,9 +58,8 @@ pre button.code-copy-btn {
 
 /* PREVIEW STYLE START */
 .editorjs-preview {
-    font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    color: #49443f;
+    color: rgba(var(--bs-dark-rgb), var(--bs-text-opacity)) !important;
 }
 
 .editorjs-preview h1,

@@ -28,7 +28,11 @@ class ThinkPadPolicy
      */
     public function view(User $user, ThinkPad $thinkPad): bool
     {
-        return true;
+        if($thinkPad->visibility == 'public'){
+            return true;
+        }
+
+        return $user->id == $thinkPad->user_id ? true : false;
     }
 
     /**

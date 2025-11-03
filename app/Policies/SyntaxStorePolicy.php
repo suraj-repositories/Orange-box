@@ -29,6 +29,11 @@ class SyntaxStorePolicy
     public function view(User $user, SyntaxStore $syntaxStore): bool
     {
         return true;
+        //  if($syntaxStore->visibility == 'public'){
+        //     return true;
+        // }
+
+        // return $user->id == $syntaxStore->user_id ? true : false;
     }
 
     /**

@@ -21,8 +21,14 @@ class DailyDigest extends Model
         'description',
         'emoji_id',
         'file_id',
-        'uuid'
+        'uuid',
+        'visibility'
     ];
+
+    protected $appends = [
+        'visibility_icon'
+    ];
+
     public function getRouteKeyName()
     {
         return 'uuid';
@@ -74,5 +80,10 @@ class DailyDigest extends Model
             $digest->files()->withTrashed()->restore();
             $digest->picture()?->restore();
         });
+    }
+
+
+    public function getVisibilityIconAttribute(){
+        return config('icons.visibility')[$this->visibility] ?? config('icons.visibility.private');
     }
 }

@@ -21,7 +21,13 @@ class ThinkPad extends Model
         'file_id',
         'uuid',
         'status',
+        'visibility'
     ];
+
+    protected $appends = [
+        'visibility_icon'
+    ];
+
 
     public function getRouteKeyName()
     {
@@ -71,5 +77,11 @@ class ThinkPad extends Model
             return null;
         }
         return $this->belongsTo(File::class);
+    }
+
+
+    public function getVisibilityIconAttribute()
+    {
+        return config('icons.visibility')[$this->visibility] ?? config('icons.visibility.private');
     }
 }

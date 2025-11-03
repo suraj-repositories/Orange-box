@@ -28,7 +28,11 @@ class DailyDigestPolicy
      */
     public function view(User $user, DailyDigest $dailyDigest): bool
     {
-        return true;
+        if($dailyDigest->visibility == 'public'){
+            return true;
+        }
+
+        return $user->id == $dailyDigest->user_id ? true : false;
     }
 
     /**

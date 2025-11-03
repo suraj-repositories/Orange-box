@@ -30,7 +30,19 @@ class SyntaxStoreController extends Controller
     {
         $items = SyntaxStore::orderBy('id', 'desc')->paginate(10);
 
-        return view('user.thinkspace.syntax_store.syntax_store_list', compact('items'));
+        return view('user.thinkspace.syntax_store.syntax_store_list', [
+            'title' => "Public Syntax Store",
+            'items' => $items,
+        ]);
+    }
+    public function mySyntaxStores(User $user)
+    {
+        $items = SyntaxStore::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(10);
+
+        return view('user.thinkspace.syntax_store.syntax_store_list',  [
+            'title' => "My Syntax Store",
+            'items' => $items,
+        ]);
     }
 
     public function create()

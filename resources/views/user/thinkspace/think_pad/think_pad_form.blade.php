@@ -3,6 +3,11 @@
 @section('title', Route::is('user.think-pad.create') ? 'Think Pad' : (Route::is('user.think-pad.edit') ? 'Edit Pad' :
     '🟢🟢🟢'))
 
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2-bootstrap-theme.min.css') }}">
+@endsection
+
 @section('content')
     <div class="content-page">
         <div class="content">
@@ -66,6 +71,39 @@
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
+
+                                        <div class="col col-12 col-md-6 mb-3">
+                                            <label for="sub_title-input" class="form-label">Visibility </label>
+                                              <a tabindex="0" class="text-dark" role="button" data-bs-html="true"
+                                                data-bs-toggle="popover" data-bs-trigger="focus"
+                                                data-bs-custom-class="custom-popover" data-bs-title="Visibility Level"
+                                                data-bs-content="
+                                               <b>Private</b> - Visible to author only
+                                                <br> <b>Protected</b> - Visible for followers
+                                                <br> <b>Unlisted</b> - Visitable by only share link
+                                                 <br> <b>Public</b> - Visible To Everyone
+                                                ">
+                                                <i class="bi bi-info-circle"></i>
+                                            </a>
+
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">
+                                                    <i class="bx bx-show-alt"></i> </span>
+                                                 <select class="form-select select2-with-image" name="visibility">
+                                                    @foreach (config('icons.visibility') as $visibility => $icon)
+                                                        <option value="{{ $visibility }}"
+                                                            data-image="{{ asset($icon) }}"
+                                                            {{ !empty($thinkPad) && $thinkPad->visibility == $visibility ? 'selected' : '' }}>
+                                                            {{ ucfirst($visibility ?? '') }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            @error('visibility')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+
                                         <div class="col col-12 col-md-12 ">
                                             <label for="title-input" class="form-label">Description</label>
 
@@ -316,12 +354,9 @@
                                     @endforeach
                                 @endif
                             </div>
-
                         </div>
                     </div>
                 </div>
-
-
             </div> <!-- container-fluid -->
 
         </div> <!-- content -->
@@ -332,11 +367,12 @@
 
     </div>
 
-
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/think-pad.js') }}"></script>
     <script src="{{ asset('assets/js/pages/add-media.js') }}"></script>
+@endsection
 
-
-
+@section('js')
+    <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/lib-config/select2.init.js') }}"></script>
 @endsection

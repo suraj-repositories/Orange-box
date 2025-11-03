@@ -81,7 +81,7 @@ function enableUserLoading(sourceSelector, targetSelector) {
 
                 data.data.forEach(user => {
                     const option = new Option(user.username, user.id, false, false);
-                    $(option).attr('data-image', user.avatar);
+                    $(option).attr('data-image', user.avatar_url);
                     if (selectedValue && user.id == selectedValue) {
                         $(option).attr('selected', true);
                     }

@@ -1,6 +1,6 @@
 @extends('user.layout.layout')
 
-@section('title', Route::is('user.think-pad') ? 'Think Pad' : '🟢🟢🟢')
+@section('title',  $title  ?? '🟢🟢🟢')
 
 @section('content')
     <div class="content-page">
@@ -11,7 +11,7 @@
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">Think Pad List</h4>
+                        <h4 class="fs-18 fw-semibold m-0">{{ $title }}</h4>
                     </div>
 
                     <div class="text-end">
@@ -27,12 +27,15 @@
                 @forelse ($thinkPads as $thinkPad)
                     <div class="col-sm-6 col-lg-4">
                         <div class="card d-block">
-                            <div class="card-header">
+                            <div class="card-header d-flex align-items-baseline">
                                 <a href="{{ authRoute('user.think-pad.show', ['thinkPad' => $thinkPad]) }}" class="card-title">{{ $thinkPad->title }}</a>
+                                @if (str_contains(request()->route()->getName(), 'me'))
+                                    <img class="ms-auto icon-20" src="{{ $thinkPad->visibility_icon }}" alt=""
+                                    title="{{ ucfirst($thinkPad->visibility ?? '') }}">
+                                @endif
                             </div>
                             <div class="card-body">
                                 <p class="card-text text-muted mb-0">{{ $thinkPad->sub_title }}</p>
-
 
                                 <div class="action-container">
                                     <div class="ago-string">
@@ -67,6 +70,7 @@
                         </div>
                     </div>
                 @empty
+                <x-no-data />
                 @endforelse
 
 

@@ -57,10 +57,13 @@
                     <div class="collapse" id="dailyDigest">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href="{{ authRoute('user.daily-digest.create') }}">Add Digestion</a>
+                                <a class='tp-link' href='{{ authRoute('user.daily-digest') }}'>Public Digestions</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.daily-digest') }}'>Digestions List</a>
+                                <a class='tp-link' href='{{ authRoute('user.daily-digest.me') }}'>My Digestions</a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href="{{ authRoute('user.daily-digest.create') }}">Add Digestion</a>
                             </li>
 
                         </ul>
@@ -75,10 +78,13 @@
                     <div class="collapse" id="creative">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.think-pad.create') }}'>Create Think Pad</a>
+                                <a class='tp-link' href='{{ authRoute('user.think-pad') }}'>Public Think Pads</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.think-pad') }}'>Think Pads</a>
+                                <a class='tp-link' href='{{ authRoute('user.think-pad.me') }}'>My Think Pads</a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.think-pad.create') }}'>Create Think Pad</a>
                             </li>
 
                         </ul>
@@ -94,12 +100,15 @@
                     <div class="collapse" id="code-syntax-container">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.syntax-store.create') }}'>Write Syntax</a>
+                                <a class='tp-link' href='{{ authRoute('user.syntax-store') }}'>Public Syntax Store</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.syntax-store') }}'>Syntax Store</a>
+                                <a class='tp-link' href='{{ authRoute('user.syntax-store.me') }}'>My Syntax Store</a>
                             </li>
                             <li>
+                                <li>
+                                    <a class='tp-link' href='{{ authRoute('user.syntax-store.create') }}'>Write Syntax</a>
+                                </li>
 
                         </ul>
                     </div>
@@ -117,7 +126,8 @@
                     <div class="collapse" id="folder-insights">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.folder-factory.files.create') }}'>Upload File</a>
+                                <a class='tp-link' href='{{ authRoute('user.folder-factory.files.create') }}'>Upload
+                                    File</a>
                             </li>
                             <li>
                                 <a class='tp-link' href='{{ authRoute('user.folder-factory') }}'>Folder List</a>
@@ -130,14 +140,15 @@
                 <li class="menu-title mt-2">Project Tracker</li>
                 <li>
                     <a href="#project-zone" data-bs-toggle="collapse">
-                        <i class='bx bx-cube-alt fs-5' ></i>
+                        <i class='bx bx-cube-alt fs-5'></i>
                         <span> Project Board </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="project-zone">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.project-board.create') }}'>Create Project</a>
+                                <a class='tp-link' href='{{ authRoute('user.project-board.create') }}'>Create
+                                    Project</a>
                             </li>
                             <li>
                                 <a class='tp-link' href='{{ authRoute('user.project-board') }}'>Project List</a>
@@ -158,7 +169,8 @@
                                 <a class='tp-link' href='{{ authRoute('user.modules.create') }}'>Create Module</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.modules.index') }}'>Project Module List</a>
+                                <a class='tp-link' href='{{ authRoute('user.modules.index') }}'>Project Module
+                                    List</a>
                             </li>
 
                         </ul>
@@ -166,7 +178,7 @@
                 </li>
                 <li>
                     <a href="#project-task" data-bs-toggle="collapse">
-                       <i class='bx bx-target-lock fs-5'></i>
+                        <i class='bx bx-target-lock fs-5'></i>
                         <span> Project Tasks </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -184,17 +196,19 @@
                 </li>
                 <li>
                     <a href="#collaborations" data-bs-toggle="collapse">
-                       <i class='bx bx-donate-heart fs-5'></i>
+                        <i class='bx bx-donate-heart fs-5'></i>
                         <span> Collaboration </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="collaborations">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.collab.all.project-board.index') }}'>Project Board</a>
+                                <a class='tp-link'
+                                    href='{{ authRoute('user.collab.all.project-board.index') }}'>Project Board</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.collab.all.modules.index') }}'>Modules</a>
+                                <a class='tp-link'
+                                    href='{{ authRoute('user.collab.all.modules.index') }}'>Modules</a>
                             </li>
                             <li>
                                 <a class='tp-link' href='{{ authRoute('user.collab.all.tasks.index') }}'>Tasks</a>
