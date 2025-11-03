@@ -131,7 +131,7 @@
                                     <span class="input-group-text"><i class='bx bx-image fs-5'></i></span>
                                     <input type="file" class="form-control" accept="image/*"
                                         id="institution-logo-input" name="institution_logo"
-                                        onchange="enableImagePick(this)">
+                                        onchange="enableEducationImagePick(this)">
                                 </div>
                                 <div class="mt-2 d-flex gap-3 " id="institution-logo-preivew">
                                 </div>

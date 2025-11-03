@@ -79,6 +79,7 @@ class WorkExperienceControl {
         const editBtns = document.querySelectorAll(selector);
         if (!editBtns.length) return;
 
+        const obj = this;
         editBtns.forEach(btn => {
             btn.addEventListener('click', function () {
                 const oldForm = modal.querySelector('form');
@@ -91,7 +92,7 @@ class WorkExperienceControl {
                 const workExpId = btn.getAttribute('data-work-experience-id');
                 newForm.setAttribute("data-work-experience-id", workExpId);
 
-                setDataToForm(newForm, btn.dataset);
+                obj.setDataToForm(newForm, btn.dataset);
 
                 const saveBtn = newForm.querySelector('button[type="submit"]');
 
@@ -223,7 +224,46 @@ class WorkExperienceControl {
         }
     }
 
-    enableImagePick(input) {
+
+
+    enableCurrentlyWorkingCheckbox() {
+        const endDateInput = document.querySelector('input[name="end_date"]');
+        const currentlyWorkingCheck = document.querySelector('#currently-working-input');
+
+        if (currentlyWorkingCheck.checked) {
+            endDateInput.value = "";
+            endDateInput.disabled = true;
+        } else {
+            endDateInput.disabled = false;
+        }
+
+    }
+
+    enableDeleteBtns(selector) {
+        this.toggleClassOnView(selector, "deletion-enabled");
+    }
+
+    enableEditingBtns(selector) {
+        this.toggleClassOnView(selector, "editing-enabled");
+    }
+
+    toggleClassOnView(sourceSelector, className) {
+        const input = document.querySelector(sourceSelector);
+        const workExperienceView = document.querySelector("#work_experience_view");
+        input.checked = false;
+        input.addEventListener('change', () => {
+            if (input.checked === true) {
+                workExperienceView.classList.add(className);
+            } else {
+                workExperienceView.classList.remove(className);
+
+            }
+        });
+    }
+
+}
+
+ function enableWorkExperienceImagePick(input) {
 
         const modal = document.getElementById("work-experience-form-modal");
         const imageBox = document.getElementById('company-logo-preivew');
@@ -264,46 +304,4 @@ class WorkExperienceControl {
         } else {
             imageBox.innerHTML = '';
         }
-
-
-
-
-
     }
-
-    enableCurrentlyWorkingCheckbox() {
-        const endDateInput = document.querySelector('input[name="end_date"]');
-        const currentlyWorkingCheck = document.querySelector('#currently-working-input');
-
-        if (currentlyWorkingCheck.checked) {
-            endDateInput.value = "";
-            endDateInput.disabled = true;
-        } else {
-            endDateInput.disabled = false;
-        }
-
-    }
-
-    enableDeleteBtns(selector) {
-        this.toggleClassOnView(selector, "deletion-enabled");
-    }
-
-    enableEditingBtns(selector) {
-        this.toggleClassOnView(selector, "editing-enabled");
-    }
-
-    toggleClassOnView(sourceSelector, className) {
-        const input = document.querySelector(sourceSelector);
-        const workExperienceView = document.querySelector("#work_experience_view");
-        input.checked = false;
-        input.addEventListener('change', () => {
-            if (input.checked === true) {
-                workExperienceView.classList.add(className);
-            } else {
-                workExperienceView.classList.remove(className);
-
-            }
-        });
-    }
-
-}

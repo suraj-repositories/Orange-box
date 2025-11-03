@@ -166,7 +166,7 @@
                                  <div class="input-group">
                                      <span class="input-group-text"><i class='bx bx-image fs-5'></i></span>
                                      <input type="file" class="form-control" accept="image/*"
-                                         id="company-logo-input" name="company_logo" onchange="enableImagePick(this)">
+                                         id="company-logo-input" name="company_logo" onchange="enableWorkExperienceImagePick(this)">
                                  </div>
 
                                  <div class="mt-2 d-flex gap-3 " id="company-logo-preivew">

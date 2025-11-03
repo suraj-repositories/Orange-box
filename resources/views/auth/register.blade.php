@@ -84,7 +84,7 @@
 
                                         <div class="col-12">
                                             <a
-                                                class="btn btn-primary fw-normal d-flex align-items-center justify-content-center mb-3">
+                                                class="btn btn-primary fw-normal btn-facebook d-flex align-items-center justify-content-center mb-3">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" class="me-2">
                                                     <path fill="#ffffff"

@@ -31,6 +31,7 @@
     --bs-danger: #ec8290;
     --bs-light: #f0f4f7;
     --bs-dark: #4a5a6b;
+    --bs-dark-blue: #1372FF;
     --bs-primary-rgb: 255, 134, 0;
     --bs-secondary-rgb: 140, 87, 209;
     --bs-success-rgb: 41, 170, 133;
@@ -1945,4 +1946,15 @@ tr.deleting a {
     position: absolute;
     bottom: 0;
     cursor: pointer;
+}
+.btn-facebook{
+    background-color: var(--bs-dark-blue);
+    border-color: var(--bs-dark-blue);
+}
+
+.btn-facebook:hover{
+    transition: all 0.2s ease;
+     background-color: var(--bs-dark-blue);
+    border-color: var(--bs-dark-blue);
+    opacity: 0.9;
 }

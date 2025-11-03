@@ -77,6 +77,7 @@ class EducationControl {
         const editBtns = document.querySelectorAll(selector);
         if (!editBtns.length) return;
 
+        const obj = this;
         editBtns.forEach(btn => {
             btn.addEventListener('click', function () {
                 const oldForm = modal.querySelector('form');
@@ -89,7 +90,7 @@ class EducationControl {
                 const workExpId = btn.getAttribute('data-education-id');
                 newForm.setAttribute("data-education-id", workExpId);
 
-                setDataToForm(newForm, btn.dataset);
+                obj.setDataToForm(newForm, btn.dataset);
 
                 const saveBtn = newForm.querySelector('button[type="submit"]');
 
@@ -218,7 +219,33 @@ class EducationControl {
         }
     }
 
-    enableImagePick(input) {
+
+    enableEducationDeleteBtns(selector) {
+        this.toggleClassOnView(selector, "deletion-enabled");
+    }
+
+    enableEducationEditingBtns(selector) {
+        this.toggleClassOnView(selector, "editing-enabled");
+    }
+
+    toggleClassOnView(sourceSelector, className) {
+        const input = document.querySelector(sourceSelector);
+        const education = document.querySelector("#education_view");
+        input.checked = false;
+        input.addEventListener('change', () => {
+            if (input.checked === true) {
+                education.classList.add(className);
+            } else {
+                education.classList.remove(className);
+
+            }
+        });
+    }
+}
+
+
+
+ function enableEducationImagePick(input) {
 
         const modal = document.getElementById("education-form-modal");
         const imageBox = document.getElementById('institution-logo-preivew');
@@ -264,29 +291,3 @@ class EducationControl {
 
 
     }
-
-    enableEducationDeleteBtns(selector) {
-        this.toggleClassOnView(selector, "deletion-enabled");
-    }
-
-    enableEducationEditingBtns(selector) {
-        this.toggleClassOnView(selector, "editing-enabled");
-    }
-
-    toggleClassOnView(sourceSelector, className) {
-        const input = document.querySelector(sourceSelector);
-        const education = document.querySelector("#education_view");
-        input.checked = false;
-        input.addEventListener('change', () => {
-            if (input.checked === true) {
-                education.classList.add(className);
-            } else {
-                education.classList.remove(className);
-
-            }
-        });
-    }
-}
-
-
-
