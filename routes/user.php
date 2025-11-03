@@ -9,6 +9,7 @@ use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\EducationController;
 use App\Http\Controllers\User\FolderFactoryController;
+use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\PasswordLockerController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ProjectBoardController;
@@ -210,4 +211,8 @@ Route::controller(EducationController::class)->group(function () {
 
 Route::controller(SettingsController::class)->group(function () {
     Route::get('settings', 'index')->name('settings.index');
+});
+
+Route::controller(NotificationController::class)->group(function () {
+    Route::get('notifications', 'index')->name('notifications.index');
 });

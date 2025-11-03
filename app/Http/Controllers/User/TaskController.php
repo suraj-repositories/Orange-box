@@ -8,10 +8,12 @@ use App\Models\ProjectBoard;
 use App\Models\ProjectModule;
 use App\Models\Task;
 use App\Models\User;
+use App\Notifications\TaskAssigned;
 use Illuminate\Http\Request;
 use App\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Notification;
 
 class TaskController extends Controller
 {
@@ -111,6 +113,8 @@ class TaskController extends Controller
             'due_date' => $validated['due_date'] ?? null
         ]);
 
+        Notification::send([$task->assignedUser], new TaskAssigned($task, "A new task assigned", 'info'));
+
         $task->projectModuleTask()->create([
             'project_module_id' => $validated['project_module_id'],
         ]);
@@ -140,6 +144,7 @@ class TaskController extends Controller
 
         return redirect()->to(authRoute('user.tasks.show', ['task' => $task]))->with('success', 'Task created successfully!');
     }
+
     public function show(User $user, Task $task, Request $request)
     {
         if ($task->user_id != $user->id) {
