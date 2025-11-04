@@ -5,7 +5,7 @@
                 height="128">
             <div class="flex-grow-1 ms-3 text-break">
                 <div class="mb-1"><a href="#" class="fw-bold link-body-emphasis me-1">
-                        {{ $comment->user->name() }} </a> <i class="zmdi zmdi-check me-1 fw-bold" title="verified"></i>
+                        {{ $comment->user->username }} </a> <i class="zmdi zmdi-check me-1 fw-bold" title="verified"></i>
                     <span class="text-body-secondary text-nowrap">{{ $comment->created_at->diffForHumans() }}</span>
                 </div>
                 <div class="mb-1">{{ $comment->message }}</div>
@@ -35,7 +35,7 @@
                         </svg>
                     </button>
                     <button class="btn btn-sm btn-secondary rounded-pill small reply-btn"
-                        data-ob-replyto="{{ $comment->user->name() }}"
+                        data-ob-replyto="{{ $comment->user->username }}"
                         data-ob-commentable-type=@json($commentable::class)
                         data-ob-commentable-id="{{ $commentable->id }}"
                         data-ob-parent-id="{{ $comment->id }}">Reply</button>

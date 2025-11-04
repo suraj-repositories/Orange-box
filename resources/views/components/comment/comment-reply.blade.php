@@ -3,12 +3,12 @@
         @if (!empty($is_newly_created)) data-ob-is-newly-created="true" data-ob-new-identification-key="{{ $reply->id }}" @endif>
         <img class="rounded-circle comment-img" src="{{ $reply->user->profilePicture() }}" width="128" height="128">
         <div class="flex-grow-1 ms-2 text-break">
-            <div class="mb-1"><a href="#" class="fw-bold link-body-emphasis pe-1">{{ $reply->user->name() }}</a>
+            <div class="mb-1"><a href="#" class="fw-bold link-body-emphasis pe-1">{{ $reply->user->username }}</a>
                 <span class="text-body-secondary text-nowrap">{{ $reply->created_at->diffForHumans() }}</span>
             </div>
 
             <div class="mb-1"><i
-                    class="text-primary">{{ !empty($reply->parent_id) ? '@' . $reply->parent->user->name() : '' }}</i>
+                    class="text-primary">{{ !empty($reply->parent_id) ? '@' . $reply->parent->user->username : '' }}</i>
                 {{ $reply->message }} </div>
             <div class="hstack align-items-center" style="margin-left:-.25rem;">
                 <button class="icon-btn comment-like-btn {{ $reply->likedBy(Auth::id()) ? 'filled' : '' }}"
@@ -37,7 +37,7 @@
                         <use xlink:href="#google-thumb_down"></use>
                     </svg>
                 </button>
-                <button data-ob-replyto="{{ $reply->user->name() }}"
+                <button data-ob-replyto="{{ $reply->user->username }}"
                     data-ob-commentable-type=@json($commentable::class)
                     data-ob-commentable-id="{{ $commentable->id }}" data-ob-parent-id="{{ $reply->id }}"
                     class="btn btn-sm btn-secondary rounded-pill small reply-btn">Reply</button>
