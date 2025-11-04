@@ -1,8 +1,8 @@
 /*
-Template Name: Tapeli - Responsive Bootstrap 5 Admin Dashboard
-Author: Zoyothemes
+
+Author: Oranbyte
 Version: 1.0.0
-Website: https://zoyothemes.com/
+Website: https://oranbyte.com/
 File: Apexcharts Box Whisker Charts
 */
 

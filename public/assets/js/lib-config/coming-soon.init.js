@@ -1,8 +1,8 @@
 /*
-Template Name: Tapeli - Responsive Bootstrap 5 Admin Dashboard
-Author: Zoyothemes
+
+Author: Oranbyte
 Version: 1.0.0
-Website: https://zoyothemes.com/
+Website: https://oranbyte.com/
 File: Countdown init js
 */
 
@@ -28,7 +28,7 @@ class Countdown {
 
             // Run myfunc every second
             var myfunc = setInterval(function () {
-                
+
                 var now = new Date().getTime();
                 var timeleft = eventCountDown - now;
 
@@ -43,7 +43,7 @@ class Countdown {
                 document.getElementById("hours").innerHTML = hours
                 document.getElementById("minutes").innerHTML = minutes
                 document.getElementById("seconds").innerHTML = seconds
-                
+
                 // Display the message when countdown is over
                 if (timeleft < 0) {
                     clearInterval(myfunc);
@@ -56,7 +56,7 @@ class Countdown {
             }, 1000);
         }
     }
-    
+
     init() {
         this.initCountDown();
     }
