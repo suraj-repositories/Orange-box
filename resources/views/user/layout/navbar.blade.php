@@ -157,7 +157,7 @@
                         </div>
 
                         <!-- All-->
-                        <a href="javascript:void(0);"
+                        <a href="{{ authRoute('user.notifications.index') }}"
                             class="dropdown-item text-center text-primary notify-item notify-all">
                             View all
                             <i class="fe-arrow-right"></i>

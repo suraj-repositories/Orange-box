@@ -60,10 +60,12 @@ class TaskAssigned extends Notification
     {
 
         return [
-            'from' => $this->task->user_id,
+            'from_user' => $this->task->user_id,
             'message' => $this->message,
-            'model_id' => $this->task->id,
             'type' => $this->type,
+            'visit_url' => authRoute('user.tasks.show', ['task' => $this->task]),
+            'priority' => $this->task->priority,
+            'status' => $this->task->status
         ];
     }
 }

@@ -28,6 +28,15 @@ composer dump-autoload
 - collaboration work on project
 - password locker
 - Personal Portfolio
+- Notification
+   - Task assigned - creation, update
+   - Module Member Selection - create - update
+   - task completed by member - to owner
+   - Comment Generated
+   - Reply on comment
+   - someone visited to your - unlisted stuff
+   
+    
 
 ## Shoutout Libraries And Framework
 

@@ -28,60 +28,94 @@
 
                             <div class="card-body p-0">
 
-                                <div class="table-responsive">
-                                    <table class="table table-traffic mb-0">
+                                <div class="accordion plain-accordion" id="accordionExample">
+                                    @forelse ($notifications as $notification)
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="heading-{{ $loop->iteration }}">
+                                                <div class="accordion-button fw-medium collapsed" type="button">
 
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>From</th>
-                                                <th>Message</th>
-                                                <th>Type</th>
-                                                <th>Desc Link</th>
-                                                <th>Date</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
+                                                    <div class="file-toggle d-flex align-items-center overflow-hidden min-w-200  me-4"
+                                                        data-bs-toggle="collapse"
+                                                        data-bs-target="#collapse-{{ $loop->iteration }}"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapse-{{ $loop->iteration }}">
+                                                        <div class="icon me-2">
 
-                                        @forelse ($notifications as $notification)
-                                            <tr>
-                                                <td>
-                                                    {{ $notifications->firstItem() + $loop->iteration - 1 }}
-                                                </td>
-                                                <td>
-                                                    {{ $notification->type }}
-                                                </td>
-                                                <td>
-                                                    {{ $notification->data['message'] ?? '' }}
-                                                </td>
-                                                <td>
-                                                    {{ $notification->data['type'] ?? '' }}
-                                                </td>
-                                                <td>
-                                                    <a href="">{{ $notification->data['message'] ?? '' }}</a>
-                                                </td>
-                                                <td>
-                                                    {{ $notification->created_at->diffForHumans() }}
-                                                </td>
-                                                <td>
-                                                    Delete
-                                                </td>
-                                            </tr>
+                                                            <img class="img-badge-40 rounded-circle"
+                                                                src="{{ $notification?->from_user?->avatar_url }}"
+                                                                alt="">
 
-                                        @empty
-                                            <tr>
-                                                <td colspan="6">
-                                                    <x-no-data />
-                                                </td>
-                                            </tr>
-                                        @endforelse
+                                                        </div>
+                                                        <div class="name text-truncate w-fit me-2"
+                                                            id="id{{ $loop->iteration }}">
+                                                            <div>{{ $notification?->from_user?->fullname() ?? '' }}</div>
+                                                            <div class="strong-italic text-dark-emphasis fs-10px">
+                                                                {{ $notification?->from_user?->username ?? '' }}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="type ms-3 mx-auto w-100 text-start truncate-1">
+                                                        {{ $notification?->data['message'] ?? '-' }}</div>
+                                                    <div class="type me-2 ms-auto min-w-100 text-center">
+                                                        {{ ucfirst($notification->data['type'] ?? '') }}
+                                                    </div>
+                                                    <small class="date me-2 w-fit-content min-w-100 text-center">
+                                                        {{ $notification?->created_at?->diffForHumans() ?? '' }}</small>
+                                                </div>
+                                            </h2>
+                                            <div id="collapse-{{ $loop->iteration }}" class="accordion-collapse collapse"
+                                                aria-labelledby="heading-{{ $loop->iteration }}"
+                                                data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
 
-                                    </table>
+                                                    <div class="d-md-snone">
 
-                                    <div class="m-3 mb-0">
-                                        {{ $notifications->withQueryString()->links() }}
-                                    </div>
+                                                        <ul class="list-unstyled fs-6 mb-3">
+                                                            <li>
+                                                                <strong>Message : </strong> {{ $notification?->data['message'] ?? '-' }}
+                                                            </li>
+                                                            <li>
+                                                                <div class="d-flex align-items-center">
+                                                                    <strong>Details : </strong>
+                                                                    <a class="mx-2 "
+                                                                        href="{{ $notification?->data['visit_url'] ?? '#' }}">+
+                                                                        1 Task
+                                                                    </a>
+                                                                    <i class="bx bxs-circle me-1 fs-4 priority-low"></i>
+                                                                    Low Priority
+                                                                </div>
+                                                            </li>
+                                                            <li><strong>Type :</strong>
+                                                                {{ ucfirst($notification->data['type'] ?? '-') }}
+                                                            </li>
+                                                            <li><strong>Creation date :</strong>
+                                                                {{ $notification?->created_at?->diffForHumans() ?? '' }}
+                                                            </li>
+
+                                                        </ul>
+                                                    </div>
+
+                                                    <!-- Actions -->
+                                                    <h6 class="mb-2">Actions</h6>
+                                                    <div class="action d-flex gap-2 flex-wrap">
+                                                        <a class="btn btn-outline-primary btn-sm d-flex align-items-center"
+                                                            href="#" target="_blank">
+                                                            <i class='bx bx-show'></i>&nbsp;View
+                                                        </a>
+
+                                                        <button class="btn btn-outline-danger btn-sm delete-file-button">
+                                                            <i class='bx bx-trash-alt'></i> Delete
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    @empty
+                                        <x-no-data />
+                                    @endforelse
                                 </div>
+
 
                             </div>
                         </div>

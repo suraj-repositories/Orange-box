@@ -923,6 +923,14 @@ p {
     object-fit: cover;
 }
 
+.truncate-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    max-height: calc(1.5em * 1);
+}
+
 .truncate-2 {
     overflow: hidden;
     display: -webkit-box;
@@ -2018,4 +2026,13 @@ tr.deleting a {
       .visibility-badge .text{
         display: none;
       }
+}
+
+
+.strong-italic{
+    font-weight: bold;
+    font-style: italic;
+}
+.min-w-200{
+    min-width: 200px;
 }

@@ -113,7 +113,10 @@ class TaskController extends Controller
             'due_date' => $validated['due_date'] ?? null
         ]);
 
-        Notification::send([$task->assignedUser], new TaskAssigned($task, "A new task assigned", 'info'));
+        Notification::send(
+            [$task->assignedUser],
+            new TaskAssigned($task, "A new task assigned", 'info')
+        );
 
         $task->projectModuleTask()->create([
             'project_module_id' => $validated['project_module_id'],
