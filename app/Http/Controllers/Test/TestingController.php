@@ -15,7 +15,7 @@ class TestingController extends Controller
 
     //
     public function testing(){
-        $this->fileService->test();
+       dd("on test");
     }
 
 }

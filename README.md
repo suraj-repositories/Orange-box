@@ -9,8 +9,7 @@
 
 
 ## Orange-box
-An Content Management system
-
+An Content Management system 
 
 - After changing anything on helpers.php file run this to see updates
 ```sh
@@ -35,7 +34,31 @@ composer dump-autoload
    - Comment Generated
    - Reply on comment
    - someone visited to your - unlisted stuff
-   
+- Settings
+    - notifications
+        - all notification
+        - Task notifications
+        - Module Notification
+        - Comment Notification
+        - unlisted notification
+    - create passwords 
+        - masterkey
+        - lockscreen
+        - pemkey
+        - changepassword
+        - authenticator_app
+    - theme
+        - theme color
+        - theme bg color
+        - sidebar color
+    - enable-project-management
+    - account settings
+        - change username
+        - change primary email
+        - delete account
+        - recovery email
+-     
+     
     
 
 ## Shoutout Libraries And Framework

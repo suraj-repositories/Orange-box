@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Common\PemKeyController;
 use App\Http\Controllers\User\Collaboration\ProjectBoardController as CollaborationProjectBoardController;
 use App\Http\Controllers\User\Collaboration\ProjectModuleController as CollaborationProjectModuleController;
 use App\Http\Controllers\User\Collaboration\TaskController as CollaborationTaskController;
@@ -21,7 +20,6 @@ use App\Http\Controllers\User\TaskController;
 use App\Http\Controllers\User\ThinkPadController;
 use App\Http\Controllers\User\UserSkillController;
 use App\Http\Controllers\User\WorkExperienceController;
-use App\Models\WorkExperience;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(DashboardController::class)->group(function () {
@@ -107,16 +105,12 @@ Route::controller(ProjectModuleController::class)->group(function () {
     Route::get('project-boards/{slug}/modules/create', 'createNested')->name('project-board.modules.create');
     Route::post('project-boards/{slug}/modules', 'store')->name('project-board.modules.save');
     Route::get('project-boards/{slug}/modules/{module}', 'show')->name('project-board.modules.show');
-
     Route::get('project-boards/{slug}/modules/{module}/edit', 'editNested')->name('project-board.modules.edit');;
     Route::post('project-boards/{slug}/modules/{module}', 'update')->name('project-board.modules.update');
-
     Route::delete('project-boards/{slug}/modules/{module}', 'destroy')->name('project-board.modules.delete');
-
     Route::get('modules', 'index')->name('modules.index');
     Route::get('modules/create', 'create')->name('modules.create');
     Route::post('modules', 'store')->name('modules.save');
-
     Route::get('modules/{module}/edit', 'edit')->name('modules.edit');
     Route::post('modules/{module}', 'updateGlobal')->name('modules.update');
     Route::get('modules/{module}', 'showGlobal')->name('modules.show');
@@ -125,17 +119,13 @@ Route::controller(ProjectModuleController::class)->group(function () {
 Route::controller(TaskController::class)->group(function () {
     Route::get('project-boards/{slug}/modules/{module}/tasks/create', 'createNested')->name('project-board.modules.tasks.createNested');
     Route::post('project-boards/{slug}/modules/{module}/tasks', 'store')->name('project-board.modules.tasks.store');
-
     Route::get('project-boards/{slug}/modules/{module}/tasks/{task}/edit', 'editNested')->name('project-board.modules.tasks.editNested');
     Route::post('project-boards/{slug}/modules/{module}/tasks/{task}', 'updateNested')->whereUuid('task')->name('project-board.modules.tasks.update');
-
     Route::get('tasks', 'index')->name('tasks.index');
     Route::post('tasks', 'store')->name('tasks.store');
     Route::get('tasks/create', 'createGlobal')->name('tasks.create');
-
     Route::get('tasks/{task}/edit', 'editGlobal')->name('tasks.edit');
     Route::post('tasks/{task}', 'update')->name('tasks.update');
-
     Route::delete('tasks/{task}', 'destroy')->name('tasks.delete');
     Route::get('tasks/{task}', 'show')->name('tasks.show');
     Route::patch('tasks/{task}/status/{status}', 'updateStatus')->name('tasks.updateStatus');
@@ -152,7 +142,6 @@ Route::controller(ProfileController::class)->group(function () {
     Route::put('profile/personal-information', 'updatePersonalInformation')->name('profile.personal_information.update');
     Route::post('profile/address', 'saveAddress')->name('profile.address.save');
     Route::post('profile/social-media-links', 'updateSocialMediaLinks')->name('profile.social_media_links.save');
-
     Route::post('profile/profile-image', 'updateProfileImage')->name('profile.profile_image.save');
 });
 
@@ -160,8 +149,6 @@ Route::controller(UserSkillController::class)->group(function () {
     Route::post('profile/user-skill', 'store')->name('profile.user_skill.save');
     Route::delete('profile/user-skill/{userSkill}', 'destroy')->name('profile.user_skill.delete');
 });
-
-
 
 Route::prefix('collab')->name('collab.all.')->middleware('collab')->group(function () {
     Route::controller(CollaborationProjectBoardController::class)->group(function () {
