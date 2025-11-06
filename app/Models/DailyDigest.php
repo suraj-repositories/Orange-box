@@ -26,7 +26,8 @@ class DailyDigest extends Model
     ];
 
     protected $appends = [
-        'visibility_icon'
+        'visibility_icon',
+        'visit_url'
     ];
 
     public function getRouteKeyName()
@@ -82,8 +83,12 @@ class DailyDigest extends Model
         });
     }
 
-
     public function getVisibilityIconAttribute(){
         return config('icons.visibility')[$this->visibility] ?? config('icons.visibility.private');
     }
+
+    public function getVisitUrlAttribute(){
+        return authRoute('user.daily-digest.show', ['dailyDigest' => $this]);
+    }
+
 }

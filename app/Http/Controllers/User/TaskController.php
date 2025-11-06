@@ -9,6 +9,7 @@ use App\Models\ProjectModule;
 use App\Models\Task;
 use App\Models\User;
 use App\Notifications\TaskAssigned;
+use App\Notifications\TaskCompleted;
 use Illuminate\Http\Request;
 use App\Services\FileService;
 use Illuminate\Support\Facades\DB;
@@ -168,7 +169,7 @@ class TaskController extends Controller
             'title' => $task->title,
             'task' => $task,
             'projectModule' => $task->module,
-            'projectBoard' => $task->module->projectBoard,
+            'projectBoard' => $task->module?->projectBoard ?? null,
             'imageFiles' => $imageFiles,
             'otherFiles' => $otherFiles
         ]);
@@ -241,6 +242,8 @@ class TaskController extends Controller
                 $validated['project_module_id'] = $validated['project_module'] ?? null;
             }
 
+            $prevAssignee = $task->assigned_to;
+
             $task->update([
                 'title' => $validated['title'],
                 'description' => $validated['description'] ?? null,
@@ -265,6 +268,13 @@ class TaskController extends Controller
                     ]);
                 }
             }
+
+            if ($prevAssignee != $task->assigned_to) {
+                Notification::send(
+                    [$task->assignedUser],
+                    new TaskAssigned($task, "A new task assigned", 'info')
+                );
+            }
         });
 
         return redirect()
@@ -279,7 +289,7 @@ class TaskController extends Controller
         return redirect()->back()->with('success', 'Task Deleted Successfully!');
     }
 
-    public function updateStatus(Request $request, User $user, Task $task,string $status)
+    public function updateStatus(Request $request, User $user, Task $task, string $status)
     {
         Gate::authorize('update', $task);
 
@@ -296,6 +306,13 @@ class TaskController extends Controller
 
         $task->status = $status;
         $task->save();
+
+        if ($task->status == "completed" && $task->user->id != $user->id) {
+            Notification::send(
+                [$task->user],
+                new TaskCompleted($task, "Task Completed!", 'info')
+            );
+        }
 
         return redirect()->back()->with('success', "Task marked as " . ucfirst(str_replace('-', ' ', $status)) . ".");
     }

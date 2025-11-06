@@ -28,7 +28,7 @@
                     <div class="col-sm-6 col-lg-4">
                         <div class="card d-block">
                             <div class="card-header d-flex align-items-center">
-                                <a href="{{ authRoute('user.daily-digest.show', ['dailyDigest' => $dailyDigest]) }}"
+                                <a href="{{ $dailyDigest->visit_url }}"
                                     class="card-title">{{ $dailyDigest->title }}</a>
                                 @if (str_contains(request()->route()->getName(), 'me'))
                                     <img class="ms-auto icon-20" src="{{ $dailyDigest->visibility_icon }}" alt=""

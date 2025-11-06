@@ -22,6 +22,10 @@ class SyntaxStore extends Model
         'uuid',
     ];
 
+    protected $appends = [
+        'visit_url'
+    ];
+
     public function getRouteKeyName()
     {
         return 'uuid';
@@ -53,5 +57,10 @@ class SyntaxStore extends Model
     public function files()
     {
         return $this->morphMany(File::class, 'fileable');
+    }
+
+    public function getVisitUrlAttribute()
+    {
+       return authRoute('user.syntax-store.show', ['syntaxStore' => $this]);
     }
 }

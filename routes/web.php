@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Common\FileController;
+use App\Http\Controllers\Common\NotificationController;
 use App\Http\Controllers\Common\PasswordLockerAuthController;
 use App\Http\Controllers\Common\PemKeyController;
 use App\Http\Controllers\Common\ProjectBoardController;
@@ -44,6 +45,9 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
         Route::post('password-locker/auth/verify-master-key', 'verfiyMasterKey')->name('password_locker.auth.verify_master_key');
     });
 
-
+    Route::controller(NotificationController::class)->group(function(){
+        Route::put('notificaiton/{notification}/mark-as-read', 'markAsRead')->name('notification.mark-as-read');
+        Route::delete('notificaiton/deleteall', 'deleteAllNotifications')->name('notification.delete.all');
+    });
 
 });

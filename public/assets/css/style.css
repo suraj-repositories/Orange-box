@@ -767,6 +767,16 @@ p {
     white-space: nowrap;
 }
 
+.plain-accordion .accordion-button .sm-message {
+    display: none;
+}
+
+.plain-accordion .accordion-button .sm-date {
+    font-size: 10px;
+    color: var(--bs-gray-700);
+    display: none;
+}
+
 @media (max-width: 768px) {
 
     .plain-accordion .accordion-button .type,
@@ -774,6 +784,18 @@ p {
     .plain-accordion .accordion-button .date,
     .plain-accordion .accordion-button .action {
         display: none;
+    }
+
+    .plain-accordion .accordion-button .sm-date {
+        display: block;
+    }
+
+    .w-sm-100 {
+        width: 100% !important;
+    }
+
+    .plain-accordion .accordion-button .sm-message {
+        display: inline;
     }
 }
 
@@ -862,6 +884,11 @@ p {
     cursor: not-allowed;
     border-color: var(--bs-danger) !important;
 
+}
+
+.notification-view  .deleting .accordion-button{
+    background: var(--bs-danger-bg-subtle);
+    box-shadow: inset 0 calc(-1 * var(--bs-accordion-border-width)) 0 var(--bs-danger-bg-subtle);
 }
 
 .deleting .accordion-button {
@@ -2023,16 +2050,57 @@ tr.deleting a {
         align-items: center;
         justify-content: center;
     }
-      .visibility-badge .text{
+
+    .visibility-badge .text {
         display: none;
-      }
+    }
 }
 
 
-.strong-italic{
+.strong-italic {
     font-weight: bold;
     font-style: italic;
 }
-.min-w-200{
+
+.min-w-200 {
     min-width: 200px;
+}
+
+.unread-badge {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 13px;
+    height: 13px;
+    background-color: var(--bs-primary);
+    border: 2px solid var(--bs-light);
+    border-radius: 50%;
+}
+
+.readed .unread-badge {
+    display: none;
+}
+
+@keyframes disapearing {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        display: none;
+    }
+}
+
+[data-ob-notification-status="read"] .unread-badge {
+    animation: disapearing 0.8s ease-in-out forwards;
+}
+
+.notification-view .accordion-button {
+    font-weight: bolder !important;
+    transition: font-weight 0.8s ease;
+}
+
+.notification-view [data-ob-notification-status="read"] .accordion-button {
+    font-weight: unset !important;
 }

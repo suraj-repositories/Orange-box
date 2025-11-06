@@ -8,10 +8,12 @@ use App\Models\ProjectBoard;
 use App\Models\ProjectModule;
 use App\Models\ProjectModuleType;
 use App\Models\User;
+use App\Notifications\ModuleAssigned;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\ValidationException;
 
 class ProjectModuleController extends Controller
@@ -124,7 +126,6 @@ class ProjectModuleController extends Controller
             $projectModule->start_date = $validated['start_date'] ?? null;
             $projectModule->end_date = $validated['end_date'] ?? null;
 
-
             $projectModule->save();
 
             if (!empty($validated['media_files'])) {
@@ -146,6 +147,11 @@ class ProjectModuleController extends Controller
                         'user_id' => $userId,
                     ]);
                 }
+                $assignees = User::whereIn('id', $validated['user'])->select('id')->get();
+                Notification::send(
+                    $assignees,
+                    new ModuleAssigned($projectModule, "A new module assigned", 'info')
+                );
             }
 
             return redirect()
@@ -196,7 +202,9 @@ class ProjectModuleController extends Controller
 
         $tasks = $projectModule->tasks()->paginate(10);
 
-        return view('user.project_tracker.project_modules.project_module_show',[
+        return view(
+            'user.project_tracker.project_modules.project_module_show',
+            [
                 'title'         => $projectModule->name,
                 'projectModule' => $projectModule,
                 'projectBoard'  => $projectBoard,
@@ -336,16 +344,32 @@ class ProjectModuleController extends Controller
                 $module->projectModuleUsers()->whereIn('user_id', $toDetach)->delete();
             }
 
-            if ($toAttach) {
+            if (!empty($toAttach)) {
                 $now = now();
-                $rows = array_map(fn($id) => [
+
+                $rows = collect($toAttach)->map(fn($id) => [
                     'project_module_id' => $module->id,
                     'user_id' => $id,
                     'created_at' => $now,
                     'updated_at' => $now,
-                ], $toAttach);
+                ])->toArray();
 
                 DB::table('project_module_users')->insertOrIgnore($rows);
+
+                $existingIds = DB::table('project_module_users')
+                    ->where('project_module_id', $module->id)
+                    ->pluck('user_id')
+                    ->toArray();
+
+                $newlyInserted = array_intersect($toAttach, $existingIds);
+
+                if (!empty($newlyInserted)) {
+                    $assignees = User::whereIn('id', $newlyInserted)->get();
+                    Notification::send(
+                        $assignees,
+                        new ModuleAssigned($module, "A new module assigned", 'info')
+                    );
+                }
             }
         });
 

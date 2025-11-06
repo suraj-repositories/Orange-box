@@ -28,12 +28,12 @@ composer dump-autoload
 - password locker
 - Personal Portfolio
 - Notification
-   - Task assigned - creation, update
-   - Module Member Selection - create - update
-   - task completed by member - to owner
-   - Comment Generated
-   - Reply on comment
-   - someone visited to your - unlisted stuff
+   - Task assigned - creation, update ----------------------------------------- DONE
+   - Module Member Selection - create - update -------------------------------- DONE
+   - task completed by member - to owner -------------------------------------- DONE
+   - Comment Generated -------------------------------------------------------- DONE
+   - Reply on comment --------------------------------------------------------- DONE
+   - someone visited to your - unlisted stuff --------------------------------- half done
 - Settings
     - notifications
         - all notification

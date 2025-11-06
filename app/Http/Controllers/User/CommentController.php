@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Jobs\DeleteCommentTreeJob;
 use App\Models\Comment;
 use App\Models\User;
+use App\Notifications\CommentNotification;
+use App\Notifications\CommentReplyNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class CommentController extends Controller
 {
@@ -21,8 +24,9 @@ class CommentController extends Controller
             'parent_id'        => 'nullable|integer|exists:comments,id',
         ]);
 
+        $authId =  Auth::id();
         $comment = Comment::create([
-            'user_id'         => Auth::id(),
+            'user_id'         => $authId,
             'parent_id'       => $request->parent_id,
             'commentable_type' => $request->commentable_type,
             'commentable_id'  => $request->commentable_id,
@@ -46,6 +50,27 @@ class CommentController extends Controller
         $totalComments = $comment->commentable->totalCommentsCount();
         $rootComment = Comment::find($comment->root_id);
         $totalReplies = $rootComment->totalTopLevelReplies();
+
+        $userId = $comment?->commentable?->user_id ?? null;
+        $user = User::where('id', $userId)->select('id')->first();
+
+        if (!empty($user) && $userId != $authId) {
+            Notification::send(
+                [$user],
+                new CommentNotification($comment, "A new comment on your post!", 'info')
+            );
+        }
+        if (!empty($comment->parent_id)) {
+            $parentComment = $comment->parent;
+            $parentCommentUser = User::where('id', $parentComment->user_id)->select('id')->first();
+            if ($parentComment->user_id != $comment->user_id) {
+                Notification::send(
+                    [$parentCommentUser],
+                    new CommentReplyNotification($comment, "A new reply on your comment!", 'info')
+                );
+            }
+        }
+
 
         return response()->json([
             'success' => true,

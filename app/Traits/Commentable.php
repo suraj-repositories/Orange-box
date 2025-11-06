@@ -23,7 +23,6 @@ trait Commentable
         return $this->totalComments()->count();
     }
 
-
     public function topLevelCommentsCount(){
         return $this->topLevelComments()->count();
     }

@@ -25,7 +25,8 @@ class ThinkPad extends Model
     ];
 
     protected $appends = [
-        'visibility_icon'
+        'visibility_icon',
+        'visit_url'
     ];
 
 
@@ -83,5 +84,9 @@ class ThinkPad extends Model
     public function getVisibilityIconAttribute()
     {
         return config('icons.visibility')[$this->visibility] ?? config('icons.visibility.private');
+    }
+
+     public function getVisitUrlAttribute(){
+        return authRoute('user.think-pad.show', ['thinkPad' => $this]);
     }
 }

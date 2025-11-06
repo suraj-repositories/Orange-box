@@ -97,6 +97,7 @@ class ProjectModule extends Model
         return $this->belongsTo(ProjectBoard::class);
     }
 
+
     public function projectModuleUsers()
     {
         return $this->hasMany(ProjectModuleUser::class);
