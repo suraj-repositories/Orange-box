@@ -2104,3 +2104,13 @@ tr.deleting a {
 .notification-view [data-ob-notification-status="read"] .accordion-button {
     font-weight: unset !important;
 }
+.clear-all-notifications .noti-icon-badge{
+    display: none;
+}
+.clear-all-notifications .notify-item{
+    display: none;
+}
+
+.clear-all-notifications .notify-all{
+    display: block;
+}

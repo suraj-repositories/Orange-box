@@ -31,11 +31,31 @@ class NotificationController extends Controller
             ]);
         }
 
+        if ($notification->status == 'new') {
+            $notification->status = 'cleared';
+        }
+
         $notification->read_at = now();
         $notification->save();
         return response()->json([
             'status' => 'success',
             'message' => 'Readed successfully!'
+        ]);
+    }
+
+    public function clearNotifications(Request $request)
+    {
+
+        $user = User::find(Auth::id());
+
+        $user->notifications()->where('status', 'new')->update([
+            'status' => 'cleared'
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Cleared successfully!',
+            'emptyComponent' => view('components.no-data')->render()
         ]);
     }
 

@@ -8,14 +8,29 @@ use App\Notifications\ModuleAssigned;
 use App\Notifications\TaskAssigned;
 use App\Notifications\TaskCompleted;
 use App\Services\FileService;
+use Exception;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
     //
-    public function index(User $user)
+    public function index(User $user, Request $request)
     {
-        $notifications = $user->notifications()->latest()->paginate(10);
+        $notifications = null;
+        $search = "";
+        if ($request->has('search')) {
+            list($col, $val) = explode('-', $request->search, 2);
+            try {
+                $notifications = $user->notifications()->where($col, $val)->latest()->paginate(10);
+                $search =  $val;
+            } catch (Exception $err) {
+                $notification = collect();
+            }
+        } else {
+            $notifications = $user->notifications()->latest()->paginate(10);
+        }
+
+
 
         $userIds = [];
         foreach ($notifications as $notification) {
@@ -50,7 +65,8 @@ class NotificationController extends Controller
             }
         }
         return view('user.notification.notifications', [
-            'notifications' => $notifications
+            'notifications' => $notifications,
+            'search' => $search
         ]);
     }
 }

@@ -28,6 +28,19 @@
 
                             <div class="card-body p-0">
 
+                                @if (!empty($search))
+                                    <div class="search-result p-3">
+                                        <a href="javascript::void(0)" class="project-module-project-link text-reset w-fit">
+                                            <i class="bx bx-search fs-6 me-1"></i>
+                                            <span><strong>Search -</strong>
+                                                <span class="fw-bold p-1 ">ID-</span><span>{{ $search ?? "" }}</span></span>
+                                            <i class="bx bx-x fs-6 mx-1"
+                                                onclick="location.href='{{ url()->current() }}'"></i>
+
+                                        </a>
+                                    </div>
+                                @endif
+
                                 <div class="accordion accordion-flush plain-accordion notification-view"
                                     id="notificationsList">
                                     @forelse ($notifications as $notification)
@@ -92,11 +105,13 @@
 
                                                                 <a class="mx-2 d-flex align-items-center flex-wrap"
                                                                     href="{{ $notification?->data['visit_url'] ?? '#' }}">
-                                                                    <i class='bx bx-package fs-5 me-1'></i><span>{{ $notification->link_text }}</span>
+                                                                    <i
+                                                                        class='bx bx-package fs-5 me-1'></i><span>{{ $notification->link_text }}</span>
                                                                 </a>
 
                                                                 @if (!empty($notification?->data['priority']))
-                                                                    <i class="bx bxs-circle me-1 fs-4 priority-{{ $notification?->data['priority'] }}"></i>
+                                                                    <i
+                                                                        class="bx bxs-circle me-1 fs-4 priority-{{ $notification?->data['priority'] }}"></i>
                                                                     {{ ucfirst($notification?->data['priority']) }}
                                                                     Priority
                                                                 @endif
@@ -147,7 +162,4 @@
 
         @include('layout.components.copyright')
     </div>
-@endsection
-@section('js')
-    <script src="{{ asset('assets/js/pages/notification.js') }}"></script>
 @endsection

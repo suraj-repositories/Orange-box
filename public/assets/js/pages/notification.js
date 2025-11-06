@@ -7,6 +7,7 @@ class NotificationControl {
     init() {
         this.enableMarkAsRead();
         this.enableDeleteNotification();
+        this.enableClearAllNotification();
     }
 
     enableMarkAsRead() {
@@ -108,6 +109,40 @@ class NotificationControl {
         } catch (error) {
             console.error('Fetch Error:', error);
             return false;
+        }
+    }
+
+    enableClearAllNotification() {
+        const btn = document.querySelector('#clearAllNotificationsBtn');
+        if (btn) {
+            const notificationDrawer = btn.closest('.notification-drawer');
+            const scrollArea = notificationDrawer.querySelector('.noti-scroll');
+
+            btn.addEventListener('click', async () => {
+
+                try {
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    const response = await fetch(authRoute('ajax.notification.clear.all'), {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                    });
+
+                    const data = await response.json();
+
+                    if (data.status === "success") {
+                        notificationDrawer.classList.add('clear-all-notifications');
+                        scrollArea.innerHTML = data.emptyComponent;
+                    } else {
+
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            });
         }
     }
 

@@ -48,6 +48,7 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
     Route::controller(NotificationController::class)->group(function(){
         Route::put('notificaiton/{notification}/mark-as-read', 'markAsRead')->name('notification.mark-as-read');
         Route::delete('notificaiton/deleteall', 'deleteAllNotifications')->name('notification.delete.all');
+        Route::put('notificaiton/clear-all', 'clearNotifications')->name('notification.clear.all');
     });
 
 });
