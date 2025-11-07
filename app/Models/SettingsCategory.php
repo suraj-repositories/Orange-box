@@ -13,4 +13,13 @@ class SettingsCategory extends Model
         'name',
         'description'
     ];
+
+    public function settings(){
+        return $this->hasMany(Settings::class);
+    }
+
+    public function getIconUrlAttribute(){
+        return asset($this->icon);
+    }
+
 }

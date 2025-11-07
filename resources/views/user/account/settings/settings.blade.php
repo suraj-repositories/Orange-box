@@ -28,9 +28,8 @@
 
                             <div class="card-body p-0">
 
-                                <div class="accordion accordion-flush plain-accordion"
-                                    id="notificationsList">
-                                    @forelse (["Notifcation", "Passwords", 'App Theme', 'Account Settings'] as $topic)
+                                <div class="accordion accordion-flush plain-accordion" id="notificationsList">
+                                    @forelse ($appSettings as $appSetting)
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="heading-{{ $loop->iteration }}">
                                                 <div class="accordion-button fw-medium collapsed" type="button"
@@ -42,43 +41,59 @@
                                                         class="file-toggle d-flex align-items-center overflow-hidden w-sm-100 min-w-200  me-sm-4">
                                                         <div class="icon me-2 position-relative">
 
-                                                            <img class="img-badge-40 rounded-circle"
-                                                                src="https://placehold.co/400" alt="">
-
+                                                            <img class="img-badge-40 rounded-circle avatar p-1"
+                                                                src="{{ asset($appSetting->icon_url) }}" alt="">
 
                                                         </div>
                                                         <div class="name me-2 w-100 ">
                                                             <div class="w-100 d-flex">
-                                                               <div>
-                                                                 <div class="text-truncate">
-                                                                    Notfication
+                                                                <div>
+                                                                    <div class="text-truncate">
+                                                                        {{ $appSetting->name ?? '#' }}
+                                                                    </div>
                                                                 </div>
-                                                               <small class="text-muted ms-1">
-                                                                Simple <b class="text-dark">•</b> Normal <b class="text-dark">•</b> Impossible
-                                                               </small>
-
-                                                               </div>
                                                             </div>
-                                                            <small class="sm-message truncate-1 text-muted">Lorem ipsum
-                                                                dolor sit amet consectetur adipisicing elit. Neque,
-                                                                minus.</small>
+                                                            <small
+                                                                class="sm-message d-inline truncate-1 ms-1  fs-8 text-muted">
+                                                                {{ !empty($appSetting->description) ? $appSetting->description : $appSetting->settings->take(3)->pluck('title')->implode(' • ') }}
+                                                            </small>
                                                         </div>
                                                     </div>
 
-
-                                                    <small class="date me-2 ms-auto w-fit-content min-w-100 text-center">
-                                                       view</small>
                                                 </div>
                                             </h2>
                                             <div id="collapse-{{ $loop->iteration }}" class="accordion-collapse collapse"
-                                                aria-labelledby="heading-{{ $loop->iteration }}"
-                                                data-bs-parent="#notificationsList">
+                                                aria-labelledby="heading-{{ $loop->iteration }}">
                                                 <div class="accordion-body">
 
-                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum similique
-                                                    dicta temporibus ratione quibusdam, accusamus tempora ea omnis
-                                                    voluptatum obcaecati adipisci soluta cumque cupiditate ipsum! Mollitia
-                                                    accusamus inventore assumenda nam.
+                                                    @if (str_contains(strtolower($appSetting->name ?? ''), 'security'))
+                                                        @include('user.account.settings.password_settings')
+                                                    @elseif (str_contains(strtolower($appSetting->name ?? ''), 'theme'))
+                                                        @include('user.account.settings.theme_settings')
+                                                    @elseif (str_contains(strtolower($appSetting->name ?? ''), 'account'))
+                                                        @include('user.account.settings.account_settings')
+                                                    @else
+                                                        @foreach ($appSetting->settings as $setting)
+                                                            <div class="d-flex align-items-center mb-3">
+                                                                <div class="d-flex align-items-center">
+                                                                    <img class="circle-30 me-2"
+                                                                        src="https://placehold.co/400" alt="alter">
+                                                                    <div>
+                                                                        <h2 class="fs-7 m-0">{{ $setting->title }} </h2>
+                                                                        <p class="fs-8 m-0 text-muted">
+                                                                            {{ $setting->description }}</p>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="buttonArea px-2 ps-3 border-start ms-auto">
+                                                                    <label class="switch">
+                                                                        <input type="checkbox" checked>
+                                                                        <span class="slider round"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
                                             </div>
 
@@ -86,6 +101,7 @@
                                     @empty
                                         <x-no-data />
                                     @endforelse
+
                                 </div>
 
                             </div>

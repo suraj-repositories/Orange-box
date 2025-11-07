@@ -6,6 +6,7 @@ use App\Models\Settings;
 use App\Models\SettingsCategory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class SettingsSeeder extends Seeder
@@ -20,14 +21,16 @@ class SettingsSeeder extends Seeder
 
         try {
 
-            SettingsCategory::query()->forceDelete();
-            Settings::query()->forceDelete();
-
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            Settings::truncate();
+            SettingsCategory::truncate();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
             if (is_array($settingCategories) && !empty($settingCategories)) {
                 foreach ($settingCategories as &$c) {
                     $c['created_at'] = now();
                     $c['updated_at'] = now();
+
                 }
                 unset($c);
                 SettingsCategory::insert($settingCategories);
@@ -38,6 +41,7 @@ class SettingsSeeder extends Seeder
                 foreach ($defaultSettings as &$s) {
                     $s['created_at'] = now();
                     $s['updated_at'] = now();
+
                 }
                 unset($s);
                 Settings::insert($defaultSettings);

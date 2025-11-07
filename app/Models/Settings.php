@@ -17,4 +17,8 @@ class Settings extends Model
         'settings_category_id',
         'description'
     ];
+
+    public function category(){
+        return $this->belongsTo(SettingsCategory::class);
+    }
 }

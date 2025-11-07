@@ -886,7 +886,7 @@ p {
 
 }
 
-.notification-view  .deleting .accordion-button{
+.notification-view .deleting .accordion-button {
     background: var(--bs-danger-bg-subtle);
     box-shadow: inset 0 calc(-1 * var(--bs-accordion-border-width)) 0 var(--bs-danger-bg-subtle);
 }
@@ -1009,6 +1009,18 @@ p {
     justify-content: center;
     text-align: center;
     list-style-type: 20px;
+    font-size: 14px;
+    border: 1px solid #dee2e6;
+}
+.circle-30 {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    list-style-type: 30px;
     font-size: 14px;
     border: 1px solid #dee2e6;
 }
@@ -2104,13 +2116,75 @@ tr.deleting a {
 .notification-view [data-ob-notification-status="read"] .accordion-button {
     font-weight: unset !important;
 }
-.clear-all-notifications .noti-icon-badge{
-    display: none;
-}
-.clear-all-notifications .notify-item{
+
+.clear-all-notifications .noti-icon-badge {
     display: none;
 }
 
-.clear-all-notifications .notify-all{
+.clear-all-notifications .notify-item {
+    display: none;
+}
+
+.clear-all-notifications .notify-all {
     display: block;
+}
+
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 25px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--bs-gray-300);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 19px;
+    width: 19px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--bs-light-bg-subtle);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.switch input:checked+.slider {
+    background-color: var(--bs-primary);
+}
+
+.switch input:focus+.slider {
+    box-shadow: 0 0 1px var(--bs-light-bg-subtle);
+}
+
+.switch input:checked+.slider:before {
+    -webkit-transform: translateX(19px);
+    -ms-transform: translateX(19px);
+    transform: translateX(19px);
+}
+
+.switch .slider.round {
+    border-radius: 34px;
+}
+
+.switch .slider.round:before {
+    border-radius: 50%;
 }

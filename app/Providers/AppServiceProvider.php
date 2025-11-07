@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Facades\Setting;
 use App\Models\Comment;
 use App\Models\File;
 use App\Models\FolderFactory;
@@ -22,6 +23,7 @@ use App\Services\Impl\EditorJsServiceImpl;
 use App\Services\Impl\FileServiceImpl;
 use App\Services\Impl\MarkdownServiceImpl;
 use App\Services\MarkdownService;
+use App\Services\Impl\SettingsServiceImpl;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
@@ -35,9 +37,14 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+        $this->app->singleton('settings', function () {
+            return new SettingsServiceImpl();
+        });
         $this->app->singleton(FileService::class, FileServiceImpl::class);
         $this->app->singleton(EditorJsService::class, EditorJsServiceImpl::class);
         $this->app->singleton(MarkdownService::class, MarkdownServiceImpl::class);
+
+        class_alias(Setting::class, 'Setting');
     }
 
     /**
@@ -57,6 +64,9 @@ class AppServiceProvider extends ServiceProvider
 
         Paginator::useBootstrapFive();
 
+        view()->composer('*', function ($view) {
+            $view->with('settings', app('settings'));
+        });
         //
         if (app()->environment('local')) {
             $this->app->booted(function () {

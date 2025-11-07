@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('value');
             $table->foreignId('settings_category_id')->nullable()->constrained('settings_categories')->onDelete('set null');
             $table->text('description')->nullable();
+            $table->string('icon')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
