@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(IconSeeder::class);
         $this->call(ProjectModuleTypeSeeder::class);
         $this->call(SocialMediaPlatformSeeder::class);
+        $this->call(SettingsSeeder::class);
     }
 }
