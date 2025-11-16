@@ -2,22 +2,21 @@
 
 namespace App\Services;
 
-use App\Models\Settings;
 use Illuminate\Support\Collection;
 
 interface SettingsService
 {
-    function loadSettings();
+    public function loadSettings(): void;
 
-    function get(string $key, $default = null);
+    public function get(string $key, mixed $default = null): mixed;
 
-    function getDescription(string $key, $default = null);
+    public function set(string $key, mixed $value): mixed;
 
-    function set(string $key, $value): Settings;
+    public function allGroupedByCategory(): Collection;
 
-    function allGroupedByCategory(): Collection;
+    public function all(): array;
 
-    function all(): array;
+    public function refresh(): void;
 
-    function refresh(): void;
+    public function getDescription(string $key, mixed $default = null): mixed;
 }

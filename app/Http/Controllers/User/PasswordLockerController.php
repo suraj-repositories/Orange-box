@@ -22,6 +22,7 @@ class PasswordLockerController extends Controller
             })
             ->paginate(10);
         $passwords->getCollection()->transform(function ($password) {
+
             $password->notes = $password->notes ? Crypt::decryptString($password->notes) : null;
             return $password;
         });

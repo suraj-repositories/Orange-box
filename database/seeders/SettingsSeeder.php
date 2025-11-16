@@ -27,23 +27,33 @@ class SettingsSeeder extends Seeder
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
             if (is_array($settingCategories) && !empty($settingCategories)) {
+
                 foreach ($settingCategories as &$c) {
                     $c['created_at'] = now();
                     $c['updated_at'] = now();
-
                 }
                 unset($c);
+
                 SettingsCategory::insert($settingCategories);
             }
 
-
             if (is_array($defaultSettings) && !empty($defaultSettings)) {
+
                 foreach ($defaultSettings as &$s) {
+
+                    if (isset($s['is_enabled'])) {
+                        $s['value'] = null;
+                        $s['value_model'] = null;
+                    }
+
+                    if (isset($s['value_model'])) {
+                        $s['is_enabled'] = null;
+                    }
                     $s['created_at'] = now();
                     $s['updated_at'] = now();
-
                 }
                 unset($s);
+
                 Settings::insert($defaultSettings);
             }
 

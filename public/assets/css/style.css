@@ -1012,6 +1012,7 @@ p {
     font-size: 14px;
     border: 1px solid #dee2e6;
 }
+
 .circle-30 {
     width: 30px;
     height: 30px;
@@ -2187,4 +2188,14 @@ tr.deleting a {
 
 .switch .slider.round:before {
     border-radius: 50%;
+}
+
+.suggestion-badge {
+    padding: 2px 10px;
+    border: 1px dashed #ffc18f;
+    color: #1e1e1e;
+    border-radius: 6px;
+    background: #ffd4b561;
+    margin: 0 3px;
+    line-height: 27px;
 }

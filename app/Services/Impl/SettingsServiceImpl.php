@@ -10,113 +10,82 @@ use Illuminate\Support\Facades\Cache;
 
 class SettingsServiceImpl implements SettingsService
 {
-    /**
-     * @var Collection
-     */
-    protected $settings;
+    protected Collection $settings;
+    protected Collection $settingsCategories;
 
-    /**
-     * @var Collection
-     */
-    protected $settingsCategories;
-
-    /**
-     * Initialize service and load settings.
-     */
     public function __construct()
     {
         $this->loadSettings();
     }
 
-    /**
-     * Load all settings and categories (from cache or DB).
-     */
     public function loadSettings(): void
     {
-        // You can cache results for performance
-        $this->settingsCategories = Cache::remember('settings_categories', 3600, function () {
-            return SettingsCategory::with('settings')->get();
-        });
-
-        $this->settings = Cache::remember('settings_all', 3600, function () {
-            return Settings::all()->keyBy('key');
-        });
+        $this->settings = Cache::rememberForever(
+            'settings.global',
+            fn() => Settings::all()->keyBy('key')
+        );
     }
 
-    /**
-     * Get a setting by key.
-     *
-     * @param string $key
-     * @param mixed|null $default
-     * @return mixed
-     */
-    public function get(string $key, $default = null)
+    public function get(string $key, mixed $default = null): mixed
     {
         $setting = $this->settings->get($key);
 
-        return $setting ? $setting->value : $default;
+        if (!$setting) {
+            return $default;
+        }
+        if ($setting->is_enabled && $setting->value === null) {
+            return true;
+        }
+
+        return $setting->value ?? $default;
     }
 
-    /**
-     * Get a setting description by key.
-     *
-     * @param string $key
-     * @param mixed|null $default
-     * @return mixed
-     */
-    public function getDescription(string $key, $default = null)
-    {
-        $setting = $this->settings->get($key);
 
-        return $setting ? $setting->description : $default;
-    }
-
-    /**
-     * Set or update a setting value in DB and cache.
-     *
-     * @param string $key
-     * @param mixed $value
-     * @return Settings
-     */
-    public function set(string $key, $value): Settings
+    public function set(string $key, mixed $value): mixed
     {
-        $setting = Settings::updateOrCreate(['key' => $key], ['value' => $value]);
+        $setting = Settings::where('key', $key)->first();
+
+        if (!$setting) {
+            throw new \Exception("Setting '{$key}' does not exist.");
+        }
+
+        if (is_bool($value)) {
+            $setting->update([
+                'is_enabled' => $value,
+                'value' => null,
+            ]);
+        } else {
+            $setting->update([
+                'value' => $value,
+            ]);
+        }
 
         $this->settings->put($key, $setting);
-        Cache::put('settings_all', $this->settings, 3600);
+        Cache::put('settings.global', $this->settings);
 
         return $setting;
     }
 
-    /**
-     * Get all settings grouped by category.
-     *
-     * @return Collection
-     */
-    public function allGroupedByCategory(): Collection
-    {
-        return $this->settingsCategories->mapWithKeys(function ($category) {
-            return [$category->name => $category->settings->pluck('value', 'key')];
-        });
-    }
-
-    /**
-     * Get all settings as key-value pairs.
-     *
-     * @return array
-     */
     public function all(): array
     {
         return $this->settings->pluck('value', 'key')->toArray();
     }
 
-    /**
-     * Refresh settings and categories (reload + clear cache).
-     */
     public function refresh(): void
     {
-        Cache::forget('settings_all');
-        Cache::forget('settings_categories');
+        Cache::forget('settings.global');
         $this->loadSettings();
+    }
+
+    public function allGroupedByCategory(): Collection
+    {
+        return $this->settingsCategories->mapWithKeys(
+            fn($cat) => [$cat->name => $cat->settings->pluck('value', 'key')]
+        );
+    }
+
+    public function getDescription(string $key, mixed $default = null): mixed
+    {
+        return $this->settings->get($key)?->description ?? $default;
     }
 }

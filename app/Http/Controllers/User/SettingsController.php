@@ -2,24 +2,42 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Facades\Setting;
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use App\Models\SettingsCategory;
-use Illuminate\Http\Request;
+use App\Models\User;
 
 class SettingsController extends Controller
 {
     //
-    public function index()
+    public function index(User $user)
     {
         $appSettings = SettingsCategory::orderBy('name', 'asc')->with('settings')->get();
-        $userSettings = Setting::allGroupedByCategory();
+        $userSettings = Settings::leftJoin('user_settings', function ($join) use ($user) {
+            $join->on('user_settings.setting_id', '=', 'settings.id')
+                ->where('user_settings.user_id', '=', $user->id);
+        })
+            ->select(
+                'settings.key',
+                'settings.is_enabled',
+                'user_settings.value',
+                'settings.value as default_value',
+                'settings.value_model'
+            )
+            ->get()
+            ->transform(function ($setting) {
+                if (empty($setting->value)) {
+                    $setting->value = false;
+                }
+                return $setting;
+            })
+            ->pluck('value', 'key');
 
         return view(
             'user.account.settings.settings',
             [
-                'settings' => $userSettings,
-                'appSettings' => $appSettings
+                'appSettings' => $appSettings,
+                'userSettings' => $userSettings,
             ]
         );
     }

@@ -198,6 +198,8 @@ Route::controller(EducationController::class)->group(function () {
 
 Route::controller(SettingsController::class)->group(function () {
     Route::get('settings', 'index')->name('settings.index');
+
+
 });
 
 Route::controller(NotificationController::class)->group(function () {

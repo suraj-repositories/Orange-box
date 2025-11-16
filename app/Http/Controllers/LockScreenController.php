@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ScreenLock;
 use App\Models\UserKey;
+use App\Models\UserScreenLockPin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -41,9 +42,9 @@ class LockScreenController extends Controller
             ], 422);
         }
         $user = Auth::user();
-        $userKey = UserKey::where('user_id', $user->id)->first();
+        $screenLockPin = UserScreenLockPin::where('user_id', $user->id)->where('status', 'active')->first();
 
-        if ($userKey->verifyScreenLockPin($request->pin)) {
+        if ($screenLockPin->verifyPin($request->pin)) {
 
             $redirectUrl = route('login');
             $screenLock = ScreenLock::where('user_id', $user->id)
@@ -72,9 +73,9 @@ class LockScreenController extends Controller
     public function lock(Request $request)
     {
         $user = Auth::user();
-        $unlockKey = $user->keys;
+        $unlockPin = $user->screenLockPin()->where('status', 'active')->exists();
 
-        if (!$user->isLocked() && !empty($unlockKey) && !empty($unlockKey->screen_lock_pin)) {
+        if (!$user->isLocked() && $unlockPin) {
             ScreenLock::create([
                 'user_id' => $user->id,
                 'redirect_url' => $request->headers->get('referer'),

@@ -16,7 +16,7 @@ return [
                 "description" => "",
                 "icon" => 'assets/icons/ob-svg/setting/notification.svg'
             ],
-             [
+            [
                 "id" => 3,
                 "name" => "Security Settings",
                 "description" => "",
@@ -37,133 +37,148 @@ return [
             ],
         ],
         'default_settings' => [
+
+            // Category: Account
             [
                 'title' => 'Change Username',
                 'key' => 'username_update',
-                'value' =>  'on',
+                'is_enabled' => true,
                 'description' => 'User can change their usernames!',
                 'settings_category_id' => 1,
             ],
             [
                 'title' => 'Change Primary Email',
                 'key' => 'primary_email_update',
-                'value' =>  'on',
+                'is_enabled' => true,
                 'description' => 'User can change their primary email!',
                 'settings_category_id' => 1,
             ],
             [
                 'title' => 'Delete Account',
                 'key' => 'delete_account',
-                'value' =>  'on',
-                'description' => 'Danger! - Once your account has been deleted it is very difficult to get it again!!!',
+                'is_enabled' => true,
+                'description' => 'Danger! Account deletion is hard to revert.',
                 'settings_category_id' => 1,
             ],
+
+
+            // Category: Notifications
             [
                 'title' => 'Task Notifications',
                 'key' => 'task_notification',
-                'value' => 'on',
-                'description' => 'A new notificaiton arrise when anyone assign you a task!',
+                'is_enabled' => true,
+                'description' => 'Notify when assigned a task.',
                 'settings_category_id' => 2,
             ],
             [
                 'title' => 'Module Notifications',
                 'key' => 'module_notification',
-                'value' => 'on',
-                'description' => 'A new notificaiton arrise when anyone join you a on any project module!',
+                'is_enabled' => true,
+                'description' => 'Notify when someone joins your module.',
                 'settings_category_id' => 2,
             ],
             [
                 'title' => 'Comment Notifications',
                 'key' => 'comment_notification',
-                'value' => 'on',
-                'description' => 'A notification arrise when anyone comment to your post!',
+                'is_enabled' => true,
+                'description' => 'Notify when someone comments.',
                 'settings_category_id' => 2,
             ],
             [
                 'title' => 'Comment Reply Notifications',
                 'key' => 'comment_reply_notification',
-                'value' => 'on',
-                'description' => 'A notification arrise when anyone reply to your comment!',
+                'is_enabled' => true,
+                'description' => 'Notify when someone replies.',
                 'settings_category_id' => 2,
             ],
             [
                 'title' => 'Unlisted Visit Notifications',
                 'key' => 'unlisted_visit_notification',
-                'value' => 'on',
-                'description' => 'A notification arrise when anyone visited to your unlisted post!',
+                'is_enabled' => true,
+                'description' => 'Notify when someone visits your unlisted post.',
                 'settings_category_id' => 2,
             ],
+
+
+            // Category: Security
             [
                 'title' => 'Master Password',
-                'key' => 'is_master_password_set',
-                'value' => false,
-                'description' => 'Set your master password. With this single password you can manage all authorized tasks. Buf often risky to get anyone know steal this, make sure to change master key after few uses!',
+                'key' => 'master_password_enabled',
+                'is_enabled' => false,
+                'description' => 'Enable master password feature.',
                 'settings_category_id' => 3,
             ],
             [
                 'title' => 'Lock Screen Password',
-                'key' => 'lock_screen_password_set',
-                'value' => false,
-                'description' => 'You can lock unlock screen, according to you handy then logout!',
+                'key' => 'lock_screen_enabled',
+                'is_enabled' => false,
+                'description' => 'Enable lock-screen.',
                 'settings_category_id' => 3,
             ],
             [
                 'title' => 'Pem key Setup',
-                'key' => 'is_pem_key_set',
-                'value' => false,
-                'description' => 'Setup you private file athorization.',
+                'key' => 'pem_key_enabled',
+                'is_enabled' => false,
+                'description' => 'Enable PEM key setup.',
                 'settings_category_id' => 3,
             ],
             [
                 'title' => 'Change Password',
                 'key' => 'enable_change_password',
-                'value' => true,
-                'description' => 'Update your password.',
+                'is_enabled' => true,
+                'description' => 'Allow password updates.',
                 'settings_category_id' => 3,
             ],
             [
                 'title' => 'App Based Authentication',
-                'key' => 'is_app_auth_set',
-                'value' => false,
-                'description' => 'Download and set the authentication via our authentication app.',
+                'key' => 'app_auth_enabled',
+                'is_enabled' => false,
+                'description' => 'Enable app-based authentication.',
                 'settings_category_id' => 3,
             ],
+
+
+            // Category: Theme (MODEL-BASED)
             [
                 'title' => 'App Theme',
                 'key' => 'app_theme',
+                'value_model' => 'App\Models\AppTheme',
                 'value' => 1,
-                'description' => 'Choose to apply a theme',
+                'description' => 'Choose a theme.',
                 'settings_category_id' => 4,
             ],
+
             [
                 'title' => 'Enable Project Module',
                 'key' => 'enable_project_module',
-                'value' => true,
-                'description' => 'Enable project, module, task and subtask creation.',
+                'is_enabled' => true,
+                'description' => 'Enable project & task management.',
                 'settings_category_id' => 5,
             ],
             [
                 'title' => 'Enable Project Contribution Module',
                 'key' => 'enable_contribution_module',
-                'value' => true,
-                'description' => 'Enable mangement of project assigned by someone else!',
+                'is_enabled' => true,
+                'description' => 'Enable project contribution.',
                 'settings_category_id' => 5,
             ],
             [
                 'title' => 'Enable Git Module',
                 'key' => 'enable_git_module',
-                'value' => true,
-                'description' => 'Enable your git',
+                'is_enabled' => true,
+                'description' => 'Enable git support.',
                 'settings_category_id' => 5,
             ],
             [
                 'title' => 'Enable Orbit Zone Module',
                 'key' => 'enable_orbit_zone_module',
-                'value' => true,
-                'description' => 'Enable your git',
+                'is_enabled' => true,
+                'description' => 'Enable Orbit Zone.',
                 'settings_category_id' => 5,
-            ]
+            ],
+
         ]
+
     ],
 
     'social_media_platforms' => [

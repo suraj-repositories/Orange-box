@@ -8,6 +8,7 @@ use App\Models\MasterKey;
 use App\Models\Otp;
 use App\Models\PasswordLocker;
 use App\Models\UserKey;
+use App\Models\UserMasterKey;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -93,7 +94,7 @@ class PasswordLockerAuthController extends Controller
     {
         $mk = $request->input('master_key');
         $user = Auth::user();
-        $userKey = UserKey::where('user_id', $user->id)->whereNotNull('master_key')->select('user_id', 'master_key')->orderByDesc('id')->first();
+        $userKey = UserMasterKey::where('user_id', $user->id)->where('status', 'active')->select('user_id', 'master_key')->orderByDesc('id')->first();
         if(!$userKey){
             return response()->json([
                 'status' => 'error',

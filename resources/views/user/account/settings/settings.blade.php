@@ -118,3 +118,7 @@
 
 
 @endsection
+
+@section('js')
+<script src="{{ asset('assets/js/pages/settings.js') }}"></script>
+@endsection

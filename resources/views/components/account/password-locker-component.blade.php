@@ -296,14 +296,14 @@
 
                             <div class="my-3 input-group-wrapper" id="emailInput">
                                 <div class="row align-items-center g-2">
-                                    <div class="col-12 col-lg-8">
+                                    <div class="col-12 col-lg-9">
                                         <div class="input-group">
                                             <span class="input-group-text fw-bold fs-5 py-1"> @ </span>
                                             <input type="text" class="form-control" id="otp-input" name="otp"
                                                 placeholder="OTP">
                                         </div>
                                     </div>
-                                    <div class="col-12 col-lg-4">
+                                    <div class="col-12 col-lg-3">
                                         <small class="text-muted resend-message d-none"></small>
                                        <button type="button" class="btn w-100 btn-primary " id="send-email-otp-btn">Send Otp</button>
                                     </div>

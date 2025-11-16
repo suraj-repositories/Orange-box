@@ -6,6 +6,7 @@ use App\Http\Controllers\Common\PasswordLockerAuthController;
 use App\Http\Controllers\Common\PemKeyController;
 use App\Http\Controllers\Common\ProjectBoardController;
 use App\Http\Controllers\Common\ProjectModuleController;
+use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Common\UserController;
 use App\Http\Controllers\Test\TestingController;
 use Illuminate\Support\Facades\Auth;
@@ -45,10 +46,16 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
         Route::post('password-locker/auth/verify-master-key', 'verfiyMasterKey')->name('password_locker.auth.verify_master_key');
     });
 
-    Route::controller(NotificationController::class)->group(function(){
+    Route::controller(NotificationController::class)->group(function () {
         Route::put('notificaiton/{notification}/mark-as-read', 'markAsRead')->name('notification.mark-as-read');
         Route::delete('notificaiton/deleteall', 'deleteAllNotifications')->name('notification.delete.all');
         Route::put('notificaiton/clear-all', 'clearNotifications')->name('notification.clear.all');
     });
 
+    Route::controller(SettingsController::class)->group(function () {
+        Route::post('settings/account-settings/change-username', 'changeUsername')->name('settings.account.change.username');
+        Route::post('settings/secutiy-settings/change-password', 'changePassword')->name('settings.security.change.password');
+        Route::post('settings/secutiy-settings/lock-screen-pin', 'setLockScreen')->name('settings.security.update.lock.screen.pin');
+
+    });
 });

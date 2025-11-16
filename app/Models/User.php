@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
+use phpseclib3\Crypt\DH\PublicKey;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -85,7 +86,8 @@ class User extends Authenticatable
         return "https://placehold.co/100/FF8600/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
     }
     public function getAvatarUrlAttribute()
-    {   $value = $this->avatar;
+    {
+        $value = $this->avatar;
 
         if ($value && Storage::disk('public')->exists($value)) {
 
@@ -96,9 +98,28 @@ class User extends Authenticatable
         return "https://placehold.co/100/FF8600/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
     }
 
-    public function keys()
+    public function masterKey()
     {
-        return $this->hasOne(UserKey::class);
+        return $this->hasOne(UserMasterKey::class);
+    }
+    public function activeMasterKey()
+    {
+        return $this->masterKey()->where('status', 'active');
+    }
+    public function screenLockPin()
+    {
+        return $this->hasOne(UserScreenLockPin::class);
+    }
+    public function activeScreenLockPin()
+    {
+        return $this->screenLockPin()->where('status', 'active');
+    }
+    public function publicKey(){
+        return $this->hasOne(PublicKey::class);
+    }
+
+    public function activePublicKey(){
+        return $this->publicKey()->where('status', 'active');
     }
 
     public function screenLocks()

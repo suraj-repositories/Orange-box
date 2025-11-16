@@ -24,6 +24,8 @@ use App\Services\Impl\FileServiceImpl;
 use App\Services\Impl\MarkdownServiceImpl;
 use App\Services\MarkdownService;
 use App\Services\Impl\SettingsServiceImpl;
+use App\Services\Impl\SuggestionServiceImpl;
+use App\Services\SuggestionService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
@@ -43,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(FileService::class, FileServiceImpl::class);
         $this->app->singleton(EditorJsService::class, EditorJsServiceImpl::class);
         $this->app->singleton(MarkdownService::class, MarkdownServiceImpl::class);
+        $this->app->singleton(SuggestionService::class, SuggestionServiceImpl::class);
 
         class_alias(Setting::class, 'Setting');
     }

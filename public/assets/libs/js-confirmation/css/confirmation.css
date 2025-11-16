@@ -1,0 +1,224 @@
+.confirm-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.confirm-modal.blackish{
+    background-color:  #00000066;
+}
+.confirm-modal.blur{
+    background: transparent;
+    backdrop-filter: blur(2px);
+}
+.confirm-modal.none{
+    background-color: transparent;
+}
+.confirm-modal.dark .modal-content{
+    background-color: #2b333c;
+}
+.confirm-modal.dark .modal-body{
+    color: #fefefe;
+}
+
+.confirm-modal .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    width: 80%;
+    max-width: 350px;
+    box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+}
+.confirm-modal .hide{
+    display: block;
+}
+.confirm-modal.slide .modal-content{
+    animation: slideDownIn 0.5s;
+}
+.confirm-modal.slide .modal-content.hide{
+    animation: slideUpOut 0.5s;
+}
+.confirm-modal.zoom .modal-content{
+    animation: zoomIn 0.5s;
+}
+.confirm-modal.zoom .modal-content.hide{
+    animation: zoomOut 0.5s;
+}
+.confirm-modal.flip .modal-content{
+    animation: flipIn 0.5s;
+}
+.confirm-modal.flip .modal-content.hide{
+    animation: flipOut 0.5s;
+}
+.confirm-modal.rotate .modal-content{
+    animation: rotateIn 0.5s;
+}
+.confirm-modal.rotate .modal-content.hide{
+    animation: rotateOut 0.5s;
+}
+
+
+/* Animations */
+/* 1. Slide Vertical */
+@keyframes slideDownIn {
+    from {
+        top: -300px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+@keyframes slideUpOut {
+    from {
+        top: 0;
+        opacity: 1
+    }
+
+    to {
+        top: -300px;
+        opacity: 0;
+    }
+}
+
+/* 2. Zoom */
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+@keyframes zoomOut {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+
+
+/* 3. Flip */
+
+@keyframes flipIn {
+    from {
+        transform: rotateY(90deg);
+        opacity: 0;
+    }
+    to {
+        transform: rotateY(0);
+        opacity: 1;
+    }
+}
+@keyframes flipOut {
+    from {
+        transform: rotateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: rotateY(90deg);
+        opacity: 0;
+    }
+}
+
+/* 4. Rotate */
+
+@keyframes rotateIn {
+    from {
+        transform: rotate(-200deg);
+        opacity: 0;
+    }
+    to {
+        transform: rotate(0);
+        opacity: 1;
+    }
+}
+
+@keyframes rotateOut {
+    from {
+        transform: rotate(0);
+        opacity: 1;
+    }
+    to {
+        transform: rotate(200deg);
+        opacity: 0;
+    }
+}
+
+
+.confirm-modal .modal-body {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: rgb(49, 56, 63);
+}
+
+.confirm-modal .modal-body .icon i{
+    margin-top: 5px;
+    font-size: 82px;
+    user-select: none;
+}
+
+@keyframes shaking {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(5px, 5px) rotate(5deg); }
+    50% { transform: translate(0, 0) rotate(0eg); }
+    75% { transform: translate(-5px, 5px) rotate(-5deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+.confirm-modal .modal-body .title{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.confirm-modal .modal-body .message{
+    font-size: 15px;
+    margin-top: 10px;
+}
+
+
+.confirm-modal .modal-footer {
+    padding: 2px 16px;
+    display: flex;
+    padding: 0;
+}
+
+.confirm-modal .modal-footer .no,
+.confirm-modal .modal-footer .yes {
+    width: 50%;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.5s ease;
+}
+.confirm-modal .modal-footer .no:hover,
+.confirm-modal .modal-footer .yes:hover{
+    filter: brightness(1.1);
+}
+
+
