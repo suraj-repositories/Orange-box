@@ -87,7 +87,7 @@
 
                                                                 <div class="buttonArea px-2 ps-3 border-start ms-auto">
                                                                     <label class="switch">
-                                                                        <input type="checkbox" checked>
+                                                                        <input type="checkbox" {{ ($userSettings[$setting->key] ?? '0') == '1' ? 'checked' : ''  }} id="setting_{{ $setting->key }}" data-setting-key="{{ $setting->key }}">
                                                                         <span class="slider round"></span>
                                                                     </label>
                                                                 </div>

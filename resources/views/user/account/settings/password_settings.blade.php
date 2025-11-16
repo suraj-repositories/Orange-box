@@ -109,7 +109,7 @@
         <div class="buttonArea px-2 ps-3 border-start ms-auto">
             <button class="btn btn-outline-primary btn-sm rounded-pill px-3" data-bs-toggle="modal"
                 data-bs-target="#lock-screen-modal">
-                @if (Setting::get('lock_screen_password_set') == true)
+                @if (($userSettings['lock_screen_enabled'] ?? '0') == '1')
                     Edit
                 @else
                     Add
@@ -123,7 +123,7 @@
 
                         <div class="modal-header">
                             <h1 class="modal-title fs-5" id="lock-screen-modal-title">
-                                @if (Setting::get('lock_screen_password_set') == true)
+                                @if (($userSettings['lock_screen_enabled'] ?? '0') == '1')
                                     Update Lock Screen Credentials
                                 @else
                                     Enable Lock Screen
@@ -190,87 +190,215 @@
     </div>
 @endif
 
+@if (Setting::get('pem_key_enabled'))
+    <div class="d-flex align-items-center mb-3">
+        <div class="d-flex align-items-center">
+            <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
+            <div>
+                <h2 class="fs-7 m-0">PEM File Setup
+                    @if (($userSettings['pem_key_enabled'] ?? '0') == '1')
+                        <small class="badge badge-green">active</small>
+                    @else
+                        <small class="badge badge-red">inactive</small>
+                    @endif
+                </h2>
+                <p class="fs-8 m-0 text-muted">
+                </p>
+            </div>
+        </div>
 
-<div class="d-flex align-items-center mb-3">
-    <div class="d-flex align-items-center">
-        <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
-        <div>
-            <h2 class="fs-7 m-0">PEM File Setup
-                @if (Setting::get('is_pem_key_set') == true)
-                    <small class="badge badge-green">active</small>
+        <div class="buttonArea px-2 ps-3 border-start ms-auto">
+            <button class="btn btn-outline-primary btn-sm rounded-pill px-3" data-bs-toggle="modal"
+                data-bs-target="#pem-key-modal">
+                @if (($userSettings['pem_key_enabled'] ?? '0') == '1')
+                    Edit
                 @else
-                    <small class="badge badge-red">inactive</small>
+                    Add
                 @endif
-            </h2>
-            <p class="fs-8 m-0 text-muted">
-            </p>
+            </button>
+
+
+
+            <div class="modal fade pem-key-modal" id="pem-key-modal" tabindex="-1"
+                aria-labelledby="pem-key-modal-title" aria-hidden="true">
+                <div class="modal-dialog modal-md modal-dialog-centered">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="pem-key-modal-title">
+                                @if (($userSettings['pem_key_enabled'] ?? '0') == '1')
+                                    Generate pem key
+                                @else
+                                    Generate and enable pem Key
+                                @endif
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+
+                        <form action="{{ authRoute('ajax.settings.security.update.pem-key') }}" id="pemKeyForm">
+
+                            <div class="modal-body">
+                                <div class="mb-3 input-group-wrapper" id="emailInput">
+                                    <div class="row align-items-center g-2">
+
+                                        <div class="col-12">
+                                            <label for="username-input" class="form-label mt-2">Your password</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bx bx-lock fs-5"></i></span>
+                                                <input type="password" class="form-control rounded-end pe-35px"
+                                                    name="password" placeholder="Enter your password">
+                                                <button type="button"
+                                                    class="show-password-btn btn-no-style text-dark me-1">
+                                                    <i class="bi bi-eye fs-5"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary"
+                                    id="confirm-change-btn">Generate</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+@endif
 
-    <div class="buttonArea px-2 ps-3 border-start ms-auto">
-        <button class="btn btn-outline-primary btn-sm rounded-pill px-3">
-            @if (Setting::get('is_pem_key_set') == true)
-                Edit
-            @else
-                Add
-            @endif
-        </button>
-    </div>
-</div>
-
-<div class="d-flex align-items-center mb-3">
-    <div class="d-flex align-items-center">
-        <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
-        <div>
-            <h2 class="fs-7 m-0">Master Key Setup
-                @if (Setting::get('is_master_password_set') == true)
-                    <small class="badge badge-green">active</small>
-                @else
-                    <small class="badge badge-red">inactive</small>
-                @endif
-            </h2>
-            <p class="fs-8 m-0 text-muted">
-            </p>
+@if (Setting::get('master_password_enabled'))
+    <div class="d-flex align-items-center mb-3">
+        <div class="d-flex align-items-center">
+            <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
+            <div>
+                <h2 class="fs-7 m-0">Master Key Setup
+                    @if (($userSettings['master_password_enabled'] ?? '0') == '1')
+                        <small class="badge badge-green">active</small>
+                    @else
+                        <small class="badge badge-red">inactive</small>
+                    @endif
+                </h2>
+                <p class="fs-8 m-0 text-muted">
+                </p>
+            </div>
         </div>
+
+        <div class="buttonArea px-2 ps-3 border-start ms-auto">
+            <button class="btn btn-outline-primary btn-sm rounded-pill px-3" data-bs-toggle="modal"
+                data-bs-target="#master-key-modal">
+                @if (($userSettings['master_password_enabled'] ?? '0') == '1')
+                    Edit
+                @else
+                    Add
+                @endif
+            </button>
+        </div>
+
+        <div class="modal fade master-key-modal" id="master-key-modal" tabindex="-1"
+            aria-labelledby="master-key-modal-title" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-dialog-centered">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="master-key-modal-title">
+                            @if (($userSettings['master_password_enabled'] ?? '0') == '1')
+                                Update Master Key
+                            @else
+                                Enable Master Key
+                            @endif
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+
+                    <form action="{{ authRoute('ajax.settings.security.update.master-key') }}" id="masterKeyForm">
+
+                        <div class="modal-body">
+                            <div class="mb-3 input-group-wrapper" id="emailInput">
+                                <div class="row align-items-center g-2">
+                                    <div class="col-12">
+                                        <label for="username-input" class="form-label">
+                                            @if (($userSettings['master_password_enabled'] ?? '0') == '1')
+                                                Update Master Key
+                                            @else
+                                                Create Master Key
+                                            @endif
+                                        </label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bx bx-lock fs-5"></i></span>
+                                            <input type="password" class="form-control rounded-end pe-35px"
+                                                name="key" placeholder="Type a key use to unlock">
+                                            <button type="button"
+                                                class="show-password-btn btn-no-style text-dark me-1">
+                                                <i class="bi bi-eye fs-5"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="username-input" class="form-label mt-2">Your password</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="bx bx-lock fs-5"></i></span>
+                                            <input type="password" class="form-control rounded-end pe-35px"
+                                                name="password" placeholder="Enter your password">
+                                            <button type="button"
+                                                class="show-password-btn btn-no-style text-dark me-1">
+                                                <i class="bi bi-eye fs-5"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="confirm-change-btn">Generate</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
     </div>
+@endif
 
-    <div class="buttonArea px-2 ps-3 border-start ms-auto">
-        <button class="btn btn-outline-primary btn-sm rounded-pill px-3">
-            @if (Setting::get('is_master_password_set') == true)
-                Edit
-            @else
-                Add
-            @endif
-        </button>
-    </div>
+@if (Setting::get('app_auth_enabled'))
+    <div class="d-flex align-items-center mb-3">
+        <div class="d-flex align-items-center">
+            <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
+            <div>
+                <h2 class="fs-7 m-0">App Based Authentication
+                    @if (Setting::get('is_app_auth_set') == true)
+                        <small class="badge badge-green">active</small>
+                    @else
+                        <small class="badge badge-red">inactive</small>
+                    @endif
+                </h2>
+                <p class="fs-8 m-0 text-muted">
+                </p>
+            </div>
+        </div>
 
-</div>
-
-
-<div class="d-flex align-items-center mb-3">
-    <div class="d-flex align-items-center">
-        <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
-        <div>
-            <h2 class="fs-7 m-0">App Based Authentication
+        <div class="buttonArea px-2 ps-3 border-start ms-auto">
+            <button class="btn btn-outline-primary btn-sm rounded-pill px-3">
                 @if (Setting::get('is_app_auth_set') == true)
-                    <small class="badge badge-green">active</small>
+                    Edit
                 @else
-                    <small class="badge badge-red">inactive</small>
+                    Add
                 @endif
-            </h2>
-            <p class="fs-8 m-0 text-muted">
-            </p>
+            </button>
         </div>
-    </div>
 
-    <div class="buttonArea px-2 ps-3 border-start ms-auto">
-        <button class="btn btn-outline-primary btn-sm rounded-pill px-3">
-            @if (Setting::get('is_app_auth_set') == true)
-                Edit
-            @else
-                Add
-            @endif
-        </button>
     </div>
-
-</div>
+@endif

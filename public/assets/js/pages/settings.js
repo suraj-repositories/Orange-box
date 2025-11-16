@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     new AccountSettings().init();
     new SecuritySettings().init();
+    new NotificationSettings().init();
 });
 
 class AccountSettings {
@@ -107,6 +108,8 @@ class SecuritySettings {
         this.enablePasswordToggle();
         this.enableChangePassword('#changePasswordForm');
         this.enableLockScreenPasswordUpdate('#updateScreenLockPinForm');
+        this.enableMasterKeyUpdate("#masterKeyForm");
+        this.enablePemKeySetupAndUpdate('#pemKeyForm');
     }
 
     enableChangePassword(formSelector) {
@@ -262,6 +265,212 @@ class SecuritySettings {
                 });
         });
 
+    }
+
+    enableMasterKeyUpdate(formSelector) {
+        const form = document.querySelector(formSelector);
+        if (!form) return;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (!submitBtn) {
+            return;
+        }
+        const modal = form.closest('.modal');
+        if (!modal) {
+            return;
+        }
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            submitBtn.textContent = "Updating...";
+            submitBtn.disabled = true;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'x-csrf-token': csrfToken
+                },
+                body: new FormData(form)
+            })
+                .then((response) => response.json())
+                .then(data => {
+                    if (!data) return;
+
+                    if (data.success) {
+                        Swal.fire({
+                            title: "Success",
+                            text: data.message,
+                            icon: "success"
+                        }).then(() => {
+                            window.location.reload();
+                        });
+
+                        $(modal).modal('hide');
+                    } else {
+                        Swal.fire({
+                            title: "Oops...",
+                            text: data.message,
+                            icon: "error"
+                        });
+                    }
+
+                })
+                .catch(() => {
+                    Swal.fire({
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                        icon: "error"
+                    });
+
+                })
+                .finally(() => {
+                    submitBtn.textContent = "Update";
+                    submitBtn.disabled = false;
+                });
+        });
+
+    }
+
+    enablePemKeySetupAndUpdate(formSelector) {
+
+        const form = document.querySelector(formSelector);
+        if (!form) return;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (!submitBtn) {
+            return;
+        }
+        const modal = form.closest('.modal');
+        if (!modal) {
+            return;
+        }
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            submitBtn.textContent = "Generating...";
+            submitBtn.disabled = true;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'x-csrf-token': csrfToken
+                },
+                body: new FormData(form)
+            })
+                .then((response) => response.json())
+                .then(data => {
+                    if (!data) return;
+
+                    if (data.success) {
+
+                        const blob = new Blob([data.private_key], {
+                            type: "application/x-pem-file"
+                        });
+
+                        const link = document.createElement("a");
+                        link.href = URL.createObjectURL(blob);
+                        link.download = data.filename;
+
+                        document.body.appendChild(link);
+                        link.click();
+
+                        URL.revokeObjectURL(link.href);
+                        link.remove();
+
+
+                        Swal.fire({
+                            title: "Success",
+                            text: data.message,
+                            icon: "success"
+                        }).then(() => {
+                            window.location.reload();
+                        });
+
+                        $(modal).modal('hide');
+                    } else {
+                        Swal.fire({
+                            title: "Oops...",
+                            text: data.message,
+                            icon: "error"
+                        });
+                    }
+
+                })
+                .catch(() => {
+                    Swal.fire({
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                        icon: "error"
+                    });
+
+                })
+                .finally(() => {
+                    submitBtn.textContent = "Generate";
+                    submitBtn.disabled = false;
+                });
+        });
+
+
+    }
+
+}
+
+class NotificationSettings {
+    init() {
+        this.enableSettingToggle('#setting_task_notification');
+        this.enableSettingToggle('#setting_module_notification');
+        this.enableSettingToggle('#setting_comment_notification');
+        this.enableSettingToggle('#setting_comment_reply_notification');
+        this.enableSettingToggle('#setting_unlisted_visit_notification');
+    }
+
+    enableSettingToggle(switchSelector) {
+        const notificationSwitch = document.querySelector(switchSelector);
+        if (!switchSelector) return;
+
+        notificationSwitch.addEventListener('change', function () {
+            const settingKey = notificationSwitch.getAttribute('data-setting-key');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+            fetch(route('ajax.settings.security.notification.toggle'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-csrf-token': csrfToken
+                },
+                body: JSON.stringify({
+                    'setting_key': settingKey,
+                    'setting_value': (notificationSwitch.checked ? 1 : 0)
+                })
+            })
+                .then((response) => response.json())
+                .then(data => {
+                    if (!data) return;
+
+                    if (data.success) {
+
+                    } else {
+                        Swal.fire({
+                            title: "Oops...",
+                            text: data.message,
+                            icon: "error"
+                        });
+                    }
+
+                })
+                .catch(() => {
+                    Swal.fire({
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                        icon: "error"
+                    });
+
+                });
+        });
     }
 
 }

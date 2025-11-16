@@ -62,7 +62,6 @@ return [
             ],
 
 
-            // Category: Notifications
             [
                 'title' => 'Task Notifications',
                 'key' => 'task_notification',
@@ -100,7 +99,6 @@ return [
             ],
 
 
-            // Category: Security
             [
                 'title' => 'Master Password',
                 'key' => 'master_password_enabled',
