@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Common;
 
 use App\Facades\Setting;
 use App\Http\Controllers\Controller;
+use App\Models\AppTheme;
 use App\Models\ScreenLock;
 use App\Models\Settings;
 use App\Models\User;
@@ -430,7 +431,51 @@ class SettingsController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => $setting->title . ' updated successfully'
+            'message' => $setting->title . ' updated successfully',
+
+        ]);
+    }
+
+    public function changeAppTheme($theme)
+    {
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized access!'
+            ]);
+        }
+
+        $theme = AppTheme::where('theme_key', $theme)->first();
+        if (!$theme) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This theme not exists!'
+            ]);
+        }
+        $setting = Settings::where('key', 'app_theme')->where('is_enabled', true)->first();
+
+        if (!$setting) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invaid Setting Update!'
+            ]);
+        }
+
+        UserSetting::updateOrCreate(
+            [
+                'user_id'    => $user->id,
+                'setting_id' => $setting->id,
+            ],
+            [
+                'value' => $theme->id
+            ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => $theme->title . ' theme applied successfully!',
+             'theme' => $theme->theme_key
         ]);
     }
 }

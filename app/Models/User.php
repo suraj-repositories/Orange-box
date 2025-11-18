@@ -114,11 +114,13 @@ class User extends Authenticatable
     {
         return $this->screenLockPin()->where('status', 'active');
     }
-    public function publicKey(){
+    public function publicKey()
+    {
         return $this->hasOne(PublicKey::class);
     }
 
-    public function activePublicKey(){
+    public function activePublicKey()
+    {
         return $this->publicKey()->where('status', 'active');
     }
 
@@ -146,5 +148,31 @@ class User extends Authenticatable
     public function primaryAddress()
     {
         return $this->addresses()->where('is_primary', true)->first();
+    }
+
+    public function themeSetting()
+    {
+        return $this->hasOne(UserSetting::class, 'user_id')
+            ->whereHas('setting', function ($q) {
+                $q->where('key', 'app_theme');
+            });
+    }
+
+    public function theme()
+    {
+        $relation = $this->hasOneThrough(
+            AppTheme::class,
+            UserSetting::class,
+            'user_id',
+            'id',
+            'id',
+            'value'
+        );
+
+        $relation->getQuery()->join('settings', 'settings.id', '=', 'user_settings.setting_id')
+            ->where('settings.key', 'app_theme')
+            ->select('app_themes.*');
+
+        return $relation;
     }
 }

@@ -67,12 +67,6 @@
     --bs-white-rgb: 255, 255, 255;
     --bs-black-rgb: 0, 0, 0;
     --bs-font-sans-serif: "Public Sans", sans-serif;
-    --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-    --bs-body-font-family: var(--bs-font-sans-serif);
-    --bs-body-font-size: 0.875rem;
-    --bs-body-font-weight: 400;
-    --bs-body-line-height: 1.5;
     --bs-body-color: #4a5a6b;
     --bs-body-color-rgb: 74, 90, 107;
     --bs-body-bg: #fff;
@@ -174,6 +168,10 @@
     --bs-form-valid-border-color: #75b798;
     --bs-form-invalid-color: #ea868f;
     --bs-form-invalid-border-color: #ea868f
+}
+
+body[data-app-theme="fresh_fiber"]{
+ --bs-primary: #77b255;
 }
 
 body.locking {

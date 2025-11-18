@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\AppTheme;
 use App\Models\Settings;
 use App\Models\SettingsCategory;
 use App\Models\User;
+use App\Models\UserSetting;
 
 class SettingsController extends Controller
 {
@@ -26,18 +28,24 @@ class SettingsController extends Controller
             )
             ->get()
             ->transform(function ($setting) {
-                if (empty($setting->value)) {
+                if(empty($setting->value) && !empty($setting->default_value)){
+                    $setting->value = $setting->default_value;
+                }
+                else if (empty($setting->value) ) {
                     $setting->value = false;
                 }
                 return $setting;
             })
             ->pluck('value', 'key');
 
+        $appThemes = AppTheme::get();
+
         return view(
             'user.account.settings.settings',
             [
                 'appSettings' => $appSettings,
                 'userSettings' => $userSettings,
+                'appThemes' => $appThemes
             ]
         );
     }

@@ -62,5 +62,7 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
 
         Route::post('settings/notifications/toggle', 'toggleNotificationSettings')->name('settings.security.notification.toggle');
 
+        Route::post('settings/theme/{theme}', 'changeAppTheme')->name('settings.theme.update');
+
     });
 });

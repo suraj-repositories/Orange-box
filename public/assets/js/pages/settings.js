@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new AccountSettings().init();
     new SecuritySettings().init();
     new NotificationSettings().init();
+    new ThemeSettings().init();
 });
 
 class AccountSettings {
@@ -473,4 +474,67 @@ class NotificationSettings {
         });
     }
 
+}
+
+class ThemeSettings {
+    init() {
+        this.enableThemeChange();
+    }
+
+    enableThemeChange() {
+        const radios = document.querySelectorAll('[name="app_theme"]');
+
+        if (!radios) {
+            return;
+        }
+        const obj = this;
+        radios.forEach(radio => {
+            radio.addEventListener('change', function () {
+                if (!radio.checked) {
+                    return;
+                }
+                const body = document.querySelector('body');
+                body.setAttribute('data-app-theme', radio.value);
+
+                obj.updateUserTheme(route('ajax.settings.theme.update', { theme: radio.value }))
+
+            });
+        });
+
+    }
+
+    updateUserTheme(url) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'x-csrf-token': csrfToken
+            }
+        })
+            .then((response) => response.json())
+            .then(data => {
+                if (!data) return;
+
+                if (data.success) {
+                    const body = document.querySelector('body');
+                    body.setAttribute('data-app-theme', data.theme);
+                } else {
+                    Swal.fire({
+                        title: "Oops...",
+                        text: data.message,
+                        icon: "error"
+                    });
+                }
+
+            })
+            .catch(() => {
+                Swal.fire({
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                    icon: "error"
+                });
+
+            });
+    }
 }

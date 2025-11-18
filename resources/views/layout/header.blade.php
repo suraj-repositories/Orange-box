@@ -39,6 +39,4 @@
     </script>
 </head>
 
-<!-- body start -->
-
-<body data-menu-color="light" data-sidebar="default">
+<body data-app-theme="{{ auth()?->user()?->theme?->theme_key ?? 'orange_box' }}" data-menu-color="light" data-sidebar="default">
