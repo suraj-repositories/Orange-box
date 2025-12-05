@@ -32,11 +32,19 @@
     @routes
     @vite(['resources/js/app.js'])
     <script>
-        function authRoute(url, args){
+        function authRoute(url, args) {
             const uid = @json(Auth::check() ? Auth::user()->username : null);
-            return route(url, {userid: uid, ...args});
+            return route(url, {
+                userid: uid,
+                ...args
+            });
         }
     </script>
 </head>
 
-<body data-app-theme="{{ auth()?->user()?->theme?->theme_key ?? 'orange_box' }}" data-menu-color="light" data-sidebar="default">
+<body data-app-theme="{{ auth()?->user()?->theme?->theme_key ?? 'orange_box' }}" data-menu-color="light"
+    data-sidebar="default">
+
+    <div id="preloader">
+        <div class="spinner"></div>
+    </div>

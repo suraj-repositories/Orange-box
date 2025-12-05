@@ -47,7 +47,12 @@ class ProjectBoardController extends Controller
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'color_tag' => ['nullable', 'exists:color_tags,id'],
             'description' => 'nullable|string|max:3000',
-            'budget' => 'nullable|numeric|min:0|decimal:0,2',
+            'budget' => [
+                'nullable',
+                'numeric',
+                'min:0',
+                'max:999999.99'
+            ],
             'start_date' => [
                 'nullable',
                 'date',
@@ -127,7 +132,7 @@ class ProjectBoardController extends Controller
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'color_tag' => ['nullable', 'exists:color_tags,id'],
             'description' => 'nullable|string|max:3000',
-             'budget' => 'nullable|numeric|min:0|decimal:0,2',
+            'budget' => 'nullable|numeric|min:0|decimal:0,2|max:999999.99',
             'start_date' => [
                 'nullable',
                 'date',

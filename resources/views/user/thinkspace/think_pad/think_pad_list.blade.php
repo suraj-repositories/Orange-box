@@ -1,6 +1,6 @@
 @extends('user.layout.layout')
 
-@section('title',  $title  ?? '🟢🟢🟢')
+@section('title', $title ?? '🟢🟢🟢')
 
 @section('content')
     <div class="content-page">
@@ -21,62 +21,67 @@
                         </ol>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                @forelse ($thinkPads as $thinkPad)
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="card d-block">
-                            <div class="card-header d-flex align-items-baseline">
-                                <a href="{{ authRoute('user.think-pad.show', ['thinkPad' => $thinkPad]) }}" class="card-title">{{ $thinkPad->title }}</a>
-                                @if (str_contains(request()->route()->getName(), 'me'))
-                                    <img class="ms-auto icon-20" src="{{ $thinkPad->visibility_icon }}" alt=""
-                                    title="{{ ucfirst($thinkPad->visibility ?? '') }}">
-                                @endif
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text text-muted mb-0">{{ $thinkPad->sub_title }}</p>
-
-                                <div class="action-container">
-                                    <div class="ago-string">
-                                        {{ $thinkPad->created_at->diffForHumans() }}
-                                    </div>
-
+                <div class="row">
+                    @forelse ($thinkPads as $thinkPad)
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="card d-block">
+                                <div class="card-header d-flex align-items-baseline">
                                     <a href="{{ authRoute('user.think-pad.show', ['thinkPad' => $thinkPad]) }}"
-                                        class="info">
-                                        <i class='bx bx-info-circle'></i>
-                                    </a>
-                                    @can('update', $thinkPad)
-                                        <a href="{{ authRoute('user.think-pad.edit', ['thinkPad' => $thinkPad]) }}"
-                                            class="edit">
-                                            <i class='bx bx-edit'></i>
+                                        class="card-title">{{ $thinkPad->title }}</a>
+                                    @if (str_contains(request()->route()->getName(), 'me'))
+                                        <img class="ms-auto icon-20" src="{{ $thinkPad->visibility_icon }}" alt=""
+                                            title="{{ ucfirst($thinkPad->visibility ?? '') }}">
+                                    @endif
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text text-muted mb-0">{{ $thinkPad->sub_title }}</p>
+
+                                    <div class="action-container">
+                                        <div class="ago-string">
+                                            {{ $thinkPad->created_at->diffForHumans() }}
+                                        </div>
+
+                                        <a href="{{ authRoute('user.think-pad.show', ['thinkPad' => $thinkPad]) }}"
+                                            class="info">
+                                            <i class='bx bx-info-circle'></i>
                                         </a>
-                                    @endcan
-                                    @can('delete', $thinkPad)
-                                        <form action="{{ authRoute('user.think-pad.delete', ['thinkPad' => $thinkPad]) }}"
-                                            method="post">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button type="submit" class="delete btn-no-style">
-                                                <i class='bx bx-trash'></i>
-                                            </button>
-                                        </form>
-                                    @endcan
-                                    {{-- <div class="more">
+                                        @can('update', $thinkPad)
+                                            <a href="{{ authRoute('user.think-pad.edit', ['thinkPad' => $thinkPad]) }}"
+                                                class="edit">
+                                                <i class='bx bx-edit'></i>
+                                            </a>
+                                        @endcan
+                                        @can('delete', $thinkPad)
+                                            <form action="{{ authRoute('user.think-pad.delete', ['thinkPad' => $thinkPad]) }}"
+                                                method="post">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type="submit" class="delete btn-no-style">
+                                                    <i class='bx bx-trash'></i>
+                                                </button>
+                                            </form>
+                                        @endcan
+                                        {{-- <div class="more">
                                         <i class='bx bx-dots-vertical-rounded' ></i>
                                     </div> --}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                @empty
-                <x-no-data />
-                @endforelse
+                    @empty
+                       <div class="col-12">
+                         <x-no-data :isDecorated="true"/>
+                       </div>
+                    @endforelse
 
 
+                </div>
+
+                {{ $thinkPads->withQueryString()->links() }}
             </div>
 
-            {{ $thinkPads->withQueryString()->links() }}
+
 
         </div> <!-- content -->
 

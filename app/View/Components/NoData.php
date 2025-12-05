@@ -8,12 +8,25 @@ use Illuminate\View\Component;
 
 class NoData extends Component
 {
+    public $message;
+    public $icon;
+    public $theme;
+    public $isDecorated;
+
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct(
+        $message = 'No Data',
+        $icon = 'bi bi-exclamation-octagon' ,
+        $theme = 'warning',
+        $isDecorated = false
+        )
     {
-        //
+        $this->message = $message;
+        $this->icon = $icon;
+        $this->theme = $theme;
+        $this->isDecorated = $isDecorated;
     }
 
     /**

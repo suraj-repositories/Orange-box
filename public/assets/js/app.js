@@ -91,6 +91,7 @@ class App {
         this.initImage3Gallery();
         this.initTabSpecificUrl();
         this.dismissablePopOvers();
+        this.enablePreloader();
     }
 
     initComponents() {
@@ -205,9 +206,10 @@ class App {
             }
         }
     }
+
     dismissablePopOvers() {
         const isPopOvers = document.querySelector('.popover-dismiss');
-        if(!isPopOvers){
+        if (!isPopOvers) {
             return;
         }
 
@@ -343,6 +345,13 @@ class App {
                 Utility.setUrlParam(role, urlAddon);
 
             });
+        });
+    }
+
+    enablePreloader() {
+        window.addEventListener("load", function () {
+            const preloader = document.getElementById("preloader");
+            preloader.classList.add("hide");
         });
     }
 }

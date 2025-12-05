@@ -66,7 +66,7 @@
                                                         <div class="name me-2 w-100 ">
                                                             <div class="w-100 d-flex">
                                                                 <div class="text-truncate">
-                                                                    {{ $notification?->from_user?->fullname() ?? ($notification?->from_user?->username ?? '') }}
+                                                                    {{ (empty($notification?->from_user?->fullname()) ? null : $notification?->from_user?->fullname()) ?? ($notification?->from_user?->username ?? '') }}
                                                                 </div>
                                                                 <div class="ms-auto sm-date">
                                                                     {{ $notification?->created_at?->diffForHumans() ?? '' }}

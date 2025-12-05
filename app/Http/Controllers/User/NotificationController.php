@@ -42,6 +42,7 @@ class NotificationController extends Controller
 
         foreach ($notifications->getCollection() as $notification) {
             if (!empty($notification->data['from_user'])) {
+
                 $notification->from_user = $users->where('id', $notification->data['from_user'])->first();
                 $linkText = "";
 
@@ -64,6 +65,7 @@ class NotificationController extends Controller
                 $notification->link_text = $linkText;
             }
         }
+        // dd($notifications->first()->from_user->fullname());
         return view('user.notification.notifications', [
             'notifications' => $notifications,
             'search' => $search
