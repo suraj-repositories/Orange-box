@@ -24,11 +24,11 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
-                                            <div class="fs-14 mb-1">Website Traffic</div>
+                                            <div class="fs-14 mb-1">Daily Learnings Saved</div>
                                         </div>
 
                                         <div class="d-flex align-items-baseline mb-2">
-                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">91.6K</div>
+                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">1.2K</div>
                                             <div class="me-auto">
                                                 <span class="text-primary d-inline-flex align-items-center">
                                                     15%
@@ -46,11 +46,11 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
-                                            <div class="fs-14 mb-1">Conversion rate</div>
+                                            <div class="fs-14 mb-1">Ideas Added</div>
                                         </div>
 
                                         <div class="d-flex align-items-baseline mb-2">
-                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">15%</div>
+                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">452</div>
                                             <div class="me-auto">
                                                 <span class="text-danger d-inline-flex align-items-center">
                                                     10%
@@ -68,11 +68,11 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
-                                            <div class="fs-14 mb-1">Session duration</div>
+                                            <div class="fs-14 mb-1">Documentation Sites</div>
                                         </div>
 
                                         <div class="d-flex align-items-baseline mb-2">
-                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">90 Sec</div>
+                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">16</div>
                                             <div class="me-auto">
                                                 <span class="text-success d-inline-flex align-items-center">
                                                     25%
@@ -90,7 +90,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
-                                            <div class="fs-14 mb-1">Active Users</div>
+                                            <div class="fs-14 mb-1">Active Project Users</div>
                                         </div>
 
                                         <div class="d-flex align-items-baseline mb-2">
@@ -121,7 +121,7 @@
                                     <div class="border border-dark rounded-2 me-2 widget-icons-sections">
                                         <i data-feather="bar-chart" class="widgets-icons"></i>
                                     </div>
-                                    <h5 class="card-title mb-0">Monthly Sales</h5>
+                                    <h5 class="card-title mb-0">Documentation Visitors</h5>
                                 </div>
                             </div>
 

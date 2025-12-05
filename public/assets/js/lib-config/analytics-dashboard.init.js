@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         yaxis: {
             title: {
-                text: 'Number of Sales',
+                text: 'Documenation Visitors',
                 style: {
                     fontSize: '12px',
                     fontWeight: 600,
