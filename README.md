@@ -57,7 +57,8 @@ composer dump-autoload
         - change primary email
         - delete account
         - recovery email
--     
+- Documentation Generative engine via Git -- (upcomming)
+  - makes project documenation generation automatic link from github 
 
 ### Screenshots
 
