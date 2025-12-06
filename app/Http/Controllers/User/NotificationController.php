@@ -30,8 +30,6 @@ class NotificationController extends Controller
             $notifications = $user->notifications()->latest()->paginate(10);
         }
 
-
-
         $userIds = [];
         foreach ($notifications as $notification) {
             if (!empty($notification->data['from_user'])) {

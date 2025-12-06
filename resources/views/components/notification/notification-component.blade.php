@@ -39,7 +39,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <p class="notify-details">
-                            {{ $notification?->from_user?->fullname() ?? ($notification?->from_user?->username ?? '') }}
+                          {{ (empty($notification?->from_user?->fullname()) ? null : $notification?->from_user?->fullname()) ?? ($notification?->from_user?->username ?? '') }}
                         </p>
                         <small class="text-muted">{{ $notification?->created_at?->diffForHumans() ?? '' }}</small>
                     </div>

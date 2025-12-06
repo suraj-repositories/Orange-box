@@ -2289,4 +2289,17 @@ tr.deleting a {
 #preloader.hide {
     opacity: 0;
     visibility: hidden;
+    color: var(--bs-dark);
+}
+.copy-icon{
+    cursor: pointer;
+}
+.copy-icon.bi-check-circle{
+    color: var(--bs-success);
+    cursor: default;
+}
+
+.copy-icon.bi-exclamation-circle{
+    color: var(--bs-danger);
+    cursor: default;
 }

@@ -18,7 +18,7 @@ class NoData extends Component
      */
     public function __construct(
         $message = 'No Data',
-        $icon = 'bi bi-exclamation-octagon' ,
+        $icon = 'bi bi-database-exclamation' ,
         $theme = 'warning',
         $isDecorated = false
         )

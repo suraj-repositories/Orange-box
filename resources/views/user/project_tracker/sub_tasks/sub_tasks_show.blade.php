@@ -136,7 +136,8 @@
                      <div class="card">
                          <div class="card-header">
                              <div class="d-flex align-items-center">
-                                 <img src="{{ $subTask->user->avatar }}" alt="_"
+
+                                 <img src="{{ $subTask->user->avatar_url }}" alt="_"
                                      class="rounded-circle avatar avatar-sm me-1">
                                  <span class="d-flex w-100 align-items-center">
                                      <div class="me-auto">{{ $subTask->user->name() }}</div>

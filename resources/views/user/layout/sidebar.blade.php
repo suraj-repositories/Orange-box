@@ -106,15 +106,37 @@
                                 <a class='tp-link' href='{{ authRoute('user.syntax-store.me') }}'>My Syntax Store</a>
                             </li>
                             <li>
-                                <li>
-                                    <a class='tp-link' href='{{ authRoute('user.syntax-store.create') }}'>Write Syntax</a>
-                                </li>
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.syntax-store.create') }}'>Write Syntax</a>
+                            </li>
 
                         </ul>
                     </div>
                 </li>
 
+                <li class="menu-title mt-2">Git</li>
+                <li>
+                    <a href="#Documentation-insights" data-bs-toggle="collapse">
+                        <i class="bi bi-file-richtext fs-5"></i>
+                        <span> Documentations </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="Documentation-insights">
+                        <ul class="nav-second-level">
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.documentation.create') }}'>
+                                    New Documentation
+                                </a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{ authRoute('user.documentation.index') }}'>
+                                    Documentations List
+                                </a>
+                            </li>
 
+                        </ul>
+                    </div>
+                </li>
 
                 <li class="menu-title mt-2">Orbit Zone</li>
                 <li>

@@ -6,6 +6,7 @@ use App\Http\Controllers\User\Collaboration\TaskController as CollaborationTaskC
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
+use App\Http\Controllers\User\DocumentationController;
 use App\Http\Controllers\User\EducationController;
 use App\Http\Controllers\User\FolderFactoryController;
 use App\Http\Controllers\User\NotificationController;
@@ -198,10 +199,18 @@ Route::controller(EducationController::class)->group(function () {
 
 Route::controller(SettingsController::class)->group(function () {
     Route::get('settings', 'index')->name('settings.index');
-
-
 });
 
 Route::controller(NotificationController::class)->group(function () {
     Route::get('notifications', 'index')->name('notifications.index');
+});
+
+Route::controller(DocumentationController::class)->group(function () {
+
+    Route::get('documentation', 'index')->name('documentation.index');
+    Route::get('documentation/new', 'create')->name('documentation.create');
+    Route::post('documentation', 'store')->name('documentation.store');
+    Route::get('documentation/{documentation}/edit', 'edit')->name('documentation.edit');
+    Route::post('documentation/{documentation}', 'update')->name('documentation.update');
+
 });

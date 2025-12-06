@@ -92,6 +92,7 @@ class App {
         this.initTabSpecificUrl();
         this.dismissablePopOvers();
         this.enablePreloader();
+        this.enableCopyBtns();
     }
 
     initComponents() {
@@ -354,6 +355,38 @@ class App {
             preloader.classList.add("hide");
         });
     }
+
+    enableCopyBtns() {
+    const copyIcons = document.querySelectorAll('.copy-icon');
+
+    if (!copyIcons.length) {
+        return;
+    }
+
+    copyIcons.forEach(icon => {
+        icon.addEventListener('click', () => {
+
+            icon.classList.remove('bi-copy');
+
+            const copyTxt = icon.getAttribute('data-copy-text');
+
+            navigator.clipboard.writeText(copyTxt)
+                .then(() => {
+                    icon.classList.add('bi-check-circle');
+                })
+                .catch(err => {
+                    icon.classList.add('bi-exclamation-circle');
+                });
+
+            setTimeout(() => {
+                icon.classList.remove('bi-check-circle');
+                icon.classList.remove('bi-exclamation-circle');
+                icon.classList.add('bi-copy');
+            }, 1000);
+        });
+    });
+}
+
 }
 
 
