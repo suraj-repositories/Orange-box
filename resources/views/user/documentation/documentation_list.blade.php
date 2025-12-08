@@ -91,9 +91,7 @@
                                                 <td>
 
                                                     <div class="action-container m-0 gap-1">
-                                                        <a href="javascript::void(0)" class="text-reset"
-                                                            data-bs-toggle="collapse" data-bs-target="#projectDescription1"
-                                                            aria-expanded="true" aria-controls="projectDescription1">
+                                                        <a href="{{ authRoute('user.documentation.pages.index', ['documentation' => $doc->uuid]) }}" class="text-reset">
                                                             <i class="bx bx-info-circle"></i>
                                                         </a>
 

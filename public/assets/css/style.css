@@ -2291,15 +2291,250 @@ tr.deleting a {
     visibility: hidden;
     color: var(--bs-dark);
 }
-.copy-icon{
+
+.copy-icon {
     cursor: pointer;
 }
-.copy-icon.bi-check-circle{
+
+.copy-icon.bi-check-circle {
     color: var(--bs-success);
     cursor: default;
 }
 
-.copy-icon.bi-exclamation-circle{
+.copy-icon.bi-exclamation-circle {
     color: var(--bs-danger);
     cursor: default;
+}
+
+/* DOCUMETATION PAGES - START */
+.box {
+    background: #f3f3f333;
+    border-radius: 2px;
+    border-right: 1px solid #80808024;
+    width: 330px;
+    min-width: 320px;
+    height: 100%;
+    overflow: hidden;
+    padding: 0;
+}
+
+.directory-list {
+    position: relative;
+    overflow-y: auto;
+    width: 100% !important;
+    height: calc(100vh - 100px);
+    scrollbar-width: none;
+    margin-bottom: 0 !important;
+}
+
+.directory-list::-webkit-scrollbar {
+    width: 0;
+}
+
+.directory-list:hover::-webkit-scrollbar {
+    width: 10px;
+}
+
+.directory-list:hover::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.directory-list:hover::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.directory-list:hover::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.directory-list:hover {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f1f1f1;
+}
+
+ul.directory-list {
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.directory-list ul {
+    margin-left: 10px;
+    padding-left: 20px;
+    border-left: 1px dashed #ddd;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.directory-list li {
+    list-style: none;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    font-size: 17px;
+    font-style: italic;
+    color: #888;
+}
+
+.directory-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    height: 30px;
+}
+
+/* .directory-list li:hover::before{
+    background-color: var(--bs-gray-300);
+} */
+
+
+.directory-list li>a,
+.directory-list li>.item {
+    display: block;
+    padding: 2px 26px 1px 27px;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: inherit;
+    z-index: 3;
+    transition: color 0.12s ease;
+    cursor: pointer;
+}
+
+.directory-list li>a::before,
+.directory-list li>.item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    z-index: 4;
+}
+
+
+
+
+.directory-list a {
+    color: inherit;
+}
+.directory-list li>.item::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='lightgrey' d='M85.714,42.857V87.5c0,1.487-0.521,2.752-1.562,3.794c-1.042,1.041-2.308,1.562-3.795,1.562H19.643 c-1.488,0-2.753-0.521-3.794-1.562c-1.042-1.042-1.562-2.307-1.562-3.794v-75c0-1.487,0.521-2.752,1.562-3.794 c1.041-1.041,2.306-1.562,3.794-1.562H50V37.5c0,1.488,0.521,2.753,1.562,3.795s2.307,1.562,3.795,1.562H85.714z M85.546,35.714 H57.143V7.311c3.05,0.558,5.505,1.767,7.366,3.627l17.41,17.411C83.78,30.209,84.989,32.665,85.546,35.714z' /></svg>");
+}
+
+.directory-list li.folder>a::before {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='lightblue' d='M96.429,37.5v39.286c0,3.423-1.228,6.361-3.684,8.817c-2.455,2.455-5.395,3.683-8.816,3.683H16.071 c-3.423,0-6.362-1.228-8.817-3.683c-2.456-2.456-3.683-5.395-3.683-8.817V23.214c0-3.422,1.228-6.362,3.683-8.817 c2.455-2.456,5.394-3.683,8.817-3.683h17.857c3.422,0,6.362,1.228,8.817,3.683c2.455,2.455,3.683,5.395,3.683,8.817V25h37.5 c3.422,0,6.361,1.228,8.816,3.683C95.201,31.138,96.429,34.078,96.429,37.5z' /></svg>");
+}
+
+.directory-list li { padding: 0; position: static; }
+
+.directory-list li > a,
+.directory-list li > .item {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;    /* ONLY on the wrapper */
+  padding: 2px 12px 2px 36px; /* reserve space for icon */
+  color: inherit;
+  text-decoration: none;
+  z-index: 2;
+}
+
+/* icon stays on wrapper so padding-left aligns correctly */
+.directory-list li > a::before,
+.directory-list li > .item::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  z-index: 3;
+}
+
+.directory-list li > a::after,
+.directory-list li > .item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: transparent;
+  pointer-events: none;
+  z-index: 1;
+  transition: background 0.12s ease;
+}
+.directory-list li > a:hover::after,
+.directory-list li > .item:hover::after {
+  background: var(--bs-gray-300);
+  color: #000 !important;
+}
+
+
+.explorer-nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    left: 0;
+    border-bottom: 1px solid rgb(222, 222, 222);
+    background: var(--bs-body-bg);
+    padding: 4px 10px;
+    height: 30px;
+}
+
+.explorer-nav button {
+    padding: 0 3px;
+    margin: 0;
+    background: transparent;
+    border: 0;
+}
+
+
+body[data-screen-type="content"] .topbar-custom,
+body[data-screen-type="content"] footer.footer,
+body[data-screen-type="content"] .app-sidebar-menu,
+body[data-screen-type="content"] .page-bredcrumb {
+    display: none !important;
+}
+
+body[data-screen-type="content"] .directory-list {
+    margin-bottom: 10px;
+}
+
+body[data-screen-type="content"] .content-page {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body[data-screen-type="content"] .content-page .container-xxl {
+    max-width: 100%;
+    padding: 0;
+}
+
+body[data-screen-type="content"] .content-page .content-card {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+body[data-screen-type="content"] .content-page .content-card .card-header {
+    height: 70px !important;
+}
+
+body[data-screen-type="content"] .content-page .content-card .card-body {
+    height: 100%;
 }
