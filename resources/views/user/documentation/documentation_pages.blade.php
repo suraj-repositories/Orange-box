@@ -35,6 +35,8 @@
                                     <h5 class="card-title mb-0">{{ $documentation->title }}</h5>
 
                                     <div class="ms-auto fw-semibold d-flex gap-1">
+                                        <small class="text-muted" id="sizeIndicator"></small>
+
                                         <div class="btn-group" role="group" aria-label="Full Screen Toggle">
                                             <input type="checkbox" class="btn-check" id="toggleScreenType"
                                                 autocomplete="off">
@@ -51,27 +53,59 @@
                             </div>
 
                             <div class="card-body p-0">
-                                <div class="d-flex">
+                                <div class="d-flex" id="splitter">
                                     @include('user.documentation.partials.explorer_sidebar')
+                                    <div id="separator"> </div>
+                                    <div class="p-3 w-100 page-form" id="page-content">
+                                        <form action="#" method="POST" enctype="multipart/form-data"
+                                            id="add-digest-form">
+                                            @csrf
+                                            <div class="row">
+                                                <div class="col col-12 col-md-12 mb-3">
 
-                                    <div class="p-3 w-100 page-form">
-                                        <form>
-                                            <div class="mb-3">
-                                                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                                                <input type="email" class="form-control" id="exampleInputEmail1"
-                                                    aria-describedby="emailHelp">
-                                                <div id="emailHelp" class="form-text">We'll never share your email with
-                                                    anyone else.</div>
+                                                    <label for="git_link-input" class="form-label">Git Link</label>
+
+                                                    <div class="d-flex">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text" id="basic-addon1">
+                                                                <i class="bi bi-git"></i>
+                                                            </span>
+
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Enter autofetch link" id="git_link-input"
+                                                                name="git_link"
+                                                                value="{{ !empty($thinkPad) ? $thinkPad->git_link : '' }}">
+                                                        </div>
+
+                                                        <a href="#" id="redirect-link" class="d-none"></a>
+                                                        <button id="load" type="button"
+                                                            class="btn bg-outline-primary border ms-1 p-0 center-content px-2 text-primary "
+                                                            aria-label="Open Folder" >
+                                                            <i class='bx bx-download fs-4'></i></button>
+                                                    </div>
+                                                </div>
+
+
+
+
+
+                                                <div class="col col-12 col-md-12 ">
+                                                    <label for="title-input" class="form-label">Content</label>
+
+                                                    <textarea class="form-control summernote" name="description" id="editor" cols="30" rows="3"
+                                                        data-image-save-url="{{ authRoute('user.think-pad.editor.images.store') }}">
+                                                {!! !empty($thinkPad) ? $thinkPad->description : '' !!}
+                                            </textarea>
+
+                                                    @error('description')
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+
+                                                <div class="mt-2">
+                                                    <button class="btn btn-primary mt-2" type="submit">Submit</button>
+                                                </div>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="exampleInputPassword1" class="form-label">Password</label>
-                                                <input type="password" class="form-control" id="exampleInputPassword1">
-                                            </div>
-                                            <div class="mb-3 form-check">
-                                                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
                                         </form>
                                     </div>
                                 </div>

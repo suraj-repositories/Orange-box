@@ -59,8 +59,7 @@ composer dump-autoload
         - recovery email
 - Documentation Generative engine via Git -- (upcomming)
   - makes project documenation generation automatic link from github 
-
-https://codemyui.com/directory-list-with-collapsible-nested-folders-and-files/
+ 
 
 ### Screenshots
 

@@ -1,14 +1,14 @@
-<div class="box">
+<div class="box" id="explorer-sidebar">
     <div class="explorer-nav">
         <strong class="title">Explorer</strong>
         <div class="action-btns">
-            <button>
+            <button id="newFile">
                 <i class="bi bi-file-earmark-plus"></i>
             </button>
-            <button>
+            <button id="newFolder">
                 <i class="bi bi-folder-plus"></i>
             </button>
-            <button>
+            <button id="refreshExplorer">
                 <i class="bi bi-arrow-clockwise"></i>
             </button>
         </div>
@@ -19,6 +19,7 @@
             <ul>
                 <li>css
                     <ul>
+
                         <li>layout.css</li>
                         <li>modules.css</li>
                         <li>states.css</li>
