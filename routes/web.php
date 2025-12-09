@@ -8,13 +8,11 @@ use App\Http\Controllers\Common\ProjectBoardController;
 use App\Http\Controllers\Common\ProjectModuleController;
 use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Common\UserController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Test\TestingController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/testing', [TestingController::class, 'testing']);
 

@@ -10,6 +10,7 @@ use App\Notifications\CommentNotification;
 use App\Notifications\CommentReplyNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Notification;
 
 class CommentController extends Controller
@@ -98,14 +99,14 @@ class CommentController extends Controller
         }
 
         $comments = $commentable->topLevelComments()->with(['user'])
-            ->orderBy('id', $request->order ?? 'desc')
-            ->paginate($size, ['*'], 'page', $request->page ?? 1);
+        ->orderBy('id', $request->order ?? 'desc')
+        ->paginate($size, ['*'], 'page', $request->page ?? 1);
 
 
         if ($comments->isEmpty()) {
             return response()->json([
                 'status' => 204,
-                'data' => view('components.no-data')->render(),
+                'data' => Blade::render('<x-no-data />'),
                 'message' => 'No comments available'
             ]);
         }
