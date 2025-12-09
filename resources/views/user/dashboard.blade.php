@@ -28,7 +28,7 @@
                                         </div>
 
                                         <div class="d-flex align-items-baseline mb-2">
-                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">1.2K</div>
+                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">{{ $counts->digestionCount }}</div>
                                             <div class="me-auto">
                                                 <span class="text-primary d-inline-flex align-items-center">
                                                     15%
@@ -50,7 +50,7 @@
                                         </div>
 
                                         <div class="d-flex align-items-baseline mb-2">
-                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">452</div>
+                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">{{ $counts->thinkPadCount }}</div>
                                             <div class="me-auto">
                                                 <span class="text-danger d-inline-flex align-items-center">
                                                     10%
@@ -68,11 +68,11 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
-                                            <div class="fs-14 mb-1">Documentation Sites</div>
+                                            <div class="fs-14 mb-1">Syntax saved</div>
                                         </div>
 
                                         <div class="d-flex align-items-baseline mb-2">
-                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">16</div>
+                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">{{ $counts->syntaxCount }}</div>
                                             <div class="me-auto">
                                                 <span class="text-success d-inline-flex align-items-center">
                                                     25%
@@ -90,11 +90,11 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="d-flex align-items-center">
-                                            <div class="fs-14 mb-1">Active Project Users</div>
+                                            <div class="fs-14 mb-1">Documentation Sites</div>
                                         </div>
 
                                         <div class="d-flex align-items-baseline mb-2">
-                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">2,986</div>
+                                            <div class="fs-22 mb-0 me-2 fw-semibold text-black">{{ $counts->documentationCount }}</div>
                                             <div class="me-auto">
                                                 <span class="text-success d-inline-flex align-items-center">
                                                     4%
