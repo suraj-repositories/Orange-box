@@ -24,7 +24,7 @@
                                         <div class="form-group mb-3 mt-3">
                                             <label for="emailaddress" class="form-label">Email address</label>
                                             <input class="form-control" type="email" name="email" id="emailaddress"
-                                                value="{{ old('email') ?? 'admin@gmail.com' }}"
+                                                value="{{ old('email') ?? 'user@gmail.com' }}"
                                                 placeholder="Enter your email">
                                             @error('email')
                                                 <small class="text-danger">{{ $message }}</small>

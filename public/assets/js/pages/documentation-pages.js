@@ -9,7 +9,9 @@ class PageControl {
         this.enableContentScreen('#toggleScreenType');
         this.enableSeperator(document.querySelector("#separator"));
         this.enableExplorerNavber();
-
+        this.enableDraggable();
+        this.createContextMenu();
+        this.enableRightClickMenu();
     }
 
     enableContentScreen(selector) {
@@ -42,13 +44,8 @@ class PageControl {
 
             var backupOfThisFolder = $(this);
             $(this).remove();
-            folderAndName.wrapInner("<a href='#' />");
+            folderAndName.wrapInner("<span class='folder-name'></span>");
             folderAndName.append(backupOfThisFolder);
-
-            folderAndName.find("a").click(function (e) {
-                $(this).siblings("ul").slideToggle("slow");
-                e.preventDefault();
-            });
 
         });
 
@@ -60,6 +57,8 @@ class PageControl {
             const cover = document.createElement('div');
             cover.classList.add('ob-li-row-cover');
             $li.prepend(cover);
+            cover.setAttribute('doc-ob-draggable', true);
+            cover.setAttribute('doc-ob-dropable', true);
 
             const textNode = $li
                 .contents()
@@ -75,10 +74,14 @@ class PageControl {
 
             cover.addEventListener('click', function (e) {
                 e.stopPropagation();
-
                 $(".ob-li-row-cover").not(this).removeClass("active");
                 $(".directory-list").removeClass("active")
                 this.classList.toggle('active');
+
+                if (cover.parentElement.classList.contains('folder')) {
+                    $(cover.parentElement).children("ul").stop(true, true).slideToggle("fast");
+                }
+
             });
         });
 
@@ -130,7 +133,7 @@ class PageControl {
         }
     }
 
-    createNewFileInput() {
+    createNewFileNameInputElement() {
         const li = document.createElement('li');
 
         const input = document.createElement('input');
@@ -158,7 +161,6 @@ class PageControl {
             li.appendChild(span);
         };
 
-        // Save on Enter
         input.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
                 finalize();
@@ -168,18 +170,16 @@ class PageControl {
             }
         });
 
-        // Save or remove on blur (unfocus)
         input.addEventListener("blur", () => {
             finalize();
         });
+
 
         // Prevent parent click triggering
         input.addEventListener("click", (e) => e.stopPropagation());
 
         return li;
     }
-
-
 
     enableExplorerNavber() {
         const newFileButton = document.querySelector("#newFile");
@@ -211,15 +211,223 @@ class PageControl {
                     }
                 }
 
-                targetUL.prepend(classObj.createNewFileInput());
+                targetUL.prepend(classObj.createNewFileNameInputElement());
+                $(targetUL).slideDown('fast');
+
+            });
+        }
+    }
+
+    enableDraggable() {
+        const draggables = document.querySelectorAll('[doc-ob-draggable="true"]');
+        if (!draggables.length) return;
+
+        draggables.forEach((element) => {
+
+            let isDown = false;
+            let ghostCard = null;
+            let dragListItem = null;
+            let startX = 0;
+            let startY = 0;
+            let hasMoved = false;
+
+
+            element.addEventListener('mousedown', (e) => {
+                isDown = true;
+                hasMoved = false;
+
+                startX = e.pageX;
+                startY = e.pageY;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+
+                const dx = e.pageX - startX;
+                const dy = e.pageY - startY;
+
+                if (!hasMoved && Math.sqrt(dx * dx + dy * dy) < 5) {
+                    return;
+                }
+
+                if (!hasMoved) {
+                    hasMoved = true;
+
+                    ghostCard = document.createElement("div");
+                    ghostCard.classList.add("drag-ghost-card");
+
+                    dragListItem = element.closest('li');
+
+                    let text = '';
+                    if (dragListItem.classList.contains('folder')) {
+                        const folder = dragListItem.querySelector('.folder-name');
+                        if (folder) {
+                            text = folder.innerText.trim();
+                        }
+                    } else {
+                        const file = dragListItem.querySelector('.li-item');
+                        if (file) {
+                            text = file.innerText.trim();
+                        }
+                    }
+
+                    ghostCard.innerText = text;
+                    document.body.appendChild(ghostCard);
+                }
+
+                if (ghostCard) {
+                    ghostCard.style.left = e.pageX + "px";
+                    ghostCard.style.top = e.pageY + "px";
+                }
+            });
+
+            document.addEventListener('mouseup', (e) => {
+                if (!isDown) return;
+                isDown = false;
+
+                if (ghostCard) {
+                    ghostCard.remove();
+                    ghostCard = null;
+                }
+
+                if (hasMoved) {
+                    const dropLocation = e.target;
+
+                    if (dropLocation.getAttribute('doc-ob-dropable') != 'true') {
+                        return;
+                    }
+
+                    const liParent = dropLocation.closest('li');
+
+                    if (liParent && dragListItem.contains(liParent)) {
+                        return;
+                    }
+
+                    if (liParent && liParent.classList.contains('folder')) {
+                        const innerUl = liParent.querySelector(':scope > ul');
+                        (innerUl || liParent.appendChild(document.createElement('ul')))
+                            .prepend(dragListItem);
+                    } else if (liParent) {
+                        liParent.insertAdjacentElement('beforebegin', dragListItem);
+                    } else {
+                        console.error("Drop failed: No parent <li> found for dropLocation.");
+                    }
+
+
+
+                }
+
+            });
+        });
+    }
+
+    createContextMenu() {
+        const menu = document.createElement("div");
+        menu.id = "contextMenu";
+        menu.classList.add('ctx-menu');
+
+        menu.innerHTML = `
+            <div class="ctx-item" data-action="new" style="padding:8px 12px; cursor:pointer;">New</div>
+            <div class="ctx-item" data-action="rename" style="padding:8px 12px; cursor:pointer;">Rename</div>
+        `;
+
+        document.body.appendChild(menu);
+    }
+
+    enableRightClickMenu() {
+
+        const menu = document.getElementById("contextMenu");
+        let currentLi = null;
+        const classObj = this;
+
+        document.addEventListener("contextmenu", (e) => {
+            const li = e.target.closest("li");
+            if (!li) return;
+
+            e.preventDefault();
+
+            currentLi = li;
+            menu.style.left = `${e.pageX}px`;
+            menu.style.top = `${e.pageY}px`;
+            menu.style.display = "block";
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!menu.contains(e.target)) {
+                menu.style.display = "none";
+            }
+        });
+
+        menu.addEventListener("click", (e) => {
+            const action = e.target.getAttribute("data-action");
+            if (!action || !currentLi) return;
+
+            if (action === "new") createNewItem(currentLi);
+            if (action === "rename") renameItem(currentLi);
+
+            menu.style.display = "none";
+        });
+
+        // --------------------------
+        // CREATE NEW ITEM
+        // --------------------------
+        function createNewItem(liNode) {
+            let targetUL;
+
+            if (liNode.classList.contains('folder')) {
+                targetUL = liNode.querySelector(':scope > ul');
+
+                if (!targetUL) {
+                    targetUL = document.createElement('ul');
+                    liNode.appendChild(targetUL);
+                }
+            } else {
+                targetUL = liNode.parentElement;
+            }
+
+            targetUL.prepend(classObj.createNewFileNameInputElement());
+            $(targetUL).slideDown('fast');
+        }
+
+        // --------------------------
+        // RENAME ITEM
+        // --------------------------
+        function renameItem(liNode) {
+            let textEl =
+                liNode.querySelector('.folder-name') ||
+                liNode.querySelector('.li-item');
+
+            if (!textEl) return;
+
+            const oldText = textEl.innerText.trim();
+
+            const input = document.createElement("input");
+            input.className = "inline-rename-input";
+            input.value = oldText;
+
+            textEl.replaceWith(input);
+            input.focus();
+
+            const finish = () => {
+                const newValue = input.value.trim() || oldText;
+                textEl.innerText = newValue;
+                input.replaceWith(textEl);
+            };
+
+            input.addEventListener("blur", finish);
+            input.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") finish();
+                if (e.key === "Escape") {
+                    input.value = oldText;
+                    finish();
+                }
             });
         }
     }
 
 
-    createFile() {
 
-    }
+
 }
 
 

@@ -26,6 +26,10 @@
     <link rel="stylesheet" href="{{ asset('assets/ckeditor5/ckeditor5.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/libs/summernote-0.9.0/summernote-lite.min.css') }}">
 
+    <!-- Oranbyte Toastify -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/oranbyte-toastify/oranbyte-toastify.css') }}">
+    <script src="{{ asset('assets/libs/oranbyte-toastify/oranbyte-toastify.js') }}"></script>
+
     @yield('css')
 
     @include('sweetalert2::index')
