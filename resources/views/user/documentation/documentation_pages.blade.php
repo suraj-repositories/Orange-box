@@ -56,8 +56,8 @@
                                 <div class="d-flex" id="splitter">
                                     @include('user.documentation.partials.explorer_sidebar')
                                     <div id="separator"> </div>
-                                    <div class="p-3 w-100 page-form" id="page-content">
-                                        <form action="#" method="POST" enctype="multipart/form-data"
+                                    <div class="w-100 page-form explorer-contents" id="page-content">
+                                        {{-- <form action="#" method="POST" enctype="multipart/form-data"
                                             id="add-digest-form">
                                             @csrf
                                             <div class="row">
@@ -80,14 +80,10 @@
                                                         <a href="#" id="redirect-link" class="d-none"></a>
                                                         <button id="load" type="button"
                                                             class="btn bg-outline-primary border ms-1 p-0 center-content px-2 text-primary "
-                                                            aria-label="Open Folder" >
+                                                            aria-label="Open Folder">
                                                             <i class='bx bx-download fs-4'></i></button>
                                                     </div>
                                                 </div>
-
-
-
-
 
                                                 <div class="col col-12 col-md-12 ">
                                                     <label for="title-input" class="form-label">Content</label>
@@ -106,7 +102,9 @@
                                                     <button class="btn btn-primary mt-2" type="submit">Submit</button>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </form> --}}
+
+                                        @include('user.documentation.partials.explorer_content_tabs')
                                     </div>
                                 </div>
 

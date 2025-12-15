@@ -2385,6 +2385,9 @@ ul.directory-list.active {
     line-height: 30px;
     max-width: 100%;
     user-select: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .directory-list a {
@@ -2471,7 +2474,7 @@ ul.directory-list.active {
 
 #separator {
     width: 6px;
-    background: var(--bs-light-bg-subtle);
+    background: transparent;
     cursor: col-resize;
     position: absolute;
     top: 0;
@@ -2481,7 +2484,7 @@ ul.directory-list.active {
 }
 
 #separator:hover {
-    background: rgba(255, 166, 0, 0.506);
+    background: rgb(255, 203, 105);
 }
 
 #page-content {
@@ -2516,6 +2519,7 @@ ul.directory-list.active {
     z-index: 5;
     width: auto;
     max-width: 100%;
+    width: 100%;
     border: 0;
     outline: 0;
     border-bottom: 1px solid var(--bs-orange);
@@ -2583,9 +2587,38 @@ ul.directory-list.active {
 }
 
 .inline-rename-input {
-    width: 80%;
+    width: 100%;
     padding: 3px 6px;
     font-size: 14px;
+}
+
+.explorer-contents .nav-link {
+    border-radius: 0;
+}
+
+.explorer-contents .nav.nav-tabs {
+    display: flex;
+    align-items: center;
+    overflow-y: hidden;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+}
+.explorer-contents .nav.nav-tabs .nav-link.active{
+    border-top: 2px solid var(--bs-primary);
+}
+
+.explorer-contents .nav.nav-tabs:hover {
+    scrollbar-color: #999 transparent;
+}
+
+.explorer-contents .nav.nav-tabs::-webkit-scrollbar {
+    height: 0;
+}
+
+
+.explorer-contents .nav.nav-tabs::-webkit-scrollbar-thumb:hover {
+    background-color: #666;
 }
 
 body[data-screen-type="content"] .topbar-custom,

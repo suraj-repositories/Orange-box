@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 class PageControl {
+
+    static tabBuilder;
+
     init() {
         this.enableSidebar();
         this.enableContentScreen('#toggleScreenType');
@@ -12,6 +15,10 @@ class PageControl {
         this.enableDraggable();
         this.createContextMenu();
         this.enableRightClickMenu();
+        PageControl.tabBuilder = new DocumentationTabs(
+            'documentationExplorerTab',
+            'documentationExplorerTabBody'
+        );
     }
 
     enableContentScreen(selector) {
@@ -145,11 +152,17 @@ class PageControl {
 
         setTimeout(() => input.focus(), 10);
 
+        let finalized = false; // 🔒 guard
+
         const finalize = () => {
+            if (finalized) return;
+            finalized = true;
+
             const fileName = input.value.trim();
 
             if (fileName === "") {
                 li.remove();
+                cleanup();
                 return;
             }
 
@@ -158,24 +171,34 @@ class PageControl {
             span.textContent = fileName;
 
             li.innerHTML = "";
+
+            PageControl.tabBuilder.createNewTab(
+                fileName,
+                `<p>Content for ${fileName}</p>`
+            );
+
             li.appendChild(span);
+            cleanup();
         };
 
-        input.addEventListener("keydown", (e) => {
+        const onKeydown = (e) => {
             if (e.key === "Enter") {
+                e.preventDefault();
                 finalize();
             }
             if (e.key === "Escape") {
                 li.remove();
+                cleanup();
             }
-        });
+        };
 
-        input.addEventListener("blur", () => {
-            finalize();
-        });
+        const cleanup = () => {
+            input.removeEventListener("keydown", onKeydown);
+            input.removeEventListener("blur", finalize);
+        };
 
-
-        // Prevent parent click triggering
+        input.addEventListener("keydown", onKeydown);
+        input.addEventListener("blur", finalize);
         input.addEventListener("click", (e) => e.stopPropagation());
 
         return li;
@@ -213,6 +236,8 @@ class PageControl {
 
                 targetUL.prepend(classObj.createNewFileNameInputElement());
                 $(targetUL).slideDown('fast');
+                $('.ob-li-row-cover').removeClass('active');
+
 
             });
         }
@@ -341,7 +366,7 @@ class PageControl {
         const classObj = this;
 
         document.addEventListener("contextmenu", (e) => {
-            const li = e.target.closest("li");
+            const li = e.target.closest(".directory-list li");
             if (!li) return;
 
             e.preventDefault();
@@ -387,6 +412,7 @@ class PageControl {
 
             targetUL.prepend(classObj.createNewFileNameInputElement());
             $(targetUL).slideDown('fast');
+            $('.ob-li-row-cover').removeClass('active');
         }
 
         // --------------------------
@@ -429,5 +455,106 @@ class PageControl {
 
 
 }
+
+
+class DocumentationTabs {
+
+    constructor(tabListId, tabBodyId) {
+        this.tabList = document.getElementById(tabListId);
+        this.tabBody = document.getElementById(tabBodyId);
+        this.tabIndex = 0;
+
+        if (!this.tabList || !this.tabBody) {
+            throw new Error('Tab container not found');
+        }
+    }
+
+    createNewTab(title, content = '', iconClass = 'bi bi-app') {
+        const id = `doc-tab-${this.tabIndex++}`;
+
+        const li = document.createElement('li');
+        li.className = 'nav-item';
+
+        const button = document.createElement('button');
+        button.className = 'nav-link d-flex align-items-center gap-2';
+        button.type = 'button';
+        button.dataset.target = id;
+
+        const icon = document.createElement('i');
+        icon.className = iconClass;
+
+        const text = document.createElement('span');
+        text.className = 'tab-title';
+        text.textContent = title;
+
+        const closeBtn = document.createElement('span');
+        closeBtn.className = 'tab-close';
+        closeBtn.innerHTML = '&times;';
+
+        button.append(icon, text, closeBtn);
+        li.appendChild(button);
+        this.tabList.appendChild(li);
+
+        const pane = document.createElement('div');
+        pane.className = 'tab-pane fade';
+        pane.id = id;
+        pane.tabIndex = 0;
+        pane.innerHTML = content;
+
+        this.tabBody.appendChild(pane);
+
+        this.activateTab(button);
+
+        button.addEventListener('click', (e) => {
+            if (e.target === closeBtn) return;
+            this.activateTab(button);
+        });
+
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.closeTab(button);
+        });
+
+        return { button, pane };
+    }
+
+    activateTab(button) {
+        const targetId = button.dataset.target;
+
+        this.tabList.querySelectorAll('.nav-link')
+            .forEach(btn => btn.classList.remove('active'));
+
+        this.tabBody.querySelectorAll('.tab-pane')
+            .forEach(pane => pane.classList.remove('show', 'active'));
+
+        button.classList.add('active');
+
+        const pane = document.getElementById(targetId);
+        if (pane) {
+            pane.classList.add('show', 'active');
+        }
+    }
+
+    closeTab(button) {
+        const li = button.closest('li');
+        const paneId = button.dataset.target;
+        const pane = document.getElementById(paneId);
+        const wasActive = button.classList.contains('active');
+
+        let nextButton = null;
+        if (wasActive) {
+            const nextLi = li.nextElementSibling || li.previousElementSibling;
+            nextButton = nextLi?.querySelector('.nav-link') || null;
+        }
+
+        li.remove();
+        pane?.remove();
+
+        if (nextButton) {
+            this.activateTab(nextButton);
+        }
+    }
+}
+
 
 
