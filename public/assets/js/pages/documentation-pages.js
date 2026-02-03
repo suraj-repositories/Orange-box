@@ -42,70 +42,92 @@ class PageControl {
     }
 
     enableSidebar() {
-
         var allFolders = $(".directory-list li > ul");
-        allFolders.each(function () {
 
+        allFolders.each(function () {
             var folderAndName = $(this).parent();
             folderAndName.addClass("folder");
 
             var backupOfThisFolder = $(this);
             $(this).remove();
+
             folderAndName.wrapInner("<span class='folder-name'></span>");
             folderAndName.append(backupOfThisFolder);
-
         });
 
         let allListItems = $(".directory-list li");
-        allListItems.each(function () {
 
+        const classObj = this;
+
+        allListItems.each(function () {
             const $li = $(this);
 
-            const cover = document.createElement('div');
-            cover.classList.add('ob-li-row-cover');
+            const cover = document.createElement("div");
+            cover.classList.add("ob-li-row-cover");
+            cover.setAttribute("doc-ob-draggable", true);
+            cover.setAttribute("doc-ob-dropable", true);
+
             $li.prepend(cover);
-            cover.setAttribute('doc-ob-draggable', true);
-            cover.setAttribute('doc-ob-dropable', true);
 
             const textNode = $li
                 .contents()
                 .filter(function () {
-                    return this.nodeType === 3 && $.trim(this.nodeValue).length > 0;
+                    return (
+                        this.nodeType === 3 &&
+                        $.trim(this.nodeValue).length > 0
+                    );
                 })
                 .first();
 
             if (textNode.length) {
-                const span = $('<span class="li-item"></span>').text(textNode.text());
+                const span = $('<span class="li-item"></span>').text(
+                    textNode.text()
+                );
                 textNode.replaceWith(span);
             }
 
-            cover.addEventListener('click', function (e) {
+            cover.addEventListener("click", function (e) {
                 e.stopPropagation();
-                $(".ob-li-row-cover").not(this).removeClass("active");
-                $(".directory-list").removeClass("active")
-                this.classList.toggle('active');
 
-                if (cover.parentElement.classList.contains('folder')) {
-                    $(cover.parentElement).children("ul").stop(true, true).slideToggle("fast");
-                }
-
+                classObj.sidebarCoverEvent(this);
             });
         });
 
-        let ul = document.querySelector('.directory-list');
-        ul.addEventListener('click', function (e) {
+        let ul = document.querySelector(".directory-list");
+
+        ul.addEventListener("click", function (e) {
             e.stopPropagation();
-            if (e.target.tagName === 'INPUT') {
+
+            if (e.target.tagName === "INPUT") {
                 return;
             }
-            const skipLi = e.target.closest(".directory-list li:has(input):not(:has(li))");
+
+            const skipLi = e.target.closest(
+                ".directory-list li:has(input):not(:has(li))"
+            );
+
             if (skipLi) {
                 return;
             }
-            $(".ob-li-row-cover").removeClass("active");
-            ul.classList.toggle('active');
+            if (!e.target.classList.contains('ob-li-row-cover')) {
+                $(".ob-li-row-cover").removeClass("active");
+                ul.classList.toggle("active");
+            }
         });
+    }
 
+    sidebarCoverEvent(cover) {
+        $(".ob-li-row-cover").not(cover).removeClass("active");
+        $(".directory-list").removeClass("active");
+
+        cover.classList.toggle("active");
+
+        if (cover.parentElement.classList.contains("folder")) {
+            $(cover.parentElement)
+                .children("ul")
+                .stop(true, true)
+                .slideToggle("fast");
+        }
     }
 
     enableSeperator(element) {
@@ -152,7 +174,8 @@ class PageControl {
 
         setTimeout(() => input.focus(), 10);
 
-        let finalized = false; // 🔒 guard
+        let finalized = false;
+        const classObj = this;
 
         const finalize = () => {
             if (finalized) return;
@@ -166,6 +189,11 @@ class PageControl {
                 return;
             }
 
+            const div = document.createElement('div');
+            div.classList.add('ob-li-row-cover');
+            div.setAttribute("doc-ob-draggable", "true");
+            div.setAttribute("doc-ob-dropable", "true");
+
             const span = document.createElement("span");
             span.classList.add("li-item");
             span.textContent = fileName;
@@ -177,8 +205,13 @@ class PageControl {
                 `<p>Content for ${fileName}</p>`
             );
 
+            li.appendChild(div);
             li.appendChild(span);
             cleanup();
+            div.addEventListener('click', () => {
+                classObj.sidebarCoverEvent(div);
+            });
+            classObj.enableDraggable();
         };
 
         const onKeydown = (e) => {
@@ -204,8 +237,84 @@ class PageControl {
         return li;
     }
 
+    createNewFolderNameInputElement() {
+        const li = document.createElement('li');
+
+        const input = document.createElement('input');
+        input.classList.add('new_folder');
+        input.name = "new_folder";
+        input.type = "text";
+
+        li.appendChild(input);
+
+        setTimeout(() => input.focus(), 10);
+
+        let finalized = false;
+        const classObj = this;
+
+        const finalize = () => {
+            if (finalized) return;
+            finalized = true;
+
+            const folderName = input.value.trim();
+
+            if (folderName === "") {
+                li.remove();
+                cleanup();
+                return;
+            }
+
+            li.innerHTML = "";
+            li.classList.add("folder");
+
+            const rowCover = document.createElement("div");
+            rowCover.className = "ob-li-row-cover";
+            rowCover.setAttribute("doc-ob-draggable", "true");
+            rowCover.setAttribute("doc-ob-dropable", "true");
+
+            const span = document.createElement("span");
+            span.classList.add("folder-name");
+            span.textContent = folderName;
+
+            const ul = document.createElement("ul");
+
+            li.appendChild(rowCover);
+            li.appendChild(span);
+            li.appendChild(ul);
+
+            cleanup();
+            rowCover.addEventListener('click', () => {
+                classObj.sidebarCoverEvent(rowCover);
+            });
+            classObj.enableDraggable();
+        };
+
+        const onKeydown = (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                finalize();
+            }
+            if (e.key === "Escape") {
+                li.remove();
+                cleanup();
+            }
+        };
+
+        const cleanup = () => {
+            input.removeEventListener("keydown", onKeydown);
+            input.removeEventListener("blur", finalize);
+        };
+
+        input.addEventListener("keydown", onKeydown);
+        input.addEventListener("blur", finalize);
+        input.addEventListener("click", e => e.stopPropagation());
+
+        return li;
+    }
+
     enableExplorerNavber() {
         const newFileButton = document.querySelector("#newFile");
+        const newFolderButton = document.querySelector("#newFolder");
         const explorerFiles = document.querySelector("#explorer-sidebar .directory-list");
 
         if (newFileButton) {
@@ -239,6 +348,37 @@ class PageControl {
                 $('.ob-li-row-cover').removeClass('active');
 
 
+            });
+        }
+
+        if (newFolderButton) {
+            const classObj = this;
+
+            newFolderButton.addEventListener('click', function () {
+                const active = document.querySelector('#explorer-sidebar .ob-li-row-cover.active');
+
+                let targetUL = explorerFiles;
+
+                $(".ob-li-row-cover").removeClass("active");
+                $(".directory-list").removeClass("active")
+
+                if (active) {
+                    const activeLI = active.closest('li');
+
+                    if (activeLI.classList.contains('folder')) {
+                        const folderUL = activeLI.querySelector('ul');
+                        if (folderUL) targetUL = folderUL;
+                    } else {
+                        const nearestFolder = activeLI.closest('.folder');
+                        if (nearestFolder) {
+                            targetUL = nearestFolder.querySelector('ul');
+                        }
+                    }
+                }
+
+                targetUL.prepend(classObj.createNewFolderNameInputElement());
+                $(targetUL).slideDown('fast');
+                $('.ob-li-row-cover').removeClass('active');
             });
         }
     }
@@ -365,6 +505,66 @@ class PageControl {
         let currentLi = null;
         const classObj = this;
 
+        const createNewItem = (liNode) => {
+            let targetUL;
+
+            if (liNode.classList.contains('folder')) {
+                targetUL = liNode.querySelector(':scope > ul');
+
+                if (!targetUL) {
+                    targetUL = document.createElement('ul');
+                    liNode.appendChild(targetUL);
+                }
+            } else {
+                targetUL = liNode.parentElement;
+            }
+
+            targetUL.prepend(classObj.createNewFileNameInputElement());
+            $(targetUL).slideDown('fast');
+            $('.ob-li-row-cover').removeClass('active');
+        };
+
+        const renameItem = (liNode) => {
+            $(".ob-li-row-cover").removeClass("active");
+            if (liNode.querySelector('.inline-rename-input')) return;
+
+            const textEl =
+                liNode.querySelector('.folder-name') ||
+                liNode.querySelector('.li-item');
+
+            if (!textEl) return;
+
+            const oldText = textEl.textContent.trim();
+
+            const input = document.createElement('input');
+            input.className = 'inline-rename-input';
+            input.value = oldText;
+
+            let finished = false;
+
+            const finish = () => {
+                if (finished) return;
+                finished = true;
+
+                const newValue = input.value.trim() || oldText;
+                textEl.textContent = newValue;
+                input.replaceWith(textEl);
+            };
+
+            textEl.replaceWith(input);
+            input.focus();
+            input.setSelectionRange(0, input.value.length);
+
+            input.addEventListener('blur', finish);
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') finish();
+                if (e.key === 'Escape') {
+                    input.value = oldText;
+                    finish();
+                }
+            });
+        };
+
         document.addEventListener("contextmenu", (e) => {
             const li = e.target.closest(".directory-list li");
             if (!li) return;
@@ -393,69 +593,11 @@ class PageControl {
             menu.style.display = "none";
         });
 
-        // --------------------------
-        // CREATE NEW ITEM
-        // --------------------------
-        function createNewItem(liNode) {
-            let targetUL;
 
-            if (liNode.classList.contains('folder')) {
-                targetUL = liNode.querySelector(':scope > ul');
 
-                if (!targetUL) {
-                    targetUL = document.createElement('ul');
-                    liNode.appendChild(targetUL);
-                }
-            } else {
-                targetUL = liNode.parentElement;
-            }
 
-            targetUL.prepend(classObj.createNewFileNameInputElement());
-            $(targetUL).slideDown('fast');
-            $('.ob-li-row-cover').removeClass('active');
-        }
-
-        // --------------------------
-        // RENAME ITEM
-        // --------------------------
-        function renameItem(liNode) {
-            let textEl =
-                liNode.querySelector('.folder-name') ||
-                liNode.querySelector('.li-item');
-
-            if (!textEl) return;
-
-            const oldText = textEl.innerText.trim();
-
-            const input = document.createElement("input");
-            input.className = "inline-rename-input";
-            input.value = oldText;
-
-            textEl.replaceWith(input);
-            input.focus();
-
-            const finish = () => {
-                const newValue = input.value.trim() || oldText;
-                textEl.innerText = newValue;
-                input.replaceWith(textEl);
-            };
-
-            input.addEventListener("blur", finish);
-            input.addEventListener("keydown", (e) => {
-                if (e.key === "Enter") finish();
-                if (e.key === "Escape") {
-                    input.value = oldText;
-                    finish();
-                }
-            });
-        }
     }
-
-
-
-
 }
-
 
 class DocumentationTabs {
 

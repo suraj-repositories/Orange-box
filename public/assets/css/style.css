@@ -2386,8 +2386,11 @@ ul.directory-list.active {
     max-width: 100%;
     user-select: none;
     text-overflow: ellipsis;
-    white-space: nowrap;
     overflow: hidden;
+}
+
+.directory-list li:not(:has(input)) {
+    white-space: nowrap;
 }
 
 .directory-list a {
@@ -2590,6 +2593,7 @@ ul.directory-list.active {
     width: 100%;
     padding: 3px 6px;
     font-size: 14px;
+    z-index: 50;
 }
 
 .explorer-contents .nav-link {
@@ -2604,7 +2608,8 @@ ul.directory-list.active {
     flex-wrap: nowrap;
     scrollbar-width: none;
 }
-.explorer-contents .nav.nav-tabs .nav-link.active{
+
+.explorer-contents .nav.nav-tabs .nav-link.active {
     border-top: 2px solid var(--bs-primary);
 }
 
