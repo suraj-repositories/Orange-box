@@ -17158,10 +17158,12 @@ body.loading {
     justify-content: center;
     gap: 5px;
 }
-.modal #card-list-tab-toggler{
+
+.modal #card-list-tab-toggler {
     display: none;
 }
-.modal .list-view-container.hide{
+
+.modal .list-view-container.hide {
     display: block;
 }
 
@@ -17487,6 +17489,12 @@ body.loading {
 }
 
 
-.logo img{
+.logo img {
     max-height: 45px;
+}
+
+.folder  > .inline-rename-input {
+        width: calc(100% - 35px) !important;
+    display: inline-flex;
+    margin-left: 3px;
 }

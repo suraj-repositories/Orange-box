@@ -357,35 +357,35 @@ class App {
     }
 
     enableCopyBtns() {
-    const copyIcons = document.querySelectorAll('.copy-icon');
+        const copyIcons = document.querySelectorAll('.copy-icon');
 
-    if (!copyIcons.length) {
-        return;
-    }
+        if (!copyIcons.length) {
+            return;
+        }
 
-    copyIcons.forEach(icon => {
-        icon.addEventListener('click', () => {
+        copyIcons.forEach(icon => {
+            icon.addEventListener('click', () => {
 
-            icon.classList.remove('bi-copy');
+                icon.classList.remove('bi-copy');
 
-            const copyTxt = icon.getAttribute('data-copy-text');
+                const copyTxt = icon.getAttribute('data-copy-text');
 
-            navigator.clipboard.writeText(copyTxt)
-                .then(() => {
-                    icon.classList.add('bi-check-circle');
-                })
-                .catch(err => {
-                    icon.classList.add('bi-exclamation-circle');
-                });
+                navigator.clipboard.writeText(copyTxt)
+                    .then(() => {
+                        icon.classList.add('bi-check-circle');
+                    })
+                    .catch(err => {
+                        icon.classList.add('bi-exclamation-circle');
+                    });
 
-            setTimeout(() => {
-                icon.classList.remove('bi-check-circle');
-                icon.classList.remove('bi-exclamation-circle');
-                icon.classList.add('bi-copy');
-            }, 1000);
+                setTimeout(() => {
+                    icon.classList.remove('bi-check-circle');
+                    icon.classList.remove('bi-exclamation-circle');
+                    icon.classList.add('bi-copy');
+                }, 1000);
+            });
         });
-    });
-}
+    }
 
 }
 

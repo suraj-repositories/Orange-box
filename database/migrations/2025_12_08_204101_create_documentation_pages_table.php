@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('documentation_pages', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('documentation_id');
@@ -37,6 +38,8 @@ return new class extends Migration
 
             $table->foreign('parent_id', 'fk_doc_pages_parent')
                 ->references('id')->on('documentation_pages')->nullOnDelete();
+
+             $table->index(['documentation_id', 'parent_id', 'sort_order']);
         });
     }
 

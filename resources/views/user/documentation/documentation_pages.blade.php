@@ -33,6 +33,7 @@
                                         class="avatar avatar-sm img-fluid rounded-2 me-2" aria-label="tet">
 
                                     <h5 class="card-title mb-0">{{ $documentation->title }}</h5>
+                                    <input type="hidden" name="documentation_uuid" value="{{ $documentation->uuid }}" id="documentationUuidInput">
 
                                     <div class="ms-auto fw-semibold d-flex gap-1">
                                         <small class="text-muted" id="sizeIndicator"></small>

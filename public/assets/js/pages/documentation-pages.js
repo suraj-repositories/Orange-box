@@ -1,11 +1,20 @@
+
 document.addEventListener('DOMContentLoaded', function () {
     new PageControl().init();
+    const icon = document.querySelector('#toggleScreenType');
+    if (localStorage.getItem('documentation-editor-full-screen')) {
+        document.body.setAttribute('data-screen-type', 'content');
+        if (icon) {
+            icon.checked = true;
+            icon.classList.remove('bi-fullscreen');
+            icon.classList.add('bi-fullscreen-exit');
+        }
+    }
 });
-
-
 class PageControl {
 
     static tabBuilder;
+    static apiService;
 
     init() {
         this.enableSidebar();
@@ -19,6 +28,8 @@ class PageControl {
             'documentationExplorerTab',
             'documentationExplorerTabBody'
         );
+
+        PageControl.apiService = new ApiService();
     }
 
     enableContentScreen(selector) {
@@ -30,10 +41,14 @@ class PageControl {
 
         checkbox.addEventListener('change', function () {
             if (checkbox.checked) {
+                localStorage.setItem('documentation-editor-full-screen', true);
                 document.body.setAttribute('data-screen-type', 'content');
                 icon.classList.remove('bi-fullscreen');
                 icon.classList.add('bi-fullscreen-exit');
             } else {
+                if (localStorage.getItem('documentation-editor-full-screen')) {
+                    localStorage.removeItem('documentation-editor-full-screen', true);
+                }
                 document.body.removeAttribute('data-screen-type', 'content');
                 icon.classList.remove('bi-fullscreen-exit');
                 icon.classList.add('bi-fullscreen');
@@ -205,6 +220,14 @@ class PageControl {
                 `<p>Content for ${fileName}</p>`
             );
 
+
+            PageControl.apiService.createPage(
+                fileName,
+                1,
+                'file',
+                li
+            );
+
             li.appendChild(div);
             li.appendChild(span);
             cleanup();
@@ -277,6 +300,13 @@ class PageControl {
             span.textContent = folderName;
 
             const ul = document.createElement("ul");
+
+            PageControl.apiService.createPage(
+                folderName,
+                1,
+                'folder',
+                li
+            );
 
             li.appendChild(rowCover);
             li.appendChild(span);
@@ -492,7 +522,8 @@ class PageControl {
         menu.classList.add('ctx-menu');
 
         menu.innerHTML = `
-            <div class="ctx-item" data-action="new" style="padding:8px 12px; cursor:pointer;">New</div>
+            <div class="ctx-item" data-action="new_file" style="padding:8px 12px; cursor:pointer;">New File</div>
+            <div class="ctx-item" data-action="new_folder" style="padding:8px 12px; cursor:pointer;">New Folder</div>
             <div class="ctx-item" data-action="rename" style="padding:8px 12px; cursor:pointer;">Rename</div>
         `;
 
@@ -505,7 +536,7 @@ class PageControl {
         let currentLi = null;
         const classObj = this;
 
-        const createNewItem = (liNode) => {
+        const createNewFileItem = (liNode) => {
             let targetUL;
 
             if (liNode.classList.contains('folder')) {
@@ -520,6 +551,27 @@ class PageControl {
             }
 
             targetUL.prepend(classObj.createNewFileNameInputElement());
+
+            $(targetUL).slideDown('fast');
+            $('.ob-li-row-cover').removeClass('active');
+        };
+
+        const createNewFolderItem = (liNode) => {
+            let targetUL;
+
+            if (liNode.classList.contains('folder')) {
+                targetUL = liNode.querySelector(':scope > ul');
+
+                if (!targetUL) {
+                    targetUL = document.createElement('ul');
+                    liNode.appendChild(targetUL);
+                }
+            } else {
+                targetUL = liNode.parentElement;
+            }
+
+            targetUL.prepend(classObj.createNewFolderNameInputElement());
+
             $(targetUL).slideDown('fast');
             $('.ob-li-row-cover').removeClass('active');
         };
@@ -587,14 +639,12 @@ class PageControl {
             const action = e.target.getAttribute("data-action");
             if (!action || !currentLi) return;
 
-            if (action === "new") createNewItem(currentLi);
+            if (action === "new_file") createNewFileItem(currentLi);
+            if (action === "new_folder") createNewFolderItem(currentLi);
             if (action === "rename") renameItem(currentLi);
 
             menu.style.display = "none";
         });
-
-
-
 
     }
 }
@@ -660,6 +710,8 @@ class DocumentationTabs {
         return { button, pane };
     }
 
+
+
     activateTab(button) {
         const targetId = button.dataset.target;
 
@@ -699,4 +751,43 @@ class DocumentationTabs {
 }
 
 
+class ApiService {
+    createPage(title, sortOrder, type, liItem) {
+        console.log(liItem.parentElement?.closest('.folder'));
 
+        const folder = liItem.classList.contains('folder')
+            ? liItem.parentElement?.closest('.folder')
+            : liItem.closest('.folder');
+        const parentUUID = folder ? (folder.getAttribute('data-doc-page-uuid') ?? null) : null;
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const docUuidInput = document.getElementById('documentationUuidInput');
+        fetch(authRoute('user.documentation.pages.create', { documentation: docUuidInput.value }), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': csrfToken
+            },
+            body: JSON.stringify({
+                title: title,
+                parent_uuid: parentUUID,
+                sort_order: sortOrder,
+                type: type,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (liItem) {
+                        liItem.setAttribute('data-doc-page-uuid', data.data.uuid);
+                    }
+                } else {
+
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+
+            });
+    }
+}

@@ -29,6 +29,7 @@
     <!-- Oranbyte Toastify -->
     <link rel="stylesheet" href="{{ asset('assets/libs/oranbyte-toastify/oranbyte-toastify.css') }}">
     <script src="{{ asset('assets/libs/oranbyte-toastify/oranbyte-toastify.js') }}"></script>
+    <script src="{{ asset('assets/js/initial.js') }}"></script>
 
     @yield('css')
 
