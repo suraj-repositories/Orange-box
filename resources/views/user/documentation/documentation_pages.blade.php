@@ -33,10 +33,13 @@
                                         class="avatar avatar-sm img-fluid rounded-2 me-2" aria-label="tet">
 
                                     <h5 class="card-title mb-0">{{ $documentation->title }}</h5>
-                                    <input type="hidden" name="documentation_uuid" value="{{ $documentation->uuid }}" id="documentationUuidInput">
+                                    <input type="hidden" name="documentation_uuid" value="{{ $documentation->uuid }}"
+                                        id="documentationUuidInput">
 
-                                    <div class="ms-auto fw-semibold d-flex gap-1">
+                                    <div class="ms-auto fw-semibold d-flex align-items-center gap-2">
                                         <small class="text-muted" id="sizeIndicator"></small>
+
+                                        <span class="spinner-border spinner-border-sm d-none" aria-hidden="true" id="editor-page-loader"></span>
 
                                         <div class="btn-group" role="group" aria-label="Full Screen Toggle">
                                             <input type="checkbox" class="btn-check" id="toggleScreenType"
@@ -58,54 +61,9 @@
                                     @include('user.documentation.partials.explorer_sidebar')
                                     <div id="separator"> </div>
                                     <div class="w-100 page-form explorer-contents" id="page-content">
-                                        {{-- <form action="#" method="POST" enctype="multipart/form-data"
-                                            id="add-digest-form">
-                                            @csrf
-                                            <div class="row">
-                                                <div class="col col-12 col-md-12 mb-3">
-
-                                                    <label for="git_link-input" class="form-label">Git Link</label>
-
-                                                    <div class="d-flex">
-                                                        <div class="input-group">
-                                                            <span class="input-group-text" id="basic-addon1">
-                                                                <i class="bi bi-git"></i>
-                                                            </span>
-
-                                                            <input type="text" class="form-control"
-                                                                placeholder="Enter autofetch link" id="git_link-input"
-                                                                name="git_link"
-                                                                value="{{ !empty($thinkPad) ? $thinkPad->git_link : '' }}">
-                                                        </div>
-
-                                                        <a href="#" id="redirect-link" class="d-none"></a>
-                                                        <button id="load" type="button"
-                                                            class="btn bg-outline-primary border ms-1 p-0 center-content px-2 text-primary "
-                                                            aria-label="Open Folder">
-                                                            <i class='bx bx-download fs-4'></i></button>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col col-12 col-md-12 ">
-                                                    <label for="title-input" class="form-label">Content</label>
-
-                                                    <textarea class="form-control summernote" name="description" id="editor" cols="30" rows="3"
-                                                        data-image-save-url="{{ authRoute('user.think-pad.editor.images.store') }}">
-                                                {!! !empty($thinkPad) ? $thinkPad->description : '' !!}
-                                            </textarea>
-
-                                                    @error('description')
-                                                        <small class="text-danger">{{ $message }}</small>
-                                                    @enderror
-                                                </div>
-
-                                                <div class="mt-2">
-                                                    <button class="btn btn-primary mt-2" type="submit">Submit</button>
-                                                </div>
-                                            </div>
-                                        </form> --}}
 
                                         @include('user.documentation.partials.explorer_content_tabs')
+
                                     </div>
                                 </div>
 

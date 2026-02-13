@@ -33,7 +33,7 @@ class DocumentationPagesController extends Controller
         ]);
     }
 
-    public function getDocumentationPage(DocumentationPage $docPage, Request $request)
+    public function getDocumentationPage(User $user, DocumentationPage $docPage, Request $request)
     {
         return response()->json([
             'success' => true,
@@ -148,5 +148,28 @@ class DocumentationPagesController extends Controller
                 'message' => $ex->getMessage()
             ]);
         }
+    }
+
+    public function renamePageOrFolder(User $user, DocumentationPage $docPage, Request  $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'new_name' => 'required|string|max:256',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $docPage->title = $request->new_name;
+        $docPage->slug = Str::slug($request->new_name);
+        $docPage->save();
+        return response()->json([
+            'success' => true,
+            'message' => "Rename successfully!",
+            'data' => $docPage
+        ]);
     }
 }

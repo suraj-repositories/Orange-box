@@ -1,4 +1,5 @@
 
+
 document.addEventListener('DOMContentLoaded', function () {
     new PageControl().init();
     const icon = document.querySelector('#toggleScreenType');
@@ -135,7 +136,29 @@ class PageControl {
         $(".ob-li-row-cover").not(cover).removeClass("active");
         $(".directory-list").removeClass("active");
 
-        cover.classList.toggle("active");
+
+        cover.classList.add("active");
+        console.log('here');
+        const li = cover.closest('li');
+        if (li) {
+            const uuid = li.getAttribute('data-doc-page-uuid');
+            const loader = document.querySelector('#editor-page-loader');
+            if (loader) loader.classList.remove('d-none');
+
+            PageControl.apiService.getPage(uuid)
+                .then(data => {
+                    PageControl.tabBuilder.createNewTab(data.data.title, data.data);
+                    if (loader) loader.classList.add('d-none');
+                })
+                .catch(error => {
+                    console.error('Failed to create tab:', error);
+                    if (loader) loader.classList.add('d-none');
+
+                })
+                ;
+        }
+
+
 
         if (cover.parentElement.classList.contains("folder")) {
             $(cover.parentElement)
@@ -215,18 +238,23 @@ class PageControl {
 
             li.innerHTML = "";
 
-            PageControl.tabBuilder.createNewTab(
-                fileName,
-                `<p>Content for ${fileName}</p>`
-            );
+            const loader = document.querySelector('#editor-page-loader');
+            if (loader) loader.classList.remove('d-none');
 
+            PageControl.apiService.createPage(fileName, 1, 'file', li)
+                .then(data => {
+                    PageControl.tabBuilder.createNewTab(fileName, {
+                        uuid: data.uuid,
+                        content: `<p>Content for ${fileName}</p>`
+                    });
+                    if (loader) loader.classList.add('d-none');
+                })
+                .catch(error => {
+                    console.error('Failed to create tab:', error);
+                    if (loader) loader.classList.add('d-none');
 
-            PageControl.apiService.createPage(
-                fileName,
-                1,
-                'file',
-                li
-            );
+                })
+                ;
 
             li.appendChild(div);
             li.appendChild(span);
@@ -577,11 +605,12 @@ class PageControl {
         };
 
         const renameItem = (liNode) => {
+
             $(".ob-li-row-cover").removeClass("active");
             if (liNode.querySelector('.inline-rename-input')) return;
-
             const textEl =
                 liNode.querySelector('.folder-name') ||
+                liNode.querySelector('.node-title') ||
                 liNode.querySelector('.li-item');
 
             if (!textEl) return;
@@ -601,6 +630,7 @@ class PageControl {
                 const newValue = input.value.trim() || oldText;
                 textEl.textContent = newValue;
                 input.replaceWith(textEl);
+                PageControl.apiService.renamePage(newValue, liNode.getAttribute('data-doc-page-uuid'));
             };
 
             textEl.replaceWith(input);
@@ -661,7 +691,7 @@ class DocumentationTabs {
         }
     }
 
-    createNewTab(title, content = '', iconClass = 'bi bi-app') {
+    createNewTab(title, pageData = {}, iconClass = 'bi bi-app') {
         const id = `doc-tab-${this.tabIndex++}`;
 
         const li = document.createElement('li');
@@ -691,7 +721,11 @@ class DocumentationTabs {
         pane.className = 'tab-pane fade';
         pane.id = id;
         pane.tabIndex = 0;
-        pane.innerHTML = content;
+        const { block, addButton } = this.createGitEditorBlock(pane);
+        const textarea = block.querySelector('textarea');
+        if (textarea) {
+            textarea.value = pageData.content ?? '';
+        }
 
         this.tabBody.appendChild(pane);
 
@@ -709,6 +743,83 @@ class DocumentationTabs {
 
         return { button, pane };
     }
+
+    createGitEditorBlock(container) {
+        const block = document.createElement('div');
+        block.className = 'git-editor-block';
+
+        const row = document.createElement('div');
+        row.className = 'row';
+
+        const gitPane = document.createElement('div');
+        gitPane.className = 'col-12 mb-3';
+        gitPane.innerHTML = `
+        <label class="form-label">Git Link</label>
+        <div class="d-flex">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-git"></i></span>
+                <input type="text" class="form-control" placeholder="Enter autofetch link">
+            </div>
+            <button type="button" class="btn btn-outline-primary ms-1 px-2">
+                <i class='bx bx-download fs-4'></i>
+            </button>
+        </div>
+    `;
+
+        const editorPane = document.createElement('div');
+        editorPane.className = 'col-12';
+        editorPane.innerHTML = `
+        <label class="form-label">Content</label>
+        <textarea class="form-control" cols="30" rows="3"></textarea>
+    `;
+
+        row.appendChild(gitPane);
+        row.appendChild(editorPane);
+        block.appendChild(row);
+
+        const toolbar = document.createElement('div');
+        toolbar.className = 'tab-editor-toolbar';
+        toolbar.innerHTML = `
+        <ul class="list-inline">
+            <li class="list-inline-item"><button class="tab-editor"><i class='bx bx-pencil'></i></button></li>
+            <li class="list-inline-item"><button class="tab-github"><i class='bx bxl-github'></i></button></li>
+            <li class="list-inline-item"><button class="tab-save"><i class='bx bx-save'></i></button></li>
+        </ul>
+    `;
+        block.appendChild(toolbar);
+
+        function showPane(pane) {
+            gitPane.style.display = pane === 'github' ? 'block' : 'none';
+            editorPane.style.display = pane === 'editor' ? 'block' : 'none';
+
+            toolbar.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            if (pane === 'editor') {
+                toolbar.querySelector('.tab-editor').classList.add('active');
+            } else if (pane === 'github') {
+                toolbar.querySelector('.tab-github').classList.add('active');
+            }
+        }
+
+        showPane('editor');
+
+        toolbar.querySelector('.tab-editor').addEventListener('click', () => showPane('editor'));
+        toolbar.querySelector('.tab-github').addEventListener('click', () => showPane('github'));
+
+        container.appendChild(block);
+
+        return {
+            block,
+            addButton: function (label, callback) {
+                const btn = document.createElement('button');
+                btn.textContent = label;
+                btn.className = 'btn btn-sm btn-secondary ms-1';
+                btn.addEventListener('click', callback);
+                toolbar.appendChild(btn);
+                return btn;
+            }
+        };
+    }
+
 
 
 
@@ -750,11 +861,8 @@ class DocumentationTabs {
     }
 }
 
-
 class ApiService {
     createPage(title, sortOrder, type, liItem) {
-        console.log(liItem.parentElement?.closest('.folder'));
-
         const folder = liItem.classList.contains('folder')
             ? liItem.parentElement?.closest('.folder')
             : liItem.closest('.folder');
@@ -762,7 +870,8 @@ class ApiService {
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const docUuidInput = document.getElementById('documentationUuidInput');
-        fetch(authRoute('user.documentation.pages.create', { documentation: docUuidInput.value }), {
+
+        return fetch(authRoute('user.documentation.pages.create', { documentation: docUuidInput.value }), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -781,13 +890,66 @@ class ApiService {
                     if (liItem) {
                         liItem.setAttribute('data-doc-page-uuid', data.data.uuid);
                     }
+                    return data.data;
                 } else {
-
+                    return Promise.reject(data.message || 'Failed to create page');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
+                return Promise.reject(error);
+            });
+    }
 
+    renamePage(title, uuid) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        return fetch(authRoute('user.documentation.pages.rename', { docPage: uuid }), {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': csrfToken
+            },
+            body: JSON.stringify({
+                new_name: title,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error(data);
+                    return Promise.reject(data.message || 'Rename failed');
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                return Promise.reject(error);
+            });
+    }
+
+    getPage(uuid) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        return fetch(authRoute('user.documentation.pages.get', { docPage: uuid }), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': csrfToken
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error(data);
+                    return Promise.reject(data.message || 'Rename failed');
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                return Promise.reject(error);
             });
     }
 }
+

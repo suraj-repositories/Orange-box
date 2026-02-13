@@ -219,10 +219,11 @@ Route::controller(DocumentationController::class)->group(function () {
 Route::controller(DocumentationPagesController::class)->group(function(){
     Route::get('documentation/{documentation}/pages', 'index')->name('documentation.pages.index');
 
-    Route::get('documentation/{documentation}/get', 'getDocumentationPage')->name('documentation.pages.get');
     Route::post('documentation/{documentation}/pages/create', 'createPage')->name('documentation.pages.create');
+    Route::get('documentation/{docPage}/get', 'getDocumentationPage')->name('documentation.pages.get');
     Route::patch('documentation/{docPage}/update-content', 'updateContent')->name('documentation.pages.udpate.content');
     Route::patch('documentation/{docPage}/update-content-git', 'loadContentFromGit')->name('documentation.pages.git.load.content');
+    Route::patch('documentation/{docPage}/rename', 'renamePageOrFolder')->name('documentation.pages.rename');
 
 
 });

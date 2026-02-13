@@ -2596,6 +2596,11 @@ ul.directory-list.active {
     z-index: 50;
 }
 
+.explorer-contents {
+    margin-right: 50px;
+    overflow-y: auto;
+}
+
 .explorer-contents .nav-link {
     border-radius: 0;
 }
@@ -2660,4 +2665,73 @@ body[data-screen-type="content"] .content-page .content-card .card-header {
 
 body[data-screen-type="content"] .content-page .content-card .card-body {
     height: 100%;
+}
+
+body[data-screen-type="content"] {
+    padding: 0px !important;
+}
+
+.tab-editor-toolbar {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 100%;
+    width: 50px;
+}
+
+.tab-editor-toolbar ul {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    background: var(--bs-light);
+    height: 100%;
+    flex-direction: column;
+    padding: 0;
+}
+
+.tab-editor-toolbar ul li {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+     margin: 0px;
+}
+.tab-editor-toolbar ul li.list-inline-item:not(:last-child){
+    margin-right: 0px;
+}
+.tab-editor-toolbar ul li:first-child{
+
+    margin-top: 10px;
+}
+.tab-editor-toolbar ul li:last-child{
+    margin-top: auto;
+    margin-bottom: 10px;
+}
+.tab-editor-toolbar ul li:last-child button{
+
+    border: 1px solid gray;
+}
+.tab-editor-toolbar ul li button{
+    width: 40px;
+    height: 40px;
+    background-color: var(--bs-light);
+    border: 1px solid var(--bs-light-bg-subtle);
+    color: var(--bs-dark);
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+.tab-editor-toolbar ul li button.active{
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
+
+}
+.explorer-contents .content-pane{
+    min-width: max-content;
+}
+.git-editor-block {
+    padding: 10px;
 }

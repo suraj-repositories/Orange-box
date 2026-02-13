@@ -89,7 +89,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 uploadedImages = currentImages;
             });
 
-
             function deleteImage(src) {
                 if (!src) return;
                 fetch(area.getAttribute('data-image-delete-url') || '/delete/image', {
