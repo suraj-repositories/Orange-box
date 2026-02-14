@@ -32,7 +32,7 @@
         Markdown
     } from '/assets/ckeditor5/ckeditor5.js';
 
-    function initCKEditor(editorElement) {
+    export function initCKEditor(editorElement) {
         if (editorElement.editorInstance) {
             editorElement.editorInstance.destroy()
                 .then(() => {
@@ -46,7 +46,7 @@
         }
     }
 
-    function createEditor(editorElement) {
+    export function createEditor(editorElement) {
         if (editorElement.dataset.editorInitializing === 'true') {
             return;
         }

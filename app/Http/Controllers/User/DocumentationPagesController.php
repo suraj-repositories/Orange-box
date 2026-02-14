@@ -35,6 +35,10 @@ class DocumentationPagesController extends Controller
 
     public function getDocumentationPage(User $user, DocumentationPage $docPage, Request $request)
     {
+        if ($docPage->content_format == 'markdown') {
+            $docPage->content = Str::markdown($docPage->content ?? '');
+        }
+
         return response()->json([
             'success' => true,
             'data' => $docPage
@@ -134,8 +138,12 @@ class DocumentationPagesController extends Controller
         try {
             $content = $this->gitService->loadGitPageContent($request->git_link);
 
-            $docPage->content = $content;
+            $docPage->content = $content ?? '';
+            $docPage->git_link = $request->git_link;
+            $docPage->content_format = 'markdown';
             $docPage->save();
+
+            $docPage->content = Str::markdown($content);
 
             return response()->json([
                 'success' => true,

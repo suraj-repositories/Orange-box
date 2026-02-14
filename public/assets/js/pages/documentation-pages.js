@@ -1,3 +1,5 @@
+import {initCKEditor, createEditor} from "/assets/js/lib-config/ckeditor.init.js";
+
 document.addEventListener('DOMContentLoaded', function () {
     new PageControl().init();
     const icon = document.querySelector('#toggleScreenType');
@@ -683,7 +685,17 @@ class PageControl {
                 const newValue = input.value.trim() || oldText;
                 textEl.textContent = newValue;
                 input.replaceWith(textEl);
-                PageControl.apiService.renamePage(newValue, liNode.getAttribute('data-doc-page-uuid'));
+
+                const uuid = liNode.getAttribute('data-doc-page-uuid');
+                PageControl.apiService.renamePage(newValue, uuid)
+                    .then((data) => {
+                        if (PageControl.tabs.has(uuid)) {
+                            PageControl.tabBuilder.updateTabContent(uuid, data.data);
+                        }
+                    })
+                    .catch((err) => {
+
+                    });
             };
 
             textEl.replaceWith(input);
@@ -734,6 +746,9 @@ class PageControl {
 
 class DocumentationTabs {
 
+    static apiService;
+    static loader;
+
     constructor(tabListId, tabBodyId) {
         this.tabList = document.getElementById(tabListId);
         this.tabBody = document.getElementById(tabBodyId);
@@ -742,6 +757,10 @@ class DocumentationTabs {
         if (!this.tabList || !this.tabBody) {
             throw new Error('Tab container not found');
         }
+
+        DocumentationTabs.apiService = new ApiService();
+
+
     }
 
     createNewTab(title, pageData = {}, {
@@ -780,10 +799,24 @@ class DocumentationTabs {
         pane.id = id;
         pane.tabIndex = 0;
         const { block, addButton } = this.createGitEditorBlock(pane);
+        block.setAttribute('data-page-uuid', pageData.uuid);
+
         const textarea = block.querySelector('textarea');
         if (textarea) {
             textarea.value = pageData.content ?? '';
-        }
+            console.log(pageData.content_markdown);
+            textarea.setAttribute('data-markdown', pageData.content_markdown ?? '');
+            initCKEditor(textarea);
+        };
+
+        const mdArea = block.querySelector('.loaded-md-page');
+        if (mdArea) mdArea.innerHTML = pageData.content ?? '';
+
+        const githubLinkInput = block.querySelector('.github-load-zone input');
+        if (githubLinkInput) githubLinkInput.value = pageData.git_link ?? '';
+
+        const previewZone = block.querySelector('.page-preview-zone');
+        if (previewZone) previewZone.innerHTML = pageData.content ?? '';
 
         this.tabBody.appendChild(pane);
 
@@ -814,7 +847,7 @@ class DocumentationTabs {
         row.className = 'row';
 
         const gitPane = document.createElement('div');
-        gitPane.className = 'col-12 mb-3';
+        gitPane.className = 'col-12 mb-3 github-load-zone';
         gitPane.innerHTML = `
         <label class="form-label">Git Link</label>
         <div class="d-flex">
@@ -822,27 +855,36 @@ class DocumentationTabs {
                 <span class="input-group-text"><i class="bi bi-git"></i></span>
                 <input type="text" class="form-control" placeholder="Enter autofetch link">
             </div>
-            <button type="button" class="btn btn-outline-primary ms-1 px-2">
+            <button type="button" class="btn btn-outline-primary ms-1 px-2 load-button" >
                 <i class='bx bx-download fs-4'></i>
             </button>
         </div>
+        <div class="loaded-md-page"> </div>
     `;
 
         const editorPane = document.createElement('div');
-        editorPane.className = 'col-12';
+        editorPane.className = 'col-12 rich-editor-zone';
         editorPane.innerHTML = `
-        <label class="form-label">Content</label>
-        <textarea class="form-control" cols="30" rows="3"></textarea>
-    `;
+            <textarea class="form-control" cols="30" rows="3"></textarea>
+        `;
+        const previewPane = document.createElement('div');
+        previewPane.className = 'col-12 page-preview-zone';
+        previewPane.innerHTML = "";
 
+        row.appendChild(previewPane);
         row.appendChild(gitPane);
         row.appendChild(editorPane);
         block.appendChild(row);
+
+        const classObj = this;
+        const btn = block.querySelector(".github-load-zone .load-button");
+        btn.addEventListener('click', () => classObj.loadGithubPageButtonClicked(btn, block));
 
         const toolbar = document.createElement('div');
         toolbar.className = 'tab-editor-toolbar';
         toolbar.innerHTML = `
         <ul class="list-inline">
+            <li class="list-inline-item"><button class="tab-preview"><i class='bx bx-show-alt'></i></button></li>
             <li class="list-inline-item"><button class="tab-editor"><i class='bx bx-pencil'></i></button></li>
             <li class="list-inline-item"><button class="tab-github"><i class='bx bxl-github'></i></button></li>
             <li class="list-inline-item"><button class="tab-save"><i class='bx bx-save'></i></button></li>
@@ -851,6 +893,7 @@ class DocumentationTabs {
         block.appendChild(toolbar);
 
         function showPane(pane) {
+            previewPane.style.display = pane === 'preview' ? 'block' : 'none';
             gitPane.style.display = pane === 'github' ? 'block' : 'none';
             editorPane.style.display = pane === 'editor' ? 'block' : 'none';
 
@@ -859,11 +902,14 @@ class DocumentationTabs {
                 toolbar.querySelector('.tab-editor').classList.add('active');
             } else if (pane === 'github') {
                 toolbar.querySelector('.tab-github').classList.add('active');
+            } else if (pane === 'preview') {
+                toolbar.querySelector('.tab-preview').classList.add('active');
             }
         }
 
-        showPane('editor');
+        showPane('preview');
 
+        toolbar.querySelector('.tab-preview').addEventListener('click', () => showPane('preview'));
         toolbar.querySelector('.tab-editor').addEventListener('click', () => showPane('editor'));
         toolbar.querySelector('.tab-github').addEventListener('click', () => showPane('github'));
 
@@ -882,8 +928,23 @@ class DocumentationTabs {
         };
     }
 
+    loadGithubPageButtonClicked(btn, block) {
+        const input = block.querySelector('.github-load-zone input');
+        if (input.value.trim() == '') {
+            console.error("Invalid Input");
+        }
+        const mdArea = block.querySelector('.loaded-md-page');
 
-
+        mdArea.innerHTML = AppUI.loader();
+        DocumentationTabs.apiService.loadGithubLinkPage(block.getAttribute('data-page-uuid'), input.value.trim())
+            .then(data => {
+                mdArea.innerHTML = data.data.content;
+            })
+            .catch(error => {
+                console.error('Failed to load page:', error);
+                mdArea.innerHTML = AppUI.error("Error", error.message);
+            });
+    }
 
     activateTab(button) {
         const targetId = button.dataset.target;
@@ -920,6 +981,16 @@ class DocumentationTabs {
         if (nextButton) {
             this.activateTab(nextButton);
         }
+    }
+
+    updateTabContent(uuid, data) {
+        let tab = document.querySelector(`#documentationExplorerTab li[data-page-uuid='${uuid}']`);
+        if (tab) {
+            const title = tab.querySelector('button .tab-title');
+            if (title) title.textContent = data.title;
+        }
+
+
     }
 }
 
@@ -1013,5 +1084,51 @@ class ApiService {
                 return Promise.reject(error);
             });
     }
+
+    loadGithubLinkPage(uuid, link) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        return fetch(authRoute('user.documentation.pages.git.load.content', { docPage: uuid }), {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': csrfToken
+            },
+            body: JSON.stringify({
+                git_link: link,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error(data);
+                    return Promise.reject(data.message || 'Fetch failed');
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                return Promise.reject(error);
+            });
+    }
+
+
 }
 
+class AppUI {
+    static loader() {
+        return `
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        `;
+    }
+
+    static error(title = "Error", message = "Something went wrong!") {
+        return `<div class="alert alert-danger" role="alert">
+            <strong> ${title} </strong> - ${message}
+        </div>`;
+    }
+}

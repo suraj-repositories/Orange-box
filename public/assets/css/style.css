@@ -2598,7 +2598,7 @@ ul.directory-list.active {
 
 .explorer-contents {
     margin-right: 50px;
-    overflow-y: auto;
+    overflow: hidden !important;
 }
 
 .explorer-contents .nav-link {
@@ -2629,6 +2629,13 @@ ul.directory-list.active {
 
 .explorer-contents .nav.nav-tabs::-webkit-scrollbar-thumb:hover {
     background-color: #666;
+}
+
+.explorer-contents .content-pane {
+    overflow-y: auto;
+    max-height: calc(100vh - 110px);
+    padding-bottom: 0;
+    height: 100%;
 }
 
 body[data-screen-type="content"] .topbar-custom,
@@ -2737,11 +2744,6 @@ body[data-screen-type="content"] {
 }
 
 
-
-.explorer-contents .content-pane {
-    min-width: max-content;
-}
-
 .git-editor-block {
     padding: 10px;
 }
@@ -2759,10 +2761,19 @@ body[data-screen-type="content"] {
     margin-left: 10px;
 }
 
-.explorer-contents .editor-tabs li button{
+.explorer-contents .editor-tabs li button {
     padding-right: 10px;
+    min-width: max-content;
 }
 
-.explorer-contents .editor-tabs li.temp .tab-title{
+.explorer-contents .editor-tabs li.temp .tab-title {
     font-style: italic;
+}
+
+
+.explorer-contents .loaded-md-page {
+    margin-top: 10px;
+    padding: 10px;
+    /* border: 1px solid #d4d4d4; */
+    border-radius: 5px;
 }

@@ -39,7 +39,8 @@
                                     <div class="ms-auto fw-semibold d-flex align-items-center gap-2">
                                         <small class="text-muted" id="sizeIndicator"></small>
 
-                                        <span class="spinner-border spinner-border-sm d-none" aria-hidden="true" id="editor-page-loader"></span>
+                                        <span class="spinner-border spinner-border-sm d-none" aria-hidden="true"
+                                            id="editor-page-loader"></span>
 
                                         <div class="btn-group" role="group" aria-label="Full Screen Toggle">
                                             <input type="checkbox" class="btn-check" id="toggleScreenType"
@@ -80,5 +81,6 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('assets/js/pages/documentation-pages.js') }}"></script>
+    @include('layout.extras.ckeditor5')
+    <script type="module" src="{{ asset('assets/js/pages/documentation-pages.js') }}"></script>
 @endsection
