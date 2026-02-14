@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', function () {
     new PageControl().init();
     const icon = document.querySelector('#toggleScreenType');
@@ -12,10 +10,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+
 class PageControl {
 
     static tabBuilder;
     static apiService;
+    static tabs = new Set();
 
     init() {
         this.enableSidebar();
@@ -105,7 +105,17 @@ class PageControl {
             cover.addEventListener("click", function (e) {
                 e.stopPropagation();
 
-                classObj.sidebarCoverEvent(this);
+                if (e.detail === 1) {
+                    setTimeout(() => {
+                        if (e.detail === 1) {
+                            classObj.sidebarCoverEvent(this);
+                        }
+                    }, 250);
+                }
+
+                if (e.detail === 2) {
+                    classObj.sidebarCoverEvent(this, 'double');
+                }
             });
         });
 
@@ -132,22 +142,38 @@ class PageControl {
         });
     }
 
-    sidebarCoverEvent(cover) {
+    sidebarCoverEvent(cover, clickType = "single") {
+        console.log(clickType == 'single' ? 'single click' : 'double click');
+
         $(".ob-li-row-cover").not(cover).removeClass("active");
         $(".directory-list").removeClass("active");
-
-
         cover.classList.add("active");
-        console.log('here');
         const li = cover.closest('li');
-        if (li) {
+
+        if (li && !li.classList.contains('folder')) {
             const uuid = li.getAttribute('data-doc-page-uuid');
             const loader = document.querySelector('#editor-page-loader');
             if (loader) loader.classList.remove('d-none');
 
             PageControl.apiService.getPage(uuid)
                 .then(data => {
-                    PageControl.tabBuilder.createNewTab(data.data.title, data.data);
+                    console.log(data.uuid);
+                    const tempTab = document.querySelector("#documentationExplorerTab li.temp");
+
+                    if (!PageControl.tabs.has(data.data.uuid)) {
+                        if (tempTab) {
+                            const closeBtn = tempTab.querySelector('.tab-close');
+                            if (closeBtn) closeBtn.click();
+                        }
+                        PageControl.tabBuilder.createNewTab(data.data.title, data.data, { isTemp: clickType == 'single' });
+                        PageControl.tabs.add(data.data.uuid);
+
+                    } else {
+                        if (tempTab && tempTab.getAttribute('data-page-uuid') == data.data.uuid) {
+                            tempTab.classList.remove('temp');
+                        }
+                    }
+
                     if (loader) loader.classList.add('d-none');
                 })
                 .catch(error => {
@@ -158,8 +184,6 @@ class PageControl {
                 ;
         }
 
-
-
         if (cover.parentElement.classList.contains("folder")) {
             $(cover.parentElement)
                 .children("ul")
@@ -167,6 +191,7 @@ class PageControl {
                 .slideToggle("fast");
         }
     }
+
 
     enableSeperator(element) {
         let startX = 0;
@@ -247,6 +272,9 @@ class PageControl {
                         uuid: data.uuid,
                         content: `<p>Content for ${fileName}</p>`
                     });
+                    PageControl.tabs.add(uuid);
+
+
                     if (loader) loader.classList.add('d-none');
                 })
                 .catch(error => {
@@ -260,7 +288,21 @@ class PageControl {
             li.appendChild(span);
             cleanup();
             div.addEventListener('click', () => {
-                classObj.sidebarCoverEvent(div);
+
+                element.addEventListener('click', function (e) {
+                    if (e.detail === 1) {
+                        setTimeout(() => {
+                            if (e.detail === 1) {
+                                classObj.sidebarCoverEvent(div);
+                            }
+                        }, 250);
+                    }
+
+                    if (e.detail === 2) {
+                        classObj.sidebarCoverEvent(div, 'double');
+                    }
+                });
+
             });
             classObj.enableDraggable();
         };
@@ -342,7 +384,18 @@ class PageControl {
 
             cleanup();
             rowCover.addEventListener('click', () => {
-                classObj.sidebarCoverEvent(rowCover);
+
+                if (e.detail === 1) {
+                    setTimeout(() => {
+                        if (e.detail === 1) {
+                            classObj.sidebarCoverEvent(rowCover);
+                        }
+                    }, 250);
+                }
+
+                if (e.detail === 2) {
+                    classObj.sidebarCoverEvent(rowCover, 'double');
+                }
             });
             classObj.enableDraggable();
         };
@@ -691,11 +744,16 @@ class DocumentationTabs {
         }
     }
 
-    createNewTab(title, pageData = {}, iconClass = 'bi bi-app') {
+    createNewTab(title, pageData = {}, {
+        iconClass = 'bi bi-app',
+        isActive = true,
+        isTemp = true
+    } = {}) {
         const id = `doc-tab-${this.tabIndex++}`;
 
         const li = document.createElement('li');
-        li.className = 'nav-item';
+        li.className = `nav-item ${isTemp ? 'temp' : ''}`;
+        li.setAttribute('data-page-uuid', pageData.uuid);
 
         const button = document.createElement('button');
         button.className = 'nav-link d-flex align-items-center gap-2';
@@ -733,12 +791,16 @@ class DocumentationTabs {
 
         button.addEventListener('click', (e) => {
             if (e.target === closeBtn) return;
+            if (e.target == text && e.detail === 2) {
+                li.classList.remove('temp');
+            }
             this.activateTab(button);
         });
 
         closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             this.closeTab(button);
+            PageControl.tabs.delete(pageData.uuid);
         });
 
         return { button, pane };

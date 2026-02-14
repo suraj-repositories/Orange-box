@@ -2695,24 +2695,29 @@ body[data-screen-type="content"] {
     display: flex;
     align-items: center;
     justify-content: center;
-     margin: 0px;
+    margin: 0px;
 }
-.tab-editor-toolbar ul li.list-inline-item:not(:last-child){
+
+.tab-editor-toolbar ul li.list-inline-item:not(:last-child) {
     margin-right: 0px;
 }
-.tab-editor-toolbar ul li:first-child{
+
+.tab-editor-toolbar ul li:first-child {
 
     margin-top: 10px;
 }
-.tab-editor-toolbar ul li:last-child{
+
+.tab-editor-toolbar ul li:last-child {
     margin-top: auto;
     margin-bottom: 10px;
 }
-.tab-editor-toolbar ul li:last-child button{
+
+.tab-editor-toolbar ul li:last-child button {
 
     border: 1px solid gray;
 }
-.tab-editor-toolbar ul li button{
+
+.tab-editor-toolbar ul li button {
     width: 40px;
     height: 40px;
     background-color: var(--bs-light);
@@ -2724,14 +2729,40 @@ body[data-screen-type="content"] {
     justify-content: center;
     border-radius: 5px;
 }
-.tab-editor-toolbar ul li button.active{
+
+.tab-editor-toolbar ul li button.active {
     background-color: var(--bs-dark);
     color: var(--bs-light);
 
 }
-.explorer-contents .content-pane{
+
+
+
+.explorer-contents .content-pane {
     min-width: max-content;
 }
+
 .git-editor-block {
     padding: 10px;
+}
+
+.explorer-contents ul li .tab-close {
+    width: 20px;
+    height: 20px;
+    color: #373535;
+    background: #f1f1f1;
+    border: 1px solid #d1d1d1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.explorer-contents .editor-tabs li button{
+    padding-right: 10px;
+}
+
+.explorer-contents .editor-tabs li.temp .tab-title{
+    font-style: italic;
 }

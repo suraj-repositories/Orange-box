@@ -3,7 +3,7 @@
 
 @section('content')
     <div class="content-page">
-        <div class="content files">
+        <div class="content files ob-doc-editor">
             <div class="container-xxl">
 
                 <div class="page-bredcrumb py-3 d-flex align-items-sm-center flex-sm-row flex-column">
