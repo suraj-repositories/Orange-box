@@ -8,6 +8,7 @@ use App\Http\Controllers\Common\ProjectBoardController;
 use App\Http\Controllers\Common\ProjectModuleController;
 use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Common\UserController;
+use App\Http\Controllers\Docs\DocumentationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Test\TestingController;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +62,10 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
         Route::post('settings/notifications/toggle', 'toggleNotificationSettings')->name('settings.security.notification.toggle');
 
         Route::post('settings/theme/{theme}', 'changeAppTheme')->name('settings.theme.update');
-
     });
 });
+Route::get(
+    '/{user:username}/docs/{slug}/{path?}',
+    [DocumentationController::class, 'show']
+)->where('path', '.*')
+ ->name('docs.show');

@@ -1,4 +1,4 @@
-import {initCKEditor, createEditor} from "/assets/js/lib-config/ckeditor.init.js";
+import { initCKEditor, createEditor } from "/assets/js/lib-config/ckeditor.init.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     new PageControl().init();
@@ -807,16 +807,27 @@ class DocumentationTabs {
             console.log(pageData.content_markdown);
             textarea.setAttribute('data-markdown', pageData.content_markdown ?? '');
             initCKEditor(textarea);
+
+            // const div = document.createElement('div');
+            // textarea.insertAdjacentElement('afterend', div);
+            // new toastui.Editor({
+            //     el: div,
+            //     height: '500px',
+            //     initialEditType: 'markdown',
+            //     previewStyle: 'tab',
+            //     initialValue: pageData.content_markdown
+            // });
+
         };
 
         const mdArea = block.querySelector('.loaded-md-page');
-        if (mdArea) mdArea.innerHTML = pageData.content ?? '';
+        if (mdArea) mdArea.innerHTML = pageData.content_html ?? '';
 
         const githubLinkInput = block.querySelector('.github-load-zone input');
         if (githubLinkInput) githubLinkInput.value = pageData.git_link ?? '';
 
         const previewZone = block.querySelector('.page-preview-zone');
-        if (previewZone) previewZone.innerHTML = pageData.content ?? '';
+        if (previewZone) previewZone.innerHTML = pageData.content_html ?? '';
 
         this.tabBody.appendChild(pane);
 

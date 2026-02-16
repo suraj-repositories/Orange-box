@@ -175,4 +175,9 @@ class User extends Authenticatable
 
         return $relation;
     }
+
+    public function documentationPages()
+    {
+        return $this->hasMany(DocumentationPage::class);
+    }
 }

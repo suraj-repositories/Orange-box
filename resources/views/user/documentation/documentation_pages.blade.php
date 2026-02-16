@@ -1,6 +1,11 @@
 @extends('user.layout.layout')
 @section('title', 'Pages')
 
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/libs/tui-editor/css/tui-editor.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/libs/tui-editor/css/tui-editor-contents.css') }}"> --}}
+@endsection
+
 @section('content')
     <div class="content-page">
         <div class="content files ob-doc-editor">
@@ -82,5 +87,6 @@
 
 @section('js')
     @include('layout.extras.ckeditor5')
+    <script src="{{ asset('assets/libs/tui-editor/js/tui-editor.js') }}"></script>
     <script type="module" src="{{ asset('assets/js/pages/documentation-pages.js') }}"></script>
 @endsection

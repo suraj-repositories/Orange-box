@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class DocumentationPage extends Model
 {
@@ -58,13 +59,32 @@ class DocumentationPage extends Model
         return $this->children()->with('childrenRecursive');
     }
 
-    public function getContentMarkdownAttribute(){
+    public function getContentMarkdownAttribute()
+    {
         return $this->content_format == 'markdown' ? $this->content : '';
     }
-    public function getContentHtmlAttribute(){
+    public function getContentHtmlAttribute()
+    {
+        if ($this->content_format === 'markdown') {
+            return Str::markdown($this->content ?? '');
+        }
         return $this->content_format == 'html' ? $this->content : '';
     }
-    public function getContentEditorjsAttribute(){
+    public function getContentEditorjsAttribute()
+    {
         return $this->content_format == 'editorjs' ? $this->content : '';
+    }
+
+    public function getFullPathAttribute()
+    {
+        $segments = [];
+        $page = $this;
+
+        while ($page) {
+            array_unshift($segments, $page->slug);
+            $page = $page->parent;
+        }
+
+        return implode('/', $segments);
     }
 }

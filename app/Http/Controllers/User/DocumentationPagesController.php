@@ -35,9 +35,6 @@ class DocumentationPagesController extends Controller
 
     public function getDocumentationPage(User $user, DocumentationPage $docPage, Request $request)
     {
-        if ($docPage->content_format == 'markdown') {
-            $docPage->content = Str::markdown($docPage->content ?? '');
-        }
 
         return response()->json([
             'success' => true,
@@ -143,7 +140,7 @@ class DocumentationPagesController extends Controller
             $docPage->content_format = 'markdown';
             $docPage->save();
 
-            $docPage->content = Str::markdown($content);
+            $docPage->content_html = Str::markdown($content);
 
             return response()->json([
                 'success' => true,
