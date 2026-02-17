@@ -38,6 +38,70 @@ class DocumentationController extends Controller
             ->with('childrenRecursive')
             ->get();
 
-        return view('docs.index', compact('documentation', 'pages', 'currentPage'));
+        $flatPages = $this->flattenPages($pages);
+        $filePages = $flatPages->where('type', 'file')->values();
+
+        $previousPage = null;
+        $nextPage = null;
+
+        if ($currentPage && $currentPage->type === 'file') {
+
+            $currentIndex = $filePages->search(
+                fn($p) => $p->id === $currentPage->id
+            );
+
+            if ($currentIndex !== false) {
+                $previousPage = $filePages->get($currentIndex - 1);
+                $nextPage = $filePages->get($currentIndex + 1);
+            }
+        }
+
+        $previousPath = null;
+        $nextPath = null;
+
+        if ($previousPage) {
+            $previousPage->load('parent');
+            $previousPath = $this->buildFullPath($previousPage);
+        }
+
+        if ($nextPage) {
+            $nextPage->load('parent');
+            $nextPath = $this->buildFullPath($nextPage);
+        }
+
+        return view('docs.index', compact(
+            'documentation',
+            'pages',
+            'currentPage',
+            'previousPage',
+            'nextPage',
+            'previousPath',
+            'nextPath'
+        ));
+    }
+
+    private function flattenPages($pages, &$flat = [])
+    {
+        foreach ($pages as $page) {
+            $flat[] = $page;
+
+            if ($page->childrenRecursive->isNotEmpty()) {
+                $this->flattenPages($page->childrenRecursive, $flat);
+            }
+        }
+
+        return collect($flat);
+    }
+
+    private function buildFullPath($page)
+    {
+        $segments = [];
+
+        while ($page) {
+            array_unshift($segments, $page->slug);
+            $page = $page->parent;
+        }
+
+        return implode('/', $segments);
     }
 }

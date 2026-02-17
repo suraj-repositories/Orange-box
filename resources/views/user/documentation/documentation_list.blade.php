@@ -65,7 +65,6 @@
                                         @forelse ($documentations as $doc)
                                             <tr>
                                                 <td>
-
                                                     {{ $documentations->firstItem() + $loop->iteration - 1 }}
                                                 </td>
                                                 <td>

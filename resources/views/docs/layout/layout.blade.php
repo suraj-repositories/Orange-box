@@ -4,10 +4,11 @@
 
     @include('docs.layout.navbar')
 
-    @include('docs.layout.sidebar')
+    <div class="container-xxl">
+        @include('docs.layout.sidebar')
 
-
-    @yield('content')
+        @yield('content')
+    </div>
 
 </div>
 

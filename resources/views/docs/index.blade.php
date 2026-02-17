@@ -2,36 +2,76 @@
 @section('title', $currentPage->title ?? '🟢🟢🟢')
 
 @section('content')
-
     <div class="content-page analytics-dashboard">
         <div class="content">
-
-            <!-- Start Content-->
             <div class="container-xxl">
-
                 <div class="row g-3">
                     <div class="col-12 col-md-9">
-                        <div class="container mt-3" id="documentationContent">
-                            {!! $currentPage->content_html ?? '' !!}
+                        <div class="container mt-3 px-4 mb-5">
+                            <div id="documentationContent">
+                                {!! $currentPage->content_html ?? '' !!}
+                            </div>
+                            <hr>
+                            @if ($previousPage || $nextPage)
+                                <div class="doc-pagination d-flex justify-content-between">
+
+                                    @if ($previousPage)
+                                        <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $previousPath]) }}"
+                                            class="prev-btn">
+
+                                            <div class="prev-text">
+                                                <i class='bx bx-chevrons-left'></i> Previous
+                                            </div>
+
+                                            <div class="prev-page-title">
+                                                {{ $previousPage->title }}
+                                            </div>
+                                        </a>
+                                    @endif
+
+                                    @if ($nextPage)
+                                        <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $nextPath]) }}"
+                                            class="next-btn text-end">
+
+                                            <div class="next-text">
+                                                Next <i class='bx bx-chevrons-right'></i>
+                                            </div>
+
+                                            <div class="next-page-title">
+                                                {{ $nextPage->title }}
+                                            </div>
+                                        </a>
+                                    @endif
+
+                                </div>
+                            @endif
+
+
+
                         </div>
                     </div>
+
                     <div class="col-12 col-md-3">
-                        <nav id="navbar-example3" class="h-100 flex-column align-items-stretch pe-4 border-end">
-                            <nav class="nav nav-pills flex-column">
+                        <nav id="navbar-example3" class="sticky-sidebar">
+                            <div class="on-this-page">On This Page</div>
+
+                            <div class="nav nav-pills flex-column position-relative">
+                                <div class="active-indicator"></div>
                                 <div class="text-center">
                                     <div class="spinner-border" role="status">
                                         <span class="visually-hidden">Loading...</span>
                                     </div>
                                 </div>
-                            </nav>
+                            </div>
+
                         </nav>
                     </div>
-
                 </div>
 
 
+
             </div>
-        </div> <!-- content -->
+        </div>
 
         <!-- Footer Start -->
         @include('layout.components.copyright')
@@ -42,76 +82,5 @@
 @endsection
 
 @section('js')
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            generateScrollSpy();
-            document.querySelectorAll('#navbar-example3 a').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href'))
-                        .scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                });
-            });
-        });
-
-        function generateScrollSpy() {
-            const content = document.getElementById('documentationContent');
-            const navContainer = document.querySelector('#navbar-example3 .nav');
-
-            if (!content || !navContainer) return;
-
-            navContainer.innerHTML = '';
-
-            const headings = content.querySelectorAll('h2, h3');
-
-            let currentParentNav = null;
-
-            headings.forEach((heading, index) => {
-
-                // Create ID if not exists
-                if (!heading.id) {
-                    heading.id = heading.textContent
-                        .toLowerCase()
-                        .trim()
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/(^-|-$)/g, '');
-                }
-
-                if (heading.tagName === 'H2') {
-
-                    // Create parent link
-                    const parentLink = document.createElement('a');
-                    parentLink.className = 'nav-link';
-                    parentLink.href = `#${heading.id}`;
-                    parentLink.textContent = heading.textContent;
-
-                    navContainer.appendChild(parentLink);
-
-                    // Create child container
-                    currentParentNav = document.createElement('nav');
-                    currentParentNav.className = 'nav nav-pills flex-column';
-                    navContainer.appendChild(currentParentNav);
-
-                } else if (heading.tagName === 'H3' && currentParentNav) {
-
-                    const childLink = document.createElement('a');
-                    childLink.className = 'nav-link ms-3 my-1';
-                    childLink.href = `#${heading.id}`;
-                    childLink.textContent = heading.textContent;
-
-                    currentParentNav.appendChild(childLink);
-                }
-            });
-
-            // Activate Bootstrap ScrollSpy
-            new bootstrap.ScrollSpy(document.body, {
-                target: '#navbar-example3',
-                offset: 100
-            });
-        }
-    </script>
-
-
+    <script src="{{ asset('assets/js/pages/docs/index.js') }}"></script>
 @endsection
