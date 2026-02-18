@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Documentation extends Model
@@ -49,6 +50,6 @@ class Documentation extends Model
     }
 
     public function getLogoUrlAttribute(){
-        return $this->logo;
+        return Storage::url($this->logo);
     }
 }

@@ -1,10 +1,35 @@
 enableDarkTheme("#themeToggle");
 document.addEventListener('DOMContentLoaded', function () {
-
+    enableSidebarBackdropCloseable();
     generateScrollSpy();
     smoothScrollBehaviour();
     enableScrollpsyIndicator();
 });
+
+function enableSidebarBackdropCloseable() {
+    const sidebarBackdrop = document.querySelector('.app-sidebar-menu');
+    if (!sidebarBackdrop) return;
+
+    const mediaQuery = window.matchMedia("(max-width: 1040px)");
+
+    function handleClick(e) {
+        if (!e.target.closest('.simplebar-content')) {
+            document.body.setAttribute('data-sidebar', 'hidden');
+        }
+    }
+
+    function checkScreen(e) {
+        if (e.matches) {
+            sidebarBackdrop.addEventListener('click', handleClick);
+        } else {
+            sidebarBackdrop.removeEventListener('click', handleClick);
+        }
+    }
+
+    checkScreen(mediaQuery);
+    mediaQuery.addEventListener('change', checkScreen);
+}
+
 function enableDarkTheme(selector) {
 
     const toggle = document.querySelector(selector);
@@ -36,17 +61,18 @@ function enableDarkTheme(selector) {
     }
 
     if (toggle) {
-        toggle.addEventListener("change", function () {
+        toggle.addEventListener("change", function (e) {
+            console.log(e.target, 'clicked');
             const theme = this.checked ? "dark" : "light";
             applyTheme(theme);
         });
     }
 
-    systemDark.addEventListener("change", function (e) {
-        if (!getSavedTheme()) {
-            applyTheme(e.matches ? "dark" : "light");
-        }
-    });
+    // systemDark.addEventListener("change", function (e) {
+    //     if (!getSavedTheme()) {
+    //         applyTheme(e.matches ? "dark" : "light");
+    //     }
+    // });
 }
 
 

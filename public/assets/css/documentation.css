@@ -1,15 +1,19 @@
 :root {
     --light: #ffffff;
     --gray-100: #d8d8d890;
+    --gray-200: #c1c0c0ab;
+    --gray-300: #bfbebec0;
+    --gray-400: #d8d8d8ec;
 
     --text-dark: #2f384f;
     --text-second-dark: #757575;
-    --primary: #ff9015;
+
+    --primary: #4fd675;
 }
 
 body[data-theme="dark"] {
-    --light: #363636;
-    --gray-100: #43434390;
+    --light: #2a2b2c;
+    --gray-100: #494c4eca;
 
     --text-dark: #ffffff;
     --text-second-dark: #dbdbdb;
@@ -18,6 +22,11 @@ body[data-theme="dark"] {
 body {
     background-color: var(--light);
     overflow: visible;
+    color: var(--text-dark);
+}
+
+a{
+    color: var(--primary);
 }
 
 .app-layout {
@@ -44,12 +53,18 @@ body {
     top: 0;
     box-shadow: none;
     border-bottom: 1px solid var(--gray-100);
+    background-color: var(--light);
 }
 
 .app-sidebar-menu {
     top: 55px;
     padding-top: 10px;
     border-right: 1px solid var(--gray-100);
+    background-color: var(--light);
+}
+
+body[data-sidebar="hidden"] .app-sidebar-menu {
+    border-right: none;
 }
 
 .logo-box {
@@ -63,9 +78,29 @@ body {
     line-height: 55px;
 }
 
+.logo-box .logo span {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .logo-box .logo img {
-    top: -7px;
     position: relative;
+    height: 50px;
+    max-width: 150px;
+    object-fit: contain;
+    top: 0;
+    left: 0;
+    left: 20px;
+    padding: 5px 0;
+}
+#sidebar-menu .menuitem-active .active, #sidebar-menu .menuitem-active>a{
+    color: var(--primary);
+}
+
+#preloader .spinner{
+    border-top: 5px solid var(--primary);
 }
 
 @media (min-width: 1400px) {
@@ -95,7 +130,18 @@ body {
     padding: 2px 20px;
     color: var(--text-dark);
     font-size: .78rem;
+}
 
+p {
+    color: var(--text-dark);
+}
+
+.text-muted {
+    color: var(--text-second-dark) !important;
+}
+
+.topbar-custom .topnav-menu .nav-link {
+    color: var(--text-dark);
 }
 
 #sidebar-menu>ul>li>a {
@@ -246,8 +292,6 @@ body {
 }
 
 
-/* From Uiverse.io by JkHuger */
-/* Default */
 .theme {
     display: flex;
     align-items: center;
@@ -263,7 +307,7 @@ body {
     background-color: var(--bg);
     display: block;
     mix-blend-mode: difference;
-    position: fixed;
+    position: relative;
     inset: 0;
     height: 100%;
     transform: translateX(-100%);
@@ -471,16 +515,112 @@ ul.topnav-menu button i.bx {
 }
 
 .topbar-search input {
-    border-color: #d9d9d9bf;
+    background-color: var(--light) !important;
+    color: var(--text-dark);
+    border: 1px solid var(--gray-100);
 }
 
 .topbar-search .shortcut-badge {
     position: absolute;
     top: 6px;
-    background: #e5e5e5ce;
+    background: #e5e5e594;
     border-radius: 7px;
     padding: 3px 10px;
     right: 8px;
-    color: #949494d5;
+    color: var(--text);
+
+}
+
+
+.vp-local-nav {
+    width: 100%;
+    height: 55px;
+    background-color: var(--light);
+    border-bottom: 1px solid var(--gray-100);
+    margin-top: 55px;
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vp-local-nav button {
+    height: 53px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--light);
+    color: var(--text-dark);
+    border: none;
+    padding: 0 15px;
+
+}
+
+.vp-local-nav button i {
+    font-size: 20px;
+    margin: 0 5px;
+}
+
+@media(max-width: 1040px) {
+    .vp-local-nav {
+        display: flex;
+        position: sticky;
+        top: 0;
+        left: 0;
+    }
+
+    .topbar-custom {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+
+    .content-page {
+        margin-top: 20px;
+        margin-left: 0;
+    }
+
+    .app-sidebar-menu {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 5000 !important;
+        width: 100%;
+        background: #3f3f3f5e;
+        padding-top: 0;
+        overflow: hidden;
+    }
+
+    .app-sidebar-menu .simplebar-content {
+        background-color: var(--light);
+        width: 260px;
+        max-width: 90%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow-y: auto;
+        padding: 20px 0 !important;
+    }
+
+    .app-sidebar-menu .simplebar-content::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .app-sidebar-menu .simplebar-content::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .app-sidebar-menu .simplebar-content::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    .app-sidebar-menu .simplebar-content::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    body[data-sidebar="hidden"] .app-sidebar-menu {
+        display: none;
+        width: 0px;
+    }
 
 }

@@ -2,12 +2,14 @@
 @section('title', $currentPage->title ?? '🟢🟢🟢')
 
 @section('content')
-    <div class="content-page analytics-dashboard">
+
+    <div class="content-page">
         <div class="content">
+
             <div class="container-xxl">
                 <div class="row g-3">
                     <div class="col-12 col-md-9">
-                        <div class="container mt-3 px-4 mb-5">
+                        <div class="container mt-3 px-1 px-sm-4 mb-5">
                             <div id="documentationContent">
                                 {!! $currentPage->content_html ?? '' !!}
                             </div>
@@ -31,7 +33,7 @@
 
                                     @if ($nextPage)
                                         <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $nextPath]) }}"
-                                            class="next-btn text-end">
+                                            class="next-btn text-end {{ !$previousPage ? 'ms-auto' : '' }}">
 
                                             <div class="next-text">
                                                 Next <i class='bx bx-chevrons-right'></i>

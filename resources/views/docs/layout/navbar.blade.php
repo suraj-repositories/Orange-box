@@ -9,7 +9,7 @@
                                 <img src="{{ asset('assets/images/logo-sm.png') }}" alt="">
                             </span>
                             <span class="logo-lg">
-                                <img src="{{ asset('assets/images/logo-light.png') }}" alt="">
+                                <img src="{{ $documentation->logo_url }}" alt="">
                             </span>
                         </a>
                         <a class='logo logo-dark' href='index.html'>
@@ -17,17 +17,17 @@
                                 <img src="{{ asset('assets/images/logo-sm.png') }}" alt="">
                             </span>
                             <span class="logo-lg">
-                                <img src="{{ asset('assets/images/logo-dark.png') }}" alt="">
+                                <img src="{{ $documentation->logo_url }}" alt="">
                             </span>
                         </a>
                     </div>
                 </li>
 
-                <li>
+                {{-- <li>
                     <button class="button-toggle-menu nav-link ps-0">
                         <i data-feather="menu" class="noti-icon"></i>
                     </button>
-                </li>
+                </li> --}}
                 <li class="d-none d-lg-block">
                     <div class="position-relative topbar-search">
                         <input type="text" class="form-control bg-light bg-opacity-75 ps-4" placeholder="Search...">
@@ -86,10 +86,10 @@
                 </li>
 
                 <li>
-                    <label for="theme" class="theme">
+                    <label for="themeToggle" class="theme">
                         <span class="theme__toggle-wrap">
                             <input id="themeToggle" class="theme__toggle" type="checkbox" role="switch" name="theme"
-                                value="dark">
+                                value="dark" />
                             <span class="theme__fill"></span>
                             <span class="theme__icon">
                                 <span class="theme__icon-part"></span>
