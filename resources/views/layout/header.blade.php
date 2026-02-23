@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-sidebar="default">
 
 <head>
 
@@ -14,6 +14,11 @@
     <!-- App favicon -->
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/ico" />
 
+    @if (Route::is('user.documentation.pages.index'))
+        <script src="{{ asset('assets/js/pages/documentation-editor-preload.js') }}"></script>
+    @endif
+
+    <script src="{{ asset('assets/js/init.js') }}"></script>
     <!-- App css -->
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" type="text/css" id="app-style" />
@@ -29,7 +34,7 @@
     <!-- Oranbyte Toastify -->
     <link rel="stylesheet" href="{{ asset('assets/libs/oranbyte-toastify/oranbyte-toastify.css') }}">
     <script src="{{ asset('assets/libs/oranbyte-toastify/oranbyte-toastify.js') }}"></script>
-    <script src="{{ asset('assets/js/initial.js') }}"></script>
+
 
     @yield('css')
 
@@ -48,7 +53,7 @@
 </head>
 
 <body data-app-theme="{{ auth()?->user()?->theme?->theme_key ?? 'orange_box' }}" data-menu-color="light"
-    data-sidebar="default">
+    >
 
     <div id="preloader">
         <div class="spinner"></div>

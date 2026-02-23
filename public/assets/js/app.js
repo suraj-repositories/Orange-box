@@ -221,7 +221,7 @@ class App {
 
     initMenu() {
         var self = this;
-        var body = document.body;
+        var body = document.documentElement;
 
         // Menu Toggle Button ( Placed in Topbar) (Left menu collapse)
         var menuToggleBtn = document.querySelector('.button-toggle-menu');

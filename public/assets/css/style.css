@@ -2638,43 +2638,43 @@ ul.directory-list.active {
     height: 100%;
 }
 
-body[data-screen-type="content"] .topbar-custom,
-body[data-screen-type="content"] footer.footer,
-body[data-screen-type="content"] .app-sidebar-menu,
-body[data-screen-type="content"] .page-bredcrumb {
+[data-screen-type="content"] .topbar-custom,
+[data-screen-type="content"] footer.footer,
+[data-screen-type="content"] .app-sidebar-menu,
+[data-screen-type="content"] .page-bredcrumb {
     display: none !important;
 }
 
-body[data-screen-type="content"] .directory-list {
+[data-screen-type="content"] .directory-list {
     margin-bottom: 10px;
 }
 
-body[data-screen-type="content"] .content-page {
+[data-screen-type="content"] .content-page {
     margin: 0 !important;
     padding: 0 !important;
 }
 
-body[data-screen-type="content"] .content-page .container-xxl {
+[data-screen-type="content"] .content-page .container-xxl {
     max-width: 100%;
     padding: 0;
 }
 
-body[data-screen-type="content"] .content-page .content-card {
+[data-screen-type="content"] .content-page .content-card {
     margin: 0;
     padding: 0;
     height: 100vh;
     overflow: hidden;
 }
 
-body[data-screen-type="content"] .content-page .content-card .card-header {
+[data-screen-type="content"] .content-page .content-card .card-header {
     height: 70px !important;
 }
 
-body[data-screen-type="content"] .content-page .content-card .card-body {
+[data-screen-type="content"] .content-page .content-card .card-body {
     height: 100%;
 }
 
-body[data-screen-type="content"] {
+[data-screen-type="content"] {
     padding: 0px !important;
 }
 

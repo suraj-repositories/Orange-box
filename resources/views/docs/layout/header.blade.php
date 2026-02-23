@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-sidebar="default">
 
 <head>
 
@@ -13,6 +13,8 @@
 
     <!-- App favicon -->
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/ico" />
+
+    <script src="{{ asset('assets/js/pages/docs/init.js') }}"></script>
 
     <!-- App css -->
     <link href="{{ asset('assets/css/app.min.css') }}" rel="stylesheet" type="text/css" id="app-style" />
@@ -30,7 +32,7 @@
     @yield('css')
 </head>
 
-<body data-menu-color="light" data-sidebar="default">
+<body data-menu-color="light" >
 
     <div id="preloader">
         <div class="spinner"></div>

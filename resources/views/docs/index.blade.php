@@ -8,11 +8,17 @@
 
             <div class="container-xxl">
                 <div class="row g-3">
-                    <div class="col-12 col-md-9">
+                    <div class="col-12 col-xl-9">
                         <div class="container mt-3 px-1 px-sm-4 mb-5">
-                            <div id="documentationContent">
+                            <div id="documentationContent" class="documentation-content">
                                 {!! $currentPage->content_html ?? '' !!}
                             </div>
+
+                            <a href="#" class="d-flex align-items-center my-5 edit-on-github">
+                                <i class='bx bx-edit'></i>
+                                <span>Edit this page on GitHub</span>
+                            </a>
+
                             <hr>
                             @if ($previousPage || $nextPage)
                                 <div class="doc-pagination d-flex justify-content-between">
@@ -45,16 +51,20 @@
                                         </a>
                                     @endif
 
+
+
                                 </div>
                             @endif
 
-
+                            <div class="my-5 d-flex align-items-center justify-content-center">
+                                <x-docs.feedback-component />
+                            </div>
 
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-3">
-                        <nav id="navbar-example3" class="sticky-sidebar">
+                    <div class="col-12 col-xl-3 scrollpsy-column">
+                        <nav id="scrollpsy-nav" class="sticky-sidebar">
                             <div class="on-this-page">On This Page</div>
 
                             <div class="nav nav-pills flex-column position-relative">
@@ -75,9 +85,7 @@
             </div>
         </div>
 
-        <!-- Footer Start -->
         @include('layout.components.copyright')
-        <!-- end Footer -->
 
     </div>
 

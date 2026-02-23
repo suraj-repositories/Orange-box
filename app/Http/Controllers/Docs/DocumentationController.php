@@ -12,7 +12,9 @@ class DocumentationController extends Controller
 {
     public function show(User $user, $slug, $path = null)
     {
-        $documentation = Documentation::where('user_id', $user->id)->where('url', $slug ?? '')->firstOrFail();
+        $documentation = Documentation::where('user_id', $user->id)
+            ->where('url', $slug ?? '')
+            ->firstOrFail();
 
         abort_unless($documentation->user_id === $user->id, 404);
 
@@ -22,13 +24,45 @@ class DocumentationController extends Controller
         $parentId = null;
 
         foreach ($segments as $segment) {
+
             $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
                 ->where('parent_id', $parentId)
                 ->where('slug', $segment)
                 ->where('is_published', 1)
-                ->firstOrFail();
+                ->first();
+
+            if (!$currentPage) {
+                abort(404, 'Page not found!');
+            }
 
             $parentId = $currentPage->id;
+        }
+
+
+        if (count($segments) === 0) {
+
+            $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
+                ->whereNull('parent_id')
+                ->orderBy('sort_order')
+                ->where('is_published', 1)
+                ->first();
+
+            if (!$currentPage) {
+                abort(404, 'No pages found!');
+            }
+
+            while ($currentPage && $currentPage->type === 'folder') {
+
+                $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
+                    ->where('parent_id', $currentPage->id)
+                    ->where('is_published', 1)
+                    ->orderBy('sort_order')
+                    ->first();
+
+                if (!$currentPage) {
+                    abort(404, 'Folder is empty!');
+                }
+            }
         }
 
         $pages = DocumentationPage::where('documentation_id', $documentation->id)

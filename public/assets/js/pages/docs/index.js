@@ -1,9 +1,12 @@
 enableDarkTheme("#themeToggle");
+
 document.addEventListener('DOMContentLoaded', function () {
     enableSidebarBackdropCloseable();
     generateScrollSpy();
     smoothScrollBehaviour();
     enableScrollpsyIndicator();
+    enableFeedbackBtns(".feedback-card");
+    enableFullScreenNav();
 });
 
 function enableSidebarBackdropCloseable() {
@@ -14,7 +17,7 @@ function enableSidebarBackdropCloseable() {
 
     function handleClick(e) {
         if (!e.target.closest('.simplebar-content')) {
-            document.body.setAttribute('data-sidebar', 'hidden');
+            document.documentElement.setAttribute('data-sidebar', 'hidden');
         }
     }
 
@@ -33,14 +36,15 @@ function enableSidebarBackdropCloseable() {
 function enableDarkTheme(selector) {
 
     const toggle = document.querySelector(selector);
-    const body = document.body;
     const storageKey = "user-theme";
-
     const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
 
-    function applyTheme(theme) {
-        body.setAttribute("data-theme", theme);
-        localStorage.setItem(storageKey, theme);
+    function applyTheme(theme, save = true) {
+        document.documentElement.setAttribute("data-theme", theme);
+
+        if (save) {
+            localStorage.setItem(storageKey, theme);
+        }
 
         if (toggle) {
             toggle.checked = theme === "dark";
@@ -51,33 +55,31 @@ function enableDarkTheme(selector) {
         return localStorage.getItem(storageKey);
     }
 
-    const savedTheme = getSavedTheme();
-
-    if (savedTheme) {
-        applyTheme(savedTheme);
-    } else {
-        const defaultTheme = systemDark.matches ? "dark" : "light";
-        applyTheme(defaultTheme);
+    // Sync toggle on load
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    if (toggle) {
+        toggle.checked = currentTheme === "dark";
     }
 
+    // Toggle click
     if (toggle) {
-        toggle.addEventListener("change", function (e) {
-            console.log(e.target, 'clicked');
+        toggle.addEventListener("change", function () {
             const theme = this.checked ? "dark" : "light";
             applyTheme(theme);
         });
     }
 
-    // systemDark.addEventListener("change", function (e) {
-    //     if (!getSavedTheme()) {
-    //         applyTheme(e.matches ? "dark" : "light");
-    //     }
-    // });
+    // System change (only if user never saved preference)
+    systemDark.addEventListener("change", function (e) {
+        if (!getSavedTheme()) {
+            applyTheme(e.matches ? "dark" : "light", false);
+        }
+    });
 }
 
 
 function smoothScrollBehaviour() {
-    document.querySelectorAll('#navbar-example3 a').forEach(anchor => {
+    document.querySelectorAll('#scrollpsy-nav a').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             document.querySelector(this.getAttribute('href'))
@@ -87,20 +89,26 @@ function smoothScrollBehaviour() {
         });
     });
 }
+
 function generateScrollSpy() {
+
     const content = document.getElementById('documentationContent');
-    const navContainer = document.querySelector('#navbar-example3 .nav');
+    const navContainer = document.querySelector('#scrollpsy-nav .nav');
+    const dropdownMenu = document.getElementById('onThisPageMenu');
 
     if (!content || !navContainer) return;
 
+    const navbarHeight = 70;
+
     navContainer.innerHTML = '<div class="active-indicator"></div>';
+    if (dropdownMenu) dropdownMenu.innerHTML = '';
 
-
-    const headings = content.querySelectorAll('h2, h3');
+    const allHeadings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    const spyHeadings = content.querySelectorAll('h2, h3');
 
     let currentParentNav = null;
 
-    headings.forEach((heading, index) => {
+    allHeadings.forEach((heading) => {
 
         if (!heading.id) {
             heading.id = heading.textContent
@@ -110,12 +118,34 @@ function generateScrollSpy() {
                 .replace(/(^-|-$)/g, '');
         }
 
+        const headingId = `#${heading.id}`;
+
+        heading.style.cursor = 'pointer';
+
+        heading.addEventListener('click', function () {
+            const targetPosition = this.getBoundingClientRect().top + window.pageYOffset;
+
+            window.scrollTo({
+                top: targetPosition - navbarHeight,
+                behavior: 'smooth'
+            });
+
+            history.replaceState(null, null, headingId);
+        });
+
+    });
+
+    spyHeadings.forEach((heading) => {
+
+        const headingId = `#${heading.id}`;
+        const headingText = heading.textContent;
+
         if (heading.tagName === 'H2') {
 
             const parentLink = document.createElement('a');
             parentLink.className = 'nav-link';
-            parentLink.href = `#${heading.id}`;
-            parentLink.textContent = heading.textContent;
+            parentLink.href = headingId;
+            parentLink.textContent = headingText;
 
             navContainer.appendChild(parentLink);
 
@@ -127,20 +157,40 @@ function generateScrollSpy() {
 
             const childLink = document.createElement('a');
             childLink.className = 'nav-link ms-2';
-            childLink.href = `#${heading.id}`;
-            childLink.textContent = heading.textContent;
+            childLink.href = headingId;
+            childLink.textContent = headingText;
 
             currentParentNav.appendChild(childLink);
         }
+
+        if (dropdownMenu) {
+
+            const li = document.createElement('li');
+            const dropdownLink = document.createElement('a');
+            dropdownLink.className = 'dropdown-item';
+
+            if (heading.tagName === 'H3') {
+                dropdownLink.classList.add('ps-4');
+            }
+
+            dropdownLink.href = headingId;
+            dropdownLink.textContent = headingText;
+
+            li.appendChild(dropdownLink);
+            dropdownMenu.appendChild(li);
+        }
+
     });
 
     new bootstrap.ScrollSpy(document.body, {
-        target: '#navbar-example3',
-        offset: 100
+        target: '#scrollpsy-nav',
+        offset: navbarHeight
     });
 }
+
+
 function enableScrollpsyIndicator() {
-    const navContainer = document.querySelector("#navbar-example3 .nav");
+    const navContainer = document.querySelector("#scrollpsy-nav .nav");
     const indicator = navContainer.querySelector(".active-indicator");
 
     function moveIndicator() {
@@ -165,4 +215,37 @@ function enableScrollpsyIndicator() {
 
     moveIndicator();
 }
+
+function enableFeedbackBtns(selector) {
+    const feedbackSection = document.querySelector(selector);
+    const btns = feedbackSection.querySelectorAll('.feedback-btns button');
+    if (btns) {
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (btn.classList.contains('active')) {
+                    btn.classList.remove('active');
+                } else {
+                    btns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                }
+            });
+        });
+    }
+}
+
+function enableFullScreenNav() {
+    const btn = document.querySelector('#fullScreenNavToggle');
+    if (btn) {
+        btn.addEventListener('click', function () {
+            const navbar = document.body.getAttribute('data-navbar');
+            if (navbar == 'full') {
+                document.body.setAttribute('data-navbar', 'default');
+            } else {
+                document.body.setAttribute('data-navbar', 'full');
+
+            }
+        });
+    }
+}
+
 

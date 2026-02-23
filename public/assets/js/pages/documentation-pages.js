@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     new PageControl().init();
     const icon = document.querySelector('#toggleScreenType');
     if (localStorage.getItem('documentation-editor-full-screen')) {
-        document.body.setAttribute('data-screen-type', 'content');
+        document.documentElement.setAttribute('data-screen-type', 'content');
         if (icon) {
             icon.checked = true;
             icon.classList.remove('bi-fullscreen');
@@ -45,14 +45,14 @@ class PageControl {
         checkbox.addEventListener('change', function () {
             if (checkbox.checked) {
                 localStorage.setItem('documentation-editor-full-screen', true);
-                document.body.setAttribute('data-screen-type', 'content');
+                document.documentElement.setAttribute('data-screen-type', 'content');
                 icon.classList.remove('bi-fullscreen');
                 icon.classList.add('bi-fullscreen-exit');
             } else {
                 if (localStorage.getItem('documentation-editor-full-screen')) {
                     localStorage.removeItem('documentation-editor-full-screen', true);
                 }
-                document.body.removeAttribute('data-screen-type', 'content');
+                document.documentElement.removeAttribute('data-screen-type', 'content');
                 icon.classList.remove('bi-fullscreen-exit');
                 icon.classList.add('bi-fullscreen');
             }

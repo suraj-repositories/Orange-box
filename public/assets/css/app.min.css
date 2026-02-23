@@ -14928,15 +14928,15 @@ body[data-menu-color=dark][data-leftbar-size=condensed] #wrapper .app-sidebar-me
     color: #FF8600
 }
 
-body[data-sidebar=hidden] .app-sidebar-menu {
+[data-sidebar=hidden] .app-sidebar-menu {
     width: 0
 }
 
-body[data-sidebar=hidden] .topbar-custom {
+[data-sidebar=hidden] .topbar-custom {
     left: 0
 }
 
-body[data-sidebar=hidden] .content-page {
+[data-sidebar=hidden] .content-page {
     margin-left: 0
 }
 

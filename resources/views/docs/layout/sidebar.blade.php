@@ -1,10 +1,7 @@
 <div class="app-sidebar-menu">
     <div class="h-100" data-simplebar>
-
         <!--- Sidemenu -->
         <div id="sidebar-menu">
-
-
 
             <ul id="side-menu">
                 @foreach ($pages as $page)
