@@ -87,4 +87,13 @@ class DocumentationPage extends Model
 
         return implode('/', $segments);
     }
+
+    public function deleteWithChildren()
+    {
+        foreach ($this->children as $child) {
+            $child->deleteWithChildren();
+        }
+
+        $this->delete(); // or forceDelete() if using SoftDeletes
+    }
 }

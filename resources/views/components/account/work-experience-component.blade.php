@@ -18,13 +18,15 @@
                      <ul class="dropdown-menu" style="min-width: 220px;">
                          <li>
                              <label class="dropdown-item d-flex align-items-center gap-2">
-                                 <input type="checkbox" class="form-check-input m-0" id="work-experience-enable-editing" checked="false">
+                                 <input type="checkbox" class="form-check-input m-0" id="work-experience-enable-editing"
+                                     checked="false">
                                  <span class="cursor-pointer">Enable Editing</span>
                              </label>
                          </li>
                          <li>
                              <label class="dropdown-item d-flex align-items-center gap-2">
-                                 <input type="checkbox" class="form-check-input m-0" id="work-experience-enable-deletion" checked="false">
+                                 <input type="checkbox" class="form-check-input m-0"
+                                     id="work-experience-enable-deletion" checked="false">
                                  <span class="cursor-pointer">Enable Deletion</span>
                              </label>
                          </li>
@@ -35,7 +37,7 @@
      </div>
 
      <div class="row row-cols-1 row-cols-md-2 profile-section actionable-content px-4 g-2" id="work_experience_view">
-         @forelse ($experiences as $experience)
+         @foreach ($experiences as $experience)
              <div class="col">
                  <div class="profile-item  ">
                      <div class="avatar-sm profile-icon p-1">
@@ -47,24 +49,23 @@
 
                          </div>
                          <div class="d-flex flex-column gap-2 p-2 mt-1">
-                            <button class="btn-no-style edit-btn edit-work-experience"
-                                data-work-experience-id="{{ $experience->id }}"
-                                data-job-title="{{ $experience->job_title }}"
-                                data-employment-type="{{ $experience->employment_type }}"
-                                data-company="{{$experience->company}}"
-                                data-company-logo="{{ $experience->logo_url }}"
-                                data-currently-working="{{ $experience->currently_working ? 'yes' : '' }}"
-                                data-start-date="{{ $experience->start_date?->format("Y-m-d") ?? "" }}"
-                                data-end-date="{{ $experience->end_date?->format("Y-m-d") ?? "" }}"
-                                data-currently-working="{{ $experience->currently_working }}"
-                                data-description="{{ $experience->description }}"
-                                data-location="{{ $experience->location }}"
-                            >
-                                <i class="bx bx-edit fs-5 text-success"></i>
-                            </button>
+                             <button class="btn-no-style edit-btn edit-work-experience"
+                                 data-work-experience-id="{{ $experience->id }}"
+                                 data-job-title="{{ $experience->job_title }}"
+                                 data-employment-type="{{ $experience->employment_type }}"
+                                 data-company="{{ $experience->company }}"
+                                 data-company-logo="{{ $experience->logo_url }}"
+                                 data-currently-working="{{ $experience->currently_working ? 'yes' : '' }}"
+                                 data-start-date="{{ $experience->start_date?->format('Y-m-d') ?? '' }}"
+                                 data-end-date="{{ $experience->end_date?->format('Y-m-d') ?? '' }}"
+                                 data-currently-working="{{ $experience->currently_working }}"
+                                 data-description="{{ $experience->description }}"
+                                 data-location="{{ $experience->location }}">
+                                 <i class="bx bx-edit fs-5 text-success"></i>
+                             </button>
                              <button class="btn-no-style delete-btn delete-work-experience"
-                                data-delete-url="{{ authRoute('user.work_experience.delete', ['workExperience' => $experience]) }}"
-                             ><i class="bx bx-trash fs-5 text-danger"></i></button>
+                                 data-delete-url="{{ authRoute('user.work_experience.delete', ['workExperience' => $experience]) }}"><i
+                                     class="bx bx-trash fs-5 text-danger"></i></button>
                          </div>
 
                      </div>
@@ -82,7 +83,8 @@
                                      {{ !empty($experience->currently_working) ? 'Present' : $experience->end_date?->format('M Y') }}
                                  </div>
 
-                                 <div class="list-inline-item list-inline-item-second">{{ $experience->duration }}</div>
+                                 <div class="list-inline-item list-inline-item-second">{{ $experience->duration }}
+                                 </div>
                              </div>
                              <p class="mb-0 text-dark">{{ $experience->description }}</p>
                          </div>
@@ -90,12 +92,14 @@
 
                  </div>
              </div>
-         @empty
-             <x-no-data />
-         @endforelse
+         @endforeach
 
 
      </div>
+
+     @if ($experiences->isEmpty())
+         <x-no-data />
+     @endif
 
      <div class="modal fade work-experience" id="work-experience-form-modal" tabindex="-1"
          aria-labelledby="work-experience-form-title" aria-hidden="true">
@@ -141,7 +145,8 @@
                                      <div class="col-12">
                                          <label for="company-input" class="form-label">Company Name</label>
                                          <div class="input-group">
-                                             <span class="input-group-text"><i class='bx bx-buildings fs-5'></i></span>
+                                             <span class="input-group-text"><i
+                                                     class='bx bx-buildings fs-5'></i></span>
                                              <input type="text" class="form-control" id="company-input"
                                                  name="company" placeholder="e.g. Google">
                                          </div>
@@ -166,7 +171,8 @@
                                  <div class="input-group">
                                      <span class="input-group-text"><i class='bx bx-image fs-5'></i></span>
                                      <input type="file" class="form-control" accept="image/*"
-                                         id="company-logo-input" name="company_logo" onchange="enableWorkExperienceImagePick(this)">
+                                         id="company-logo-input" name="company_logo"
+                                         onchange="enableWorkExperienceImagePick(this)">
                                  </div>
 
                                  <div class="mt-2 d-flex gap-3 " id="company-logo-preivew">
@@ -181,8 +187,8 @@
                                  <label for="company-start-input" class="form-label">Start Date</label>
                                  <div class="input-group">
                                      <span class="input-group-text"><i class='bx bx-calendar fs-5'></i></span>
-                                     <input type="date" class="form-control" id="company-start-input" max="{{ date("Y-m-d") }}"
-                                         name="start_date">
+                                     <input type="date" class="form-control" id="company-start-input"
+                                         max="{{ date('Y-m-d') }}" name="start_date">
                                  </div>
                              </div>
 
@@ -201,7 +207,8 @@
 
                                  <div class="form-check ms-1 mt-lg-2">
                                      <input class="form-check-input" type="checkbox" name="currently_working"
-                                         value="yes" id="currently-working-input" checked="false" onchange="enableCurrentlyWorkingCheckbox()">
+                                         value="yes" id="currently-working-input" checked="false"
+                                         onchange="enableCurrentlyWorkingCheckbox()">
                                      <label class="form-check-label" for="currently-working-input">
                                          Currently Working
                                      </label>

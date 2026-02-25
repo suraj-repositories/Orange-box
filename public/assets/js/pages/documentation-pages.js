@@ -1,4 +1,4 @@
-import { initCKEditor, createEditor } from "/assets/js/lib-config/ckeditor.init.js";
+
 
 document.addEventListener('DOMContentLoaded', function () {
     new PageControl().init();
@@ -608,6 +608,7 @@ class PageControl {
             <div class="ctx-item" data-action="new_file" style="padding:8px 12px; cursor:pointer;">New File</div>
             <div class="ctx-item" data-action="new_folder" style="padding:8px 12px; cursor:pointer;">New Folder</div>
             <div class="ctx-item" data-action="rename" style="padding:8px 12px; cursor:pointer;">Rename</div>
+            <div class="ctx-item" data-action="delete" style="padding:8px 12px; cursor:pointer;">Delete</div>
         `;
 
         document.body.appendChild(menu);
@@ -712,6 +713,35 @@ class PageControl {
             });
         };
 
+        const deleteItem = (liNode) => {
+            const uuid = liNode.getAttribute('data-doc-page-uuid');
+            liNode.classList.add('hide');
+
+            if (liNode.classList.contains('folder')) {
+                const children = liNode.querySelectorAll('li');
+
+                children.forEach(child => {
+                    PageControl.tabBuilder.closeTab(child.getAttribute('data-doc-page-uuid'));
+                });
+            } else {
+                PageControl.tabBuilder.closeTab(uuid);
+            }
+            PageControl.tabs.delete(uuid);
+
+            PageControl.apiService.deletePage(uuid)
+                .then((data) => {
+                    if (!data.success) {
+                        liNode.classList.remove('hide');
+                    } else {
+                        liNode.remove();
+                    }
+                })
+                .catch((err) => {
+                    liNode.classList.remove('hide');
+                });
+
+        };
+
         document.addEventListener("contextmenu", (e) => {
             const li = e.target.closest(".directory-list li");
             if (!li) return;
@@ -737,6 +767,7 @@ class PageControl {
             if (action === "new_file") createNewFileItem(currentLi);
             if (action === "new_folder") createNewFolderItem(currentLi);
             if (action === "rename") renameItem(currentLi);
+            if (action === "delete") deleteItem(currentLi);
 
             menu.style.display = "none";
         });
@@ -801,22 +832,16 @@ class DocumentationTabs {
         const { block, addButton } = this.createGitEditorBlock(pane);
         block.setAttribute('data-page-uuid', pageData.uuid);
 
-        const textarea = block.querySelector('textarea');
-        if (textarea) {
-            textarea.value = pageData.content ?? '';
-            console.log(pageData.content_markdown);
-            textarea.setAttribute('data-markdown', pageData.content_markdown ?? '');
-            initCKEditor(textarea);
+        const obEitor = block.querySelector('.ob-rich-editor');
+        if (obEitor) {
+            const div = document.createElement('div');
+            obEitor.insertAdjacentElement('beforeend', div);
 
-            // const div = document.createElement('div');
-            // textarea.insertAdjacentElement('afterend', div);
-            // new toastui.Editor({
-            //     el: div,
-            //     height: '500px',
-            //     initialEditType: 'markdown',
-            //     previewStyle: 'tab',
-            //     initialValue: pageData.content_markdown
-            // });
+            div.style.height = '700px';
+            div.style.width = '100%';
+
+            const mdEditor = new MarkdownEditor(div);
+            mdEditor.init(pageData.content ?? '');
 
         };
 
@@ -843,7 +868,7 @@ class DocumentationTabs {
 
         closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            this.closeTab(button);
+            this.closeTab(pageData.uuid);
             PageControl.tabs.delete(pageData.uuid);
         });
 
@@ -876,7 +901,7 @@ class DocumentationTabs {
         const editorPane = document.createElement('div');
         editorPane.className = 'col-12 rich-editor-zone';
         editorPane.innerHTML = `
-            <textarea class="form-control" cols="30" rows="3"></textarea>
+            <div class="ob-rich-editor"> </div>
         `;
         const previewPane = document.createElement('div');
         previewPane.className = 'col-12 page-preview-zone';
@@ -895,20 +920,32 @@ class DocumentationTabs {
         toolbar.className = 'tab-editor-toolbar';
         toolbar.innerHTML = `
         <ul class="list-inline">
-            <li class="list-inline-item"><button class="tab-preview"><i class='bx bx-show-alt'></i></button></li>
             <li class="list-inline-item"><button class="tab-editor"><i class='bx bx-pencil'></i></button></li>
             <li class="list-inline-item"><button class="tab-github"><i class='bx bxl-github'></i></button></li>
+            <li class="list-inline-item"><button class="tab-preview"><i class='bx bx-show-alt'></i></button></li>
             <li class="list-inline-item"><button class="tab-save"><i class='bx bx-save'></i></button></li>
         </ul>
     `;
         block.appendChild(toolbar);
 
         function showPane(pane) {
-            previewPane.style.display = pane === 'preview' ? 'block' : 'none';
-            gitPane.style.display = pane === 'github' ? 'block' : 'none';
-            editorPane.style.display = pane === 'editor' ? 'block' : 'none';
 
-            toolbar.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            previewPane.classList.add('hide');
+            gitPane.classList.add('hide');
+            editorPane.classList.add('hide');
+
+            if (pane === 'preview') {
+                previewPane.classList.remove('hide');
+            } else if (pane === 'github') {
+                gitPane.classList.remove('hide');
+            } else if (pane === 'editor') {
+                editorPane.classList.remove('hide');
+            }
+
+            toolbar.querySelectorAll('button').forEach(btn =>
+                btn.classList.remove('active')
+            );
+
             if (pane === 'editor') {
                 toolbar.querySelector('.tab-editor').classList.add('active');
             } else if (pane === 'github') {
@@ -918,11 +955,11 @@ class DocumentationTabs {
             }
         }
 
-        showPane('preview');
+        showPane('editor');
 
-        toolbar.querySelector('.tab-preview').addEventListener('click', () => showPane('preview'));
         toolbar.querySelector('.tab-editor').addEventListener('click', () => showPane('editor'));
         toolbar.querySelector('.tab-github').addEventListener('click', () => showPane('github'));
+        toolbar.querySelector('.tab-preview').addEventListener('click', () => showPane('preview'));
 
         container.appendChild(block);
 
@@ -974,8 +1011,15 @@ class DocumentationTabs {
         }
     }
 
-    closeTab(button) {
-        const li = button.closest('li');
+    closeTab(uuid) {
+        const li = document.querySelector(`#documentationExplorerTab .nav-item[data-page-uuid="${uuid}"]`);
+
+        if (!li) {
+            console.log("Tab not present - ", uuid);
+            return;
+        }
+
+        const button = li.querySelector('button');
         const paneId = button.dataset.target;
         const pane = document.getElementById(paneId);
         const wasActive = button.classList.contains('active');
@@ -1004,6 +1048,39 @@ class DocumentationTabs {
 
     }
 }
+
+// class Tab {
+//     constructor(uuid, title, content) {
+//         this.uuid = uuid;
+//         this.title = title;
+//         this.editor = this.createEditor(content);
+//         this.listeners = [];
+//     }
+
+//     createEditor(content) {
+//         return {
+//             value: content,
+//             setValue(val) { this.value = val; },
+//             destroy() { console.log('destroyed'); }
+//         };
+//     }
+
+//     addListener(element, event, handler) {
+//         element.addEventListener(event, handler);
+//         this.listeners.push({ element, event, handler });
+//     }
+
+//     destroy() {
+//         this.editor?.destroy();
+
+//         this.listeners.forEach(({ element, event, handler }) => {
+//             element.removeEventListener(event, handler);
+//         });
+
+//         this.listeners = [];
+//     }
+
+// }
 
 class ApiService {
     createPage(title, sortOrder, type, liItem) {
@@ -1123,6 +1200,28 @@ class ApiService {
             });
     }
 
+    deletePage(uuid) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        return fetch(authRoute('user.documentation.pages.delete', { docPage: uuid }), {
+            method: 'DELETE',
+            headers: {
+                'x-csrf-token': csrfToken
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error(data);
+                    return Promise.reject(data.message || 'Deletion failed');
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                return Promise.reject(error);
+            });
+    }
 
 }
 
@@ -1141,5 +1240,145 @@ class AppUI {
         return `<div class="alert alert-danger" role="alert">
             <strong> ${title} </strong> - ${message}
         </div>`;
+    }
+}
+
+class MarkdownEditor {
+
+    static monacoLoader = null;
+
+    #editor = null;
+    #element = null;
+    #observer = null;
+
+    constructor(element = null) {
+        if (element) {
+            this.setElement(element);
+        }
+    }
+
+    static loadMonaco() {
+        if (this.monacoLoader) {
+            return this.monacoLoader;
+        }
+
+        this.monacoLoader = new Promise((resolve) => {
+            require.config({
+                paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor/min/vs' }
+            });
+
+            require(['vs/editor/editor.main'], function () {
+
+                monaco.editor.defineTheme('custom-dark', {
+                    base: 'vs-dark',
+                    inherit: true,
+                    rules: [],
+                    colors: {
+                        'editor.background': '#212529',
+                    }
+                });
+
+                resolve();
+            });
+        });
+
+        return this.monacoLoader;
+    }
+
+    async init(data = {}) {
+        if (!this.#element) {
+            throw new Error('Editor element is not set.');
+        }
+
+        await MarkdownEditor.loadMonaco();
+
+        const theme = this.#getTheme();
+
+        this.#editor = monaco.editor.create(this.#element, {
+            value: typeof data === 'string'
+                ? data
+                : JSON.stringify(data, null, 4),
+            language: 'markdown',
+            theme: theme,
+            readOnly: false,
+            stickyScroll: { enabled: false }
+        });
+
+        this.#attachResizeHandler();
+        this.#observeThemeChange();
+    }
+
+    #getTheme() {
+        return document.body.classList.contains("dark")
+            ? "custom-dark"
+            : "vs-light";
+    }
+
+    #attachResizeHandler() {
+        window.addEventListener('resize', () => {
+            this.#editor?.layout();
+        });
+
+        const classObj = this;
+
+        var resizeObserver = new ResizeObserver(function (entries) {
+            for (let entry of entries) {
+                classObj.#editor?.layout();
+            }
+        });
+
+        resizeObserver.observe(document.getElementById("page-content"));
+    }
+
+    #observeThemeChange() {
+        this.#observer = new MutationObserver(() => {
+            monaco.editor.setTheme(this.#getTheme());
+        });
+
+        this.#observer.observe(document.body, { attributes: true });
+    }
+
+    getEditor() {
+        return this.#editor;
+    }
+
+    setEditor(editorInstance) {
+        this.#editor = editorInstance;
+    }
+
+    getElement() {
+        return this.#element;
+    }
+
+    setElement(element) {
+        if (!(element instanceof HTMLElement)) {
+            throw new Error('Element must be a valid HTMLElement.');
+        }
+        this.#element = element;
+    }
+
+    setValue(value) {
+        if (!this.#editor) return;
+        this.#editor.setValue(
+            typeof value === 'string'
+                ? value
+                : JSON.stringify(value, null, 4)
+        );
+    }
+
+    getValue() {
+        return this.#editor?.getValue() ?? null;
+    }
+
+    destroy() {
+        if (this.#observer) {
+            this.#observer.disconnect();
+        }
+
+        if (this.#editor) {
+            this.#editor.dispose();
+        }
+
+        this.#editor = null;
     }
 }

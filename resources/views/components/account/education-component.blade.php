@@ -38,7 +38,7 @@
 
 
     <div class="row row-cols-1 row-cols-md-2 profile-section actionable-content px-4 g-2" id="education_view">
-        @forelse ($educations as $education)
+        @foreach ($educations as $education)
             <div class="col">
                 <div class="profile-item">
                     <div class="avatar-sm profile-icon p-1">
@@ -48,24 +48,22 @@
                                 class="max-square-40" alt="company-img">
                         </div>
 
-                          <div class="d-flex flex-column gap-2 p-2 mt-1">
+                        <div class="d-flex flex-column gap-2 p-2 mt-1">
                             <button class="btn-no-style edit-btn edit-education"
                                 data-education-id="{{ $education->id }}"
                                 data-institution="{{ $education->institution }}"
                                 data-institution-logo="{{ $education->logo_url }}"
                                 data-degree="{{ $education->degree }}"
-                                data-field-of-study="{{$education->field_of_study}}"
-                                data-start-date="{{ $education->start_date?->format("Y-m-d") ?? "" }}"
-                                data-end-date="{{ $education->end_date?->format("Y-m-d") ?? "" }}"
-                                data-grade="{{ $education->grade }}"
-                                data-description="{{ $education->description }}"
-                            >
+                                data-field-of-study="{{ $education->field_of_study }}"
+                                data-start-date="{{ $education->start_date?->format('Y-m-d') ?? '' }}"
+                                data-end-date="{{ $education->end_date?->format('Y-m-d') ?? '' }}"
+                                data-grade="{{ $education->grade }}" data-description="{{ $education->description }}">
                                 <i class="bx bx-edit fs-5 text-success"></i>
                             </button>
-                             <button class="btn-no-style delete-btn delete-education"
-                                data-delete-url="{{ authRoute('user.education.delete', ['education' => $education]) }}"
-                             ><i class="bx bx-trash fs-5 text-danger"></i></button>
-                         </div>
+                            <button class="btn-no-style delete-btn delete-education"
+                                data-delete-url="{{ authRoute('user.education.delete', ['education' => $education]) }}"><i
+                                    class="bx bx-trash fs-5 text-danger"></i></button>
+                        </div>
                     </div>
                     <div class="exper-item-list">
                         <h5 class="fs-18 text-dark">{{ $education->institution }}</h5>
@@ -80,10 +78,12 @@
                     </div>
                 </div>
             </div>
-        @empty
-            <x-no-data />
-        @endforelse
+        @endforeach
     </div>
+
+    @if ($educations->isEmpty())
+        <x-no-data />
+    @endif
 
     <div class="modal fade education" id="education-form-modal" tabindex="-1" aria-labelledby="education-form-title"
         aria-hidden="true">
@@ -117,8 +117,8 @@
                                         <label for="degree-input" class="form-label">Degree</label>
                                         <div class="input-group">
                                             <span class="input-group-text"><i class='bx bx-map fs-5'></i></span>
-                                            <input type="text" class="form-control" id="degree-input" name="degree"
-                                                placeholder="e.g. Diploma, Btech, Ph.D">
+                                            <input type="text" class="form-control" id="degree-input"
+                                                name="degree" placeholder="e.g. Diploma, Btech, Ph.D">
                                         </div>
                                     </div>
                                 </div>
@@ -149,11 +149,11 @@
 
                             <!-- GPA -->
                             <div class="col-md-6">
-                                <label for="grade-type" class="form-label">GPA  </label>
+                                <label for="grade-type" class="form-label">GPA </label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class='bx bx-time-five fs-5'></i></span>
-                                    <input type="number" class="form-control" id="grade-input"
-                                        name="grade" placeholder="e.g. 7.85">
+                                    <input type="number" class="form-control" id="grade-input" name="grade"
+                                        placeholder="e.g. 7.85">
                                 </div>
                             </div>
 

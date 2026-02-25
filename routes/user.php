@@ -224,6 +224,7 @@ Route::controller(DocumentationPagesController::class)->group(function(){
     Route::patch('documentation/{docPage}/update-content', 'updateContent')->name('documentation.pages.udpate.content');
     Route::patch('documentation/{docPage}/update-content-git', 'loadContentFromGit')->name('documentation.pages.git.load.content');
     Route::patch('documentation/{docPage}/rename', 'renamePageOrFolder')->name('documentation.pages.rename');
+    Route::delete('documentation/{docPage}/destroy', 'deletePageOrFolder')->name('documentation.pages.delete');
 
 
 });

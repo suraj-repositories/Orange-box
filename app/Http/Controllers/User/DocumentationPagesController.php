@@ -177,4 +177,32 @@ class DocumentationPagesController extends Controller
             'data' => $docPage
         ]);
     }
+
+    public function deletePageOrFolder(User $user, DocumentationPage $docPage, Request $request)
+    {
+        try {
+            if ($docPage->user_id !== $user->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized action.'
+                ], 403);
+            }
+
+            DB::transaction(function () use ($docPage) {
+                $docPage->deleteWithChildren();
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Deleted successfully!'
+            ]);
+        } catch (Throwable $ex) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Deletion failed!',
+                'error' => config('app.debug') ? $ex->getMessage() : null
+            ], 500);
+        }
+    }
 }

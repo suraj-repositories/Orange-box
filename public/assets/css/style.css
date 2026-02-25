@@ -2251,9 +2251,13 @@ tr.deleting a {
 }
 
 .no-data.no-data-warning .icon-box {
-    border-color: #ffe69c;
-    color: #ffc107;
-    background-color: #fff6d9b9;
+    border-color: #ffd297;
+    color: #ff9307;
+    background-color: #fffbed;
+}
+
+.no-data.no-data-warning .message {
+    font-style: italic;
 }
 
 #preloader {
@@ -2409,6 +2413,10 @@ ul.directory-list.active {
 .directory-list .folder>a {
     color: #777;
     font-weight: bold;
+}
+
+.directory-list .folder {
+    overflow: visible;
 }
 
 .directory-list li:before {
@@ -2743,9 +2751,16 @@ ul.directory-list.active {
 
 }
 
-
 .git-editor-block {
     padding: 10px;
+}
+
+.git-editor-block:has(.rich-editor-zone:not(.hide)) {
+    padding: 0px;
+}
+
+.tab-content:has(.rich-editor-zone:not(.hide)) {
+    overflow: hidden;
 }
 
 .explorer-contents ul li .tab-close {

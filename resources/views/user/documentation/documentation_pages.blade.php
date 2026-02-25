@@ -3,7 +3,6 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/tui-editor/css/tui-editor.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('assets/libs/tui-editor/css/tui-editor-contents.css') }}"> --}}
 @endsection
 
 @section('content')
@@ -86,7 +85,8 @@
 @endsection
 
 @section('js')
-    @include('layout.extras.ckeditor5')
+
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor/min/vs/loader.js"></script>
     <script src="{{ asset('assets/libs/tui-editor/js/tui-editor.js') }}"></script>
     <script type="module" src="{{ asset('assets/js/pages/documentation-pages.js') }}"></script>
 @endsection
