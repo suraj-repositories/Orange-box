@@ -89,7 +89,7 @@ class DocumentationPagesController extends Controller
         }
     }
 
-    public function updateContent(User $user, DocumentationPage $docPage, Request $request)
+    public function updateMarkdownContent(User $user, DocumentationPage $docPage, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'content' => 'nullable|string'
@@ -103,6 +103,7 @@ class DocumentationPagesController extends Controller
         }
 
         try {
+            $docPage->type = 'markdown';
             $docPage->content = $request->content;
             $docPage->save();
 
@@ -135,17 +136,11 @@ class DocumentationPagesController extends Controller
         try {
             $content = $this->gitService->loadGitPageContent($request->git_link);
 
-            $docPage->content = $content ?? '';
-            $docPage->git_link = $request->git_link;
-            $docPage->content_format = 'markdown';
-            $docPage->save();
-
-            $docPage->content_html = Str::markdown($content);
-
             return response()->json([
                 'success' => true,
-                'message' => 'Content updated successfully!',
-                'data' => $docPage
+                'message' => 'Content fetched successfully!',
+                'data' => $docPage,
+                'markdown' => $content
             ]);
         } catch (Throwable $ex) {
             return response()->json([
@@ -204,5 +199,25 @@ class DocumentationPagesController extends Controller
                 'error' => config('app.debug') ? $ex->getMessage() : null
             ], 500);
         }
+    }
+
+    public function markdownToHtml(User $user, DocumentationPage $docPage, Request $request)
+    {
+        $validator = Validator::make($request->only('markdown'), [
+            'markdown' => 'nullable|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'uuid' => $docPage->uuid,
+            'html' => Str::markdown($request->input('markdown') ?? "")
+        ]);
     }
 }

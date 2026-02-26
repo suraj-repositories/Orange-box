@@ -17,7 +17,7 @@ class PageControl {
 
     static tabBuilder;
     static apiService;
-    static tabs = new Set();
+    static tabs = new Map();
 
     init() {
         this.enableSidebar();
@@ -159,7 +159,6 @@ class PageControl {
 
             PageControl.apiService.getPage(uuid)
                 .then(data => {
-                    console.log(data.uuid);
                     const tempTab = document.querySelector("#documentationExplorerTab li.temp");
 
                     if (!PageControl.tabs.has(data.data.uuid)) {
@@ -167,8 +166,9 @@ class PageControl {
                             const closeBtn = tempTab.querySelector('.tab-close');
                             if (closeBtn) closeBtn.click();
                         }
+                        PageControl.tabs.set(data.data.uuid, {});
                         PageControl.tabBuilder.createNewTab(data.data.title, data.data, { isTemp: clickType == 'single' });
-                        PageControl.tabs.add(data.data.uuid);
+
 
                     } else {
                         if (tempTab && tempTab.getAttribute('data-page-uuid') == data.data.uuid) {
@@ -270,12 +270,11 @@ class PageControl {
 
             PageControl.apiService.createPage(fileName, 1, 'file', li)
                 .then(data => {
+                    PageControl.tabs.set(data.uuid, {});
                     PageControl.tabBuilder.createNewTab(fileName, {
                         uuid: data.uuid,
                         content: `<p>Content for ${fileName}</p>`
                     });
-                    PageControl.tabs.add(uuid);
-
 
                     if (loader) loader.classList.add('d-none');
                 })
@@ -790,8 +789,6 @@ class DocumentationTabs {
         }
 
         DocumentationTabs.apiService = new ApiService();
-
-
     }
 
     createNewTab(title, pageData = {}, {
@@ -843,10 +840,9 @@ class DocumentationTabs {
             const mdEditor = new MarkdownEditor(div);
             mdEditor.init(pageData.content ?? '');
 
+            const tab = PageControl.tabs.get(pageData.uuid);
+            if (tab) tab.editor = mdEditor;
         };
-
-        const mdArea = block.querySelector('.loaded-md-page');
-        if (mdArea) mdArea.innerHTML = pageData.content_html ?? '';
 
         const githubLinkInput = block.querySelector('.github-load-zone input');
         if (githubLinkInput) githubLinkInput.value = pageData.git_link ?? '';
@@ -855,7 +851,6 @@ class DocumentationTabs {
         if (previewZone) previewZone.innerHTML = pageData.content_html ?? '';
 
         this.tabBody.appendChild(pane);
-
         this.activateTab(button);
 
         button.addEventListener('click', (e) => {
@@ -871,6 +866,11 @@ class DocumentationTabs {
             this.closeTab(pageData.uuid);
             PageControl.tabs.delete(pageData.uuid);
         });
+
+        const classObj = this;
+
+        const tabEditor = block.querySelector('.tab-editor-toolbar .tab-save');
+        tabEditor.addEventListener('click', () => classObj.savePageContent(pageData.uuid));
 
         return { button, pane };
     }
@@ -895,7 +895,7 @@ class DocumentationTabs {
                 <i class='bx bx-download fs-4'></i>
             </button>
         </div>
-        <div class="loaded-md-page"> </div>
+        <div class="git-link-load-body mt-2"> </div>
     `;
 
         const editorPane = document.createElement('div');
@@ -936,6 +936,7 @@ class DocumentationTabs {
 
             if (pane === 'preview') {
                 previewPane.classList.remove('hide');
+                classObj.openingPreviewTab(previewPane);
             } else if (pane === 'github') {
                 gitPane.classList.remove('hide');
             } else if (pane === 'editor') {
@@ -952,6 +953,7 @@ class DocumentationTabs {
                 toolbar.querySelector('.tab-github').classList.add('active');
             } else if (pane === 'preview') {
                 toolbar.querySelector('.tab-preview').classList.add('active');
+
             }
         }
 
@@ -976,17 +978,54 @@ class DocumentationTabs {
         };
     }
 
+    savePageContent(uuid) {
+        const obj = PageControl.tabs.get(uuid);
+        const markdown = obj.editor.getValue();
+
+        console.log('Ready to save : ', uuid, markdown);
+
+    }
+
+    openingPreviewTab(previewPane) {
+
+        const gitEditorBlock = previewPane.closest('.git-editor-block');
+        const uuid = gitEditorBlock.getAttribute('data-page-uuid');
+
+        previewPane.innerHTML = AppUI.loader();
+
+        const obj = PageControl.tabs.get(uuid);
+        const markdown = obj.editor.getValue();
+
+        DocumentationTabs.apiService.getHtmlFromMarkdown(uuid, markdown)
+            .then((data) => {
+                if (data.success) {
+                    previewPane.innerHTML = data.html;
+                } else {
+                    previewPane.innerHTML = AppUI.error("Error", data.message);
+                }
+            })
+            .catch((err) => {
+                console.error("Error", err);
+                previewPane.innerHTML = AppUI.error("Error", 'Something went wrong!');
+            });
+    }
+
     loadGithubPageButtonClicked(btn, block) {
         const input = block.querySelector('.github-load-zone input');
         if (input.value.trim() == '') {
             console.error("Invalid Input");
         }
-        const mdArea = block.querySelector('.loaded-md-page');
+        const mdArea = block.querySelector('.git-link-load-body');
 
-        mdArea.innerHTML = AppUI.loader();
+        mdArea.innerHTML = `${AppUI.loader()}`;
         DocumentationTabs.apiService.loadGithubLinkPage(block.getAttribute('data-page-uuid'), input.value.trim())
             .then(data => {
-                mdArea.innerHTML = data.data.content;
+                const obj = PageControl.tabs.get(data.data.uuid);
+                obj.editor.setValue(data.markdown);
+                mdArea.innerHTML = AppUI.success('Success', 'Loaded Successfully! view preview or edit page');
+                setTimeout(() => {
+                    mdArea.innerHTML = "";
+                }, 8000);
             })
             .catch(error => {
                 console.error('Failed to load page:', error);
@@ -1048,39 +1087,6 @@ class DocumentationTabs {
 
     }
 }
-
-// class Tab {
-//     constructor(uuid, title, content) {
-//         this.uuid = uuid;
-//         this.title = title;
-//         this.editor = this.createEditor(content);
-//         this.listeners = [];
-//     }
-
-//     createEditor(content) {
-//         return {
-//             value: content,
-//             setValue(val) { this.value = val; },
-//             destroy() { console.log('destroyed'); }
-//         };
-//     }
-
-//     addListener(element, event, handler) {
-//         element.addEventListener(event, handler);
-//         this.listeners.push({ element, event, handler });
-//     }
-
-//     destroy() {
-//         this.editor?.destroy();
-
-//         this.listeners.forEach(({ element, event, handler }) => {
-//             element.removeEventListener(event, handler);
-//         });
-
-//         this.listeners = [];
-//     }
-
-// }
 
 class ApiService {
     createPage(title, sortOrder, type, liItem) {
@@ -1177,7 +1183,7 @@ class ApiService {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
         return fetch(authRoute('user.documentation.pages.git.load.content', { docPage: uuid }), {
-            method: 'PATCH',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'x-csrf-token': csrfToken
@@ -1223,6 +1229,62 @@ class ApiService {
             });
     }
 
+    getHtmlFromMarkdown(uuid, markdown) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        return fetch(authRoute('user.documentation.pages.md-to-html', { docPage: uuid }), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': csrfToken
+            },
+            body: JSON.stringify({
+                markdown: markdown,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error(data);
+                    return Promise.reject(data.message || 'Load failed');
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                return Promise.reject(error);
+            });
+    }
+
+    saveMarkdownContent(uuid, markdown) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        return fetch(authRoute('user.documentation.pages.udpate.md.content', { docPage: uuid }), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': csrfToken
+            },
+            body: JSON.stringify({
+                markdown: markdown,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error(data);
+                    return Promise.reject(data.message || 'Save failed');
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                return Promise.reject(error);
+            });
+    }
+
+
+
 }
 
 class AppUI {
@@ -1241,6 +1303,11 @@ class AppUI {
             <strong> ${title} </strong> - ${message}
         </div>`;
     }
+    static success(title = "Success", message = "") {
+        return `<div class="alert alert-success" role="alert">
+            <strong> ${title} </strong> - ${message}
+        </div>`;
+    }
 }
 
 class MarkdownEditor {
@@ -1250,6 +1317,8 @@ class MarkdownEditor {
     #editor = null;
     #element = null;
     #observer = null;
+    #resizeObserver = null;
+    #windowResizeHandler = null;
 
     constructor(element = null) {
         if (element) {
@@ -1301,7 +1370,8 @@ class MarkdownEditor {
             language: 'markdown',
             theme: theme,
             readOnly: false,
-            stickyScroll: { enabled: false }
+            stickyScroll: { enabled: false },
+            automaticLayout: true
         });
 
         this.#attachResizeHandler();
@@ -1315,19 +1385,25 @@ class MarkdownEditor {
     }
 
     #attachResizeHandler() {
-        window.addEventListener('resize', () => {
-            this.#editor?.layout();
-        });
+        if (!this.#element) return;
 
-        const classObj = this;
+        this.#resizeObserver = new ResizeObserver(() => {
+            if (!this.#editor) return;
 
-        var resizeObserver = new ResizeObserver(function (entries) {
-            for (let entry of entries) {
-                classObj.#editor?.layout();
+            const { offsetWidth, offsetHeight } = this.#element;
+
+            if (offsetWidth > 0 && offsetHeight > 0) {
+                this.#editor.layout();
             }
         });
 
-        resizeObserver.observe(document.getElementById("page-content"));
+        this.#resizeObserver.observe(this.#element);
+
+        this.#windowResizeHandler = () => {
+            this.#editor?.layout();
+        };
+
+        window.addEventListener('resize', this.#windowResizeHandler);
     }
 
     #observeThemeChange() {
@@ -1373,12 +1449,22 @@ class MarkdownEditor {
     destroy() {
         if (this.#observer) {
             this.#observer.disconnect();
+            this.#observer = null;
+        }
+
+        if (this.#resizeObserver) {
+            this.#resizeObserver.disconnect();
+            this.#resizeObserver = null;
+        }
+
+        if (this.#windowResizeHandler) {
+            window.removeEventListener('resize', this.#windowResizeHandler);
+            this.#windowResizeHandler = null;
         }
 
         if (this.#editor) {
             this.#editor.dispose();
+            this.#editor = null;
         }
-
-        this.#editor = null;
     }
 }
