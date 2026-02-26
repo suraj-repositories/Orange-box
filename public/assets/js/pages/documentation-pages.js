@@ -870,7 +870,7 @@ class DocumentationTabs {
         const classObj = this;
 
         const tabEditor = block.querySelector('.tab-editor-toolbar .tab-save');
-        tabEditor.addEventListener('click', () => classObj.savePageContent(pageData.uuid));
+        tabEditor.addEventListener('click', () => classObj.savePageContent(tabEditor, pageData.uuid));
 
         return { button, pane };
     }
@@ -978,11 +978,37 @@ class DocumentationTabs {
         };
     }
 
-    savePageContent(uuid) {
+    savePageContent(saveBtn, uuid) {
         const obj = PageControl.tabs.get(uuid);
         const markdown = obj.editor.getValue();
 
-        console.log('Ready to save : ', uuid, markdown);
+        const prev = saveBtn.innerHTML;
+        saveBtn.innerHTML = `<div class="spinner-border spinner-border-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+            </div>`;
+        saveBtn.disabled = true;
+
+        DocumentationTabs.apiService.saveMarkdownContent(uuid, markdown)
+            .then(data => {
+                if (data.success) {
+                    console.log('saved successfully!');
+                    saveBtn.innerHTML = `<i class="bx bx-check-circle"></i>`;
+                    setTimeout(() => {
+                        saveBtn.innerHTML = prev;
+                    }, 2000);
+
+                } else {
+                    console.error('Saving failed!', data);
+                    saveBtn.innerHTML = prev;
+                }
+                saveBtn.disabled = false;
+            })
+            .catch(error => {
+                console.error(error);
+                saveBtn.innerHTML = prev;
+                saveBtn.disabled = false;
+            });
+
 
     }
 
@@ -1260,7 +1286,7 @@ class ApiService {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
         return fetch(authRoute('user.documentation.pages.udpate.md.content', { docPage: uuid }), {
-            method: 'POST',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
                 'x-csrf-token': csrfToken

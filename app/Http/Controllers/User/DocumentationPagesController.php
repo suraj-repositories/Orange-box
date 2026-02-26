@@ -92,7 +92,7 @@ class DocumentationPagesController extends Controller
     public function updateMarkdownContent(User $user, DocumentationPage $docPage, Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'content' => 'nullable|string'
+            'markdown' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -103,8 +103,8 @@ class DocumentationPagesController extends Controller
         }
 
         try {
-            $docPage->type = 'markdown';
-            $docPage->content = $request->content;
+            $docPage->content_format = 'markdown';
+            $docPage->content = $request->markdown;
             $docPage->save();
 
             return response()->json([
