@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <ul class="directory-list">
+    <ul class="directory-list" doc-ob-dropable="true">
         @foreach ($pages as $page)
             <x-user.docs.tree-node :page="$page" />
         @endforeach

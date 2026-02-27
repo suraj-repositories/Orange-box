@@ -220,4 +220,28 @@ class DocumentationPagesController extends Controller
             'html' => Str::markdown($request->input('markdown') ?? "")
         ]);
     }
+
+    public function move(Request $request)
+    {
+        DB::transaction(function () use ($request) {
+
+            $parentId = null;
+
+            if ($request->parent_uuid) {
+                $parent = DocumentationPage::where('uuid', $request->parent_uuid)->first();
+                $parentId = $parent?->id;
+            }
+
+            foreach ($request->items as $item) {
+
+                DocumentationPage::where('uuid', $item['uuid'])
+                    ->update([
+                        'parent_id'  => $parentId,
+                        'sort_order' => $item['sort_order']
+                    ]);
+            }
+        });
+
+        return response()->json(['success' => true]);
+    }
 }

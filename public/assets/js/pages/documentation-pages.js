@@ -98,7 +98,7 @@ class PageControl {
                 .first();
 
             if (textNode.length) {
-                const span = $('<span class="li-item"></span>').text(
+                const span = $('<span class="node-title"></span>').text(
                     textNode.text()
                 );
                 textNode.replaceWith(span);
@@ -194,7 +194,6 @@ class PageControl {
         }
     }
 
-
     enableSeperator(element) {
         let startX = 0;
         let startWidth = 0;
@@ -260,7 +259,7 @@ class PageControl {
             div.setAttribute("doc-ob-dropable", "true");
 
             const span = document.createElement("span");
-            span.classList.add("li-item");
+            span.classList.add("node-title");
             span.textContent = fileName;
 
             li.innerHTML = "";
@@ -273,7 +272,7 @@ class PageControl {
                     PageControl.tabs.set(data.uuid, {});
                     PageControl.tabBuilder.createNewTab(fileName, {
                         uuid: data.uuid,
-                        content: `<p>Content for ${fileName}</p>`
+                        content: `# ${fileName}`
                     });
 
                     if (loader) loader.classList.add('d-none');
@@ -384,7 +383,7 @@ class PageControl {
             li.appendChild(ul);
 
             cleanup();
-            rowCover.addEventListener('click', () => {
+            rowCover.addEventListener('click', (e) => {
 
                 if (e.detail === 1) {
                     setTimeout(() => {
@@ -542,7 +541,7 @@ class PageControl {
                             text = folder.innerText.trim();
                         }
                     } else {
-                        const file = dragListItem.querySelector('.li-item');
+                        const file = dragListItem.querySelector('.node-title');
                         if (file) {
                             text = file.innerText.trim();
                         }
@@ -569,6 +568,9 @@ class PageControl {
 
                 if (hasMoved) {
                     const dropLocation = e.target;
+                    const sourceUuid = dragListItem.getAttribute('data-doc-page-uuid');
+
+                    let newParentUuid = null;
 
                     if (dropLocation.getAttribute('doc-ob-dropable') != 'true') {
                         return;
@@ -584,18 +586,46 @@ class PageControl {
                         const innerUl = liParent.querySelector(':scope > ul');
                         (innerUl || liParent.appendChild(document.createElement('ul')))
                             .prepend(dragListItem);
+
+                        newParentUuid = liParent.getAttribute('data-doc-page-uuid');
+
                     } else if (liParent) {
                         liParent.insertAdjacentElement('beforebegin', dragListItem);
-                    } else {
+
+                        newParentUuid = liParent.closest('ul')?.closest('li')
+                            ?.getAttribute('data-doc-page-uuid') || null;
+                    } else if (dropLocation.classList.contains('directory-list')) {
+                        dropLocation.appendChild(dragListItem);
+                    }
+                    else {
                         console.error("Drop failed: No parent <li> found for dropLocation.");
                     }
+                    const parentUl = dragListItem.parentElement;
 
+                    const siblings = [...parentUl.children];
 
+                    const orderedUuids = siblings.map((li, index) => {
+                        return {
+                            uuid: li.getAttribute('data-doc-page-uuid'),
+                            sort_order: index + 1
+                        };
+                    });
 
+                    this.moveFile(sourceUuid, newParentUuid, orderedUuids);
                 }
 
             });
         });
+    }
+
+    moveFile(source, destination, orderData) {
+        PageControl.apiService.moveFile(orderData, destination)
+            .then((data) => {
+                console.log("moved successfully");
+            })
+            .catch(err => {
+                console.error('Move failed');
+            });
     }
 
     createContextMenu() {
@@ -665,8 +695,7 @@ class PageControl {
             if (liNode.querySelector('.inline-rename-input')) return;
             const textEl =
                 liNode.querySelector('.folder-name') ||
-                liNode.querySelector('.node-title') ||
-                liNode.querySelector('.li-item');
+                liNode.querySelector('.node-title');
 
             if (!textEl) return;
 
@@ -796,6 +825,7 @@ class DocumentationTabs {
         isActive = true,
         isTemp = true
     } = {}) {
+        const classObj = this;
         const id = `doc-tab-${this.tabIndex++}`;
 
         const li = document.createElement('li');
@@ -830,6 +860,9 @@ class DocumentationTabs {
         block.setAttribute('data-page-uuid', pageData.uuid);
 
         const obEitor = block.querySelector('.ob-rich-editor');
+
+        const tabEditorSaveBtn = block.querySelector('.tab-editor-toolbar .tab-save');
+
         if (obEitor) {
             const div = document.createElement('div');
             obEitor.insertAdjacentElement('beforeend', div);
@@ -842,6 +875,15 @@ class DocumentationTabs {
 
             const tab = PageControl.tabs.get(pageData.uuid);
             if (tab) tab.editor = mdEditor;
+
+            mdEditor.onSave((content) => {
+                tabEditorSaveBtn.click();
+            });
+
+            mdEditor.onChange((content) => {
+                li.classList.remove('temp');
+                li.classList.add("content-edited");
+            });
         };
 
         const githubLinkInput = block.querySelector('.github-load-zone input');
@@ -867,10 +909,7 @@ class DocumentationTabs {
             PageControl.tabs.delete(pageData.uuid);
         });
 
-        const classObj = this;
-
-        const tabEditor = block.querySelector('.tab-editor-toolbar .tab-save');
-        tabEditor.addEventListener('click', () => classObj.savePageContent(tabEditor, pageData.uuid));
+        tabEditorSaveBtn.addEventListener('click', () => classObj.savePageContent(tabEditorSaveBtn, pageData.uuid));
 
         return { button, pane };
     }
@@ -997,6 +1036,10 @@ class DocumentationTabs {
                         saveBtn.innerHTML = prev;
                     }, 2000);
 
+                    const tabLi = document.querySelector(`#documentationExplorerTab .nav-item[data-page-uuid='${uuid}']`);
+                    if (tabLi) {
+                        tabLi.classList.remove("content-edited");
+                    }
                 } else {
                     console.error('Saving failed!', data);
                     saveBtn.innerHTML = prev;
@@ -1309,7 +1352,33 @@ class ApiService {
             });
     }
 
+    moveFile(orderData, parentUuid) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+        return fetch(authRoute('user.documentation.pages.move'), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-csrf-token': csrfToken
+            },
+            body: JSON.stringify({
+                items: orderData,
+                parent_uuid: parentUuid
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    console.error(data);
+                    return Promise.reject(data.message || 'Move failed');
+                }
+                return data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                return Promise.reject(error);
+            });
+    }
 
 }
 
@@ -1345,6 +1414,11 @@ class MarkdownEditor {
     #observer = null;
     #resizeObserver = null;
     #windowResizeHandler = null;
+    #saveCallback = null;
+    #changeCallback = null;
+    #contentChangeDisposable = null;
+    #saveCommandDisposable = null;
+    #isDirty = false;
 
     constructor(element = null) {
         if (element) {
@@ -1402,6 +1476,7 @@ class MarkdownEditor {
 
         this.#attachResizeHandler();
         this.#observeThemeChange();
+        this.#attachEditorListeners();
     }
 
     #getTheme() {
@@ -1440,6 +1515,28 @@ class MarkdownEditor {
         this.#observer.observe(document.body, { attributes: true });
     }
 
+    #attachEditorListeners() {
+        if (!this.#editor) return;
+
+        this.#saveCommandDisposable = this.#editor.addCommand(
+            monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
+            () => {
+                this.#isDirty = false;
+                if (typeof this.#saveCallback === 'function') {
+                    this.#saveCallback(this.getValue());
+                }
+            }
+        );
+
+        this.#contentChangeDisposable = this.#editor.onDidChangeModelContent(() => {
+            this.#isDirty = true;
+
+            if (typeof this.#changeCallback === 'function') {
+                this.#changeCallback(this.getValue());
+            }
+        });
+    }
+
     getEditor() {
         return this.#editor;
     }
@@ -1472,6 +1569,18 @@ class MarkdownEditor {
         return this.#editor?.getValue() ?? null;
     }
 
+    onSave(callback) {
+        this.#saveCallback = callback;
+    }
+
+    onChange(callback) {
+        this.#changeCallback = callback;
+    }
+
+    isDirty() {
+        return this.#isDirty;
+    }
+
     destroy() {
         if (this.#observer) {
             this.#observer.disconnect();
@@ -1488,9 +1597,21 @@ class MarkdownEditor {
             this.#windowResizeHandler = null;
         }
 
+        if (this.#contentChangeDisposable) {
+            this.#contentChangeDisposable.dispose();
+            this.#contentChangeDisposable = null;
+        }
+
+        if (this.#saveCommandDisposable) {
+            this.#editor.removeCommand(this.#saveCommandDisposable);
+            this.#saveCommandDisposable = null;
+        }
+
         if (this.#editor) {
             this.#editor.dispose();
             this.#editor = null;
         }
+
+
     }
 }

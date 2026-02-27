@@ -2792,3 +2792,15 @@ ul.directory-list.active {
     /* border: 1px solid #d4d4d4; */
     border-radius: 5px;
 }
+
+.editor-tabs .content-edited .tab-title {
+    padding-right: 5px;
+    position: relative;
+}
+
+.editor-tabs .content-edited .tab-title::after {
+    content: "*";
+    position: absolute;
+    top: -2px;
+    right: -2px;
+}

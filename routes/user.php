@@ -213,10 +213,9 @@ Route::controller(DocumentationController::class)->group(function () {
     Route::post('documentation', 'store')->name('documentation.store');
     Route::get('documentation/{documentation}/edit', 'edit')->name('documentation.edit');
     Route::post('documentation/{documentation}', 'update')->name('documentation.update');
-
 });
 
-Route::controller(DocumentationPagesController::class)->group(function(){
+Route::controller(DocumentationPagesController::class)->group(function () {
     Route::get('documentation/{documentation}/pages', 'index')->name('documentation.pages.index');
 
     Route::post('documentation/{documentation}/pages/create', 'createPage')->name('documentation.pages.create');
@@ -226,6 +225,5 @@ Route::controller(DocumentationPagesController::class)->group(function(){
     Route::post('documentation/{docPage}/load-git-content', 'loadContentFromGit')->name('documentation.pages.git.load.content');
     Route::patch('documentation/{docPage}/rename', 'renamePageOrFolder')->name('documentation.pages.rename');
     Route::delete('documentation/{docPage}/destroy', 'deletePageOrFolder')->name('documentation.pages.delete');
-
-
+    Route::post('/documentation/pages/move', 'move')->name('documentation.pages.move');
 });
