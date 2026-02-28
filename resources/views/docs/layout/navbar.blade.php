@@ -8,18 +8,18 @@
                     <div class="logo-box">
                         <a class='logo logo-light' href='index.html'>
                             <span class="logo-sm">
-                                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="">
+                                <img src="{{ Storage::url( $documentation->logo_sm_light) }}" alt="">
                             </span>
                             <span class="logo-lg">
-                                <img src="{{ $documentation->logo_url }}" alt="">
+                                <img src="{{ Storage::url( $documentation->logo_light) }}" alt="">
                             </span>
                         </a>
                         <a class='logo logo-dark' href='index.html'>
                             <span class="logo-sm">
-                                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="">
+                                <img src="{{ Storage::url( $documentation->logo_sm_dark) }}" alt="">
                             </span>
                             <span class="logo-lg">
-                                <img src="{{ $documentation->logo_url }}" alt="">
+                                <img src="{{ Storage::url( $documentation->logo_dark) }}" alt="">
                             </span>
                         </a>
                     </div>

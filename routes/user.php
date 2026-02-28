@@ -6,8 +6,8 @@ use App\Http\Controllers\User\Collaboration\TaskController as CollaborationTaskC
 use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
-use App\Http\Controllers\User\DocumentationController;
-use App\Http\Controllers\User\DocumentationPagesController;
+use App\Http\Controllers\User\Documentation\DocumentationController;
+use App\Http\Controllers\User\Documentation\DocumentationPagesController;
 use App\Http\Controllers\User\EducationController;
 use App\Http\Controllers\User\FolderFactoryController;
 use App\Http\Controllers\User\NotificationController;
@@ -22,7 +22,6 @@ use App\Http\Controllers\User\TaskController;
 use App\Http\Controllers\User\ThinkPadController;
 use App\Http\Controllers\User\UserSkillController;
 use App\Http\Controllers\User\WorkExperienceController;
-use App\Models\Documentation;
 use Illuminate\Support\Facades\Route;
 
 Route::controller(DashboardController::class)->group(function () {
@@ -211,13 +210,14 @@ Route::controller(DocumentationController::class)->group(function () {
     Route::get('documentation', 'index')->name('documentation.index');
     Route::get('documentation/new', 'create')->name('documentation.create');
     Route::post('documentation', 'store')->name('documentation.store');
+    Route::get('documentation/{documentation}', 'show')->name('documentation.show');
     Route::get('documentation/{documentation}/edit', 'edit')->name('documentation.edit');
     Route::post('documentation/{documentation}', 'update')->name('documentation.update');
+    Route::delete('documentation/{documentation}', 'delete')->name('documentation.delete');
 });
 
 Route::controller(DocumentationPagesController::class)->group(function () {
     Route::get('documentation/{documentation}/pages', 'index')->name('documentation.pages.index');
-
     Route::post('documentation/{documentation}/pages/create', 'createPage')->name('documentation.pages.create');
     Route::post('documentation/{docPage}/pages/md-to-html', 'markdownToHtml')->name('documentation.pages.md-to-html');
     Route::get('documentation/{docPage}/get', 'getDocumentationPage')->name('documentation.pages.get');

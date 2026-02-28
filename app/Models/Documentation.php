@@ -2,46 +2,36 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Documentation extends Model
 {
-    //
+    use SoftDeletes, HasUuid;
+
     protected $fillable = [
+        'uuid',
         'user_id',
         'title',
-        'logo',
         'url',
-        'status'
+        'logo_light',
+        'logo_sm_light',
+        'logo_dark',
+        'logo_sm_dark',
+        'status',
     ];
 
     protected $appends = [
         'full_url',
-        'logo_url'
+        'logo_url',
     ];
 
-
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'uuid';
-    }
-
-
-    protected static function booted()
-    {
-        static::creating(function ($doc) {
-            if (empty($doc->uuid)) {
-                $doc->uuid = (string) Str::uuid();
-            }
-        });
-    }
-
-    public function getFullUrlAttribute()
-    {
-        $urlPrefix = rtrim(config('app.url'), '/') . '/' . $this->user->username . '/docs/';
-        return $urlPrefix . $this->url;
     }
 
     public function user()
@@ -49,7 +39,21 @@ class Documentation extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getLogoUrlAttribute(){
-        return Storage::url($this->logo);
+    public function getFullUrlAttribute(): ?string
+    {
+        if (!$this->user) {
+            return null;
+        }
+
+        return rtrim(config('app.url'), '/')
+            . '/' . $this->user->username
+            . '/docs/' . $this->url;
+    }
+
+    public function getLogoUrlAttribute(): ?string
+    {
+        return $this->logo_light
+            ? Storage::url($this->logo_light)
+            : null;
     }
 }

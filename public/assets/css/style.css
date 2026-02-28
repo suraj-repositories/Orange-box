@@ -1896,6 +1896,10 @@ tr.deleting a {
     max-height: 60px;
 }
 
+.square-30 {
+    width: 30px;
+    height: 30px;
+}
 .square-40 {
     width: 40px;
     height: 40px;
@@ -2885,4 +2889,121 @@ ul.directory-list.active {
     mask-repeat: no-repeat;
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
+}
+
+/* .doc-logo-picker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.doc-logo-picker label{
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    border: 1px solid var(--bs-gray-300);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.doc-logo-picker input{
+    display: none;
+} */
+.doc-logo-picker {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.doc-logo-picker label {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.doc-logo-picker input[type="file"] {
+    display: none;
+}
+
+.doc-logo-picker .picker-box {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    border: 2px dashed #d0d5dd;
+    border-radius: 10px;
+    background: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: 0.2s ease;
+}
+
+.doc-logo-picker .picker-box:hover {
+    border-color: var(--bs-primary-bg-subtle);
+    background: #fff9f5;
+}
+
+.doc-logo-picker span {
+    font-size: 12px;
+    color: #63574cda;
+}
+
+.doc-logo-picker .picker-box span {
+    color: #857066;
+    font-size: 13px;
+}
+
+.doc-logo-picker .picker-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.doc-logo-picker .remove-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 22px;
+}
+
+.doc-logo-picker label.has-error .picker-box {
+    border-color: #ff6574;
+}
+
+.avatar.avatar-sm.avatar-xl-logo {
+    width: auto !important;
+}
+
+.hot-pages-card .list-group-item {
+    border: none;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.hot-pages-card .list-group-item:last-child {
+    border-bottom: none;
+}
+
+.hot-pages-card .dropdown-menu {
+    border-radius: 12px;
+}
+.hot-pages-card .text-warning{
+    color: #b87711 !important;
+}
+.hot-pages-card .text-success{
+    color: #207820d4 !important;
 }

@@ -33,10 +33,18 @@
 
                             <div class="card-header">
                                 <div class="d-flex align-items-center">
-                                    <img src="{{ Storage::url($documentation->logo) }}"
-                                        class="avatar avatar-sm img-fluid rounded-2 me-2" aria-label="tet">
+                                    @if (!empty($documentation->logo_light))
+                                        <img src="{{ Storage::url($documentation->logo_light) }}"
+                                            class="avatar avatar-sm img-fluid rounded-2 me-1 avatar-xl-logo"
+                                            aria-label="{{ $documentation->title }}">
+                                    @elseif (!empty($documentation->logo_sm_light))
+                                        <img src="{{ Storage::url($documentation->logo_sm_light) }}"
+                                            class="avatar avatar-sm img-fluid rounded-2 me-1"
+                                            aria-label="{{ $documentation->title }}">
+                                        <h5 class="card-title mb-0">{{ $documentation->title }}</h5>
+                                    @endif
 
-                                    <h5 class="card-title mb-0">{{ $documentation->title }}</h5>
+
                                     <input type="hidden" name="documentation_uuid" value="{{ $documentation->uuid }}"
                                         id="documentationUuidInput">
 

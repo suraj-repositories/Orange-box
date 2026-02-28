@@ -120,6 +120,18 @@ a:hover {
     padding: 5px 0;
 }
 
+.logo-box .logo {
+    display: none;
+}
+
+[data-theme="light"] .logo-box .logo-light {
+    display: inline-block;
+}
+
+[data-theme="dark"] .logo-box .logo-dark {
+    display: inline-block;
+}
+
 #sidebar-menu .menuitem-active .active,
 #sidebar-menu .menuitem-active>a {
     color: var(--primary);

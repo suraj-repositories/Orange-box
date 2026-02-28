@@ -30,14 +30,15 @@
                             <div class="card-header">
                                 <div class="d-flex align-items-center">
                                     <div class="rounded-2 me-2 widget-icons-sections p-0">
-                                        <i class="bi bi-file-richtext widgets-icons fs-5" ></i>
+                                        <i class="bi bi-file-richtext widgets-icons fs-5"></i>
 
                                     </div>
                                     <h5 class="card-title mb-0">Documentations</h5>
 
                                     <div class="ms-auto fw-semibold d-flex gap-1">
 
-                                    <a href="{{ authRoute('user.documentation.create') }}" class="btn btn-light btn-sm border center-content gap-1">
+                                        <a href="{{ authRoute('user.documentation.create') }}"
+                                            class="btn btn-light btn-sm border center-content gap-1">
                                             <i class="bx bx-plus fs-5"></i>
                                             <div> New</div>
                                         </a>
@@ -54,6 +55,7 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Logo</th>
                                                 <th>Title</th>
                                                 <th>Link</th>
                                                 <th>Status</th>
@@ -68,15 +70,32 @@
                                                     {{ $documentations->firstItem() + $loop->iteration - 1 }}
                                                 </td>
                                                 <td>
-                                                    <img src="{{ Storage::url($doc->logo) }}" class="avatar avatar-sm img-fluid rounded-2 me-1" aria-label="{{ $doc->title }}" >
-                                                    {{ $doc->title }}
+                                                    <a class="text-dark"
+                                                        href="{{ authRoute('user.documentation.show', ['documentation' => $doc]) }}">
+                                                        @if (!empty($doc->logo_light))
+                                                            <img src="{{ Storage::url($doc->logo_light) }}"
+                                                                class="avatar avatar-sm img-fluid rounded-2 me-1 avatar-xl-logo"
+                                                                aria-label="{{ $doc->title }}">
+                                                        @elseif (!empty($doc->logo_sm_light))
+                                                            <img src="{{ Storage::url($doc->logo_sm_light) }}"
+                                                                class="avatar avatar-sm img-fluid rounded-2 me-1"
+                                                                aria-label="{{ $doc->title }}">
+                                                        @endif
+                                                    </a>
                                                 </td>
                                                 <td>
-                                                   <small> <a href="{{ $doc->full_url }}" target="_blank"
-                                                        title="{{ $doc->full_url }}">{{ $doc->url }}</a>
+                                                    <a class="text-dark"
+                                                        href="{{ authRoute('user.documentation.show', ['documentation' => $doc]) }}">
+                                                        {{ $doc->title }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <small> <a href="{{ $doc->full_url }}" target="_blank"
+                                                            title="{{ $doc->full_url }}">{{ $doc->url }}</a>
                                                     </small>
 
-                                                <i class="bi bi-copy ms-1 copy-icon" data-copy-text="{{ $doc->full_url }}"></i>
+                                                    <i class="bi bi-copy ms-1 copy-icon"
+                                                        data-copy-text="{{ $doc->full_url }}"></i>
                                                 </td>
                                                 <td>
                                                     {{ ucfirst($doc->status) }}
@@ -90,7 +109,8 @@
                                                 <td>
 
                                                     <div class="action-container m-0 gap-1">
-                                                        <a href="{{ authRoute('user.documentation.pages.index', ['documentation' => $doc->uuid]) }}" class="text-reset">
+                                                        <a href="{{ authRoute('user.documentation.pages.index', ['documentation' => $doc->uuid]) }}"
+                                                            class="text-reset">
                                                             <i class="bx bx-info-circle"></i>
                                                         </a>
 
