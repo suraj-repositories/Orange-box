@@ -23,10 +23,10 @@
                 </div>
 
 
-                <div class="row">
+                <div class="row g-3">
                     @forelse ($digestions as $dailyDigest)
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card d-block">
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="card h-100 mb-0">
                                 <div class="card-header d-flex align-items-center">
                                     <a href="{{ $dailyDigest->visit_url }}" class="card-title">{{ $dailyDigest->title }}</a>
                                     @if (str_contains(request()->route()->getName(), 'me'))
@@ -34,10 +34,11 @@
                                             alt="" title="{{ ucfirst($dailyDigest->visibility ?? '') }}">
                                     @endif
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body py-2">
                                     <p class="card-text text-muted mb-0">{{ $dailyDigest->sub_title }}</p>
 
-
+                                </div>
+                                <div class="card-footer pt-0">
                                     <div class="action-container">
                                         <div class="ago-string">
                                             {{ $dailyDigest->created_at->diffForHumans() }}
@@ -72,9 +73,9 @@
                             </div>
                         </div>
                     @empty
-                      <div class="col-12">
-                         <x-no-data :isDecorated="true"/>
-                      </div>
+                        <div class="col-12">
+                            <x-no-data message="No Digestions Yet"/>
+                        </div>
                     @endforelse
 
 

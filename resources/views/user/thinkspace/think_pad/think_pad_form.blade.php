@@ -86,13 +86,14 @@
                                                 <i class="bi bi-info-circle"></i>
                                             </a>
 
-                                            <div class="input-group">
+                                            <div class="input-group visibility-select2">
                                                 <span class="input-group-text" id="basic-addon1">
                                                     <i class="bx bx-show-alt"></i> </span>
                                                  <select class="form-select select2-with-image" name="visibility">
                                                     @foreach (config('icons.visibility') as $visibility => $icon)
                                                         <option value="{{ $visibility }}"
                                                             data-image="{{ asset($icon) }}"
+                                                            data-image-class="visibility-image"
                                                             {{ !empty($thinkPad) && $thinkPad->visibility == $visibility ? 'selected' : '' }}>
                                                             {{ ucfirst($visibility ?? '') }}
                                                         </option>

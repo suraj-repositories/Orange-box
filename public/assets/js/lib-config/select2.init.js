@@ -3,9 +3,12 @@
         if (!option.id) return option.text;
         const imageUrl = $(option.element).data('image');
         if (!imageUrl) return option.text;
+
+        const imgClass = $(option.element).data('image-class') ?? "";
+
         return $(`
             <span style="display:flex; align-items:center;">
-                <img src="${imageUrl}" style="width:28px;height:28px;border-radius:50%;margin-right:8px;">
+                <img src="${imageUrl}" class="select2-image ${imgClass}">
                 <span>${option.text}</span>
             </span>
         `);

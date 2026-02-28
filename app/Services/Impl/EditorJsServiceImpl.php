@@ -12,6 +12,7 @@ class EditorJsServiceImpl implements EditorJsService
         if (!$data || empty($data['blocks'])) return '';
 
         $text = '';
+
         foreach ($data['blocks'] as $block) {
             switch ($block['type']) {
                 case 'paragraph':
@@ -20,7 +21,12 @@ class EditorJsServiceImpl implements EditorJsService
                     break;
                 case 'list':
                     foreach ($block['data']['items'] ?? [] as $item) {
-                        $text .= ' ' . strip_tags($item);
+                        $content = is_array($item)
+                            ? ($item['content'] ?? '')
+                            : $item;
+
+                        $text .= ' ' . strip_tags($content);
+
                         if (strlen($text) >= $size) break 2;
                     }
                     break;

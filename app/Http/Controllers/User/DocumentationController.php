@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\FileService;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class DocumentationController extends Controller
@@ -17,7 +18,8 @@ class DocumentationController extends Controller
     //
     public function index()
     {
-        $documentations = Documentation::with('user')->latest()->paginate();
+        $authUser = Auth::user();
+        $documentations = Documentation::with('user')->where('user_id', $authUser->id)->latest()->paginate();
 
         return view('user.documentation.documentation_list', [
             'title' => 'Documenations',

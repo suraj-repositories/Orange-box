@@ -22,10 +22,10 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row g-3">
                     @forelse ($thinkPads as $thinkPad)
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="card d-block">
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="card h-100 mb-0">
                                 <div class="card-header d-flex align-items-baseline">
                                     <a href="{{ authRoute('user.think-pad.show', ['thinkPad' => $thinkPad]) }}"
                                         class="card-title">{{ $thinkPad->title }}</a>
@@ -34,9 +34,10 @@
                                             title="{{ ucfirst($thinkPad->visibility ?? '') }}">
                                     @endif
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body py-2">
                                     <p class="card-text text-muted mb-0">{{ $thinkPad->sub_title }}</p>
-
+                                </div>
+                                <div class="card-footer pt-0">
                                     <div class="action-container">
                                         <div class="ago-string">
                                             {{ $thinkPad->created_at->diffForHumans() }}
@@ -62,17 +63,14 @@
                                                 </button>
                                             </form>
                                         @endcan
-                                        {{-- <div class="more">
-                                        <i class='bx bx-dots-vertical-rounded' ></i>
-                                    </div> --}}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     @empty
-                       <div class="col-12">
-                         <x-no-data :isDecorated="true"/>
-                       </div>
+                        <div class="col-12">
+                            <x-no-data message="No Records yet"/>
+                        </div>
                     @endforelse
 
 

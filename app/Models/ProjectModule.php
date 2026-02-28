@@ -35,8 +35,6 @@ class ProjectModule extends Model
                 $module->user_id,
                 $module->project_board_id
             );
-
-
         });
 
         static::updating(function ($module) {
@@ -51,17 +49,44 @@ class ProjectModule extends Model
         });
 
         static::deleting(function ($module) {
+
             if ($module->isForceDeleting()) {
-                $module->files()->withTrashed()->each->forceDelete();
-                $module->projectModuleUsers()->withTrashed()->each->forceDelete();
-                $module->projectModuleTasks()->withTrashed()->each->forceDelete();
+
+                $module->files()
+                    ->withTrashed()
+                    ->chunkById(100, function ($files) {
+                        $files->each->forceDelete();
+                    });
+
+                $module->projectModuleUsers()
+                    ->withTrashed()
+                    ->chunkById(100, function ($users) {
+                        $users->each->forceDelete();
+                    });
+
+                $module->projectModuleTasks()
+                    ->withTrashed()
+                    ->chunkById(100, function ($tasks) {
+                        $tasks->each->forceDelete();
+                    });
             } else {
-                $module->files()->each->delete();
-                $module->projectModuleUsers()->each->delete();
-                $module->projectModuleTasks()->each->delete();
+
+                $module->files()
+                    ->chunkById(100, function ($files) {
+                        $files->each->delete();
+                    });
+
+                $module->projectModuleUsers()
+                    ->chunkById(100, function ($users) {
+                        $users->each->delete();
+                    });
+
+                $module->projectModuleTasks()
+                    ->chunkById(100, function ($tasks) {
+                        $tasks->each->delete();
+                    });
             }
         });
-
         static::restoring(function ($module) {
             $module->files()->withTrashed()->each->restore();
             $module->projectModuleUsers()->withTrashed()->each->restore();

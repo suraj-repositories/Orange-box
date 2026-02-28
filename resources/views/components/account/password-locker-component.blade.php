@@ -94,7 +94,7 @@
                             @empty
                                 <tr>
                                     <td colspan="9">
-                                        <div class="text-center">No Data...</div>
+                                        <x-no-data />
                                     </td>
                                 </tr>
                             @endforelse

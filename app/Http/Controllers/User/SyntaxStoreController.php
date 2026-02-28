@@ -10,10 +10,12 @@ use App\Models\User;
 use App\Services\EditorJsService;
 use Illuminate\Http\Request;
 use App\Services\FileService;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 use SweetAlert2\Laravel\Swal;
+use Throwable;
 
 class SyntaxStoreController extends Controller
 {
@@ -58,36 +60,43 @@ class SyntaxStoreController extends Controller
             'submit_status' => 'required|in:publish,draft',
         ]);
 
-        $store = SyntaxStore::create([
-            'title' => $validated['title'],
-            'preview_text' => $this->editorService->jsonToPlainText($validated['editor_content']),
-            'content' => $validated['editor_content'],
-            'status' => $validated['submit_status'],
-            'user_id' => $user->id
-        ]);
-
-
-        $usedFilePaths = $this->editorService->extractFiles($validated['editor_content']);
-        $unusedFiles = File::where('user_id', $user->id)
-            ->where('is_temp', true)
-            ->whereNotIn('file_path', $usedFilePaths)
-            ->select('id', 'file_path', 'is_temp', 'file_name')
-            ->get();
-
-        DB::transaction(function () use ($store, $user, $usedFilePaths, $unusedFiles) {
-            File::where('user_id', $user->id)->whereIn('file_path', $usedFilePaths)->update([
-                'is_temp' => false,
-                'fileable_id' => $store->id,
-                'fileable_type' => SyntaxStore::class,
+        try {
+            $store = SyntaxStore::create([
+                'title' => $validated['title'],
+                'preview_text' => $this->editorService->jsonToPlainText($validated['editor_content']),
+                'content' => $validated['editor_content'],
+                'status' => $validated['submit_status'],
+                'user_id' => $user->id
             ]);
 
-            $unusedIds = $unusedFiles->pluck('id');
-            $unusedPaths = $unusedFiles->pluck('file_path')->toArray();;
-            $this->fileService->deleteAllIfExists($unusedPaths);
-            File::whereIn('id', $unusedIds)->forceDelete();
-        });
 
-        return redirect()->to(authRoute('user.syntax-store.show', ['syntaxStore' => $store]));
+            $usedFilePaths = $this->editorService->extractFiles($validated['editor_content']);
+            $unusedFiles = File::where('user_id', $user->id)
+                ->where('is_temp', true)
+                ->whereNotIn('file_path', $usedFilePaths)
+                ->select('id', 'file_path', 'is_temp', 'file_name')
+                ->get();
+
+            DB::transaction(function () use ($store, $user, $usedFilePaths, $unusedFiles) {
+                File::where('user_id', $user->id)->whereIn('file_path', $usedFilePaths)->update([
+                    'is_temp' => false,
+                    'fileable_id' => $store->id,
+                    'fileable_type' => SyntaxStore::class,
+                ]);
+
+                $unusedIds = $unusedFiles->pluck('id');
+                $unusedPaths = $unusedFiles->pluck('file_path')->toArray();;
+                $this->fileService->deleteAllIfExists($unusedPaths);
+                File::whereIn('id', $unusedIds)->forceDelete();
+            });
+            return redirect()->to(authRoute('user.syntax-store.show', ['syntaxStore' => $store]));
+        } catch (Throwable $ex) {
+             Swal::error([
+                'title' => 'Error!',
+                'text' => $ex->getMessage()
+            ]);
+            return redirect()->back()->with('error', $ex->getMessage());
+        }
     }
 
     public function show(User $user, SyntaxStore $syntaxStore, Request $request)
@@ -111,42 +120,52 @@ class SyntaxStoreController extends Controller
             'submit_status' => 'required|in:publish,draft',
         ]);
 
-        $syntaxStore->update([
-            'title'         => $validated['title'],
-            'preview_text'  => $this->editorService->jsonToPlainText($validated['editor_content']),
-            'content'       => $validated['editor_content'],
-            'status'        => $validated['submit_status'],
-        ]);
-
-        $usedFilePaths = $this->editorService->extractFiles($validated['editor_content']);
-
-        $unusedFiles = File::where('user_id', $user->id)
-            ->where('fileable_type', SyntaxStore::class)
-            ->where('fileable_id', $syntaxStore->id)
-            ->whereNotIn('file_path', $usedFilePaths)
-            ->get(['id', 'file_path']);
-
-        DB::transaction(function () use ($syntaxStore, $usedFilePaths, $unusedFiles) {
-            File::whereIn('file_path', $usedFilePaths)->update([
-                'is_temp'       => false,
-                'fileable_id'   => $syntaxStore->id,
-                'fileable_type' => SyntaxStore::class,
+        try {
+            $syntaxStore->update([
+                'title'         => $validated['title'],
+                'preview_text'  => $this->editorService->jsonToPlainText($validated['editor_content']),
+                'content'       => $validated['editor_content'],
+                'status'        => $validated['submit_status'],
             ]);
 
-            $unusedIds = $unusedFiles->pluck('id');
-            $unusedPaths = $unusedFiles->pluck('file_path')->toArray();
+            $usedFilePaths = $this->editorService->extractFiles($validated['editor_content']);
 
-            $this->fileService->deleteAllIfExists($unusedPaths);
-            File::whereIn('id', $unusedIds)->forceDelete();
-        });
+            $unusedFiles = File::where('user_id', $user->id)
+                ->where('fileable_type', SyntaxStore::class)
+                ->where('fileable_id', $syntaxStore->id)
+                ->whereNotIn('file_path', $usedFilePaths)
+                ->get(['id', 'file_path']);
+
+            DB::transaction(function () use ($syntaxStore, $usedFilePaths, $unusedFiles) {
+                File::whereIn('file_path', $usedFilePaths)->update([
+                    'is_temp'       => false,
+                    'fileable_id'   => $syntaxStore->id,
+                    'fileable_type' => SyntaxStore::class,
+                ]);
+
+                $unusedIds = $unusedFiles->pluck('id');
+                $unusedPaths = $unusedFiles->pluck('file_path')->toArray();
+
+                $this->fileService->deleteAllIfExists($unusedPaths);
+                File::whereIn('id', $unusedIds)->forceDelete();
+            });
 
 
-        Swal::success([
-            'title' => 'Success!',
-            'text' => 'Syntax Updated Successfully!'
-        ]);
+            Swal::success([
+                'title' => 'Success!',
+                'text' => 'Syntax Updated Successfully!'
+            ]);
 
-        return redirect()->to(authRoute('user.syntax-store.show', ['syntaxStore' => $syntaxStore]));
+            return redirect()->to(authRoute('user.syntax-store.show', ['syntaxStore' => $syntaxStore]));
+        } catch (Throwable $th) {
+
+            Swal::error([
+                'title' => 'Error!',
+                'text' => $th->getMessage()
+            ]);
+
+            return redirect()->back();
+        }
     }
 
 

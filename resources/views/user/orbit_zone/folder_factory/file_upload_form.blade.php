@@ -37,6 +37,7 @@
                                                 @foreach ($folderFactories as $folder)
                                                     <option value="{{ $folder->id }}"
                                                         data-image="{{ $folder->getIconUrl() }}"
+                                                        data-image-class="rounded-0"
                                                         data-slug="{{ $folder->slug }}"
                                                     {{ request()->get('folder') == $folder->slug ? 'selected' : '' }}>
                                                         {{ $folder->name }}

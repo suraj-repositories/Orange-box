@@ -6,7 +6,6 @@
     <div class="content-page">
         <div class="content">
 
-            <!-- Start Content-->
             <div class="container-xxl">
 
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
@@ -21,7 +20,7 @@
                         </ol>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row g-3">
                     @forelse ($items as $item)
                         <div class="col-sm-6 col-lg-6">
                             <div class="card d-flex flex-column h-100">

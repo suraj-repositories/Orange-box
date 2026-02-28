@@ -98,6 +98,7 @@
                                                     @foreach (config('icons.visibility') as $visibility => $icon)
                                                         <option value="{{ $visibility }}"
                                                             data-image="{{ asset($icon) }}"
+                                                            data-image-class="visibility-image"
                                                             {{ !empty($dailyDigest) && $dailyDigest->visibility == $visibility ? 'selected' : '' }}>
                                                             {{ ucfirst($visibility ?? '') }}
                                                         </option>
