@@ -1,5 +1,4 @@
 
-
 document.addEventListener('DOMContentLoaded', function () {
     new PageControl().init();
     const icon = document.querySelector('#toggleScreenType');
@@ -289,7 +288,6 @@ class PageControl {
             cleanup();
             div.addEventListener('click', () => {
 
-                element.addEventListener('click', function (e) {
                     if (e.detail === 1) {
                         setTimeout(() => {
                             if (e.detail === 1) {
@@ -301,7 +299,7 @@ class PageControl {
                     if (e.detail === 2) {
                         classObj.sidebarCoverEvent(div, 'double');
                     }
-                });
+
 
             });
             classObj.enableDraggable();
@@ -426,6 +424,7 @@ class PageControl {
     enableExplorerNavber() {
         const newFileButton = document.querySelector("#newFile");
         const newFolderButton = document.querySelector("#newFolder");
+        const collapseExplorerButton = document.querySelector("#collapseExplorer");
         const explorerFiles = document.querySelector("#explorer-sidebar .directory-list");
 
         if (newFileButton) {
@@ -490,6 +489,17 @@ class PageControl {
                 targetUL.prepend(classObj.createNewFolderNameInputElement());
                 $(targetUL).slideDown('fast');
                 $('.ob-li-row-cover').removeClass('active');
+            });
+        }
+
+        if (collapseExplorerButton) {
+            collapseExplorerButton.addEventListener('click', function () {
+                if (explorerFiles) {
+                    const allfolderUls = explorerFiles.querySelectorAll('ul');
+                    if (allfolderUls) {
+                        allfolderUls.forEach(ul => $(ul).slideUp('fast'));
+                    }
+                }
             });
         }
     }
@@ -761,6 +771,11 @@ class PageControl {
                     if (!data.success) {
                         liNode.classList.remove('hide');
                     } else {
+                        const deletedUuids = liNode.querySelectorAll("data-doc-page-uuid");
+                        if(deletedUuids){
+                            deletedUuids.forEach(uid => PageControl.tabBuilder.closeTab(uid));
+                        }
+
                         liNode.remove();
                     }
                 })
@@ -775,11 +790,27 @@ class PageControl {
             if (!li) return;
 
             e.preventDefault();
-
             currentLi = li;
-            menu.style.left = `${e.pageX}px`;
-            menu.style.top = `${e.pageY}px`;
+
             menu.style.display = "block";
+
+            const menuRect = menu.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            let left = e.pageX;
+            let top = e.pageY;
+
+            if (left + menuRect.width > viewportWidth) {
+                left = viewportWidth - menuRect.width - 10;
+            }
+
+            if (top + menuRect.height > viewportHeight) {
+                top = viewportHeight - menuRect.height - 10;
+            }
+
+            menu.style.left = `${left}px`;
+            menu.style.top = `${top}px`;
         });
 
         document.addEventListener("click", (e) => {
@@ -934,7 +965,8 @@ class DocumentationTabs {
                 <i class='bx bx-download fs-4'></i>
             </button>
         </div>
-        <div class="git-link-load-body mt-2"> </div>
+        <div class="git-link-load-body mt-2">
+        </div>
     `;
 
         const editorPane = document.createElement('div');
@@ -952,22 +984,20 @@ class DocumentationTabs {
         block.appendChild(row);
 
         const classObj = this;
-        const btn = block.querySelector(".github-load-zone .load-button");
-        btn.addEventListener('click', () => classObj.loadGithubPageButtonClicked(btn, block));
 
         const toolbar = document.createElement('div');
         toolbar.className = 'tab-editor-toolbar';
         toolbar.innerHTML = `
-        <ul class="list-inline">
-            <li class="list-inline-item"><button class="tab-editor"><i class='bx bx-pencil'></i></button></li>
-            <li class="list-inline-item"><button class="tab-github"><i class='bx bxl-github'></i></button></li>
-            <li class="list-inline-item"><button class="tab-preview"><i class='bx bx-show-alt'></i></button></li>
-            <li class="list-inline-item"><button class="tab-save"><i class='bx bx-save'></i></button></li>
-        </ul>
-    `;
+            <ul class="list-inline">
+                <li class="list-inline-item"><button class="tab-editor"><i class='bx bx-pencil'></i></button></li>
+                <li class="list-inline-item"><button class="tab-github"><i class='bx bxl-github'></i></button></li>
+                <li class="list-inline-item"><button class="tab-preview"><i class='bx bx-show-alt'></i></button></li>
+                <li class="list-inline-item"><button class="tab-save"><i class='bx bx-save'></i></button></li>
+            </ul>
+        `;
         block.appendChild(toolbar);
 
-        function showPane(pane) {
+        const showPane = (pane) => {
 
             previewPane.classList.add('hide');
             gitPane.classList.add('hide');
@@ -995,8 +1025,21 @@ class DocumentationTabs {
 
             }
         }
-
         showPane('editor');
+
+        const btn = block.querySelector(".github-load-zone .load-button");
+        const input = block.querySelector(".github-load-zone input");
+
+        btn.addEventListener('click', () => {
+            classObj.loadGithubPageButtonClicked(btn, block, showPane);
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                classObj.loadGithubPageButtonClicked(btn, block, showPane);
+            }
+        });
 
         toolbar.querySelector('.tab-editor').addEventListener('click', () => showPane('editor'));
         toolbar.querySelector('.tab-github').addEventListener('click', () => showPane('github'));
@@ -1027,7 +1070,9 @@ class DocumentationTabs {
             </div>`;
         saveBtn.disabled = true;
 
-        DocumentationTabs.apiService.saveMarkdownContent(uuid, markdown)
+        const git_link = document.querySelector(`.git-editor-block[data-page-uuid='${uuid}'] .github-load-zone input`)?.value ?? "";
+
+        DocumentationTabs.apiService.saveMarkdownContent(uuid, { markdown: markdown, git_link: git_link.trim() })
             .then(data => {
                 if (data.success) {
                     console.log('saved successfully!');
@@ -1079,7 +1124,7 @@ class DocumentationTabs {
             });
     }
 
-    loadGithubPageButtonClicked(btn, block) {
+    loadGithubPageButtonClicked(btn, block, showPane) {
         const input = block.querySelector('.github-load-zone input');
         if (input.value.trim() == '') {
             console.error("Invalid Input");
@@ -1091,9 +1136,31 @@ class DocumentationTabs {
             .then(data => {
                 const obj = PageControl.tabs.get(data.data.uuid);
                 obj.editor.setValue(data.markdown);
-                mdArea.innerHTML = AppUI.success('Success', 'Loaded Successfully! view preview or edit page');
+                const successMsgHtml = AppUI.success('Success', 'Loaded Successfully! view preview or edit page');
+
+                mdArea.innerHTML = `
+                        <div class="success-message">
+                            ${successMsgHtml}
+                        </div>
+                        <div class="loaded-by-link mt-2">
+                            <button class="view-btn">
+                                <i class="bx bx-show-alt"></i> Preview
+                            </button>
+                            <button class="edit-btn">
+                                <i class="bx bx-pencil"></i> Open Editor
+                            </button>
+                        </div>
+                    `;
+
+                mdArea.querySelector('.view-btn')
+                    .addEventListener('click', () => showPane('preview'));
+
+                mdArea.querySelector('.edit-btn')
+                    .addEventListener('click', () => showPane('editor'));
+
                 setTimeout(() => {
-                    mdArea.innerHTML = "";
+                    const successEl = mdArea.querySelector('.success-message');
+                    if (successEl) successEl.remove();
                 }, 8000);
             })
             .catch(error => {
@@ -1325,7 +1392,7 @@ class ApiService {
             });
     }
 
-    saveMarkdownContent(uuid, markdown) {
+    saveMarkdownContent(uuid, data) {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
         return fetch(authRoute('user.documentation.pages.udpate.md.content', { docPage: uuid }), {
@@ -1334,9 +1401,7 @@ class ApiService {
                 'Content-Type': 'application/json',
                 'x-csrf-token': csrfToken
             },
-            body: JSON.stringify({
-                markdown: markdown,
-            })
+            body: JSON.stringify(data)
         })
             .then(response => response.json())
             .then(data => {

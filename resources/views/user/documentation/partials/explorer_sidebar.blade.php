@@ -8,8 +8,8 @@
             <button id="newFolder">
                 <i class="bi bi-folder-plus"></i>
             </button>
-            <button id="refreshExplorer">
-                <i class="bi bi-arrow-clockwise"></i>
+            <button id="collapseExplorer">
+                <i class="codicon--collapse-all"></i>
             </button>
         </div>
     </div>

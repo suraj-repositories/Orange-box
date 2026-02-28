@@ -2494,6 +2494,15 @@ ul.directory-list.active {
     z-index: 100;
 }
 
+[data-screen-type="content"] #explorer-sidebar {
+    width: 300px;
+}
+
+[data-screen-type="content"] #separator {
+    left: 300px;
+}
+
+
 #separator:hover {
     background: rgb(255, 203, 105);
 }
@@ -2803,4 +2812,75 @@ ul.directory-list.active {
     position: absolute;
     top: -2px;
     right: -2px;
+}
+
+.explorer-contents .loaded-by-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.explorer-contents .loaded-by-link i {
+    font-size: 16px;
+}
+
+.explorer-contents .loaded-by-link .view-btn {
+    font-weight: 600;
+    min-width: 100px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px;
+    gap: 4px;
+    transition: all 0.3s ease-in-out;
+    background: #fff1d2;
+    color: #ff8700;
+    border: 1px solid #ff870070;
+}
+
+.explorer-contents .loaded-by-link .edit-btn {
+    font-weight: 600;
+    min-width: 100px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px;
+    gap: 4px;
+    transition: all 0.3s ease-in-out;
+    background: #98e02e30;
+    color: #70a522;
+    border: 1px solid #70a522ad;
+}
+
+.explorer-contents .loaded-by-link .view-btn:hover {
+    color: var(--bs-light);
+    background: #ff8700;
+    border: 1px solid #ff870070;
+}
+
+.explorer-contents .loaded-by-link .edit-btn:hover {
+    color: var(--bs-light);
+    background: #70a522;
+    border: 1px solid #70a522ad;
+}
+
+.codicon--collapse-all {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    font-style: normal;
+    position: relative;
+    top: 1px;
+    --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cg fill='%23000'%3E%3Cpath d='M14 4.27c.6.35 1 .99 1 1.73v5c0 2.21-1.79 4-4 4H6c-.74 0-1.38-.4-1.73-1H11c1.65 0 3-1.35 3-3zM9.5 7a.5.5 0 0 1 0 1h-4a.5.5 0 0 1 0-1z'/%3E%3Cpath fill-rule='evenodd' d='M11 2c1.103 0 2 .897 2 2v7c0 1.103-.897 2-2 2H4c-1.103 0-2-.897-2-2V4c0-1.103.897-2 2-2zM4 3c-.551 0-1 .449-1 1v7c0 .552.449 1 1 1h7c.551 0 1-.448 1-1V4c0-.551-.449-1-1-1z' clip-rule='evenodd'/%3E%3C/g%3E%3C/svg%3E");
+    background-color: currentColor;
+    -webkit-mask-image: var(--svg);
+    mask-image: var(--svg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
 }
