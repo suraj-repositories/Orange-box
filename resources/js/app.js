@@ -83,7 +83,6 @@ function enableEditorJs() {
     }
 
 
-    console.log(preloadData);
     const editor = new EditorJS({
         holder: 'editorjs-editor',
         autofocus: true,

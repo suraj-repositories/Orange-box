@@ -56,4 +56,16 @@ class Documentation extends Model
             ? Storage::url($this->logo_light)
             : null;
     }
+
+    public function releases()
+    {
+        return $this->hasMany(DocumentationRelease::class);
+    }
+
+    public function latestRelease()
+    {
+        return $this->hasOne(DocumentationRelease::class)
+            ->where('is_current', true)
+            ->latest('id');
+    }
 }

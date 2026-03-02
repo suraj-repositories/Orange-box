@@ -59,8 +59,8 @@
                                                 <th>Title</th>
                                                 <th>Link</th>
                                                 <th>Status</th>
-                                                <th>Creation</th>
-                                                <th>Updated</th>
+                                                <th>Version</th>
+                                                <th>Last Updated</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -101,7 +101,7 @@
                                                     {{ ucfirst($doc->status) }}
                                                 </td>
                                                 <td>
-                                                    {{ $doc->created_at?->format('M d, Y h:i A') ?? '' }}
+                                                   {{ $doc->latestRelease?->version }}
                                                 </td>
                                                 <td>
                                                     {{ $doc->updated_at?->diffForHumans() ?? '' }}

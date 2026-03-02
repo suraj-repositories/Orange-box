@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\Documentation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Documentation;
+use App\Models\DocumentationRelease;
 use App\Models\User;
 use App\Services\FileService;
 use Exception;
@@ -19,7 +20,10 @@ class DocumentationController extends Controller
     public function index()
     {
         $authUser = Auth::user();
-        $documentations = Documentation::with('user')->where('user_id', $authUser->id)->latest()->paginate();
+        $documentations = Documentation::with('user', 'latestRelease')
+                        ->where('user_id', $authUser->id)
+                        ->latest()
+                        ->paginate();
 
         return view('user.documentation.documentation_list', [
             'title' => 'Documenations',
@@ -80,7 +84,7 @@ class DocumentationController extends Controller
                 ? $this->fileService->uploadFile($request->file('logo_sm_dark'), 'documentations')
                 : null;
 
-            Documentation::create([
+            $documentation = Documentation::create([
                 'user_id'       => $user->id,
                 'title'         => $validated['title'],
                 'url'           => $slugUrl,
@@ -88,6 +92,13 @@ class DocumentationController extends Controller
                 'logo_sm_light' => $logoSmLight,
                 'logo_dark'     => $logoDark,
                 'logo_sm_dark'  => $logoSmDark,
+            ]);
+
+            DocumentationRelease::create([
+                'documentation_id' => $documentation->id,
+                'version' => 'v1.0.0',
+                'is_current' => true,
+                'is_published' => false
             ]);
 
             return redirect()

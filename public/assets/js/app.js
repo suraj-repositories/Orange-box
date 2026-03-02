@@ -93,6 +93,7 @@ class App {
         this.dismissablePopOvers();
         this.enablePreloader();
         this.enableCopyBtns();
+        this.enableAjaxFormSubmittion();
     }
 
     initComponents() {
@@ -386,6 +387,126 @@ class App {
             });
         });
     }
+
+    enableAjaxFormSubmittion() {
+        const forms = document.querySelectorAll("form[data-submit-type='ajax']");
+        if (!forms.length) return;
+
+        const toggleForm = (form, action) => {
+            const disabled = action === 'disable';
+            form.querySelectorAll('input, select, button, textarea').forEach(el => {
+                el.disabled = disabled;
+            });
+        };
+
+        const ajaxFormInitalized = (form) => {
+            const submitEl =
+                form.querySelector("button[type='submit'], input[type='submit']");
+
+            if (!submitEl) return;
+
+            submitEl.disabled = false;
+        }
+
+        const toggleSubmitText = (form, action) => {
+            const submitEl =
+                form.querySelector("button[type='submit'], input[type='submit']");
+
+            if (!submitEl) return;
+
+            if (!submitEl.dataset.originalText) {
+                submitEl.dataset.originalText =
+                    submitEl.tagName === 'INPUT'
+                        ? submitEl.value
+                        : submitEl.textContent.trim();
+            }
+
+            if (action === 'loading') {
+                const original = submitEl.dataset.originalText.trim();
+
+                let loadingText;
+
+                if (submitEl.getAttribute('data-loading-text')) {
+                    loadingText = submitEl.getAttribute('data-loading-text');
+                } else {
+                    if (original.endsWith('...')) {
+                        loadingText = original;
+                    } else if (original.toLowerCase().endsWith('e')) {
+                        loadingText = `${original.slice(0, -1)}ing...`;
+                    } else {
+                        loadingText = `${original}ing...`;
+                    }
+                }
+
+                if (submitEl.tagName === 'INPUT') {
+                    submitEl.value = loadingText;
+                } else {
+                    submitEl.textContent = loadingText;
+                }
+            } else {
+                if (submitEl.tagName === 'INPUT') {
+                    submitEl.value = submitEl.dataset.originalText;
+                } else {
+                    submitEl.textContent = submitEl.dataset.originalText;
+                }
+            }
+        };
+
+        forms.forEach(form => {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const csrfToken = document
+                    .querySelector('meta[name="csrf-token"]')
+                    ?.getAttribute('content');
+
+                const formData = new FormData(form);
+
+                toggleSubmitText(form, 'loading');
+                toggleForm(form, 'disable');
+
+                fetch(form.action, {
+                    method: form.method?.toUpperCase() || 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Toastify.success(data.message);
+
+                            setTimeout(() => {
+                                const modal = form.closest('.modal');
+                                if (modal) {
+                                    $(modal).modal('hide');
+                                }
+                                form.reset();
+                                if (data.redirect_url) {
+                                    window.location.href = data.redirect_url;
+                                } else {
+                                    window.location.reload();
+                                }
+                            }, 500);
+                        } else {
+                            Toastify.error(data.message || 'Request failed');
+                        }
+                    })
+                    .catch(() => {
+                        Toastify.error('Something went wrong!');
+                    })
+                    .finally(() => {
+                        toggleForm(form, 'enable');
+                        toggleSubmitText(form, 'restore');
+                    });
+            });
+
+            ajaxFormInitalized(form);
+        });
+    }
+
 
 }
 

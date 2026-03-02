@@ -18,6 +18,7 @@ class DocumentationPage extends Model
         'title',
         'type',
         'slug',
+        'release_id',
         'git_link',
         'content',
         'content_format',
@@ -96,4 +97,10 @@ class DocumentationPage extends Model
 
         $this->delete(); // or forceDelete() if using SoftDeletes
     }
+
+    public function documentationRelease(){
+        return $this->belongsTo(DocumentationRelease::class, 'release_id', 'id');
+    }
+
+
 }

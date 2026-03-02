@@ -168,7 +168,6 @@ class SyntaxStoreController extends Controller
         }
     }
 
-
     public function storeEditorImages(User $user, Request $request)
     {
         if (!$request->hasFile('image')) {

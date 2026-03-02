@@ -7,7 +7,10 @@ use App\Http\Controllers\User\CommentController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\Documentation\DocumentationController;
+use App\Http\Controllers\User\Documentation\DocumentationDocumentController;
 use App\Http\Controllers\User\Documentation\DocumentationPagesController;
+use App\Http\Controllers\User\Documentation\DocumentationReleaseController;
+use App\Http\Controllers\User\Documentation\PrivacyPolicyController;
 use App\Http\Controllers\User\EducationController;
 use App\Http\Controllers\User\FolderFactoryController;
 use App\Http\Controllers\User\NotificationController;
@@ -215,6 +218,24 @@ Route::controller(DocumentationController::class)->group(function () {
     Route::post('documentation/{documentation}', 'update')->name('documentation.update');
     Route::delete('documentation/{documentation}', 'delete')->name('documentation.delete');
 });
+Route::controller(PrivacyPolicyController::class)->group(function () {
+    Route::get('documentation/{documentation}/privacy-policy/edit', 'updateOrNewPage')->name('documentation.privacy-policy.edit');
+    Route::post('documentation/{documentation}/privacy-policy', 'saveOrUpdate')->name('documentation.privacy-policy.save');
+});
+
+Route::controller(DocumentationDocumentController::class)->group(function () {
+    Route::post('documentation-doc/editor/images/store', 'uploadEditorImages')->name('documentation.document.editor.images.store');
+    Route::post('documentation-doc/editor/fetch-url-media', 'fetchMediaFromUrl')->name('documentation.document.editor.fetch-url-media');
+    Route::get('documentation-doc/editor/fetch-url-data', 'fetchUrlData')->name('documentation.document.editor.fetch-url-data');
+});
+
+Route::controller(DocumentationReleaseController::class)->group(function () {
+    Route::get('documentation/{documentation}/releases', 'index')->name('documentation.releases');
+    Route::post('documentation/{documentation}/releases', 'save')->name('documentation.release.save');
+    Route::patch('documentation/{documentation}/releases/{release}', 'update')->name('documentation.release.update');
+
+});
+
 
 Route::controller(DocumentationPagesController::class)->group(function () {
     Route::get('documentation/{documentation}/pages', 'index')->name('documentation.pages.index');
