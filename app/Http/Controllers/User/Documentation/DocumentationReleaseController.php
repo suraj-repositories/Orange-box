@@ -27,6 +27,7 @@ class DocumentationReleaseController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
+             'title' => 'required|string|max:255',
             'version' => 'required|string|min:1|max:255'
         ]);
 
@@ -58,6 +59,7 @@ class DocumentationReleaseController extends Controller
             }
 
             $newRelease = $documentation->releases()->create([
+                'title' => $request->title,
                 'version' => $request->version,
                 'is_current' => false,
                 'is_published' => false,
@@ -114,6 +116,7 @@ class DocumentationReleaseController extends Controller
     public function update(User $user, Documentation $documentation, DocumentationRelease $release, Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
             'version' => 'required|string|min:1|max:255'
         ]);
 
@@ -135,6 +138,7 @@ class DocumentationReleaseController extends Controller
             ]);
         }
 
+        $release->title = $request->title;
         $release->version = $request->version;
         $release->save();
 

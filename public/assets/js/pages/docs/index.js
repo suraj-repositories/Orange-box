@@ -218,6 +218,7 @@ function enableScrollpsyIndicator() {
 
 function enableFeedbackBtns(selector) {
     const feedbackSection = document.querySelector(selector);
+    if(!feedbackSection) return;
     const btns = feedbackSection.querySelectorAll('.feedback-btns button');
     if (btns) {
         btns.forEach(btn => {

@@ -37,8 +37,8 @@
                 <div class="row">
                     <div class="col-12">
                         <form
-                            action="{{ authRoute('user.documentation.privacy-policy.save', ['documentation' => $documentation, 'release' => $release]) }}"
-                            id="savePrivacyPolicy" method="POST">
+                            action="{{ authRoute('user.documentation.terms.save', ['documentation' => $documentation, 'release' => $release]) }}"
+                            id="saveTermsForm" method="POST">
                             @csrf
                             <div class="card">
                                 <div
@@ -59,7 +59,7 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <div id="editorjs-editor" data-ob-submit-form="#savePrivacyPolicy"
+                                    <div id="editorjs-editor" data-ob-submit-form="#saveTermsForm"
                                         data-ob-image-upload-url="{{ authRoute('user.documentation.document.editor.images.store') }}"
                                         data-ob-preview-toggle-checkbox="#previewToggleCheckbox"
                                         data-ob-cacheable-id="syntax-store-editorjs"
@@ -79,10 +79,4 @@
 
         @include('layout.components.copyright')
     </div>
-@endsection
-
-@section('js')
-
-
-
 @endsection

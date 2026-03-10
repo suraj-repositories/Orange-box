@@ -10,19 +10,18 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Throwable;
 
-class PrivacyPolicyController extends Controller
+class CommunityGuideController extends Controller
 {
-    //
-    public function updateOrNewPage(User $user, Documentation $documentation, DocumentationRelease $release)
+     public function updateOrNewPage(User $user, Documentation $documentation, DocumentationRelease $release)
     {
-        $title = 'Privacy Policy';
+        $title = 'Community Guide';
 
         $documentationDocument = DocumentationDocument::where('documentation_id', $documentation->id)
             ->where('release_id', $release->id)
-            ->where('type', 'privacy')
+            ->where('type', 'guide')
             ->first();
 
-        return view('user.documentation.privacy-policy.privacy-policy-form', [
+        return view('user.documentation.community-guide.community-guide-editor', [
             'title' => $title,
             'user' => $user,
             'documentationDocument' => $documentationDocument,
@@ -42,11 +41,11 @@ class PrivacyPolicyController extends Controller
                 [
                     'documentation_id' => $documentation->id,
                     'release_id' => $release->id,
-                    'type' => 'privacy'
+                    'type' => 'guide'
                 ],
                 [
-                    'title' => 'Privacy Policy',
-                    'slug' => 'privacy',
+                    'title' => 'Commnunity Guide',
+                    'slug' => 'guide',
                     'content' => $validated['editor_content'],
                     'status' => 'inactive'
                 ]

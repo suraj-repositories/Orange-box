@@ -3,6 +3,59 @@
         <!--- Sidemenu -->
         <div id="sidebar-menu">
 
+            <div class="dropdown version-dropdown">
+                <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="icon-box">
+                        @if ($release->id == $documentation->latestRelease->id)
+                            <i class='bx bx-purchase-tag'></i>
+                        @else
+                            <i class='bx bx-box'></i>
+                        @endif
+                    </div>
+                    <div>
+                        <h4 class="title">{{ $release->title }}</h4>
+                        <p class="version-tag">{{ $release->version }}</p>
+                    </div>
+
+                    <div class="toggle-icon">
+                        <i class='bx bx-code bx-rotate-90'></i>
+                    </div>
+
+                </button>
+                <ul class="dropdown-menu">
+                    @foreach ($top5Releases as $r)
+                        <li>
+                            <a class="dropdown-item btn"
+                                href="{{ route('docs.switchVersion', [
+                                    'user' => $user->username,
+                                    'slug' => $documentation->url,
+                                    'version' => $r->version,
+                                    'path' => request()->route('path'),
+                                ]) }}">
+                                <div class="icon-box">
+                                    @if ($r->id == $documentation->latestRelease->id)
+                                        <i class='bx bx-purchase-tag'></i>
+                                    @else
+                                        <i class='bx bx-box'></i>
+                                    @endif
+                                </div>
+                                <div>
+                                    <h4 class="title">{{ $r->title }}</h4>
+                                    <p class="version-tag">{{ $r->version }}</p>
+                                </div>
+
+                                @if ($r->id == $release->id)
+                                    <div class="toggle-icon">
+                                        <i class='bx bx-check'></i>
+                                    </div>
+                                @endif
+                            </a>
+                        </li>
+                    @endforeach
+
+                </ul>
+            </div>
+
             <ul id="side-menu">
                 @foreach ($pages as $page)
                     <li>

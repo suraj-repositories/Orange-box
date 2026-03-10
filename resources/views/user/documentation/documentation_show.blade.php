@@ -28,7 +28,7 @@
 
                 <div class="row g-3">
                     <div class="col-md-12">
-                        <div class="card mb-0 overflow-hidden  rounded-4">
+                        <div class="card mb-0 overflow-hidden border rounded-4">
 
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
@@ -39,7 +39,7 @@
                                         </div>
                                         <div>
                                             <h5 class="mb-1 fs-6 fw-bold">
-                                                <a href="{{ route('docs.show', [$documentation->user, $documentation->url, '/']) }}"
+                                                <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $release->version, '/']) }}"
                                                     target="_blank" class=" text-dark">{{ $documentation->title }}<i
                                                         class="bi bi-box-arrow-up-right fs-7 ms-1"></i>
                                                 </a>
@@ -53,7 +53,7 @@
                                     <div>
 
                                         <div class="dropdown">
-                                            <span class="btn border cursor-default" >
+                                            <span class="btn border cursor-default">
                                                 Release - {{ $release->version }}
                                             </span>
                                             <button type="button"
@@ -64,7 +64,8 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 @foreach ($documentation->releases as $r)
-                                                    <li><a class="dropdown-item" href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $r]) }}">{{ $r->version }}</a>
+                                                    <li><a class="dropdown-item"
+                                                            href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $r]) }}">{{ $r->version }}</a>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -166,39 +167,6 @@
                                         <!-- Pages List -->
                                         <ul class="list-group list-group-flush">
 
-                                            <!-- Privacy Policy -->
-                                            <li
-                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <div class="fw-semibold">Privacy Policy</div>
-                                                    <span class="badge bg-success-subtle text-success">Active</span>
-                                                </div>
-
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm btn-light border square-30 center-content"
-                                                        data-bs-toggle="dropdown">
-                                                        <i class="bi bi-three-dots-vertical"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end p-2"
-                                                        style="min-width: 200px;">
-                                                        <li>
-                                                            <a class="dropdown-item"
-                                                                href="{{ authRoute('user.documentation.privacy-policy.edit', ['documentation' => $documentation, 'release' => $release]) }}">Edit</a>
-                                                        </li>
-                                                        <li>
-                                                            <div
-                                                                class="dropdown-item d-flex justify-content-between align-items-center">
-                                                                <span>Disable Page</span>
-                                                                <div class="form-check form-switch m-0">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                        checked>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-
                                             <!-- FAQ -->
                                             <li
                                                 class="list-group-item px-0 d-flex justify-content-between align-items-center">
@@ -221,7 +189,8 @@
                                                                 class="dropdown-item d-flex justify-content-between align-items-center">
                                                                 <span>Disable Page</span>
                                                                 <div class="form-check form-switch m-0">
-                                                                    <input class="form-check-input" type="checkbox">
+                                                                    <input class="form-check-input change-status-checkbox"
+                                                                        type="checkbox">
                                                                 </div>
                                                             </div>
                                                         </li>
@@ -229,96 +198,91 @@
                                                 </div>
                                             </li>
 
-                                            <!-- Terms & Condition -->
-                                            <li
-                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <div class="fw-semibold">Terms & Condition</div>
-                                                    <span class="badge bg-success-subtle text-success">Active</span>
-                                                </div>
+                                            @php
+                                                $pages = [
+                                                    'privacy' => [
+                                                        'title' => 'Privacy Policy',
+                                                        'route' => 'privacy-policy.edit',
+                                                    ],
+                                                    'terms' => [
+                                                        'title' => 'Terms & Condition',
+                                                        'route' => 'terms.edit',
+                                                    ],
+                                                    'guide' => [
+                                                        'title' => 'Community Guide',
+                                                        'route' => 'community-guide.edit',
+                                                    ],
+                                                    'code_of_conduct' => [
+                                                        'title' => 'Code Of Conduct',
+                                                        'route' => 'code-of-conduct.edit',
+                                                    ],
+                                                ];
+                                            @endphp
 
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm btn-light border square-30 center-content"
-                                                        data-bs-toggle="dropdown">
-                                                        <i class="bi bi-three-dots-vertical"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">Edit</a>
-                                                        </li>
-                                                        <li>
-                                                            <div
-                                                                class="dropdown-item d-flex justify-content-between align-items-center">
-                                                                <span>Disable Page</span>
-                                                                <div class="form-check form-switch m-0">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                        checked>
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
+                                            @foreach ($pages as $type => $page)
+                                                @php
+                                                    $doc = $documentationDocuments->get($type);
+                                                @endphp
 
-                                            <!-- Community Guide -->
-                                            <li
-                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <div class="fw-semibold">Community Guide</div>
-                                                    <span class="badge bg-warning-subtle text-warning">Unimplemented</span>
-                                                </div>
+                                                <li
+                                                    class="list-group-item px-0 d-flex justify-content-between align-items-center document-list-item">
 
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm btn-light border square-30 center-content"
-                                                        data-bs-toggle="dropdown">
-                                                        <i class="bi bi-three-dots-vertical"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">Edit</a>
-                                                        </li>
-                                                        <li>
-                                                            <div
-                                                                class="dropdown-item d-flex justify-content-between align-items-center">
-                                                                <span>Disable Page</span>
-                                                                <div class="form-check form-switch m-0">
-                                                                    <input class="form-check-input" type="checkbox">
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
+                                                    <div>
+                                                        <div class="fw-semibold">{{ $page['title'] }}</div>
 
-                                            <!-- Code of conduct -->
-                                            <li
-                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <div class="fw-semibold">Code Of Conduct</div>
-                                                    <span class="badge bg-warning-subtle text-warning">Unimplemented</span>
-                                                </div>
+                                                        @if (!$doc)
+                                                            <span
+                                                                class="badge bg-warning-subtle text-warning page-status-badge">Unimplemented</span>
+                                                        @elseif($doc->status === 'active')
+                                                            <span
+                                                                class="badge bg-success-subtle text-success page-status-badge">Active</span>
+                                                        @else
+                                                            <span
+                                                                class="badge bg-danger-subtle text-danger page-status-badge">Inactive</span>
+                                                        @endif
+                                                    </div>
 
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm btn-light border square-30 center-content"
-                                                        data-bs-toggle="dropdown">
-                                                        <i class="bi bi-three-dots-vertical"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                        <li>
-                                                            <a class="dropdown-item" href="#">Edit</a>
-                                                        </li>
-                                                        <li>
-                                                            <div
-                                                                class="dropdown-item d-flex justify-content-between align-items-center">
-                                                                <span>Disable Page</span>
-                                                                <div class="form-check form-switch m-0">
-                                                                    <input class="form-check-input" type="checkbox">
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
+                                                    <div class="dropdown">
+                                                        <button
+                                                            class="btn btn-sm btn-light border square-30 center-content"
+                                                            data-bs-toggle="dropdown">
+                                                            <i class="bi bi-three-dots-vertical"></i>
+                                                        </button>
+
+                                                        <ul class="dropdown-menu dropdown-menu-end p-2"
+                                                            style="min-width: 200px">
+
+                                                            <li>
+                                                                <a class="dropdown-item"
+                                                                    href="{{ authRoute('user.documentation.' . $page['route'], ['documentation' => $documentation, 'release' => $release]) }}">
+                                                                    Edit
+                                                                </a>
+                                                            </li>
+
+                                                            @if ($doc)
+                                                                <li>
+                                                                    <div
+                                                                        class="dropdown-item d-flex justify-content-between align-items-center">
+
+                                                                        <span>Page Status</span>
+
+                                                                        <div class="form-check form-switch m-0">
+                                                                            <input
+                                                                                class="form-check-input change-status-checkbox"
+                                                                                type="checkbox"
+                                                                                data-document-id="{{ $doc->id }}"
+                                                                                {{ $doc->status === 'active' ? 'checked' : '' }}>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </li>
+                                                            @endif
+
+                                                        </ul>
+                                                    </div>
+
+                                                </li>
+                                            @endforeach
 
                                         </ul>
 
@@ -404,5 +368,5 @@
 @endsection
 
 @section('js')
-
+    <script src="{{ asset('assets/js/pages/documentation-show.js') }}"></script>
 @endsection

@@ -5,7 +5,6 @@
 
     <div class="content-page">
         <div class="content">
-
             <div class="container-xxl">
                 <div class="row g-3">
                     <div class="col-12 col-xl-9">
@@ -50,9 +49,6 @@
                                             </div>
                                         </a>
                                     @endif
-
-
-
                                 </div>
                             @endif
 

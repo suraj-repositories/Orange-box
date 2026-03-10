@@ -61,6 +61,7 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Title</th>
                                                 <th>Version</th>
                                                 <th>Creation Date</th>
                                                 <th>Publish Date</th>
@@ -73,6 +74,7 @@
                                                 <td>
                                                     {{ $releases->firstItem() + $loop->iteration - 1 }}
                                                 </td>
+                                                <td>{{ $release->title }}</td>
                                                 <td>{{ $release->version }}</td>
                                                 <td>{{ $release->created_at?->format('M d, Y h:i a') }}</td>
                                                 <td>{{ $release->released_at?->format('M d, Y h:i a') ?? '-' }}</td>

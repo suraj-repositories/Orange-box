@@ -10,19 +10,18 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Throwable;
 
-class PrivacyPolicyController extends Controller
+class TermsController extends Controller
 {
-    //
     public function updateOrNewPage(User $user, Documentation $documentation, DocumentationRelease $release)
     {
-        $title = 'Privacy Policy';
+        $title = 'Terms';
 
         $documentationDocument = DocumentationDocument::where('documentation_id', $documentation->id)
             ->where('release_id', $release->id)
-            ->where('type', 'privacy')
+            ->where('type', 'terms')
             ->first();
 
-        return view('user.documentation.privacy-policy.privacy-policy-form', [
+        return view('user.documentation.terms.terms-editor', [
             'title' => $title,
             'user' => $user,
             'documentationDocument' => $documentationDocument,
@@ -42,11 +41,11 @@ class PrivacyPolicyController extends Controller
                 [
                     'documentation_id' => $documentation->id,
                     'release_id' => $release->id,
-                    'type' => 'privacy'
+                    'type' => 'terms'
                 ],
                 [
-                    'title' => 'Privacy Policy',
-                    'slug' => 'privacy',
+                    'title' => 'Terms & Conditions',
+                    'slug' => 'terms',
                     'content' => $validated['editor_content'],
                     'status' => 'inactive'
                 ]

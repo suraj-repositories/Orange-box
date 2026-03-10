@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 
 class DocumentationDocumentController extends Controller
 {
@@ -65,7 +66,7 @@ class DocumentationDocumentController extends Controller
         ]);
     }
 
-     public function fetchUrlData(Request $request)
+    public function fetchUrlData(Request $request)
     {
         $url = $request->input('url');
 
@@ -157,4 +158,25 @@ class DocumentationDocumentController extends Controller
         ]);
     }
 
+    public function changeStatus(User $user, DocumentationDocument $document, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|string|in:active,inactive'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        $document->status = $request->status;
+        $document->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully!'
+        ]);
+    }
 }

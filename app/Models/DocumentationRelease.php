@@ -8,6 +8,7 @@ class DocumentationRelease extends Model
 {
     protected $fillable = [
         'documentation_id',
+        'title',
         'version',
         'is_current',
         'is_published',

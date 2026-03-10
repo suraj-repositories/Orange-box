@@ -8,7 +8,9 @@
 
     <div class="container-xxl">
 
-        @include('docs.layout.sidebar')
+        @if (Route::is('docs.show'))
+            @include('docs.layout.sidebar')
+        @endif
 
         @yield('content')
 

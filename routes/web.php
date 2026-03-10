@@ -9,6 +9,7 @@ use App\Http\Controllers\Common\ProjectModuleController;
 use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Common\UserController;
 use App\Http\Controllers\Docs\DocumentationController;
+use App\Http\Controllers\Docs\DocumentationDocumentController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Test\TestingController;
 use Illuminate\Support\Facades\Route;
@@ -64,8 +65,20 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
         Route::post('settings/theme/{theme}', 'changeAppTheme')->name('settings.theme.update');
     });
 });
+
+Route::get(
+    '/{user:username}/docs/{slug}/switch/{version}/{path?}',
+    [DocumentationController::class, 'switchVersion']
+)->where('path', '.*')
+    ->name('docs.switchVersion');
+
 Route::get(
     '/{user:username}/docs/{slug}/{version}/{path?}',
     [DocumentationController::class, 'show']
 )->where('path', '.*')
- ->name('docs.show');
+    ->name('docs.show');
+
+Route::get(
+    '/{user:username}/docs-extras/{slug}/{version}/{type}',
+    [DocumentationDocumentController::class, 'index']
+)->name('docs.extras.show');

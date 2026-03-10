@@ -25,14 +25,15 @@
     <link rel="stylesheet" href="{{ asset('assets/icons/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css') }}">
     <link rel='stylesheet' href='{{ asset('assets/icons/boxicons-2.1.4/css/boxicons.min.css') }}'>
 
-    <!-- Oranbyte Toastify -->
     <link rel="stylesheet" href="{{ asset('assets/libs/oranbyte-toastify/oranbyte-toastify.css') }}">
     <script src="{{ asset('assets/libs/oranbyte-toastify/oranbyte-toastify.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/documentation.css') }}">
+    @vite(['resources/js/app.js'])
     @yield('css')
+
 </head>
 
-<body data-menu-color="light" >
+<body data-menu-color="light">
 
     <div id="preloader">
         <div class="spinner"></div>

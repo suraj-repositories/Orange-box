@@ -8,18 +8,18 @@
                     <div class="logo-box">
                         <a class='logo logo-light' href='index.html'>
                             <span class="logo-sm">
-                                <img src="{{ Storage::url( $documentation->logo_sm_light) }}" alt="">
+                                <img src="{{ Storage::url($documentation->logo_sm_light) }}" alt="">
                             </span>
                             <span class="logo-lg">
-                                <img src="{{ Storage::url( $documentation->logo_light) }}" alt="">
+                                <img src="{{ Storage::url($documentation->logo_light) }}" alt="">
                             </span>
                         </a>
                         <a class='logo logo-dark' href='index.html'>
                             <span class="logo-sm">
-                                <img src="{{ Storage::url( $documentation->logo_sm_dark) }}" alt="">
+                                <img src="{{ Storage::url($documentation->logo_sm_dark) }}" alt="">
                             </span>
                             <span class="logo-lg">
-                                <img src="{{ Storage::url( $documentation->logo_dark) }}" alt="">
+                                <img src="{{ Storage::url($documentation->logo_dark) }}" alt="">
                             </span>
                         </a>
                     </div>
@@ -60,24 +60,35 @@
                     <li class="dropdown in-full-nav dropdown-list topbar-dropdown">
                         <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#"
                             role="button">
-                            <span class="pro-user-name ms-1 dropdown-icon">About <i class="mdi mdi-chevron-down"></i></span>
+                            <span class="pro-user-name ms-1 dropdown-icon">About <i
+                                    class="mdi mdi-chevron-down"></i></span>
                         </a>
+
                         <div class="dropdown-menu dropdown-menu-end profile-dropdown">
-                            <a class='dropdown-item notify-item' href='#'><span>FAQ's</span></a>
-                            <a class='dropdown-item notify-item' href='#'><span>Releases</span></a>
-                            <a class='dropdown-item notify-item' href='#'><span>Code of conduct</span></a>
-                            <a class='dropdown-item notify-item' href='#'><span>Privacy Policy</span></a>
+
+                            <a class="dropdown-item notify-item" href="#">
+                                <span>FAQ's</span>
+                            </a>
+                            <a class="dropdown-item notify-item" href="#">
+                                <span>Releases</span>
+                            </a>
+
+                            <x-docs.documentation-document-nav-items :user="$user" :documentation="$documentation"
+                                :release="$release" />
+
                         </div>
                     </li>
 
                     <li class="mobile-dots-container">
                         <div class="dropdown">
-                            <button type="button" class="btn three-dot-btn nav-link d-flex align-items-center justify-content-center"
+                            <button type="button"
+                                class="btn three-dot-btn nav-link d-flex align-items-center justify-content-center"
                                 data-bs-toggle="dropdown">
                                 <i class='bx bx-dots-horizontal-rounded fs-4'></i>
                             </button>
                             <ul class="dropdown-menu mobile-social-menu dropdown-menu-end p-2">
-                                <li class="dropdown-item apearence-card d-flex align-items-center justify-content-between">
+                                <li
+                                    class="dropdown-item apearence-card d-flex align-items-center justify-content-between">
                                     <span class="me-2 apearance-txt">Appearance</span>
                                     <label for="themeToggle" class="theme">
                                         <span class="theme__toggle-wrap">

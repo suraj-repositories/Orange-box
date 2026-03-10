@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\Documentation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Documentation;
+use App\Models\DocumentationDocument;
 use App\Models\DocumentationRelease;
 use App\Models\User;
 use App\Services\FileService;
@@ -124,7 +125,14 @@ class DocumentationController extends Controller
     public function show(User $user, Documentation $documentation, DocumentationRelease $release)
     {
         $title = $documentation->title;
-        return view('user.documentation.documentation_show', compact('user', 'documentation', 'title', 'release'));
+
+        $documentationDocuments = DocumentationDocument::where('documentation_id', $documentation->id)
+            ->where('release_id', $release->id)
+            ->select('status', 'type', 'id')
+            ->get()
+            ->keyBy('type');
+
+        return view('user.documentation.documentation_show', compact('user', 'documentation', 'title', 'release', 'documentationDocuments'));
     }
 
     public function edit(User $user, Documentation $documentation)

@@ -18,6 +18,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <div class="col col-12 mb-2">
+                            <label for="version-title-input" class="form-label">Version Title</label>
+
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon1">
+                                    <i class="bi bi-alphabet-uppercase"></i> </span>
+                                <input type="text" class="form-control" placeholder="Version 10 Releases, Version 15"
+                                    id="version-title-input" name="title"
+                                    value="{{ empty($release) ? '' : $release->title }}">
+                            </div>
+
+
+                        </div>
                         <div class="col col-12 mb-3">
                             <label for="version-input" class="form-label">Version tag</label>
 

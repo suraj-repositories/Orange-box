@@ -20,7 +20,8 @@
 }
 
 .toastify.toastBox{
-    position: absolute;
+    position: fixed;
+    z-index: 1500;
     top: 5px;
     right: 0px;
     display: flex;

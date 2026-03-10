@@ -3007,3 +3007,6 @@ ul.directory-list.active {
 .hot-pages-card .text-success{
     color: #207820d4 !important;
 }
+.hot-pages-card .dropdown-menu.show .dropdown-item{
+    padding-right: 2px;
+}

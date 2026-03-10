@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Docs;
 
 use App\Http\Controllers\Controller;
 use App\Models\Documentation;
+use App\Models\DocumentationDocument;
 use App\Models\DocumentationPage;
 use App\Models\DocumentationRelease;
 use App\Models\User;
@@ -20,6 +21,11 @@ class DocumentationController extends Controller
         $release = DocumentationRelease::where('version', $version)
             ->where('documentation_id', $documentation->id)
             ->firstOrFail();
+
+        $top5Releases = DocumentationRelease::where('documentation_id', $documentation->id)
+            ->latest()
+            ->limit(5)
+            ->get();
 
         abort_unless($documentation->user_id === $user->id, 404);
 
@@ -44,14 +50,13 @@ class DocumentationController extends Controller
             $parentId = $currentPage->id;
         }
 
-
         if (count($segments) === 0) {
 
             $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
                 ->where('release_id', $release->id)
                 ->whereNull('parent_id')
-                ->orderBy('sort_order')
                 ->where('is_published', 1)
+                ->orderBy('sort_order')
                 ->first();
 
             if (!$currentPage) {
@@ -71,6 +76,17 @@ class DocumentationController extends Controller
                     abort(404, 'Folder is empty!');
                 }
             }
+
+            $currentPage->load('parent');
+
+            $path = $this->buildFullPath($currentPage);
+
+            return redirect()->route('docs.show', [
+                'user' => $user->username,
+                'slug' => $slug,
+                'version' => $version,
+                'path' => $path,
+            ]);
         }
 
         $pages = DocumentationPage::where('documentation_id', $documentation->id)
@@ -122,7 +138,87 @@ class DocumentationController extends Controller
             'nextPath',
             'release',
             'version',
+            'top5Releases',
+            'user',
         ));
+    }
+
+    public function switchVersion(User $user, $slug, $version, $path = null)
+    {
+        $documentation = Documentation::where('user_id', $user->id)
+            ->where('url', $slug)
+            ->firstOrFail();
+
+        $release = DocumentationRelease::where('version', $version)
+            ->where('documentation_id', $documentation->id)
+            ->firstOrFail();
+
+        $segments = $path ? explode('/', $path) : [];
+
+        $currentPage = null;
+        $parentId = null;
+
+        foreach ($segments as $segment) {
+
+            $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
+                ->where('release_id', $release->id)
+                ->where('parent_id', $parentId)
+                ->where('slug', $segment)
+                ->where('is_published', 1)
+                ->first();
+
+            if (!$currentPage) {
+                $currentPage = null;
+                break;
+            }
+
+            $parentId = $currentPage->id;
+        }
+
+        if ($currentPage) {
+            return redirect()->route('docs.show', [
+                'user' => $user->username,
+                'slug' => $slug,
+                'version' => $version,
+                'path' => $path,
+            ]);
+        }
+
+        $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
+            ->where('release_id', $release->id)
+            ->whereNull('parent_id')
+            ->where('is_published', 1)
+            ->orderBy('sort_order')
+            ->first();
+
+        if (!$currentPage) {
+            abort(404);
+        }
+
+        while ($currentPage && $currentPage->type === 'folder') {
+
+            $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
+                ->where('release_id', $release->id)
+                ->where('parent_id', $currentPage->id)
+                ->where('is_published', 1)
+                ->orderBy('sort_order')
+                ->first();
+
+            if (!$currentPage) {
+                abort(404);
+            }
+        }
+
+        $currentPage->load('parent');
+
+        $newPath = $this->buildFullPath($currentPage);
+
+        return redirect()->route('docs.show', [
+            'user' => $user->username,
+            'slug' => $slug,
+            'version' => $version,
+            'path' => $newPath,
+        ]);
     }
 
     private function flattenPages($pages, &$flat = [])
