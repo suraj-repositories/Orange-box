@@ -25,6 +25,7 @@
         <a href="{{ route('docs.show', [
                 'user' => request()->route('user')->username,
                 'slug' => request()->slug,
+                'version' => request()->version,
                 'path' => $page->full_path
             ]) }}"
            class="{{ request()->is('*'.$page->full_path) ? 'active' : '' }}">

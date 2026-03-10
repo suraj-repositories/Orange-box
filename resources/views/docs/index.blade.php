@@ -24,7 +24,7 @@
                                 <div class="doc-pagination d-flex justify-content-between">
 
                                     @if ($previousPage)
-                                        <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $previousPath]) }}"
+                                        <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $version, $previousPath]) }}"
                                             class="prev-btn">
 
                                             <div class="prev-text">
@@ -38,7 +38,7 @@
                                     @endif
 
                                     @if ($nextPage)
-                                        <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $nextPath]) }}"
+                                        <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $version, $nextPath]) }}"
                                             class="next-btn text-end {{ !$previousPage ? 'ms-auto' : '' }}">
 
                                             <div class="next-text">

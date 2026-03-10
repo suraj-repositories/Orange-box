@@ -47,7 +47,7 @@ class Documentation extends Model
 
         return rtrim(config('app.url'), '/')
             . '/' . $this->user->username
-            . '/docs/' . $this->url;
+            . '/docs/'  . $this->url . '/' . $this->latestRelease?->version;
     }
 
     public function getLogoUrlAttribute(): ?string

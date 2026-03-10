@@ -22,7 +22,7 @@
                             </li>
                             <li class="breadcrumb-item">
                                 <a
-                                    href="{{ authRoute('user.documentation.show', ['documentation' => $documentation]) }}">{{ $documentation->title }}</a>
+                                    href="{{ authRoute('user.documentation.show.latest', ['documentation' => $documentation]) }}">{{ $documentation->title }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ $title }}</li>
                         </ol>
@@ -79,11 +79,14 @@
                                                 <td> <span class="badge bg-success-subtle text-success">Active</span> </td>
                                                 <td>
                                                     <div class="action-container m-0 gap-1">
-                                                        <a href="#" class="info ms-0 ">
+                                                        <a href="{{ authRoute('user.documentation.pages.index', ['documentation' => $release->documentation, 'release' => $release]) }}"
+                                                            class="info ms-0 ">
                                                             <i class='bx bx-info-circle fs-4'></i>
                                                         </a>
 
-                                                        <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#realease-form-modal-{{ $release->id }}" class="edit">
+                                                        <a href="javascript:void(0)" data-bs-toggle="modal"
+                                                            data-bs-target="#realease-form-modal-{{ $release->id }}"
+                                                            class="edit">
                                                             <i class='bx bx-edit fs-4'></i>
                                                         </a>
                                                         @include(
@@ -93,7 +96,9 @@
                                                             ]
                                                         )
 
-                                                        <form action="#" method="post">
+                                                        <form
+                                                            action="{{ authRoute('user.documentation.release.delete', ['release' => $release]) }}"
+                                                            method="post">
                                                             @method('DELETE')
                                                             @csrf
                                                             <button type="submit" class="delete btn-no-style">

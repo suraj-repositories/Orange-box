@@ -7,6 +7,7 @@ use App\Models\Documentation;
 use App\Models\DocumentationRelease;
 use App\Models\User;
 use App\Services\FileService;
+use Dom\Document;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +22,9 @@ class DocumentationController extends Controller
     {
         $authUser = Auth::user();
         $documentations = Documentation::with('user', 'latestRelease')
-                        ->where('user_id', $authUser->id)
-                        ->latest()
-                        ->paginate();
+            ->where('user_id', $authUser->id)
+            ->latest()
+            ->paginate();
 
         return view('user.documentation.documentation_list', [
             'title' => 'Documenations',
@@ -111,10 +112,19 @@ class DocumentationController extends Controller
         }
     }
 
-    public function show(User $user, Documentation $documentation)
+    public function showLatestRelease(User $user, Documentation $documentation)
+    {
+        $release = $documentation->releases()->latest('id')->first();
+        return redirect()->to(authRoute('user.documentation.show', [
+            'documentation' => $documentation,
+            'release' => $release
+        ]));
+    }
+
+    public function show(User $user, Documentation $documentation, DocumentationRelease $release)
     {
         $title = $documentation->title;
-        return view('user.documentation.documentation_show', compact('user', 'documentation', 'title'));
+        return view('user.documentation.documentation_show', compact('user', 'documentation', 'title', 'release'));
     }
 
     public function edit(User $user, Documentation $documentation)

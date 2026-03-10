@@ -54,7 +54,7 @@
 
                                         <div class="dropdown">
                                             <span class="btn border cursor-default" >
-                                                Release - {{ $documentation->latestRelease->version }}
+                                                Release - {{ $release->version }}
                                             </span>
                                             <button type="button"
                                                 class="btn btn-light border dropdown-toggle dropdown-toggle-split"
@@ -63,8 +63,8 @@
                                                 <span class="visually-hidden">Toggle Dropdown</span>
                                             </button>
                                             <ul class="dropdown-menu">
-                                                @foreach ($documentation->releases as $release)
-                                                    <li><a class="dropdown-item" href="#">{{ $release->version }}</a>
+                                                @foreach ($documentation->releases as $r)
+                                                    <li><a class="dropdown-item" href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $r]) }}">{{ $r->version }}</a>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -183,7 +183,7 @@
                                                         style="min-width: 200px;">
                                                         <li>
                                                             <a class="dropdown-item"
-                                                                href="{{ authRoute('user.documentation.privacy-policy.edit', ['documentation' => $documentation]) }}">Edit</a>
+                                                                href="{{ authRoute('user.documentation.privacy-policy.edit', ['documentation' => $documentation, 'release' => $release]) }}">Edit</a>
                                                         </li>
                                                         <li>
                                                             <div
@@ -331,7 +331,7 @@
                                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
                                             <div class="col">
                                                 <a
-                                                    href="{{ authRoute('user.documentation.pages.index', ['documentation' => $documentation]) }}">
+                                                    href="{{ authRoute('user.documentation.pages.index', ['documentation' => $documentation, 'release' => $release]) }}">
                                                     <div class="card mb-0 rounded-4 border">
                                                         <div class="card-body d-flex align-items-center gap-2">
                                                             <i class="bi bi-folder fs-4"></i>

@@ -22,7 +22,7 @@
                                 <a href="{{ authRoute('user.documentation.index') }}">Documentations</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="{{ authRoute('user.documentation.show', ['documentation' => $documentation]) }}">{{ $documentation->title }}</a>
+                                <a href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">{{ $documentation->title }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ $title }}</li>
                         </ol>

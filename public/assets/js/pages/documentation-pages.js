@@ -288,17 +288,17 @@ class PageControl {
             cleanup();
             div.addEventListener('click', () => {
 
-                    if (e.detail === 1) {
-                        setTimeout(() => {
-                            if (e.detail === 1) {
-                                classObj.sidebarCoverEvent(div);
-                            }
-                        }, 250);
-                    }
+                if (e.detail === 1) {
+                    setTimeout(() => {
+                        if (e.detail === 1) {
+                            classObj.sidebarCoverEvent(div);
+                        }
+                    }, 250);
+                }
 
-                    if (e.detail === 2) {
-                        classObj.sidebarCoverEvent(div, 'double');
-                    }
+                if (e.detail === 2) {
+                    classObj.sidebarCoverEvent(div, 'double');
+                }
 
 
             });
@@ -772,7 +772,7 @@ class PageControl {
                         liNode.classList.remove('hide');
                     } else {
                         const deletedUuids = liNode.querySelectorAll("data-doc-page-uuid");
-                        if(deletedUuids){
+                        if (deletedUuids) {
                             deletedUuids.forEach(uid => PageControl.tabBuilder.closeTab(uid));
                         }
 
@@ -1233,8 +1233,9 @@ class ApiService {
 
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const docUuidInput = document.getElementById('documentationUuidInput');
+        const docReleaseIdInput = document.getElementById('documentationReleaseInput');
 
-        return fetch(authRoute('user.documentation.pages.create', { documentation: docUuidInput.value }), {
+        return fetch(authRoute('user.documentation.pages.create', { documentation: docUuidInput.value, release: docReleaseIdInput.value }), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

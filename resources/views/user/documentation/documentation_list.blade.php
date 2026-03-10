@@ -71,7 +71,7 @@
                                                 </td>
                                                 <td>
                                                     <a class="text-dark"
-                                                        href="{{ authRoute('user.documentation.show', ['documentation' => $doc]) }}">
+                                                        href="{{ authRoute('user.documentation.show.latest', ['documentation' => $doc]) }}">
                                                         @if (!empty($doc->logo_light))
                                                             <img src="{{ Storage::url($doc->logo_light) }}"
                                                                 class="avatar avatar-sm img-fluid rounded-2 me-1 avatar-xl-logo"
@@ -85,7 +85,7 @@
                                                 </td>
                                                 <td>
                                                     <a class="text-dark"
-                                                        href="{{ authRoute('user.documentation.show', ['documentation' => $doc]) }}">
+                                                        href="{{ authRoute('user.documentation.show.latest', ['documentation' => $doc]) }}">
                                                         {{ $doc->title }}
                                                     </a>
                                                 </td>
@@ -101,7 +101,7 @@
                                                     {{ ucfirst($doc->status) }}
                                                 </td>
                                                 <td>
-                                                   {{ $doc->latestRelease?->version }}
+                                                    {{ $doc->latestRelease?->version }}
                                                 </td>
                                                 <td>
                                                     {{ $doc->updated_at?->diffForHumans() ?? '' }}
@@ -109,7 +109,7 @@
                                                 <td>
 
                                                     <div class="action-container m-0 gap-1">
-                                                        <a href="{{ authRoute('user.documentation.pages.index', ['documentation' => $doc->uuid]) }}"
+                                                        <a href="{{ authRoute('user.documentation.pages.index', ['documentation' => $doc->uuid, 'release' => $doc->latestRelease->id]) }}"
                                                             class="text-reset">
                                                             <i class="bx bx-info-circle"></i>
                                                         </a>

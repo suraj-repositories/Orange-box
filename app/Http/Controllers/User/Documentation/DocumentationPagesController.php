@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User\Documentation;
 use App\Http\Controllers\Controller;
 use App\Models\Documentation;
 use App\Models\DocumentationPage;
+use App\Models\DocumentationRelease;
 use App\Models\User;
 use App\Services\GitService;
 use Illuminate\Http\Request;
@@ -17,9 +18,10 @@ class DocumentationPagesController extends Controller
 {
     public function __construct(public GitService $gitService) {}
 
-    public function index(User $user, Documentation $documentation)
+    public function index(User $user, Documentation $documentation, DocumentationRelease $release)
     {
         $pages = DocumentationPage::where('documentation_id', $documentation->id)
+            ->where('release_id', $release->id)
             ->whereNull('parent_id')
             ->where('is_published', 1)
             ->orderBy('sort_order')
@@ -30,6 +32,7 @@ class DocumentationPagesController extends Controller
         return view('user.documentation.documentation_pages', [
             'documentation' => $documentation,
             'pages' => $pages,
+            'release' => $release,
         ]);
     }
 
@@ -42,7 +45,7 @@ class DocumentationPagesController extends Controller
         ]);
     }
 
-    public function createPage(User $user, Documentation $documentation, Request $request)
+    public function createPage(User $user, Documentation $documentation, DocumentationRelease $release, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'parent_uuid' => 'nullable|exists:documentation_pages,uuid',
@@ -56,11 +59,12 @@ class DocumentationPagesController extends Controller
         }
 
         try {
-            $page = DB::transaction(function () use ($request, $documentation, $user) {
+            $page = DB::transaction(function () use ($request, $documentation, $release, $user) {
 
                 $parentId = DocumentationPage::where('uuid', $request->parent_uuid)->value('id');
 
                 DocumentationPage::where('documentation_id', $documentation->id)
+                    ->where('release_id', $release->id)
                     ->where('parent_id', $parentId)
                     ->where('sort_order', '>=', $request->sort_order)
                     ->increment('sort_order');
@@ -68,6 +72,7 @@ class DocumentationPagesController extends Controller
                 return DocumentationPage::create([
                     'user_id' => $user->id,
                     'documentation_id' => $documentation->id,
+                    'release_id' => $release->id,
                     'parent_id' => $parentId,
                     'type' => $request->type,
                     'title' => $request->title,

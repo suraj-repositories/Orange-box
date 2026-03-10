@@ -166,6 +166,7 @@ Route::prefix('collab')->name('collab.all.')->middleware('collab')->group(functi
         Route::get('tasks', 'index')->name('tasks.index');
     });
 });
+
 Route::prefix('collab/{owner?}/')->name('collab.')->middleware('collab')->group(function () {
     Route::controller(CollaborationProjectBoardController::class)->group(function () {
         Route::get('project-boards', 'index')->name('project-board.index');
@@ -213,14 +214,16 @@ Route::controller(DocumentationController::class)->group(function () {
     Route::get('documentation', 'index')->name('documentation.index');
     Route::get('documentation/new', 'create')->name('documentation.create');
     Route::post('documentation', 'store')->name('documentation.store');
-    Route::get('documentation/{documentation}', 'show')->name('documentation.show');
+    Route::get('documentation/{documentation}', 'showLatestRelease')->name('documentation.show.latest');
+    Route::get('documentation/{documentation}/v/{release}', 'show')->name('documentation.show');
     Route::get('documentation/{documentation}/edit', 'edit')->name('documentation.edit');
     Route::post('documentation/{documentation}', 'update')->name('documentation.update');
     Route::delete('documentation/{documentation}', 'delete')->name('documentation.delete');
 });
+
 Route::controller(PrivacyPolicyController::class)->group(function () {
-    Route::get('documentation/{documentation}/privacy-policy/edit', 'updateOrNewPage')->name('documentation.privacy-policy.edit');
-    Route::post('documentation/{documentation}/privacy-policy', 'saveOrUpdate')->name('documentation.privacy-policy.save');
+    Route::get('documentation/{documentation}/v/{release}/privacy-policy/edit', 'updateOrNewPage')->name('documentation.privacy-policy.edit');
+    Route::post('documentation/{documentation}/v/{release}/privacy-policy', 'saveOrUpdate')->name('documentation.privacy-policy.save');
 });
 
 Route::controller(DocumentationDocumentController::class)->group(function () {
@@ -233,13 +236,14 @@ Route::controller(DocumentationReleaseController::class)->group(function () {
     Route::get('documentation/{documentation}/releases', 'index')->name('documentation.releases');
     Route::post('documentation/{documentation}/releases', 'save')->name('documentation.release.save');
     Route::patch('documentation/{documentation}/releases/{release}', 'update')->name('documentation.release.update');
+    Route::delete('documentation-releases/{release}', 'destroy')->name('documentation.release.delete');
 
 });
 
 
 Route::controller(DocumentationPagesController::class)->group(function () {
-    Route::get('documentation/{documentation}/pages', 'index')->name('documentation.pages.index');
-    Route::post('documentation/{documentation}/pages/create', 'createPage')->name('documentation.pages.create');
+    Route::get('documentation/{documentation}/v/{release}/pages', 'index')->name('documentation.pages.index');
+    Route::post('documentation/{documentation}/v/{release}/pages/create', 'createPage')->name('documentation.pages.create');
     Route::post('documentation/{docPage}/pages/md-to-html', 'markdownToHtml')->name('documentation.pages.md-to-html');
     Route::get('documentation/{docPage}/get', 'getDocumentationPage')->name('documentation.pages.get');
     Route::patch('documentation/{docPage}/update-content', 'updateMarkdownContent')->name('documentation.pages.udpate.md.content');

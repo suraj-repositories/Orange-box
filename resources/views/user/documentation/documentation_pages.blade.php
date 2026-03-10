@@ -43,10 +43,13 @@
                                             aria-label="{{ $documentation->title }}">
                                         <h5 class="card-title mb-0">{{ $documentation->title }}</h5>
                                     @endif
+                                    <div class="badge border ms-1">{{ $release->version }}</div>
 
 
                                     <input type="hidden" name="documentation_uuid" value="{{ $documentation->uuid }}"
                                         id="documentationUuidInput">
+                                    <input type="hidden" name="documentation_release" value="{{ $release->id }}"
+                                        id="documentationReleaseInput">
 
                                     <div class="ms-auto fw-semibold d-flex align-items-center gap-2">
                                         <small class="text-muted" id="sizeIndicator"></small>

@@ -5,15 +5,20 @@ namespace App\Http\Controllers\Docs;
 use App\Http\Controllers\Controller;
 use App\Models\Documentation;
 use App\Models\DocumentationPage;
+use App\Models\DocumentationRelease;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class DocumentationController extends Controller
 {
-    public function show(User $user, $slug, $path = null)
+    public function show(User $user, $slug, $version, $path = null)
     {
         $documentation = Documentation::where('user_id', $user->id)
             ->where('url', $slug ?? '')
+            ->firstOrFail();
+
+        $release = DocumentationRelease::where('version', $version)
+            ->where('documentation_id', $documentation->id)
             ->firstOrFail();
 
         abort_unless($documentation->user_id === $user->id, 404);
@@ -26,6 +31,7 @@ class DocumentationController extends Controller
         foreach ($segments as $segment) {
 
             $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
+                ->where('release_id', $release->id)
                 ->where('parent_id', $parentId)
                 ->where('slug', $segment)
                 ->where('is_published', 1)
@@ -42,6 +48,7 @@ class DocumentationController extends Controller
         if (count($segments) === 0) {
 
             $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
+                ->where('release_id', $release->id)
                 ->whereNull('parent_id')
                 ->orderBy('sort_order')
                 ->where('is_published', 1)
@@ -54,6 +61,7 @@ class DocumentationController extends Controller
             while ($currentPage && $currentPage->type === 'folder') {
 
                 $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
+                    ->where('release_id', $release->id)
                     ->where('parent_id', $currentPage->id)
                     ->where('is_published', 1)
                     ->orderBy('sort_order')
@@ -66,6 +74,7 @@ class DocumentationController extends Controller
         }
 
         $pages = DocumentationPage::where('documentation_id', $documentation->id)
+            ->where('release_id', $release->id)
             ->whereNull('parent_id')
             ->where('is_published', 1)
             ->orderBy('sort_order')
@@ -110,7 +119,9 @@ class DocumentationController extends Controller
             'previousPage',
             'nextPage',
             'previousPath',
-            'nextPath'
+            'nextPath',
+            'release',
+            'version',
         ));
     }
 

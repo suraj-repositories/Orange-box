@@ -50,7 +50,7 @@ class DocumentationReleaseController extends Controller
         DB::transaction(function () use ($documentation, $request) {
 
             $currentRelease = $documentation->releases()
-                ->where('is_current', true)
+                ->latest()
                 ->first();
 
             if (!$currentRelease) {
@@ -66,10 +66,34 @@ class DocumentationReleaseController extends Controller
 
             $pages = DocumentationPage::where('release_id', $currentRelease->id)->get();
 
+            $idMap = [];
+
             foreach ($pages as $page) {
+
                 $newPage = $page->replicate(['uuid']);
+
                 $newPage->release_id = $newRelease->id;
-                $newPage->push();
+
+                $oldParent = $page->parent_id;
+                $newPage->parent_id = null;
+
+                $newPage->save();
+
+                $idMap[$page->id] = [
+                    'new_id' => $newPage->id,
+                    'old_parent' => $oldParent
+                ];
+            }
+
+            foreach ($idMap as $oldId => $data) {
+
+                if ($data['old_parent']) {
+
+                    DocumentationPage::where('id', $data['new_id'])
+                        ->update([
+                            'parent_id' => $idMap[$data['old_parent']]['new_id'] ?? null
+                        ]);
+                }
             }
 
             $documents = DocumentationDocument::where('release_id', $currentRelease->id)->get();
@@ -77,7 +101,7 @@ class DocumentationReleaseController extends Controller
             foreach ($documents as $document) {
                 $newDocument = $document->replicate();
                 $newDocument->release_id = $newRelease->id;
-                $newDocument->push();
+                $newDocument->save();
             }
         });
 
@@ -118,5 +142,22 @@ class DocumentationReleaseController extends Controller
             'success' => true,
             'message' => 'Release version title updated.'
         ]);
+    }
+
+    public function destroy(User $user, DocumentationRelease $release)
+    {
+        $documentation = $release->documentation;
+
+        if (!$documentation) {
+            abort(404, 'Documentation not found');
+        }
+
+        if ($user->id != $documentation->user_id) {
+            abort(403, 'Unauthorized access!');
+        }
+
+        $release->delete();
+
+        return redirect()->back()->with('success', 'Release Deleted Successfully!');
     }
 }

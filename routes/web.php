@@ -65,7 +65,7 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
     });
 });
 Route::get(
-    '/{user:username}/docs/{slug}/{path?}',
+    '/{user:username}/docs/{slug}/{version}/{path?}',
     [DocumentationController::class, 'show']
 )->where('path', '.*')
  ->name('docs.show');
