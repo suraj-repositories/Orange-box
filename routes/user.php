@@ -12,6 +12,7 @@ use App\Http\Controllers\User\Documentation\DocumentationController;
 use App\Http\Controllers\User\Documentation\DocumentationDocumentController;
 use App\Http\Controllers\User\Documentation\DocumentationPagesController;
 use App\Http\Controllers\User\Documentation\DocumentationReleaseController;
+use App\Http\Controllers\User\Documentation\FaqController;
 use App\Http\Controllers\User\Documentation\PrivacyPolicyController;
 use App\Http\Controllers\User\Documentation\TermsController;
 use App\Http\Controllers\User\EducationController;
@@ -228,18 +229,28 @@ Route::controller(PrivacyPolicyController::class)->group(function () {
     Route::get('documentation/{documentation}/v/{release}/privacy-policy/edit', 'updateOrNewPage')->name('documentation.privacy-policy.edit');
     Route::post('documentation/{documentation}/v/{release}/privacy-policy', 'saveOrUpdate')->name('documentation.privacy-policy.save');
 });
+
 Route::controller(TermsController::class)->group(function () {
     Route::get('documentation/{documentation}/v/{release}/terms/edit', 'updateOrNewPage')->name('documentation.terms.edit');
     Route::post('documentation/{documentation}/v/{release}/terms', 'saveOrUpdate')->name('documentation.terms.save');
 });
+
 Route::controller(CodeOfConductController::class)->group(function () {
     Route::get('documentation/{documentation}/v/{release}/coc/edit', 'updateOrNewPage')->name('documentation.code-of-conduct.edit');
     Route::post('documentation/{documentation}/v/{release}/coc', 'saveOrUpdate')->name('documentation.code-of-conduct.save');
 });
+
 Route::controller(CommunityGuideController::class)->group(function () {
     Route::get('documentation/{documentation}/v/{release}/community-guide/edit', 'updateOrNewPage')->name('documentation.community-guide.edit');
     Route::post('documentation/{documentation}/v/{release}/community-guide', 'saveOrUpdate')->name('documentation.community-guide.save');
 });
+
+Route::controller(FaqController::class)->group(function () {
+    Route::get('documentation/{documentation}/v/{release}/faqs', 'index')->name('documentation.faqs.index');
+    Route::post('documentation/{documentation}/v/{release}/faqs', 'store')->name('documentation.faqs.save');
+});
+
+
 
 Route::controller(DocumentationDocumentController::class)->group(function () {
     Route::post('documentation-doc/editor/images/store', 'uploadEditorImages')->name('documentation.document.editor.images.store');

@@ -1,20 +1,17 @@
 @extends('docs.layout.layout')
-@section('title', $currentPage->title ?? '🟢🟢🟢')
+@section('title', $document->title ?? '🟢🟢🟢')
 
 @section('content')
 
-    <div class="content-page">
+    <div class="content-page ms-0">
         <div class="content">
             <div class="container-xxl">
                 <div class="row g-3">
                     <div class="col-12 col-xl-9">
                         <div class="container mt-3 px-1 px-sm-4 mb-5">
-                            {{-- <div id="documentationContent" >
-                                {!! $document->content ?? '' !!}
-                            </div> --}}
-                            <div data-ob-preview-type="editorjs" data-ob-content="{{ $document->content }}"
-                                class="documentation-content">
 
+                            <div id="documentationDocumentContent" data-ob-preview-type="editorjs"
+                                data-ob-content="{{ $document->content }}" class="documentation-content">
                             </div>
 
                         </div>
@@ -33,6 +30,7 @@
                                 </div>
                             </div>
 
+
                         </nav>
                     </div>
                 </div>
@@ -48,4 +46,5 @@
 
 @section('js')
     <script src="{{ asset('assets/js/pages/docs/index.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/docs/extras.js') }}"></script>
 @endsection

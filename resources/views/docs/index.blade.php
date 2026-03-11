@@ -9,9 +9,11 @@
                 <div class="row g-3">
                     <div class="col-12 col-xl-9">
                         <div class="container mt-3 px-1 px-sm-4 mb-5">
+
                             <div id="documentationContent" class="documentation-content">
                                 {!! $currentPage->content_html ?? '' !!}
                             </div>
+
 
                             <a href="#" class="d-flex align-items-center my-5 edit-on-github">
                                 <i class='bx bx-edit'></i>
@@ -63,6 +65,7 @@
                         <nav id="scrollpsy-nav" class="sticky-sidebar">
                             <div class="on-this-page">On This Page</div>
 
+
                             <div class="nav nav-pills flex-column position-relative">
                                 <div class="active-indicator"></div>
                                 <div class="text-center">
@@ -71,6 +74,7 @@
                                     </div>
                                 </div>
                             </div>
+
 
                         </nav>
                     </div>

@@ -12,7 +12,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- App favicon -->
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/ico" />
+    <link rel="icon"
+        href="{{ empty($documentation?->logo_sm_light) ? asset('favicon.ico') : Storage::url($documentation->logo_sm_light) }}"
+        type="image/ico" />
 
     <script src="{{ asset('assets/js/pages/docs/init.js') }}"></script>
 

@@ -7,6 +7,7 @@
 <script src="{{ asset('assets/libs/jquery.counterup/jquery.counterup.min.js') }}"></script>
 <script src="{{ asset('assets/libs/feather-icons/feather.min.js') }}"></script>
 <script src="{{ asset('assets/js/app.js') }}"></script>
+<script src="{{ asset('assets/js/pages/docs/scrollspy-control.js') }}"></script>
 
 @yield('js')
 

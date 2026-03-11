@@ -182,7 +182,8 @@
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                                         <li>
-                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item"
+                                                                href="{{ authRoute('user.documentation.faqs.index', ['documentation' => $documentation, 'release' => $release]) }}">Edit</a>
                                                         </li>
                                                         <li>
                                                             <div

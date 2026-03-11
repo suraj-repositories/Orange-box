@@ -28,6 +28,6 @@ class DocumentationDocumentController extends Controller
             ->where('status', 'active')
             ->firstOrFail();
 
-        return view('docs.extras.hot-pages', compact('documentation', 'release', 'document', 'user'));
+        return view('docs.extras.index', compact('documentation', 'release', 'document', 'user'));
     }
 }

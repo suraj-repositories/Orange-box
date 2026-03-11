@@ -100,6 +100,7 @@ a:hover {
 
 .logo-box .logo {
     line-height: 55px;
+    outline: none;
 }
 
 .logo-box .logo span {
@@ -1204,3 +1205,6 @@ ul.topnav-menu button i.bx {
 .version-dropdown .toggle-icon {
     margin-left: auto;
 }
+/* #scrollpsy-nav:not(:has(.nav-link)){
+    display: none;
+} */

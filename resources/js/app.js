@@ -222,6 +222,7 @@ function enableEditorJsPreview(previewSelector) {
                 const htmlElement = editorJsonToHtml(parsedJson);
                 element.innerHTML = '';
                 element.appendChild(htmlElement);
+                element.classList.add('editorjs-parsed');
             } catch (elementError) {
                 console.error("Error processing :", elementError);
             }
@@ -238,13 +239,13 @@ function editorJsonToHtml(savedData) {
         switch (block.type) {
             case 'header':
                 const h = document.createElement(`h${block.data.level || 2}`);
-                h.textContent = block.data.text;
+                h.innerHTML = block.data.text;
                 output.appendChild(h);
                 break;
 
             case 'paragraph':
                 const p = document.createElement('p');
-                p.textContent = block.data.text;
+                p.innerHTML = block.data.text;
                 output.appendChild(p);
                 break;
 
@@ -279,7 +280,7 @@ function editorJsonToHtml(savedData) {
             case 'linkTool':
                 const a = document.createElement('a');
                 a.href = block.data.link;
-                a.textContent = block.data.link || block.data.meta?.title || 'Link';
+                a.innerHTML = block.data.link || block.data.meta?.title || 'Link';
                 a.target = '_blank';
                 a.rel = 'noopener noreferrer';
                 output.appendChild(a);
@@ -386,7 +387,7 @@ function editorJsonToHtml(savedData) {
 
             default:
                 const preRaw = document.createElement('pre');
-                preRaw.textContent = JSON.stringify(block, null, 2);
+                preRaw.innerHTML = JSON.stringify(block, null, 2);
                 output.appendChild(preRaw);
         }
     });

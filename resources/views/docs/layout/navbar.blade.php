@@ -48,7 +48,13 @@
             <div class="mobile-nav-screen">
                 <ul class="list-unstyled topbar-menu topnav-menu right-menu mb-0 d-flex align-items-center">
                     <li>
-                        <a class="nav-link in-full-nav dropdown-toggle nav-user me-0 active">
+                        <a href="{{ route('docs.show', [
+                            'user' => $user->username,
+                            'slug' => $documentation->url,
+                            'version' => $release->version,
+                            'path' => '',
+                        ]) }}"
+                            class="nav-link in-full-nav dropdown-toggle nav-user me-0 {{ Route::is('docs.show') ? 'active' : '' }}">
                             <span class="pro-user-name ms-1">Docs</span>
                         </a>
                     </li>
@@ -58,7 +64,7 @@
                                 class="pro-user-name ms-1">Partners</span></a></li>
 
                     <li class="dropdown in-full-nav dropdown-list topbar-dropdown">
-                        <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#"
+                        <a class="nav-link dropdown-toggle nav-user me-0  {{ Route::is('docs.extras.show') ? 'active' : '' }}" data-bs-toggle="dropdown" href="#"
                             role="button">
                             <span class="pro-user-name ms-1 dropdown-icon">About <i
                                     class="mdi mdi-chevron-down"></i></span>
