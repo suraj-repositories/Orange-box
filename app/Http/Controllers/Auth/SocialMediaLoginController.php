@@ -14,7 +14,6 @@ use Illuminate\Support\Str;
 
 class SocialMediaLoginController extends Controller
 {
-    //
 
     public function googleLogin()
     {
