@@ -29,7 +29,7 @@ class SocialMediaLoginController extends Controller
             $findUser = User::where('email', $user->email)->first();
             if (!$findUser) {
                 $findUser = new User();
-                $findUser->username = $user->name;
+                $findUser->username = $this->createUsername($user->email);
                 $findUser->email = $user->email;
                 $findUser->password = Hash::make(Str::rand(12));
                 $findUser->save();
@@ -56,12 +56,13 @@ class SocialMediaLoginController extends Controller
 
             if (!$findUser) {
                 $findUser = new User();
-                $findUser->name = $user->name;
+                $findUser->username = $this->createUsername($user->email);
                 $findUser->email = $user->email;
                 $findUser->image = $user->avatar;
                 $findUser->password = Hash::make(Str::rand(12));
-                $findUser->role = 'USER';
                 $findUser->save();
+
+                $findUser->assignRole('user');
             }
 
             Auth::login($findUser);
@@ -84,10 +85,10 @@ class SocialMediaLoginController extends Controller
 
             if (!$findUser) {
                 $findUser = new User();
-                $findUser->name = $user->name;
+                $findUser->username = $this->createUsername($user->email);
                 $findUser->email = $user->email;
                 $findUser->password = Hash::make(Str::rand(12));
-                $findUser->role = 'USER';
+                $findUser->assignRole('user');
                 $findUser->save();
             }
 
@@ -96,5 +97,18 @@ class SocialMediaLoginController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with('error', empty($e->getMessage()) ? "Something went wrong!" : $e->getMessage());
         }
+    }
+
+    private function createUsername($email)
+    {
+        $baseUsername = strtolower(substr($email, 0, strpos($email, '@')));
+
+        $count = User::where('username', 'like', $baseUsername . '%')->count();
+
+        if ($count == 0) {
+            return $baseUsername;
+        }
+
+        return $baseUsername . $count;
     }
 }
