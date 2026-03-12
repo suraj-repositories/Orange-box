@@ -10,6 +10,7 @@ use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Common\UserController;
 use App\Http\Controllers\Docs\DocumentationController;
 use App\Http\Controllers\Docs\DocumentationDocumentController;
+use App\Http\Controllers\Docs\FaqController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Test\TestingController;
 use Illuminate\Support\Facades\Route;
@@ -66,6 +67,10 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
     });
 });
 
+/* ---------------------------------------------
+| BEGIN - DOC-routes
+-----------------------------------------------*/
+
 Route::get(
     '/{user:username}/docs/{slug}/switch/{version}/{path?}',
     [DocumentationController::class, 'switchVersion']
@@ -82,3 +87,9 @@ Route::get(
     '/{user:username}/docs-extras/{slug}/{version}/{type}',
     [DocumentationDocumentController::class, 'index']
 )->name('docs.extras.show');
+
+Route::get('/{user:username}/docs-xt/{slug}/{version}/faqs', [FaqController::class, 'index'])->name('docs.faq.index');
+
+/* ---------------------------------------------
+| END - DOC-routes
+-----------------------------------------------*/

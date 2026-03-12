@@ -1208,3 +1208,6 @@ ul.topnav-menu button i.bx {
 /* #scrollpsy-nav:not(:has(.nav-link)){
     display: none;
 } */
+.opacity-15{
+    opacity: .15 !important;
+}

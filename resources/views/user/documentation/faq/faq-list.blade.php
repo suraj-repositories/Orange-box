@@ -51,27 +51,28 @@
 
                                     <div class="ms-auto fw-semibold d-flex gap-1">
 
-                                        <a href="javascript:void(0)" id="create-faq-creation" data-bs-toggle="modal"
-                                            data-bs-target="#faq-creation-form-modal"
+                                        <a href="javascript:void(0)" id="create-faq-button"
                                             class="btn btn-light btn-sm border center-content gap-1">
                                             <i class="bx bx-plus fs-5"></i>
                                             <div>New</div>
                                         </a>
 
-
                                         <div class="modal fade faq-creation" id="faq-creation-form-modal" tabindex="-1"
                                             aria-labelledby="faq-creation-form-title" aria-hidden="true">
                                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                                 <div class="modal-content">
-                                                    <form id="faq-creation-form" {{-- data-submit-type='ajax' --}}
+                                                    <form id="faq-creation-form" data-submit-type="ajax"
                                                         action="{{ authRoute('user.documentation.faqs.save', ['documentation' => $documentation, 'release' => $release]) }}"
                                                         method="post">
                                                         @csrf
+
+                                                        <input type="hidden" name="faq_id" id="faq-id">
+
                                                         <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="faq-creation-form-title">
-                                                                Create Password Lock</h1>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
+                                                            <h1 class="modal-title fs-5" id="faq-creation-form-title">Create
+                                                                FAQ</h1>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             <div class="row g-3">
@@ -112,76 +113,99 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body">
 
-                                <div class="accordion" id="faqAccordion">
 
-                                    @forelse ($faqs as $faq)
-                                        <div class="accordion-item mb-2">
+                            <div class="card-body p-0">
 
-                                            <h2 class="accordion-header" id="heading{{ $faq->id }}">
-                                                <button class="accordion-button collapsed" type="button"
-                                                    data-bs-toggle="collapse" data-bs-target="#collapse{{ $faq->id }}"
-                                                    aria-expanded="false">
+                                <div class="table-responsive">
+                                    <table class="table table-traffic mb-0">
 
-                                                    <div class="d-flex justify-content-between w-100 align-items-center">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Question</th>
+                                                <th>Answer</th>
+                                                <th width="140">Last Updated</th>
+                                                <th width="120">Status</th>
+                                                <th width="120">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
-                                                        <div>
-                                                            <strong>
-                                                                {{ $faqs->firstItem() + $loop->iteration - 1 }}.
-                                                            </strong>
-                                                            {{ $faq->question }}
-                                                        </div>
+                                            @forelse ($faqs as $faq)
+                                                <tr>
+                                                    <th> {{ $faqs->firstItem() + $loop->iteration - 1 }}</th>
+                                                    <td style="max-width:400px;" class="text-truncate">
+                                                        {{ $faq->question }}
+                                                    </td>
 
-                                                        <small class="text-muted ms-3">
-                                                            {{ $faq->created_at->format('d M Y') }}
-                                                        </small>
-
-                                                    </div>
-                                                </button>
-                                            </h2>
-
-                                            <div id="collapse{{ $faq->id }}" class="accordion-collapse collapse"
-                                                data-bs-parent="#faqAccordion">
-
-                                                <div class="accordion-body">
-
-                                                    <p class="mb-3">
+                                                    <td style="max-width:400px;" class="text-truncate">
                                                         {!! $faq->answer !!}
-                                                    </p>
+                                                    </td>
 
-                                                    <div class="d-flex gap-2">
+                                                    <td>
+                                                        <small class="text-muted">
+                                                            {{ $faq->updated_at->diffForHumans() }}
+                                                        </small>
+                                                    </td>
+                                                    <td>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input faqStatusToggleSwitch"
+                                                                type="checkbox" role="switch"
+                                                                data-documentation-faq-id="{{ $faq->id }}"
+                                                                {{ $faq->is_active ? 'checked' : '' }}>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="action-container m-0 gap-1">
 
-                                                        <button
-                                                            class="delete btn btn-sm btn-danger delete-password-locker-button">
-                                                            <i class='bx bx-trash'></i> Delete
-                                                        </button>
 
-                                                    </div>
+                                                            <a href="javascript:void(0)" class="info ms-0 show-faq"
+                                                                data-question="{{ $faq->question }}"
+                                                                data-answer="{{ Str::markdown($faq->answer) }}">
+                                                                <i class='bx bx-info-circle fs-5'></i>
+                                                            </a>
 
-                                                </div>
+                                                            <a href="javascript:void(0)" class="edit edit-faq"
+                                                                data-id="{{ $faq->id }}"
+                                                                data-question="{{ $faq->question }}"
+                                                                data-answer="{{ $faq->answer }}">
+                                                                <i class='bx bx-edit fs-5'></i>
+                                                            </a>
 
-                                            </div>
+                                                            <form
+                                                                action="{{ authRoute('user.documentation.faqs.status.delete', ['faq' => $faq]) }}"
+                                                                method="POST" data-confirm-delete>
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" disabled
+                                                                    class="delete btn-no-style delete-password-locker-button">
+                                                                    <i class='bx bx-trash fs-5'></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
 
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <x-no-data />
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        </tbody>
+
+                                    </table>
+
+                                    @if ($faqs->lastPage() > 1)
+                                        <div class="m-3 mb-0">
+                                            {{ $faqs->withQueryString()->links() }}
                                         </div>
-
-                                    @empty
-
-                                        <x-no-data />
-                                    @endforelse
-
+                                    @endif
                                 </div>
-
-                                @if ($faqs->lastPage() > 1)
-                                    <div class="mt-3">
-                                        {{ $faqs->withQueryString()->links() }}
-                                    </div>
-                                @endif
-
                             </div>
                         </div>
-
-
 
                     </div>
                 </div>
@@ -196,8 +220,34 @@
 
     </div>
 
+    <div class="modal fade" id="faq-view-modal" tabindex="-1" aria-labelledby="faq-view-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="faq-view-title">FAQ Details</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <h6 class="fw-bold mb-2">Question</h6>
+                    <p id="faq-view-question"></p>
+
+                    <h6 class="fw-bold mt-3 mb-2">Answer</h6>
+                    <div id="faq-view-answer"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('js')
     @include('layout.extras.ckeditor5')
+    <script src="{{ asset('assets/js/pages/documentation-faq-list.js') }}"></script>
 @endsection

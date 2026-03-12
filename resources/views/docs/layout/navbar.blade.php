@@ -64,15 +64,20 @@
                                 class="pro-user-name ms-1">Partners</span></a></li>
 
                     <li class="dropdown in-full-nav dropdown-list topbar-dropdown">
-                        <a class="nav-link dropdown-toggle nav-user me-0  {{ Route::is('docs.extras.show') ? 'active' : '' }}" data-bs-toggle="dropdown" href="#"
-                            role="button">
+                        <a class="nav-link dropdown-toggle nav-user me-0  {{ Route::is('docs.extras.show') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown" href="#" role="button">
                             <span class="pro-user-name ms-1 dropdown-icon">About <i
                                     class="mdi mdi-chevron-down"></i></span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-end profile-dropdown">
 
-                            <a class="dropdown-item notify-item" href="#">
+                            <a class="dropdown-item notify-item"
+                                href="{{ route('docs.faq.index', [
+                                    'user' => $user->username,
+                                    'slug' => $documentation->url,
+                                    'version' => $release->version,
+                                ]) }}">
                                 <span>FAQ's</span>
                             </a>
                             <a class="dropdown-item notify-item" href="#">

@@ -1900,6 +1900,7 @@ tr.deleting a {
     width: 30px;
     height: 30px;
 }
+
 .square-40 {
     width: 40px;
     height: 40px;
@@ -3001,12 +3002,33 @@ ul.directory-list.active {
 .hot-pages-card .dropdown-menu {
     border-radius: 12px;
 }
-.hot-pages-card .text-warning{
+
+.hot-pages-card .text-warning {
     color: #b87711 !important;
 }
-.hot-pages-card .text-success{
+
+.hot-pages-card .text-success {
     color: #207820d4 !important;
 }
-.hot-pages-card .dropdown-menu.show .dropdown-item{
+
+.hot-pages-card .dropdown-menu.show .dropdown-item {
     padding-right: 2px;
+}
+
+.swal-confirm-gradient {
+    background-color: var(--bs-danger);
+    color: #fff;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.swal-cancel-btn {
+    background: #6c757d;
+    color: #fff;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
 }

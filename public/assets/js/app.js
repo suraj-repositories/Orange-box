@@ -94,6 +94,7 @@ class App {
         this.enablePreloader();
         this.enableCopyBtns();
         this.enableAjaxFormSubmittion();
+        this.enableDeletionConfirmationForm();
     }
 
     initComponents() {
@@ -456,6 +457,12 @@ class App {
             form.addEventListener('submit', function (event) {
                 event.preventDefault();
 
+                form.querySelectorAll('.ckeditor').forEach(el => {
+                    if (el.editorInstance) {
+                        el.value = el.editorInstance.getData();
+                    }
+                });
+
                 const csrfToken = document
                     .querySelector('meta[name="csrf-token"]')
                     ?.getAttribute('content');
@@ -507,6 +514,55 @@ class App {
         });
     }
 
+    enableDeletionConfirmationForm() {
+
+        window.enableDeleteConfirmation = function () {
+
+            const DEFAULT_TEXT = "This action cannot be undone!";
+
+            document.querySelectorAll('form[data-confirm-delete] button[type="submit"]').forEach(btn => {
+                btn.disabled = false;
+            });
+
+            console.log('here');
+
+            document.addEventListener('submit', function (event) {
+
+                const form = event.target;
+
+                if (!form.matches('form[data-confirm-delete]')) return;
+
+                event.preventDefault();
+
+                const confirmText = form.dataset.confirmText || DEFAULT_TEXT;
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: confirmText,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it',
+                    cancelButtonText: 'Cancel',
+                    buttonsStyling: false,
+                    reverseButtons: true,
+                    customClass: {
+                        confirmButton: 'swal-confirm-gradient',
+                        cancelButton: 'swal-cancel-btn'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.removeAttribute('data-confirm-delete');
+                        form.submit();
+                    }
+                });
+
+            });
+
+        };
+
+        enableDeleteConfirmation();
+
+    }
 
 }
 

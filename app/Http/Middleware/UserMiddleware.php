@@ -22,6 +22,6 @@ class UserMiddleware
             return $next($request);
         }
 
-        return redirect()->route('login')->with('error', 'Please Login First!');
+        return redirect()->route('login');
     }
 }

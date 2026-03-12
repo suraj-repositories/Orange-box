@@ -22,7 +22,7 @@
                     </div>
 
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu mt-3">
                     @foreach ($top5Releases as $r)
                         <li>
                             <a class="dropdown-item btn"

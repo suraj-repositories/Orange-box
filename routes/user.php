@@ -248,6 +248,8 @@ Route::controller(CommunityGuideController::class)->group(function () {
 Route::controller(FaqController::class)->group(function () {
     Route::get('documentation/{documentation}/v/{release}/faqs', 'index')->name('documentation.faqs.index');
     Route::post('documentation/{documentation}/v/{release}/faqs', 'store')->name('documentation.faqs.save');
+    Route::patch('documentation-faqs/{faq}/status', 'updateStatus')->name('documentation.faqs.status.update');
+    Route::delete('documentation-faqs/{faq}', 'destroy')->name('documentation.faqs.status.delete');
 });
 
 
