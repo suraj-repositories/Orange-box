@@ -30,7 +30,8 @@ class SocialMediaLoginController extends Controller
                 $findUser = new User();
                 $findUser->username = $this->createUsername($user->email);
                 $findUser->email = $user->email;
-                $findUser->password = Hash::make(Str::rand(12));
+                $findUser->avatar = $user->avatar;
+                $findUser->password = Hash::make(Str::random(12));
                 $findUser->save();
 
                 $findUser->assignRole('user');
@@ -57,8 +58,8 @@ class SocialMediaLoginController extends Controller
                 $findUser = new User();
                 $findUser->username = $this->createUsername($user->email);
                 $findUser->email = $user->email;
-                $findUser->image = $user->avatar;
-                $findUser->password = Hash::make(Str::rand(12));
+                $findUser->avatar = $user->avatar;
+                $findUser->password = Hash::make(Str::random(12));
                 $findUser->save();
 
                 $findUser->assignRole('user');
@@ -86,7 +87,8 @@ class SocialMediaLoginController extends Controller
                 $findUser = new User();
                 $findUser->username = $this->createUsername($user->email);
                 $findUser->email = $user->email;
-                $findUser->password = Hash::make(Str::rand(12));
+                $findUser->avatar = $user->avatar;
+                $findUser->password = Hash::make(Str::random(12));
                 $findUser->assignRole('user');
                 $findUser->save();
             }
