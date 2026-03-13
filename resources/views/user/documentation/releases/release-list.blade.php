@@ -61,7 +61,7 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Title</th>
+                                                <th>Group Title</th>
                                                 <th>Version</th>
                                                 <th>Creation Date</th>
                                                 <th>Publish Date</th>

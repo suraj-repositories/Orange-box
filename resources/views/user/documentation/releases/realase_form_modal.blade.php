@@ -19,7 +19,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col col-12 mb-2">
-                            <label for="version-title-input" class="form-label">Version Title</label>
+                            <label for="version-title-input" class="form-label">Version Group Title</label>
 
                             <div class="input-group">
                                 <span class="input-group-text" id="basic-addon1">

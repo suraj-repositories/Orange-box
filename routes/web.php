@@ -11,6 +11,7 @@ use App\Http\Controllers\Common\UserController;
 use App\Http\Controllers\Docs\DocumentationController;
 use App\Http\Controllers\Docs\DocumentationDocumentController;
 use App\Http\Controllers\Docs\FaqController;
+use App\Http\Controllers\Docs\ReleaseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Test\TestingController;
 use Illuminate\Support\Facades\Route;
@@ -89,6 +90,7 @@ Route::get(
 )->name('docs.extras.show');
 
 Route::get('/{user:username}/docs-xt/{slug}/{version}/faqs', [FaqController::class, 'index'])->name('docs.faq.index');
+Route::get('/{user:username}/docs-v/{slug}/releases', [ReleaseController::class, 'index'])->name('docs.releases.index');
 
 /* ---------------------------------------------
 | END - DOC-routes

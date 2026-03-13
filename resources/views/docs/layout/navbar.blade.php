@@ -80,7 +80,8 @@
                                 ]) }}">
                                 <span>FAQ's</span>
                             </a>
-                            <a class="dropdown-item notify-item" href="#">
+                            <a class="dropdown-item notify-item"
+                                href="{{ route('docs.releases.index', ['user' => $user->username, 'slug' => $documentation->url]) }}">
                                 <span>Releases</span>
                             </a>
 

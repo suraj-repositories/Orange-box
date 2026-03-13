@@ -22,7 +22,7 @@
                     </div>
 
                 </button>
-                <ul class="dropdown-menu mt-3">
+                <ul class="dropdown-menu">
                     @foreach ($top5Releases as $r)
                         <li>
                             <a class="dropdown-item btn"
@@ -56,7 +56,7 @@
                 </ul>
             </div>
 
-            <ul id="side-menu">
+            <ul id="side-menu" class=" mt-3">
                 @foreach ($pages as $page)
                     <li>
                         @if ($page->type == 'folder')

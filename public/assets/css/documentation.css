@@ -1205,9 +1205,20 @@ ul.topnav-menu button i.bx {
 .version-dropdown .toggle-icon {
     margin-left: auto;
 }
+
 /* #scrollpsy-nav:not(:has(.nav-link)){
     display: none;
 } */
-.opacity-15{
+.opacity-15 {
     opacity: .15 !important;
+}
+
+.documentation-release-list {
+    list-style-type: disc !important;
+    padding-left: 1.5rem;
+}
+
+.documentation-release-list li::marker {
+    color: var(--primary);
+    font-size: 1.5em;
 }

@@ -9,11 +9,11 @@
                 <div class="row g-3">
                     <div class="col-12 col-xl-9">
                         <div class="container mt-3 px-1 px-sm-4 mb-5">
+                            <h1 class="pt-3 fw-bold ">
+                                Frequently Asked Questions
+                            </h1>
+                            <div class="faq-questions mt-3">
 
-                            <div class="faq-questions mt-4">
-                                <h1 class="pt-3 fw-bold text-dark">
-                                    Frequently Asked Questions
-                                </h1>
                                 <br class="opacity-15">
                                 @forelse ($faqs as $faq)
                                     <hr class="opacity-15"> <br>
