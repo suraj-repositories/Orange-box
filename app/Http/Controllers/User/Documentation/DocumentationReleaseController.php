@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class DocumentationReleaseController extends Controller
 {
@@ -27,7 +28,7 @@ class DocumentationReleaseController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-             'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
             'version' => 'required|string|min:1|max:255'
         ]);
 
@@ -163,5 +164,50 @@ class DocumentationReleaseController extends Controller
         $release->delete();
 
         return redirect()->back()->with('success', 'Release Deleted Successfully!');
+    }
+    public function updateStatus(User $user, DocumentationRelease $release, Request $request)
+    {
+        $documentation = $release->documentation;
+
+        if (!$documentation) {
+            abort(404, 'Documentation not found');
+        }
+
+        if ($user->id != $documentation->user_id) {
+            abort(403, 'Unauthorized access!');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|string|in:active,inactive',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        try {
+            $release->is_published = $request->status == 'active';
+            $isDateUpdated = false;
+            if (empty($release->released_at) && $request->status == 'active') {
+                $release->released_at = now();
+                $isDateUpdated = true;
+            }
+
+            $release->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Status updated successfully!',
+                'refresh' => $isDateUpdated
+            ]);
+        } catch (Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => $th->getMessage()
+            ]);
+        }
     }
 }

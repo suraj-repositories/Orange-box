@@ -9,6 +9,3 @@ function enableOnThisPageSection(selector) {
     sc.enableScrollpsyIndicator();
 
 }
-
-
-

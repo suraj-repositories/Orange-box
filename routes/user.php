@@ -266,6 +266,7 @@ Route::controller(DocumentationReleaseController::class)->group(function () {
     Route::post('documentation/{documentation}/releases', 'save')->name('documentation.release.save');
     Route::patch('documentation/{documentation}/releases/{release}', 'update')->name('documentation.release.update');
     Route::delete('documentation-releases/{release}', 'destroy')->name('documentation.release.delete');
+    Route::patch('documentation-releases/{release}', 'updateStatus')->name('documentation.release.status.update');
 });
 
 Route::controller(DocumentationPagesController::class)->group(function () {

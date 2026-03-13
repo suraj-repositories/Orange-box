@@ -64,7 +64,7 @@
                                                 <th>Group Title</th>
                                                 <th>Version</th>
                                                 <th>Creation Date</th>
-                                                <th>Publish Date</th>
+                                                <th>Release Date</th>
                                                 <th>Visibility</th>
                                                 <th>Action</th>
                                             </tr>
@@ -78,7 +78,15 @@
                                                 <td>{{ $release->version }}</td>
                                                 <td>{{ $release->created_at?->format('M d, Y h:i a') }}</td>
                                                 <td>{{ $release->released_at?->format('M d, Y h:i a') ?? '-' }}</td>
-                                                <td> <span class="badge bg-success-subtle text-success">Active</span> </td>
+                                                <td>
+
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input releaseStatusToggleSwitch"
+                                                            type="checkbox" role="switch"
+                                                            data-documentation-release-id="{{ $release->id }}"
+                                                            {{ $release->is_published ? 'checked' : '' }}>
+                                                    </div>
+                                                </td>
                                                 <td>
                                                     <div class="action-container m-0 gap-1">
                                                         <a href="{{ authRoute('user.documentation.pages.index', ['documentation' => $release->documentation, 'release' => $release]) }}"
@@ -114,7 +122,7 @@
 
                                         @empty
                                             <tr>
-                                                <td colspan="5">
+                                                <td colspan="7">
                                                     <x-no-data />
                                                 </td>
                                             </tr>
@@ -143,4 +151,5 @@
 @endsection
 
 @section('js')
+    <script src="{{ asset('assets/js/pages/documentation-releases.js') }}"></script>
 @endsection
