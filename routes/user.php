@@ -12,6 +12,7 @@ use App\Http\Controllers\User\Documentation\DocumentationController;
 use App\Http\Controllers\User\Documentation\DocumentationDocumentController;
 use App\Http\Controllers\User\Documentation\DocumentationPagesController;
 use App\Http\Controllers\User\Documentation\DocumentationReleaseController;
+use App\Http\Controllers\User\Documentation\DocumentationSponsorController;
 use App\Http\Controllers\User\Documentation\FaqController;
 use App\Http\Controllers\User\Documentation\PrivacyPolicyController;
 use App\Http\Controllers\User\Documentation\TermsController;
@@ -267,6 +268,11 @@ Route::controller(DocumentationReleaseController::class)->group(function () {
     Route::patch('documentation/{documentation}/releases/{release}', 'update')->name('documentation.release.update');
     Route::delete('documentation-releases/{release}', 'destroy')->name('documentation.release.delete');
     Route::patch('documentation-releases/{release}', 'updateStatus')->name('documentation.release.status.update');
+});
+
+Route::controller(DocumentationSponsorController::class)->group(function () {
+    Route::get('documentation/{documentation}/sponsors', 'index')->name('documentation.sponsors.index');
+    Route::post('documentation/{documentation}/sponsors', 'save')->name('documentation.sponsors.save');
 });
 
 Route::controller(DocumentationPagesController::class)->group(function () {

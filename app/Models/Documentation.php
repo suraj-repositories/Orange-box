@@ -68,4 +68,10 @@ class Documentation extends Model
             ->where('is_current', true)
             ->latest('id');
     }
+
+    public function sponsors()
+    {
+        return $this->hasMany(DocumentationSponsor::class)
+            ->orderBy('sort_order');
+    }
 }

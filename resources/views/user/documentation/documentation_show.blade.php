@@ -77,7 +77,7 @@
 
                                     <!-- Setup Sponsor -->
                                     <div class="col">
-                                        <a href="#" class="text-decoration-none">
+                                        <a href="{{ authRoute('user.documentation.sponsors.index', ['documentation' => $documentation, 'v' => $release->version]) }}" class="text-decoration-none">
                                             <div class="card mb-0 rounded-4 border h-100 hover-shadow">
                                                 <div class="card-body d-flex justify-content-between align-items-center">
                                                     <div>
