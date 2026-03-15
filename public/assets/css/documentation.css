@@ -232,10 +232,9 @@ p {
 
 .sticky-sidebar {
     position: sticky;
-    top: 100px;
-    max-height: calc(100vh - 120px);
+    top: 90px;
+    max-height: 100%;
     overflow: visible;
-    position: sticky;
     padding-left: 12px;
 }
 
@@ -1221,4 +1220,52 @@ ul.topnav-menu button i.bx {
 .documentation-release-list li::marker {
     color: var(--primary);
     font-size: 1.5em;
+}
+
+
+.sponsor-logo {
+    max-height: 70px;
+    object-fit: contain;
+}
+
+.sponsor-logo.logo-dark {
+    display: none;
+}
+
+[data-theme="dark"] .sponsor-logo.logo-light {
+    display: none;
+}
+
+[data-theme="dark"] .sponsor-logo.logo-dark {
+    display: inline-block;
+}
+
+.border-gray-100 {
+    border-color: var(--gray-100) !important;
+}
+
+.documentation-content img {
+    max-width: 100%;
+}
+
+.sidebar-sponsors .sponsors-m-2{
+    margin: 2px;
+    border-radius: none;
+}
+.sidebar-sponsors {
+    font-size: 10px;
+}
+
+.sidebar-sponsors .card-height{
+    height: 25px;
+}
+.sidebar-sponsors .sponsor-column{
+   filter: grayscale(1);
+}
+.sidebar-sponsors .sponsor-column:hover{
+   filter: grayscale(0);
+}
+
+.sidebar-sponsors .card-height img{
+    max-height: 25px;
 }

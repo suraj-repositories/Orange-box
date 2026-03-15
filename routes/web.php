@@ -12,6 +12,7 @@ use App\Http\Controllers\Docs\DocumentationController;
 use App\Http\Controllers\Docs\DocumentationDocumentController;
 use App\Http\Controllers\Docs\FaqController;
 use App\Http\Controllers\Docs\ReleaseController;
+use App\Http\Controllers\Docs\SponsorsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Test\TestingController;
 use Illuminate\Support\Facades\Route;
@@ -91,6 +92,7 @@ Route::get(
 
 Route::get('/{user:username}/docs-xt/{slug}/{version}/faqs', [FaqController::class, 'index'])->name('docs.faq.index');
 Route::get('/{user:username}/docs-v/{slug}/releases', [ReleaseController::class, 'index'])->name('docs.releases.index');
+Route::get('/{user:username}/docs-v/{slug}/sponsors', [SponsorsController::class, 'index'])->name('docs.sponsors.index');
 
 /* ---------------------------------------------
 | END - DOC-routes

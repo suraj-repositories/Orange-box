@@ -174,7 +174,7 @@
                                                             </a>
 
                                                             <form
-                                                                action="{{ authRoute('user.documentation.faqs.status.delete', ['faq' => $faq]) }}"
+                                                                action="{{ authRoute('user.documentation.faqs.delete', ['faq' => $faq]) }}"
                                                                 method="POST" data-confirm-delete>
                                                                 @csrf
                                                                 @method('DELETE')

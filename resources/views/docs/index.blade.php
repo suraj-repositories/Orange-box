@@ -62,21 +62,28 @@
                     </div>
 
                     <div class="col-12 col-xl-3 scrollpsy-column">
-                        <nav id="scrollpsy-nav" class="sticky-sidebar">
-                            <div class="on-this-page">On This Page</div>
+                        <div class="sticky-sidebar">
+                            <nav id="scrollpsy-nav">
+                                <div class="on-this-page">On This Page</div>
 
 
-                            <div class="nav nav-pills flex-column position-relative">
-                                <div class="active-indicator"></div>
-                                <div class="text-center">
-                                    <div class="spinner-border" role="status">
-                                        <span class="visually-hidden">Loading...</span>
+                                <div class="nav nav-pills flex-column position-relative">
+                                    <div class="active-indicator"></div>
+                                    <div class="text-center">
+                                        <div class="spinner-border" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                     </div>
                                 </div>
+
+
+                            </nav>
+                            <div class="mt-3">
+                                <x-docs.sidebar-sponsors :documentation="$documentation" />
                             </div>
+                        </div>
 
 
-                        </nav>
                     </div>
                 </div>
 

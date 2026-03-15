@@ -3,7 +3,7 @@
 @section('title', $title ?? '🟢🟢🟢')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/syntax-store-editor.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/editorjs-custom.css') }}">
 @endsection
 
 @section('content')
@@ -15,7 +15,7 @@
                     <x-alert-component />
 
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">{{ $title }}</h4>
+                        <h4 class="fs-18 fw-semibold m-0">{{ $title }} </h4>
                     </div>
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
@@ -24,10 +24,12 @@
                                 <a href="{{ authRoute('user.documentation.index') }}">Documentations</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">{{ $documentation->title }}</a>
+                                <a
+                                    href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">{{ $documentation->title }}</a>
                             </li>
                             <li class="breadcrumb-item">
-                                <a href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">{{ $release->version }}</a>
+                                <a
+                                    href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">{{ $release->version }}</a>
                             </li>
                             <li class="breadcrumb-item active">{{ $title }}</li>
                         </ol>
@@ -51,9 +53,11 @@
                                     <div class="d-flex align-items-center gap-1">
                                         <input type="checkbox" class="btn-check" id="previewToggleCheckbox"
                                             autocomplete="off">
-                                        <label class="btn btn-outline-dark" for="previewToggleCheckbox"><i class="bi bi-file-earmark-richtext me-1"></i> Preview</label><br>
+                                        <label class="btn btn-outline-dark" for="previewToggleCheckbox"><i
+                                                class="bi bi-file-earmark-richtext me-1"></i> Preview</label><br>
 
-                                        <button type="submit" class="btn btn-primary"><i class="bi bi-send-check me-1"></i> Publish</button>
+                                        <button type="submit" class="btn btn-primary"><i class="bi bi-send-check me-1"></i>
+                                            Publish</button>
 
                                     </div>
                                 </div>

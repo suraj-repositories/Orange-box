@@ -9,7 +9,7 @@
     : '🟢🟢🟢'))
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/syntax-store-editor.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/editorjs-custom.css') }}">
 @endsection
 
 @section('content')

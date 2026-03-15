@@ -93,7 +93,7 @@
                                                 <div class="accordion-body">
 
                                                     <ul class="list-unstyled fs-6 mb-3">
-                                                        <li class="mb-2">
+                                                        <li>
                                                             <strong>Message : </strong>
                                                             {{ $notification?->data['message'] ?? '-' }}
 
@@ -128,7 +128,7 @@
 
 
                                                     <!-- Actions -->
-                                                    <h6 class="mb-2">Actions</h6>
+                                                    <h6 class="mb-2 fw-bold">Actions</h6>
                                                     <div class="action d-flex gap-2 flex-wrap">
 
 

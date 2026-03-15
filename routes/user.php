@@ -250,10 +250,8 @@ Route::controller(FaqController::class)->group(function () {
     Route::get('documentation/{documentation}/v/{release}/faqs', 'index')->name('documentation.faqs.index');
     Route::post('documentation/{documentation}/v/{release}/faqs', 'store')->name('documentation.faqs.save');
     Route::patch('documentation-faqs/{faq}/status', 'updateStatus')->name('documentation.faqs.status.update');
-    Route::delete('documentation-faqs/{faq}', 'destroy')->name('documentation.faqs.status.delete');
+    Route::delete('documentation-faqs/{faq}', 'destroy')->name('documentation.faqs.delete');
 });
-
-
 
 Route::controller(DocumentationDocumentController::class)->group(function () {
     Route::post('documentation-doc/editor/images/store', 'uploadEditorImages')->name('documentation.document.editor.images.store');
@@ -273,6 +271,9 @@ Route::controller(DocumentationReleaseController::class)->group(function () {
 Route::controller(DocumentationSponsorController::class)->group(function () {
     Route::get('documentation/{documentation}/sponsors', 'index')->name('documentation.sponsors.index');
     Route::post('documentation/{documentation}/sponsors', 'save')->name('documentation.sponsors.save');
+    Route::post('documentation/{documentation}/sponsors-content', 'createOrUpdateSponsorDocument')->name('documentation.sponsors.content.save');
+    Route::patch('documentation-sponsor/{sponsor}', 'updateStatus')->name('documentation.sponsor.status.update');
+    Route::delete('documentation-sponsor/{sponsor}', 'destroy')->name('documentation.sponsor.delete');
 });
 
 Route::controller(DocumentationPagesController::class)->group(function () {
