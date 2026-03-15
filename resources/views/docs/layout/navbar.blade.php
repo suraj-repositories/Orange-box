@@ -129,12 +129,7 @@
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li class="d-flex justify-content-around social-media-icons">
-                                    <a class="dropdown-item p-2 text-center" href="#"><i
-                                            class='bx bxl-github fs-4'></i></a>
-                                    <a class="dropdown-item p-2 text-center" href="#"><i
-                                            class='bx bxl-twitter fs-4'></i></a>
-                                    <a class="dropdown-item p-2 text-center" href="#"><i
-                                            class='bx bxl-discord fs-4'></i></a>
+                                    <x-docs.social-media-links :documentation="$documentation" />
                                 </li>
                             </ul>
                         </div>

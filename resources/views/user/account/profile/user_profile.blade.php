@@ -132,19 +132,27 @@
 
                                             <div class="row g-3">
                                                 <div class="col-lg-6 col-xl-6">
-                                                    @include('user.account.profile.personal_information_form')
-                                                </div>
-                                                <div class="col-lg-6 col-xl-6">
-                                                    @include('user.account.profile.social_media_links_form')
-                                                </div>
+                                                    <div class="row g-3">
+                                                        <div class="col-12">
+                                                            @include('user.account.profile.personal_information_form')
 
-                                                <div class="col-lg-6 col-xl-6">
-                                                    @include('user.account.profile.address_details_form')
+                                                        </div>
+                                                        <div class="col-12">
+                                                            @include('user.account.profile.address_details_form')
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-lg-6 col-xl-6">
-                                                    @include('user.account.profile.user_skill_form')
-                                                </div>
+                                                    <div class="row g-3">
+                                                        <div class="col-12">
+                                                            @include('user.account.profile.social_media_links_form')
 
+                                                        </div>
+                                                        <div class="col-12">
+                                                            @include('user.account.profile.user_skill_form')
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -256,6 +256,13 @@ return [
             'color' => '#25D366',
             'bg_color' => '#ffffffff',
         ],
+        [
+            'name' => 'Discord',
+            'url' => 'https://www.discord.com',
+            'icon' => 'bx bxl-discord',
+            'color' => '#0D0C0C',
+            'bg_color' => '#ffffffff',
+        ],
     ],
 
 ];

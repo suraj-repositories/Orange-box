@@ -15,6 +15,7 @@ use App\Http\Controllers\User\Documentation\DocumentationReleaseController;
 use App\Http\Controllers\User\Documentation\DocumentationSponsorController;
 use App\Http\Controllers\User\Documentation\FaqController;
 use App\Http\Controllers\User\Documentation\PrivacyPolicyController;
+use App\Http\Controllers\User\Documentation\SocialLinksController;
 use App\Http\Controllers\User\Documentation\TermsController;
 use App\Http\Controllers\User\EducationController;
 use App\Http\Controllers\User\FolderFactoryController;
@@ -274,6 +275,11 @@ Route::controller(DocumentationSponsorController::class)->group(function () {
     Route::post('documentation/{documentation}/sponsors-content', 'createOrUpdateSponsorDocument')->name('documentation.sponsors.content.save');
     Route::patch('documentation-sponsor/{sponsor}', 'updateStatus')->name('documentation.sponsor.status.update');
     Route::delete('documentation-sponsor/{sponsor}', 'destroy')->name('documentation.sponsor.delete');
+});
+
+Route::controller(SocialLinksController::class)->group(function(){
+    Route::get('documentation/{documentation}/links', 'edit')->name('documentation.social-links.edit');
+    Route::post('documentation/{documentation}/links', 'updateSocialLinks')->name('documentation.social-links.update');
 });
 
 Route::controller(DocumentationPagesController::class)->group(function () {

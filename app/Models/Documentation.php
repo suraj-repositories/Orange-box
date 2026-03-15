@@ -74,4 +74,9 @@ class Documentation extends Model
         return $this->hasMany(DocumentationSponsor::class)
             ->orderBy('sort_order');
     }
+
+    public function socialLinks()
+    {
+        return $this->hasMany(DocumentationSocialLink::class);
+    }
 }
