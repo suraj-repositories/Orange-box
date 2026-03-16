@@ -14,6 +14,7 @@ use App\Http\Controllers\User\Documentation\DocumentationPagesController;
 use App\Http\Controllers\User\Documentation\DocumentationReleaseController;
 use App\Http\Controllers\User\Documentation\DocumentationSponsorController;
 use App\Http\Controllers\User\Documentation\FaqController;
+use App\Http\Controllers\User\Documentation\PartnersController as DocumentationPartnersController;
 use App\Http\Controllers\User\Documentation\PrivacyPolicyController;
 use App\Http\Controllers\User\Documentation\SocialLinksController;
 use App\Http\Controllers\User\Documentation\TermsController;
@@ -277,7 +278,17 @@ Route::controller(DocumentationSponsorController::class)->group(function () {
     Route::delete('documentation-sponsor/{sponsor}', 'destroy')->name('documentation.sponsor.delete');
 });
 
-Route::controller(SocialLinksController::class)->group(function(){
+Route::controller(DocumentationPartnersController::class)->group(function () {
+    Route::get('documentation/{documentation}/partners', 'index')->name('documentation.partners.index');
+    Route::get('documentation/{documentation}/partners/new', 'create')->name('documentation.partners.create');
+    Route::post('documentation/{documentation}/partners', 'save')->name('documentation.partners.save');
+    Route::get('documentation-partner/{partner}', 'edit')->name('documentation.partner.edit');
+    Route::patch('documentation-partner/{partner}/status', 'updateStatus')->name('documentation.partner.status.update');
+    Route::patch('documentation-partner/{partner}/sportlight', 'markSpotlight')->name('documentation.partner.mark-spotlight');
+    Route::delete('documentation-partner/{partner}', 'destroy')->name('documentation.partner.delete');
+});
+
+Route::controller(SocialLinksController::class)->group(function () {
     Route::get('documentation/{documentation}/links', 'edit')->name('documentation.social-links.edit');
     Route::post('documentation/{documentation}/links', 'updateSocialLinks')->name('documentation.social-links.update');
 });

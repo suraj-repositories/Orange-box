@@ -3032,3 +3032,15 @@ ul.directory-list.active {
     border-radius: 5px;
     margin: 5px;
 }
+
+.partners-media-picker {
+    display: flex;
+}
+
+.partners-media-picker label.square {
+    width: 120px;
+}
+
+.partners-media-picker label {
+    width: 175px;
+}
