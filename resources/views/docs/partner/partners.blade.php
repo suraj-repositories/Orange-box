@@ -40,14 +40,17 @@
                                                     {{ $spotlightPartner->short_description }}
                                                 </p>
 
-                                                <h6 class="fw-semibold">Proficiencies</h6>
-                                                <div class="d-flex gap-2 flex-wrap">
-                                                    @foreach ([1, 2, 3, 5, 6] as $tag)
-                                                        <div class="badge tech-badge">
-                                                            Tech
-                                                        </div>
-                                                    @endforeach
-                                                </div>
+                                                @if (!empty($spotlightPartner->tags))
+                                                    <h6 class="fw-semibold">Proficiencies</h6>
+                                                    <div class="d-flex gap-2 flex-wrap">
+                                                        @foreach ($spotlightPartner->tags ?? [] as $tag)
+                                                            <div class="badge tech-badge">
+                                                                {{ $tag }}
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+
                                             </div>
                                             <div class="col-12 col-md-6">
                                                 <div class="d-flex align-items-center h-100 w-100 justify-content-center">

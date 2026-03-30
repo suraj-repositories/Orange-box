@@ -84,6 +84,12 @@ class PartnersController extends Controller
         $partner->short_description = $validated['short_description'] ?? null;
         $partner->description = $validated['description'] ?? null;
 
+        $tags = collect(json_decode($request->tags))
+            ->pluck('value')
+            ->toArray();
+
+        $partner->tags = $tags ?? [];
+
 
         if ($request->hasFile('logo_light')) {
 

@@ -6,7 +6,13 @@
             <ul class="list-unstyled topnav-menu mb-0 d-flex align-items-center">
                 <li>
                     <div class="logo-box">
-                        <a class='logo logo-light' href='index.html'>
+                        <a class='logo logo-light'
+                            href='{{ route('docs.show', [
+                                'user' => $user->username,
+                                'slug' => $documentation->url,
+                                'version' => $release->version,
+                                'path' => '',
+                            ]) }}'>
                             <span class="logo-sm">
                                 <img src="{{ Storage::url($documentation->logo_sm_light) }}" alt="">
                             </span>
@@ -14,7 +20,13 @@
                                 <img src="{{ Storage::url($documentation->logo_light) }}" alt="">
                             </span>
                         </a>
-                        <a class='logo logo-dark' href='index.html'>
+                        <a class='logo logo-dark'
+                            href='{{ route('docs.show', [
+                                'user' => $user->username,
+                                'slug' => $documentation->url,
+                                'version' => $release->version,
+                                'path' => '',
+                            ]) }}'>
                             <span class="logo-sm">
                                 <img src="{{ Storage::url($documentation->logo_sm_dark) }}" alt="">
                             </span>

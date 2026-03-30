@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initFileChoosers();
     enableStatusUpdate('.partnerStatusToggleSwitch');
     enableSpotlightUpdate('.spotlightUpdateRadio');
+    initTagify();
 });
 
 let fileChoosers = {};
@@ -141,5 +142,16 @@ function enableSpotlightUpdate(selector) {
             }
 
         });
+    });
+}
+
+function initTagify() {
+    const input = document.querySelector('#tags-input');
+
+    const tagify = new Tagify(input, {
+        maxTags: 10,
+        dropdown: {
+            enabled: 0
+        }
     });
 }

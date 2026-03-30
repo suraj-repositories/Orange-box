@@ -4,7 +4,8 @@
 
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/editorjs-custom.css') }}">
+    <link href="{{ asset('assets/css/editorjs-custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/libs/tagify/tagify.css') }}" rel="stylesheet">
 @endsection
 
 
@@ -205,6 +206,20 @@
 
                                         </div>
 
+                                        <div class="col-12 mb-3">
+
+                                            <label class="form-label">Proficiencies <small>(Tags)</small></label>
+
+                                            <input type="text" id="tags-input" name="tags" class="form-control"
+                                                placeholder="Add tags"
+                                                value="{{ old('tags', isset($partner->tags) ? json_encode($partner->tags) : '') }}">
+
+                                            @error('tags')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+
+                                        </div>
+
                                         <div class="col-12 mt-2">
 
                                             <button class="btn btn-primary" type="submit">
@@ -231,6 +246,6 @@
 
 @section('js')
     @include('layout.extras.ckeditor5')
-
+    <script src="{{ asset('assets/libs/tagify/tagify.js') }}"></script>
     <script src="{{ asset('assets/js/pages/documentation-partners.js') }}"></script>
 @endsection

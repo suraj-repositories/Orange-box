@@ -23,6 +23,7 @@ class DocumentationPartner extends Model
         'longitude',
         'short_description',
         'description',
+        'tags',
         'sort_order',
         'is_spotlight_partner',
         'status',
@@ -32,9 +33,11 @@ class DocumentationPartner extends Model
         'latitude' => 'float',
         'longitude' => 'float',
         'sort_order' => 'integer',
+        'tags' => 'array',
     ];
 
-    public function documentation(){
+    public function documentation()
+    {
         return $this->belongsTo(Documentation::class);
     }
 }
