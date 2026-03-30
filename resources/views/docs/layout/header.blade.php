@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/oranbyte-toastify/oranbyte-toastify.css') }}">
     <script src="{{ asset('assets/libs/oranbyte-toastify/oranbyte-toastify.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/documentation.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/md-render.css') }}">
     @vite(['resources/js/app.js'])
     @yield('css')
 

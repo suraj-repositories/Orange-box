@@ -96,6 +96,10 @@ Route::get('/{user:username}/docs-v/{slug}/releases', [ReleaseController::class,
 Route::get('/{user:username}/docs-v/{slug}/sponsors', [SponsorsController::class, 'index'])->name('docs.sponsors.index');
 Route::get('/{user:username}/docs-v/{slug}/partners', [PartnersController::class, 'index'])->name('docs.partners.index');
 Route::get('/{user:username}/docs-v/{slug}/partners-all', [PartnersController::class, 'partnersAll'])->name('docs.partners.all.index');
+Route::get('/{user:username}/docs-v/{slug}/partner/{uuid}', [PartnersController::class, 'show'])->name('docs.partners.show');
+
+Route::post('/{user:username}/docs-v-ajax/{slug}/partners-search', [PartnersController::class, 'partnersSearchComponent'])->name('docs.partners.search.component');
+
 
 /* ---------------------------------------------
 | END - DOC-routes

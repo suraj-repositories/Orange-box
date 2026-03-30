@@ -68,7 +68,7 @@
 
                                     <div class="row">
 
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-6 mb-3">
                                             <label class="form-label">Name</label>
 
                                             <div class="input-group">
@@ -82,6 +82,24 @@
                                             </div>
 
                                             @error('name')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Email</label>
+
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-envelope"></i>
+                                                </span>
+
+                                                <input type="text" name="email" class="form-control"
+                                                    placeholder="Partner contact email"
+                                                    value="{{ old('email', $partner->email ?? '') }}">
+                                            </div>
+
+                                            @error('email')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
 

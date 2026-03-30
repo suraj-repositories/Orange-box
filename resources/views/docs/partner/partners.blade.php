@@ -75,12 +75,12 @@
                         <div class="mx-width-container  mt-4">
 
                             @if (!empty($searchable) && $searchable)
-
-                            <div class="in-page-search-box mb-4">
-                                <i class="bx bx-search"></i>
-                                <input type="text" class="form-control" id="searchInput"
-                                    placeholder="Search partners by name or region">
-                            </div>
+                                <div class="in-page-search-box mb-4">
+                                    <i class="bx bx-search"></i>
+                                    <input type="text" class="form-control" id="partnersSearchInput"
+                                        data-search-url="{{ route('docs.partners.search.component', ['user' => $user, 'slug' => request('slug')]) }}"
+                                        placeholder="Search partners by name or region">
+                                </div>
                             @endif
 
                             @if (empty($searchable))
@@ -88,7 +88,9 @@
                                     Featured Partners
                                 </h5>
                             @endif
-                            <x-docs.partners-list :partners="$partners" />
+                            <div id="partnersListRender">
+                                <x-docs.partners-list :partners="$partners" />
+                            </div>
                         </div>
                     </div>
 
@@ -105,6 +107,5 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('assets/js/pages/docs/index.js') }}"></script>
-    <script src="{{ asset('assets/js/pages/docs/extras.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/docs/partners.js') }}"></script>
 @endsection

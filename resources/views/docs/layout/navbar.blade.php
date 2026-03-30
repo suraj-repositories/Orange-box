@@ -65,7 +65,7 @@
                         </a>
                     </li>
                     <li><a href="{{ route('docs.partners.index', ['user' => $user, 'slug' => $documentation->url]) }}"
-                            class="nav-link in-full-nav dropdown-toggle nav-user me-0"><span
+                            class="nav-link in-full-nav dropdown-toggle nav-user me-0 {{ Route::is('docs.partners.index') || Route::is('docs.partners.all.index') || Route::is('docs.partners.show') ? 'active' : '' }}""><span
                                 class="pro-user-name ms-1">Partners</span></a></li>
 
                     <li class="dropdown in-full-nav dropdown-list topbar-dropdown">

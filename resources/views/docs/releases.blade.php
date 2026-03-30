@@ -98,6 +98,5 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('assets/js/pages/docs/index.js') }}"></script>
     <script src="{{ asset('assets/js/pages/docs/releases.js') }}"></script>
 @endsection

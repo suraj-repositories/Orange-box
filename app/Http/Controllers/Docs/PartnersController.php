@@ -42,7 +42,7 @@ class PartnersController extends Controller
 
 
         return view(
-            'docs.partners',
+            'docs.partner.partners',
             compact(
                 'title',
                 'user',
@@ -70,14 +70,12 @@ class PartnersController extends Controller
 
         $partners = DocumentationPartner::where('documentation_id', $documentation->id)
             ->where('status', 'active')
-            ->where('is_spotlight_partner', false)
             ->orderBy('sort_order')
             ->latest()
-            ->take(5)
-            ->get();
+            ->paginate(6);
 
         return view(
-            'docs.partners',
+            'docs.partner.partners',
             compact(
                 'title',
                 'user',
@@ -87,5 +85,59 @@ class PartnersController extends Controller
                 'searchable'
             )
         );
+    }
+
+    public function show(User $user, $slug, $uuid)
+    {
+
+        $documentation = Documentation::where('user_id', $user->id)
+            ->where('url', $slug ?? '')
+            ->firstOrFail();
+
+        $release = DocumentationRelease::where('documentation_id', $documentation->id)
+            ->where('is_current', true)
+            ->where('is_published', true)
+            ->latest()->first();
+
+        $partner = DocumentationPartner::where('uuid', $uuid)->firstOrFail();
+        $title = 'Partners';
+
+        return view('docs.partner.show-partner', compact([
+            'title',
+            'user',
+            'release',
+            'documentation',
+            'partner'
+        ]));
+    }
+
+    public function partnersSearchComponent(User $user, $slug, Request $request)
+    {
+        $documentation = Documentation::where('user_id', $user->id)
+            ->where('url', $slug ?? '')
+            ->firstOrFail();
+
+        $release = DocumentationRelease::where('documentation_id', $documentation->id)
+            ->where('is_current', true)
+            ->where('is_published', true)
+            ->latest()->first();
+
+        $search = $request->search;
+
+        $partners = DocumentationPartner::where('documentation_id', $documentation->id)
+            ->when(!empty($search), function ($query) use ($search) {
+                $query->where('name', 'like', "%$search%")
+                    ->orWhere('location', 'like', "%$search%");
+            })
+            ->where('status', 'active')
+            ->orderBy('sort_order')
+            ->latest()
+            ->paginate(6);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Component fetched successfully!',
+            'html' => view('components.docs.partners-list', compact('partners'))->render()
+        ]);
     }
 }

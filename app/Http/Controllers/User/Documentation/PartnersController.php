@@ -50,6 +50,7 @@ class PartnersController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'email' => ['nullable', 'string', 'email', 'max:255'],
             'website_url' => ['nullable', 'url'],
             'location' => ['nullable', 'string', 'max:255'],
             'short_description' => ['nullable', 'string', 'max:500'],
@@ -76,6 +77,7 @@ class PartnersController extends Controller
         }
 
         $partner->name = $validated['name'];
+        $partner->email = $validated['email'];
         $partner->slug = Str::slug($validated['name']);
         $partner->website_url = $validated['website_url'] ?? null;
         $partner->location = $validated['location'] ?? null;

@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class DocumentationPartner extends Model
 {
+    use HasUuid;
     //
     protected $fillable = [
+        'uuid',
         'documentation_id',
         'name',
         'slug',

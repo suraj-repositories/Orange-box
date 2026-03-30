@@ -52,6 +52,11 @@ a:hover {
     color: var(--primary);
 }
 
+.border {
+    border-color: var(--gray-100) !important;
+}
+
+
 .app-layout {
     overflow: unset;
 }
@@ -1266,7 +1271,7 @@ ul.topnav-menu button i.bx {
 }
 
 .sidebar-sponsors .sponsor-column {
-    filter: grayscale(1);
+    /* filter: grayscale(1); */
 }
 
 .sidebar-sponsors .sponsor-column:hover {
@@ -1334,4 +1339,25 @@ ul.topnav-menu button i.bx {
     background-color: var(--light);
     border-color: var(--gray-100);
     color: var(--text-dark);
+}
+
+.content-page.show-partner .back-btn {
+    border: 1px solid var(--gray-100);
+    color: var(--text-dark);
+
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary-dark);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.btn-dark {
+    background-color: var(--dark);
+    border-color: var(--dark);
 }
