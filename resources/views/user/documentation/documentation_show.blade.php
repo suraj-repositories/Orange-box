@@ -112,15 +112,16 @@
                                         </a>
                                     </div>
 
-                                    <!-- Team -->
+                                    <!-- Partners -->
                                     <div class="col">
-                                        <a href="#" class="text-decoration-none">
+                                        <a href="{{ authRoute('user.documentation.partners.index', ['documentation' => $documentation]) }}"
+                                            class="text-decoration-none">
                                             <div class="card mb-0 rounded-4 border h-100 hover-shadow">
                                                 <div class="card-body d-flex justify-content-between align-items-center">
                                                     <div>
-                                                        <i class="bi bi-people fs-4"></i>
-                                                        <h5 class="mb-0 mt-2">Team</h5>
-                                                        <small class="text-muted">Manage team members</small>
+                                                        <i class='bx bx-donate-heart fs-4'></i>
+                                                        <h5 class="mb-0 mt-2">Partners</h5>
+                                                        <small class="text-muted">Manage parteners</small>
                                                     </div>
                                                     <i class="bi bi-chevron-right fs-4"></i>
                                                 </div>

@@ -64,7 +64,8 @@
                             <span class="pro-user-name ms-1">Sponsor</span>
                         </a>
                     </li>
-                    <li><a class="nav-link in-full-nav dropdown-toggle nav-user me-0"><span
+                    <li><a href="{{ route('docs.partners.index', ['user' => $user, 'slug' => $documentation->url]) }}"
+                            class="nav-link in-full-nav dropdown-toggle nav-user me-0"><span
                                 class="pro-user-name ms-1">Partners</span></a></li>
 
                     <li class="dropdown in-full-nav dropdown-list topbar-dropdown">

@@ -138,10 +138,17 @@
                                                 Media</label>
                                             <div class="doc-logo-picker mt-1 partners-media-picker">
 
-                                                <label >
-                                                    <span>Logo</span>
-                                                    <input type="file" name="logo" accept="image/*" id="logo_input"
-                                                        data-existing="{{ !empty($partner?->logo) ? Storage::url($partner->logo) : '' }}">
+                                                <label>
+                                                    <span>Logo (Light)</span>
+                                                    <input type="file" name="logo_light" accept="image/*"
+                                                        id="logo_light_input"
+                                                        data-existing="{{ !empty($partner?->logo_light) ? Storage::url($partner->logo_light) : '' }}">
+                                                </label>
+                                                <label>
+                                                    <span>Logo (Dark)</span>
+                                                    <input type="file" name="logo_dark" accept="image/*"
+                                                        id="logo_dark_input"
+                                                        data-existing="{{ !empty($partner?->logo_dark) ? Storage::url($partner->logo_dark) : '' }}">
                                                 </label>
 
                                                 <label>

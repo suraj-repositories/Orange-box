@@ -55,7 +55,8 @@ class PartnersController extends Controller
             'short_description' => ['nullable', 'string', 'max:500'],
             'description' => ['nullable', 'string'],
 
-            'logo' => ['nullable', 'image', 'max:2048'],
+            'logo_light' => ['nullable', 'image', 'max:2048'],
+            'logo_dark' => ['nullable', 'image', 'max:2048'],
             'banner' => ['nullable', 'image', 'max:4096'],
         ]);
 
@@ -82,15 +83,27 @@ class PartnersController extends Controller
         $partner->description = $validated['description'] ?? null;
 
 
-        if ($request->hasFile('logo')) {
+        if ($request->hasFile('logo_light')) {
 
-            if ($this->fileService->fileExists($partner->logo)) {
-                $this->fileService->deleteIfExists($partner->logo);
+            if ($this->fileService->fileExists($partner->logo_light)) {
+                $this->fileService->deleteIfExists($partner->logo_light);
             }
 
-            $partner->logo = $this->fileService->uploadFile(
-                $request->file('logo'),
-                "documentation/partners/logo"
+            $partner->logo_light = $this->fileService->uploadFile(
+                $request->file('logo_light'),
+                "documentation/partners/logo_light"
+            );
+        }
+
+        if ($request->hasFile('logo_dark')) {
+
+            if ($this->fileService->fileExists($partner->logo_dark)) {
+                $this->fileService->deleteIfExists($partner->logo_dark);
+            }
+
+            $partner->logo_dark = $this->fileService->uploadFile(
+                $request->file('logo_dark'),
+                "documentation/partners/logo_dark"
             );
         }
 
@@ -167,8 +180,11 @@ class PartnersController extends Controller
     public function destroy(User $user, DocumentationPartner $partner)
     {
         try {
-            if (!empty($partner->logo)) {
-                $this->fileService->deleteIfExists($partner->logo);
+            if (!empty($partner->logo_light)) {
+                $this->fileService->deleteIfExists($partner->logo_light);
+            }
+            if (!empty($partner->logo_dark)) {
+                $this->fileService->deleteIfExists($partner->logo_dark);
             }
             if (!empty($partner->banner)) {
                 $this->fileService->deleteIfExists($partner->banner);

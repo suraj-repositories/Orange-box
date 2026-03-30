@@ -88,12 +88,12 @@
                                                 <tr>
                                                     <th> {{ $partners->firstItem() + $loop->iteration - 1 }}</th>
                                                     <td>
-                                                        @if (!empty($partner->logo))
+                                                        @if (!empty($partner->logo_light))
                                                             @if (!empty($partner->website_url))
                                                                 <a href="{{ $partner->website_url }}" target="_blank">
                                                             @endif
 
-                                                            <img src="{{ Storage::url($partner->logo) }}"
+                                                            <img src="{{ Storage::url($partner->logo_light) }}"
                                                                 class="avatar avatar-sm img-fluid rounded-2 me-1 avatar-xl-logo"
                                                                 aria-label="{{ $partner->name }}">
 

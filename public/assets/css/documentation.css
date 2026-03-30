@@ -37,6 +37,10 @@ a:hover {
     color: var(--primary);
 }
 
+.text-second-dark {
+    color: var(--text-second-dark);
+}
+
 #sidebar-menu>ul>li>a:active,
 #sidebar-menu>ul>li>a:focus,
 #sidebar-menu>ul>li>a:hover {
@@ -1248,24 +1252,86 @@ ul.topnav-menu button i.bx {
     max-width: 100%;
 }
 
-.sidebar-sponsors .sponsors-m-2{
+.sidebar-sponsors .sponsors-m-2 {
     margin: 2px;
     border-radius: none;
 }
+
 .sidebar-sponsors {
     font-size: 10px;
 }
 
-.sidebar-sponsors .card-height{
+.sidebar-sponsors .card-height {
     height: 25px;
 }
-.sidebar-sponsors .sponsor-column{
-   filter: grayscale(1);
-}
-.sidebar-sponsors .sponsor-column:hover{
-   filter: grayscale(0);
+
+.sidebar-sponsors .sponsor-column {
+    filter: grayscale(1);
 }
 
-.sidebar-sponsors .card-height img{
+.sidebar-sponsors .sponsor-column:hover {
+    filter: grayscale(0);
+}
+
+.sidebar-sponsors .card-height img {
     max-height: 25px;
+}
+
+.spotlight-partner-container {
+    max-width: 1100px;
+}
+
+.partner-card {
+    background: var(--light);
+    color: var(--text-dark);
+    border-color: var(--gray-100) !important;
+}
+
+.partner-card .badge {
+    border-radius: 5px;
+    background: var(--gray-100);
+    color: var(--text-dark) !important;
+    padding: 7px 10px;
+}
+
+.card {
+    background: var(--light);
+    color: var(--text-dark);
+    border-color: var(--gray-100) !important;
+}
+
+.mx-width-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.mx-width-container .card {
+    border-radius: 12px;
+}
+
+.location-text i {
+    font-size: 14px;
+}
+
+.in-page-search-box {
+    position: relative;
+}
+
+.in-page-search-box i {
+    position: absolute;
+    top: 11px;
+    font-size: 22px;
+    left: 8px;
+    color: var(--text-dark);
+}
+
+.in-page-search-box input,
+.in-page-search-box input:focus,
+.in-page-search-box input:active {
+    padding: 10px;
+    padding-left: 34px;
+    background-color: var(--light);
+    border-color: var(--gray-100);
+    color: var(--text-dark);
 }
