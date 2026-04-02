@@ -144,6 +144,21 @@
                                             </div>
                                         </a>
                                     </div>
+                                    <div class="col">
+                                        <a href="{{ authRoute('user.documentation.document.pages.index', ['documentation' => $documentation]) }}"
+                                            class="text-decoration-none">
+                                            <div class="card mb-0 rounded-4 border h-100 hover-shadow">
+                                                <div class="card-body d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <i class="bi bi-box fs-4"></i>
+                                                        <h5 class="mb-0 mt-2">Pages</h5>
+                                                        <small class="text-muted">Custom Pages</small>
+                                                    </div>
+                                                    <i class="bi bi-chevron-right fs-4"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
 
                                 </div>
 

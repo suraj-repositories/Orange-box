@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User\Documentation;
 
 use App\Http\Controllers\Controller;
+use App\Models\Documentation;
 use App\Models\DocumentationDocument;
 use App\Models\File;
 use App\Models\User;
@@ -15,6 +16,26 @@ class DocumentationDocumentController extends Controller
 {
     //
     public function __construct(public FileService $fileService) {}
+
+    public function index(User $user, Documentation $documentation)
+    {
+        $title = "Pages";
+        $releases = $documentation->releases;
+
+        // dd($releases);
+
+        $formattedVersion = $releases->map(function ($r) {
+            return [
+                'id' => $r->id,
+                'name' => $r->version,
+                'label' => $r->title,
+                'date' => $r->released_at ? $r->released_at->format('M Y') : 'N/A',
+                'current' => (bool) $r->is_current,
+                'published' => (bool) $r->is_published,
+            ];
+        })->values();
+        return view('user.documentation.documents.document-pages', compact('title', 'documentation', 'releases', 'formattedVersion'));
+    }
 
     public function uploadEditorImages(User $user, Request $request)
     {

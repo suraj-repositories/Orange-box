@@ -256,6 +256,7 @@ Route::controller(FaqController::class)->group(function () {
 });
 
 Route::controller(DocumentationDocumentController::class)->group(function () {
+    Route::get('documentation/{documentation}/documentation-doc/pages', 'index')->name('documentation.document.pages.index');
     Route::post('documentation-doc/editor/images/store', 'uploadEditorImages')->name('documentation.document.editor.images.store');
     Route::post('documentation-doc/editor/fetch-url-media', 'fetchMediaFromUrl')->name('documentation.document.editor.fetch-url-media');
     Route::get('documentation-doc/editor/fetch-url-data', 'fetchUrlData')->name('documentation.document.editor.fetch-url-data');

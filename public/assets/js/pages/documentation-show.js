@@ -83,3 +83,5 @@ function enableHotPagesStatusChange() {
     });
 
 }
+
+// documentation pages overview
