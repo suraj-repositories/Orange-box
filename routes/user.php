@@ -255,12 +255,72 @@ Route::controller(FaqController::class)->group(function () {
     Route::delete('documentation-faqs/{faq}', 'destroy')->name('documentation.faqs.delete');
 });
 
+// Route::controller(DocumentationDocumentController::class)->group(function () {
+//     Route::get('documentation/{documentation}/documentation-doc/pages', 'index')->name('documentation.document.pages.index');
+//     Route::post('documentation-doc/editor/images/store', 'uploadEditorImages')->name('documentation.document.editor.images.store');
+//     Route::post('documentation-doc/editor/fetch-url-media', 'fetchMediaFromUrl')->name('documentation.document.editor.fetch-url-media');
+//     Route::get('documentation-doc/editor/fetch-url-data', 'fetchUrlData')->name('documentation.document.editor.fetch-url-data');
+//     Route::patch('documentation-doc/{document}/status-update', 'changeStatus')->name('documentation.document.status.update');
+// });
+
+
 Route::controller(DocumentationDocumentController::class)->group(function () {
-    Route::get('documentation/{documentation}/documentation-doc/pages', 'index')->name('documentation.document.pages.index');
-    Route::post('documentation-doc/editor/images/store', 'uploadEditorImages')->name('documentation.document.editor.images.store');
-    Route::post('documentation-doc/editor/fetch-url-media', 'fetchMediaFromUrl')->name('documentation.document.editor.fetch-url-media');
-    Route::get('documentation-doc/editor/fetch-url-data', 'fetchUrlData')->name('documentation.document.editor.fetch-url-data');
-    Route::patch('documentation-doc/{document}/status-update', 'changeStatus')->name('documentation.document.status.update');
+
+    // ── View ──────────────────────────────────────────────────────────────────
+    Route::get(
+        'documentation/{documentation}/documentation-doc/pages',
+        'index'
+    )->name('documentation.document.pages.index');
+
+    // ── Pages CRUD API ────────────────────────────────────────────────────────
+    Route::prefix('documentation/{documentation}/documentation-doc/pages')->group(function () {
+
+        // List (with filters: type, status, release_id, search)
+        Route::get('list', 'list')
+            ->name('documentation.document.pages.list');
+
+        // Create
+        Route::post('/', 'store')
+            ->name('documentation.document.pages.store');
+
+        // Read single
+        Route::get('{document}', 'show')
+            ->name('documentation.document.pages.show');
+
+        // Update
+        Route::put('{document}', 'update')
+            ->name('documentation.document.pages.update');
+
+        // Delete
+        Route::delete('{document}', 'destroy')
+            ->name('documentation.document.pages.destroy');
+
+        // Toggle live/off
+        Route::patch('{document}/toggle', 'toggle')
+            ->name('documentation.document.pages.toggle');
+    });
+
+    // ── Editor helpers ────────────────────────────────────────────────────────
+    Route::post(
+        'documentation-doc/editor/images/store',
+        'uploadEditorImages'
+    )->name('documentation.document.editor.images.store');
+
+    Route::post(
+        'documentation-doc/editor/fetch-url-media',
+        'fetchMediaFromUrl'
+    )->name('documentation.document.editor.fetch-url-media');
+
+    Route::get(
+        'documentation-doc/editor/fetch-url-data',
+        'fetchUrlData'
+    )->name('documentation.document.editor.fetch-url-data');
+
+    // ── Legacy status-update (kept for backwards compat) ──────────────────────
+    Route::patch(
+        'documentation-doc/{document}/status-update',
+        'changeStatus'
+    )->name('documentation.document.status.update');
 });
 
 Route::controller(DocumentationReleaseController::class)->group(function () {

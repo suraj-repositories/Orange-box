@@ -19,7 +19,6 @@ class SponsorsController extends Controller
             ->where('url', $slug ?? '')
             ->firstOrFail();
 
-        // latest stable release
         $release = DocumentationRelease::where('documentation_id', $documentation->id)
             ->where('is_current', true)
             ->where('is_published', true)

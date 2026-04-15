@@ -84,9 +84,11 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a class="text-dark"
+                                                    <a class="text-dark d-flex align-items-center"
                                                         href="{{ authRoute('user.documentation.show.latest', ['documentation' => $doc]) }}">
-                                                        {{ $doc->title }}
+                                                        <i class="bx bx-link me-1 fs-5"></i>{{ $doc->title }}
+
+
                                                     </a>
                                                 </td>
                                                 <td>

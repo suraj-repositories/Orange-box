@@ -28,7 +28,7 @@
 
                 <div class="row g-3">
                     <div class="col-md-12">
-                        <div class="card mb-0 overflow-hidden border rounded-4">
+                        <div class="card mb-0 border rounded-4">
 
                             <div class="card-body">
                                 <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
@@ -77,90 +77,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 row-cols-xxl-4 mt-2 g-3">
 
-                                    <!-- Setup Sponsor -->
-                                    <div class="col">
-                                        <a href="{{ authRoute('user.documentation.sponsors.index', ['documentation' => $documentation, 'v' => $release->version]) }}"
-                                            class="text-decoration-none">
-                                            <div class="card mb-0 rounded-4 border h-100 hover-shadow">
-                                                <div class="card-body d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <i class="bi bi-cash-coin fs-4"></i>
-                                                        <h5 class="mb-0 mt-2">Setup Sponsor</h5>
-                                                        <small class="text-muted">Configure sponsorship</small>
-                                                    </div>
-                                                    <i class="bi bi-chevron-right fs-4"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
-                                    <div class="col">
-                                        <a href="{{ authRoute('user.documentation.releases', ['documentation' => $documentation]) }}"
-                                            class="text-decoration-none">
-                                            <div class="card mb-0 rounded-4 border h-100 hover-shadow">
-                                                <div class="card-body d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <i class="bi bi-megaphone fs-4"></i>
-                                                        <h5 class="mb-0 mt-2">Releases Page</h5>
-                                                        <small class="text-muted">Manage releases</small>
-                                                    </div>
-                                                    <i class="bi bi-chevron-right fs-4"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
-                                    <!-- Partners -->
-                                    <div class="col">
-                                        <a href="{{ authRoute('user.documentation.partners.index', ['documentation' => $documentation]) }}"
-                                            class="text-decoration-none">
-                                            <div class="card mb-0 rounded-4 border h-100 hover-shadow">
-                                                <div class="card-body d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <i class='bx bx-donate-heart fs-4'></i>
-                                                        <h5 class="mb-0 mt-2">Partners</h5>
-                                                        <small class="text-muted">Manage parteners</small>
-                                                    </div>
-                                                    <i class="bi bi-chevron-right fs-4"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
-                                    <!-- Customize -->
-                                    <div class="col">
-                                        <a href="#" class="text-decoration-none">
-                                            <div class="card mb-0 rounded-4 border h-100 hover-shadow">
-                                                <div class="card-body d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <i class="bi bi-box fs-4"></i>
-                                                        <h5 class="mb-0 mt-2">Customize</h5>
-                                                        <small class="text-muted">Customize docs</small>
-                                                    </div>
-                                                    <i class="bi bi-chevron-right fs-4"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    <div class="col">
-                                        <a href="{{ authRoute('user.documentation.document.pages.index', ['documentation' => $documentation]) }}"
-                                            class="text-decoration-none">
-                                            <div class="card mb-0 rounded-4 border h-100 hover-shadow">
-                                                <div class="card-body d-flex justify-content-between align-items-center">
-                                                    <div>
-                                                        <i class="bi bi-box fs-4"></i>
-                                                        <h5 class="mb-0 mt-2">Pages</h5>
-                                                        <small class="text-muted">Custom Pages</small>
-                                                    </div>
-                                                    <i class="bi bi-chevron-right fs-4"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
-                                </div>
 
                             </div>
                         </div>
@@ -187,6 +104,98 @@
 
                                         <!-- Pages List -->
                                         <ul class="list-group list-group-flush">
+
+                                            <!-- Release -->
+                                            <li
+                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <div class="fw-semibold">Releases</div>
+                                                    <small class="text-muted fs-7">Manage documentation versions</small>
+                                                </div>
+
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-light border square-30 center-content"
+                                                        data-bs-toggle="dropdown">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
+                                                        <li>
+                                                            <a class="dropdown-item"
+                                                                href="{{ authRoute('user.documentation.releases', ['documentation' => $documentation]) }}">
+                                                                Edit Releases
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                            </li>
+
+                                            <!-- Sponsor -->
+                                            <li
+                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <div class="fw-semibold">Sponsors</div>
+                                                    <span class="badge bg-warning-subtle text-warning">Unimplemented</span>
+                                                </div>
+
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-light border square-30 center-content"
+                                                        data-bs-toggle="dropdown">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
+                                                        <li>
+                                                            <a class="dropdown-item"
+                                                                href="{{ authRoute('user.documentation.sponsors.index', ['documentation' => $documentation, 'v' => $release->version]) }}">Edit
+                                                                Sponsors</a>
+                                                        </li>
+                                                        <li>
+                                                            <div
+                                                                class="dropdown-item d-flex justify-content-between align-items-center">
+                                                                <span>Disable Page</span>
+                                                                <div class="form-check form-switch m-0">
+                                                                    <input class="form-check-input change-status-checkbox"
+                                                                        type="checkbox">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+
+                                            <!-- Partner -->
+                                            <li
+                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <div class="fw-semibold">Partners</div>
+                                                    <span class="badge bg-warning-subtle text-warning">Unimplemented</span>
+                                                </div>
+
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-light border square-30 center-content"
+                                                        data-bs-toggle="dropdown">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
+                                                        <li>
+                                                            <a class="dropdown-item"
+                                                                href="{{ authRoute('user.documentation.partners.index', ['documentation' => $documentation]) }}">
+                                                                Edit Partners
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <div
+                                                                class="dropdown-item d-flex justify-content-between align-items-center">
+                                                                <span>Disable Page</span>
+                                                                <div class="form-check form-switch m-0">
+                                                                    <input class="form-check-input change-status-checkbox"
+                                                                        type="checkbox">
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
 
                                             <!-- FAQ -->
                                             <li
@@ -220,92 +229,6 @@
                                                 </div>
                                             </li>
 
-                                            @php
-                                                $pages = [
-                                                    'privacy' => [
-                                                        'title' => 'Privacy Policy',
-                                                        'route' => 'privacy-policy.edit',
-                                                    ],
-                                                    'terms' => [
-                                                        'title' => 'Terms & Condition',
-                                                        'route' => 'terms.edit',
-                                                    ],
-                                                    'guide' => [
-                                                        'title' => 'Community Guide',
-                                                        'route' => 'community-guide.edit',
-                                                    ],
-                                                    'code_of_conduct' => [
-                                                        'title' => 'Code Of Conduct',
-                                                        'route' => 'code-of-conduct.edit',
-                                                    ],
-                                                ];
-                                            @endphp
-
-                                            @foreach ($pages as $type => $page)
-                                                @php
-                                                    $doc = $documentationDocuments->get($type);
-                                                @endphp
-
-                                                <li
-                                                    class="list-group-item px-0 d-flex justify-content-between align-items-center document-list-item">
-
-                                                    <div>
-                                                        <div class="fw-semibold">{{ $page['title'] }}</div>
-
-                                                        @if (!$doc)
-                                                            <span
-                                                                class="badge bg-warning-subtle text-warning page-status-badge">Unimplemented</span>
-                                                        @elseif($doc->status === 'active')
-                                                            <span
-                                                                class="badge bg-success-subtle text-success page-status-badge">Active</span>
-                                                        @else
-                                                            <span
-                                                                class="badge bg-danger-subtle text-danger page-status-badge">Inactive</span>
-                                                        @endif
-                                                    </div>
-
-                                                    <div class="dropdown">
-                                                        <button
-                                                            class="btn btn-sm btn-light border square-30 center-content"
-                                                            data-bs-toggle="dropdown">
-                                                            <i class="bi bi-three-dots-vertical"></i>
-                                                        </button>
-
-                                                        <ul class="dropdown-menu dropdown-menu-end p-2"
-                                                            style="min-width: 200px">
-
-                                                            <li>
-                                                                <a class="dropdown-item"
-                                                                    href="{{ authRoute('user.documentation.' . $page['route'], ['documentation' => $documentation, 'release' => $release]) }}">
-                                                                    Edit
-                                                                </a>
-                                                            </li>
-
-                                                            @if ($doc)
-                                                                <li>
-                                                                    <div
-                                                                        class="dropdown-item d-flex justify-content-between align-items-center">
-
-                                                                        <span>Page Status</span>
-
-                                                                        <div class="form-check form-switch m-0">
-                                                                            <input
-                                                                                class="form-check-input change-status-checkbox"
-                                                                                type="checkbox"
-                                                                                data-document-id="{{ $doc->id }}"
-                                                                                {{ $doc->status === 'active' ? 'checked' : '' }}>
-                                                                        </div>
-
-                                                                    </div>
-                                                                </li>
-                                                            @endif
-
-                                                        </ul>
-                                                    </div>
-
-                                                </li>
-                                            @endforeach
-
                                         </ul>
 
                                     </div>
@@ -314,7 +237,7 @@
                             <div class="col-md-8">
                                 <div class="row  g-3">
                                     <div class="col-12">
-                                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 lh-cards">
                                             <div class="col">
                                                 <a
                                                     href="{{ authRoute('user.documentation.pages.index', ['documentation' => $documentation, 'release' => $release]) }}">
@@ -331,14 +254,15 @@
                                                     href="{{ authRoute('user.documentation.edit', ['documentation' => $documentation]) }}">
                                                     <div class="card mb-0 rounded-4 border">
                                                         <div class="card-body d-flex align-items-center gap-2">
-                                                            <i class="bi bi-pencil-square fs-4"></i>
+                                                           <i class='bx bx-edit fs-3'></i>
                                                             <h5 class="mb-0">Edit Doc</h5>
                                                         </div>
                                                     </div>
                                                 </a>
                                             </div>
                                             <div class="col">
-                                                <a href="">
+                                                <a
+                                                    href="{{ authRoute('user.documentation.document.pages.index', ['documentation' => $documentation]) }}">
                                                     <div class="card mb-0 rounded-4 border">
                                                         <div class="card-body d-flex align-items-center gap-2">
                                                             <i class="bi bi-journal-code fs-4"></i>

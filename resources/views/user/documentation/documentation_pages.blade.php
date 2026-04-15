@@ -43,7 +43,14 @@
                                             aria-label="{{ $documentation->title }}">
                                         <h5 class="card-title mb-0">{{ $documentation->title }}</h5>
                                     @endif
-                                    <div class="badge border ms-1">{{ $release->version }}</div>
+                                    <div class="badge border ms-1">
+                                        {{ $release->version }}
+                                     <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $release->version, '/']) }}"
+                                        target="_blank" class=" text-dark">
+                                        <i class="bi bi-box-arrow-up-right fs-7 ms-1"></i>
+                                    </a>
+                                    </div>
+
 
 
                                     <input type="hidden" name="documentation_uuid" value="{{ $documentation->uuid }}"
@@ -96,7 +103,6 @@
 @endsection
 
 @section('js')
-
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor/min/vs/loader.js"></script>
     <script src="{{ asset('assets/libs/tui-editor/js/tui-editor.js') }}"></script>
     <script type="module" src="{{ asset('assets/js/pages/documentation-pages.js') }}"></script>

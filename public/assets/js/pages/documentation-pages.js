@@ -286,7 +286,7 @@ class PageControl {
             li.appendChild(div);
             li.appendChild(span);
             cleanup();
-            div.addEventListener('click', () => {
+            div.addEventListener('click', (e) => {
 
                 if (e.detail === 1) {
                     setTimeout(() => {
