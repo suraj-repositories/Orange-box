@@ -21,7 +21,6 @@
             @csrf<button type="submit">Logout</button></form>
     @endauth
     @guest
-
         <a href="{{ route('login') }}">Login</a>
         <a href="{{ route('register') }}">Register</a>
     @endguest

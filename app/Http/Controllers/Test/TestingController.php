@@ -15,7 +15,7 @@ class TestingController extends Controller
 
     //
     public function testing(){
-       dd("on test");
+       return view('welcome');
     }
 
 }
