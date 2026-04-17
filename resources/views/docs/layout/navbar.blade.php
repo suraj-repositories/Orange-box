@@ -71,13 +71,10 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('docs.sponsors.index', ['user' => $user, 'slug' => $documentation->url]) }}"
-                            class="nav-link in-full-nav dropdown-toggle nav-user me-0 {{ Route::is('docs.sponsors.index') ? 'active' : '' }}">
-                            <span class="pro-user-name ms-1">Sponsor</span>
-                        </a>
+                        <x-docs.nav.sponsor-page-link :user="$user" :documentation="$documentation" :release="$release"/>
                     </li>
-                    <li><a href="{{ route('docs.partners.index', ['user' => $user, 'slug' => $documentation->url]) }}"
-                            class="nav-link in-full-nav dropdown-toggle nav-user me-0 {{ Route::is('docs.partners.index') || Route::is('docs.partners.all.index') || Route::is('docs.partners.show') ? 'active' : '' }}""><span
+                    <li><a {{-- href="{{ route('docs.partners.index', ['user' => $user, 'slug' => $documentation->url]) }}" --}}
+                            class="nav-link in-full-nav dropdown-toggle nav-user me-0 {{-- Route::is('docs.partners.index') || Route::is('docs.partners.all.index') || Route::is('docs.partners.show') ? 'active' : '' --}}"><span
                                 class="pro-user-name ms-1">Partners</span></a></li>
 
                     <li class="dropdown in-full-nav dropdown-list topbar-dropdown">
@@ -89,14 +86,6 @@
 
                         <div class="dropdown-menu dropdown-menu-end profile-dropdown">
 
-                            <a class="dropdown-item notify-item"
-                                href="{{ route('docs.faq.index', [
-                                    'user' => $user->username,
-                                    'slug' => $documentation->url,
-                                    'version' => $release->version,
-                                ]) }}">
-                                <span>FAQ's</span>
-                            </a>
                             <a class="dropdown-item notify-item"
                                 href="{{ route('docs.releases.index', ['user' => $user->username, 'slug' => $documentation->url]) }}">
                                 <span>Releases</span>

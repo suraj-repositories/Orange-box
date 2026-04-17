@@ -27,7 +27,7 @@
                     aria-labelledby="sponsor-creation-form-title" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
                         <form id="sponsor-creation-form" data-submit-type="ajax"
-                            action="{{ authRoute('user.documentation.sponsors.save', ['documentation' => $documentation]) }}"
+                            action="{{ authRoute('user.documentation.sponsors.save', ['document' => $sponsorDocument]) }}"
                             method="post">
                             @csrf
                             <div class="modal-content">

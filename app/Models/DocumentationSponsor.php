@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Storage;
 
 class DocumentationSponsor extends Model
 {
-     use SoftDeletes, HasUuid;
+    use SoftDeletes, HasUuid;
 
     protected $fillable = [
         'uuid',
-        'documentation_id',
+        'documentation_document_id',
         'name',
         'website_url',
         'description',
@@ -34,9 +34,9 @@ class DocumentationSponsor extends Model
         return 'uuid';
     }
 
-    public function documentation()
+    public function document()
     {
-        return $this->belongsTo(Documentation::class);
+        return $this->belongsTo(DocumentationDocument::class, 'documentation_document_id');
     }
 
     public function getLogoLightUrlAttribute(): ?string

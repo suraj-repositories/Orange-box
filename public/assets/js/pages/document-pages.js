@@ -85,15 +85,22 @@
         terms: ['Terms of Service', 'Terms and legal agreement pages'],
         conduct: ['Code of Conduct', 'Community conduct pages'],
         cookie: ['Cookie Policy', 'Cookie and tracking policy pages'],
+        sponsors: ['Sponsors', 'Sponsors management on version'],
+        partners: ['Partners', 'Partner management on version'],
+        guide: ['Community Guide', 'Community Guidelines articals'],
+        faq: ["FAQ's", 'Frequently asked questions'],
         custom: ['Custom Pages', 'Custom policy pages'],
     };
-
 
     const viewToType = {
         privacy: 'privacy',
         terms: 'terms',
         conduct: 'code_of_conduct',
         cookie: 'cookie',
+        sponsors: 'sponsors',
+        partners: 'partners',
+        guide: 'guide',
+        faq: 'faq',
         custom: 'custom',
     };
 
@@ -135,7 +142,7 @@
             sidebarData = res.sidebar_data || [];
             pmRenderPages();
         } catch (err) {
-            list.innerHTML = `<div class="pm-empty"><div class="pm-empty-icon">⚠️</div><div class="pm-empty-title">Failed to load pages</div><div class="pm-empty-desc">${err.message}</div></div>`;
+            list.innerHTML = `<div class="pm-empty"><div class="pm-empty-icon text-danger"><i class="bx bx-error"></i></div><div class="pm-empty-title">Failed to load pages</div><div class="pm-empty-desc">${err.message}</div></div>`;
         }
     }
 
@@ -149,7 +156,7 @@
         if (!pmPages.length) {
             list.innerHTML = `
                 <div class="pm-empty">
-                    <div class="pm-empty-icon">📄</div>
+                    <div class="pm-empty-icon"><i class="bx bx-file"></i></div>
                     <div class="pm-empty-title">No pages found</div>
                     <div class="pm-empty-desc">Create a new page or adjust your filters</div>
                 </div>`;
@@ -187,7 +194,9 @@
                     <div class="pm-status-bar" style="background:${barColor}"></div>
                     <div class="pm-card-body">
                         <div class="pm-card-top">
-                            <span class="pm-page-name">${pmEscape(p.title)}</span>
+                            <a class="pm-page-name" href="${p.link}">
+                            ${pmEscape(p.title)}
+                            </a>
                             <span class="pm-badge pm-badge-${badgeClass}">${badgeClass}</span>
                             ${vTag}
                             <span class="pm-status-pill">
@@ -241,6 +250,10 @@
         pmEl('pm-count-terms').textContent = sidebarData.terms;
         pmEl('pm-count-conduct').textContent = sidebarData.code_of_conduct;
         pmEl('pm-count-cookie').textContent = sidebarData.cookie;
+        pmEl('pm-count-sponsors').textContent = sidebarData.sponsors;
+        pmEl('pm-count-partners').textContent = sidebarData.partners;
+        pmEl('pm-count-faq').textContent = sidebarData.faq;
+        pmEl('pm-count-guide').textContent = sidebarData.guide;
         pmEl('pm-count-custom').textContent = sidebarData.custom;
     }
 

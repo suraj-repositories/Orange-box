@@ -26,4 +26,8 @@ class DocumentationDocument extends Model
     {
         return $this->belongsTo(DocumentationRelease::class, 'release_id', 'id');
     }
+
+    public function sponsors(){
+        return $this->hasMany(DocumentationSponsor::class);
+    }
 }

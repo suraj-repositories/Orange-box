@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 class SponsorsController extends Controller
 {
     //
-    public function index(User $user, $slug)
+    public function index(User $user, DocumentationRelease $release, $slug)
     {
         $documentation = Documentation::where('user_id', $user->id)
             ->where('url', $slug ?? '')
@@ -27,14 +27,14 @@ class SponsorsController extends Controller
         $title = 'Sponsors';
 
         $sponsorDocument = DocumentationDocument::where('documentation_id', $documentation->id)
-            ->whereNull('release_id')
+            // ->whereNull('release_id')
             ->where('type', 'sponsors')
-            ->where('status', 'active')
+            ->where('status', 'live')
             ->firstOrFail();
 
         $tierOrder = ['platinum', 'gold', 'silver', 'bronze'];
 
-        $sponsors = DocumentationSponsor::where('documentation_id', $documentation->id)
+        $sponsors = DocumentationSponsor::where('documentation_document_id', $sponsorDocument->id)
             ->where('status', 'active')
             ->orderByRaw("FIELD(tier, 'platinum', 'gold', 'silver', 'bronze')")
             ->get()

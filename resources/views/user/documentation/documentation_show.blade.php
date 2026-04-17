@@ -146,7 +146,7 @@
                                                     <ul class="dropdown-menu dropdown-menu-end p-2">
                                                         <li>
                                                             <a class="dropdown-item"
-                                                                href="{{ authRoute('user.documentation.sponsors.index', ['documentation' => $documentation, 'v' => $release->version]) }}">Edit
+                                                                href="#">Edit
                                                                 Sponsors</a>
                                                         </li>
                                                         <li>

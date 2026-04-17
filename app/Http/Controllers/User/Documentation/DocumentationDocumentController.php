@@ -42,6 +42,7 @@ class DocumentationDocumentController extends Controller
 
     public function list(User $user, Documentation $documentation, Request $request)
     {
+
         $query = DocumentationDocument::where('documentation_id', $documentation->id)
             ->with('release');
 
@@ -77,8 +78,11 @@ class DocumentationDocumentController extends Controller
             'terms' => 0,
             'code_of_conduct' => 0,
             'guide' => 0,
-            'custom' => 0,
+            'sponsors' => 0,
+            'partners' => 0,
+            'faq' => 0,
             'cookie' => 0,
+            'custom' => 0,
         ];
 
         $sidebarData =  DocumentationDocument::where('documentation_id', $documentation->id)
@@ -101,7 +105,7 @@ class DocumentationDocumentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title'      => 'required|string|max:255',
-            'type'       => 'required|string|in:privacy,terms,code_of_conduct,guide,custom,cookie',
+            'type'       => 'required|string|in:privacy,terms,code_of_conduct,sponsors,partners,guide,faq,cookie,custom',
             'slug'       => 'nullable|string|max:255',
             'status'     => 'required|string|in:draft,live,off',
             'description'    => 'nullable|string',
@@ -160,7 +164,7 @@ class DocumentationDocumentController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title'      => 'required|string|max:255',
-            'type'       => 'required|string|in:privacy,terms,code_of_conduct,guide,cookie,custom',
+            'type'       => 'required|string|in:privacy,terms,code_of_conduct,sponsors,partners,guide,faq,cookie,custom',
             'slug'       => 'nullable|string|max:255',
             'status'     => 'required|string|in:draft,live,off',
             'description'    => 'nullable|string',
@@ -320,6 +324,22 @@ class DocumentationDocumentController extends Controller
 
     private function formatDocument(DocumentationDocument $doc): array
     {
+
+
+        $typeRoutes = [
+            'privacy' => 0,
+            'terms' => 0,
+            'code_of_conduct' => 0,
+            'guide' => 0,
+            'sponsors' =>  authRoute('user.documentation.document.sponsors.index', [
+                'document' => $doc
+            ]),
+            'partners' => 0,
+            'faq' => 0,
+            'cookie' => 0,
+            'custom' => 0,
+        ];
+
         return [
             'id'         => $doc->id,
             'title'      => $doc->title,
@@ -334,6 +354,7 @@ class DocumentationDocumentController extends Controller
                 'version' => $doc->release->version,
                 'title'   => $doc->release->title,
             ] : null,
+            'link' =>  $typeRoutes[$doc->type] ?? null,
             'created_at' => $doc->created_at?->toISOString(),
             'updated_at' => $doc->updated_at?->toISOString(),
         ];

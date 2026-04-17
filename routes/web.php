@@ -87,13 +87,14 @@ Route::get(
     ->name('docs.show');
 
 Route::get(
-    '/{user:username}/docs-extras/{slug}/{version}/{type}',
+    '/{user:username}/docs-extras/{documentationSlug}/{version}/{slug}',
     [DocumentationDocumentController::class, 'index']
 )->name('docs.extras.show');
 
-Route::get('/{user:username}/docs-xt/{slug}/{version}/faqs', [FaqController::class, 'index'])->name('docs.faq.index');
 Route::get('/{user:username}/docs-v/{slug}/releases', [ReleaseController::class, 'index'])->name('docs.releases.index');
-Route::get('/{user:username}/docs-v/{slug}/sponsors', [SponsorsController::class, 'index'])->name('docs.sponsors.index');
+
+Route::get('/{user:username}/docs-xt/{slug}/{version}/faqs', [FaqController::class, 'index'])->name('docs.faq.index');
+Route::get('/{user:username}/docs-v/{version}/{slug}', [SponsorsController::class, 'index'])->name('docs.sponsors.index');
 Route::get('/{user:username}/docs-v/{slug}/partners', [PartnersController::class, 'index'])->name('docs.partners.index');
 Route::get('/{user:username}/docs-v/{slug}/partners-all', [PartnersController::class, 'partnersAll'])->name('docs.partners.all.index');
 Route::get('/{user:username}/docs-v/{slug}/partner/{uuid}', [PartnersController::class, 'show'])->name('docs.partners.show');

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\User\Documentation;
 
 use App\Http\Controllers\Controller;
-use App\Models\Documentation;
 use App\Models\DocumentationDocument;
 use App\Models\DocumentationSponsor;
 use App\Models\User;
@@ -16,24 +15,18 @@ class DocumentationSponsorController extends Controller
 {
     public function __construct(public FileService $fileService) {}
 
-    public function index(User $user, Documentation $documentation, Request $request)
+    public function index(User $user, DocumentationDocument $document)
     {
         $title = 'Sponsors';
 
-        $sponsors = $documentation->sponsors()->paginate(10);
+        $sponsors = $document->sponsors()->paginate(10);
 
-        if ($request->has('v')) {
-            $release = $documentation->releases()
-                ->where('version', $request->get('v'))
-                ->where('is_published', true)
-                ->firstOrFail();
-        } else {
-            $release = $documentation->latestRelease;
-        }
-
-        $sponsorDocument = DocumentationDocument::where('documentation_id', $documentation->id)
+        $sponsorDocument = DocumentationDocument::where('id', $document->id)
             ->where('type', 'sponsors')
             ->first();
+
+        $documentation = $document->documentation;
+        $release = $document->release;
 
         return view(
             'user.documentation.sponsor.sponsors-show',
@@ -41,7 +34,8 @@ class DocumentationSponsorController extends Controller
         );
     }
 
-    public function save(User $user, Documentation $documentation, Request $request)
+
+    public function save(User $user, DocumentationDocument $document, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -60,11 +54,11 @@ class DocumentationSponsorController extends Controller
         }
 
         if ($request->filled('sponsor_id')) {
-            $sponsor = DocumentationSponsor::where('documentation_id', $documentation->id)
+            $sponsor = DocumentationSponsor::where('documentation_document_id', $document->id)
                 ->findOrFail($request->sponsor_id);
         } else {
             $sponsor = new DocumentationSponsor();
-            $sponsor->documentation_id = $documentation->id;
+            $sponsor->documentation_document_id = $document->id;
         }
 
         $sponsor->name = $request->name;
@@ -154,7 +148,7 @@ class DocumentationSponsorController extends Controller
         }
     }
 
-    public function createOrUpdateSponsorDocument(User $user, Documentation $documentation, Request $request)
+    public function updateContent(User $user, DocumentationDocument $document, Request $request)
     {
 
         $validated = $request->validate([
@@ -162,18 +156,9 @@ class DocumentationSponsorController extends Controller
         ]);
 
         try {
-            DocumentationDocument::updateOrCreate(
-                [
-                    'documentation_id' => $documentation->id,
-                    'release_id' => null,
-                    'type' => 'sponsors'
-                ],
-                [
-                    'title' => 'Sponsors',
-                    'slug' => 'sponsors',
-                    'content' => $validated['editor_content']
-                ]
-            );
+            $document->content =  $validated['editor_content'];
+            $document->save();
+
 
             return redirect()->back()->with('success', 'Updated successfully!');
         } catch (Throwable $ex) {

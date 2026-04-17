@@ -1,5 +1,5 @@
 @extends('docs.layout.layout')
-@section('title', "Faq's")
+@section('title', "FAQ's")
 
 @section('content')
 

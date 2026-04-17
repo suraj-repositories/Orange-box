@@ -47,7 +47,7 @@ class CodeOfConductController extends Controller
                     'title' => 'Code of Conduct',
                     'slug' => 'code-of-conduct',
                     'content' => $validated['editor_content'],
-                    'status' => 'inactive'
+                    'status' => 'off'
                 ]
             );
 

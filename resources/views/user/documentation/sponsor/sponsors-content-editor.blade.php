@@ -1,4 +1,4 @@
-<form action="{{ authRoute('user.documentation.sponsors.content.save', ['documentation' => $documentation]) }}"
+<form action="{{ authRoute('user.documentation.sponsors.content.save', ['document' => $sponsorDocument]) }}"
     id="saveSponsorDocumentForm" method="POST">
     @csrf
     <div class="card">

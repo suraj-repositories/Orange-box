@@ -7,10 +7,11 @@
         <div class="content">
 
             <div class="mx-width-container mt-4">
-                <a href="{{ route('docs.partners.all.index', [
+                <a
+                {{-- href="{{ route('docs.partners.all.index', [
                     'user' => $user,
                     'slug' => request('slug'),
-                ]) }}"
+                ]) }}" --}}
                     class="btn border mt-4 d-flex align-items-center w-fit back-btn">
                     <i class='bx bx-chevron-left fs-5'></i> Back to all partners
                 </a>

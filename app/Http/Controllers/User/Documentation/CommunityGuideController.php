@@ -47,7 +47,7 @@ class CommunityGuideController extends Controller
                     'title' => 'Commnunity Guide',
                     'slug' => 'guide',
                     'content' => $validated['editor_content'],
-                    'status' => 'inactive'
+                    'status' => 'off'
                 ]
             );
 

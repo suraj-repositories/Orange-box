@@ -69,9 +69,14 @@ class Documentation extends Model
             ->latest('id');
     }
 
+    public function documents()
+    {
+        return $this->hasMany(DocumentationDocument::class, 'documentation_id');
+    }
+
     public function sponsors()
     {
-        return $this->hasMany(DocumentationSponsor::class)
+        return $this->hasMany(DocumentationSponsor::class, 'documentation_document_id')
             ->orderBy('sort_order');
     }
 
