@@ -10,7 +10,6 @@ class DocumentationDocument extends Model
         'documentation_id',
         'release_id',
         'title',
-        'slug',
         'type',
         'content',
         'description',

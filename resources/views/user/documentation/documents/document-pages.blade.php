@@ -324,13 +324,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="mb-3">
-                                                        <label class="pm-label">URL Slug</label>
-                                                        <input type="text" class="pm-input" id="pm-page-slug"
-                                                            placeholder="e.g. /privacy-policy">
-                                                        <p class="pm-hint">The URL path where this page will be accessible
-                                                        </p>
-                                                    </div>
+
                                                     <div class="mb-3">
                                                         <label class="pm-label">Release Scope</label>
                                                         <div class="row g-2 mt-1">

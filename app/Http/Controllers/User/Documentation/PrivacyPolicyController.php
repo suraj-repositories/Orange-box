@@ -46,7 +46,6 @@ class PrivacyPolicyController extends Controller
                 ],
                 [
                     'title' => 'Privacy Policy',
-                    'slug' => 'privacy',
                     'content' => $validated['editor_content'],
                     'status' => 'inactive'
                 ]

@@ -11,7 +11,7 @@ class DocumentationPartner extends Model
     //
     protected $fillable = [
         'uuid',
-        'documentation_id',
+        'documentation_document_id',
         'name',
         'slug',
         'website_url',
@@ -36,8 +36,8 @@ class DocumentationPartner extends Model
         'tags' => 'array',
     ];
 
-    public function documentation()
+    public function document()
     {
-        return $this->belongsTo(Documentation::class);
+        return $this->belongsTo(DocumentationDocument::class, 'documentation_document_id');
     }
 }

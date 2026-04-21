@@ -71,14 +71,15 @@
                         </a>
                     </li>
                     <li>
-                        <x-docs.nav.sponsor-page-link :user="$user" :documentation="$documentation" :release="$release"/>
+                        <x-docs.nav.sponsor-page-link :user="$user" :documentation="$documentation" :release="$release" />
                     </li>
-                    <li><a {{-- href="{{ route('docs.partners.index', ['user' => $user, 'slug' => $documentation->url]) }}" --}}
-                            class="nav-link in-full-nav dropdown-toggle nav-user me-0 {{-- Route::is('docs.partners.index') || Route::is('docs.partners.all.index') || Route::is('docs.partners.show') ? 'active' : '' --}}"><span
-                                class="pro-user-name ms-1">Partners</span></a></li>
+                    <li>
+                        <x-docs.nav.partners-page-link :user="$user" :documentation="$documentation" :release="$release" />
+                    </li>
 
                     <li class="dropdown in-full-nav dropdown-list topbar-dropdown">
-                        <a class="nav-link dropdown-toggle nav-user me-0  {{ Route::is('docs.extras.show') ? 'active' : '' }}"
+                        @php $isAboutPage = Route::is('docs.extras.show') && !in_array(request('type'), ['partners', 'sponsors']) ; @endphp
+                        <a class="nav-link dropdown-toggle nav-user me-0  {{ $isAboutPage || Route::is('docs.releases.index') ? 'active' : '' }}"
                             data-bs-toggle="dropdown" href="#" role="button">
                             <span class="pro-user-name ms-1 dropdown-icon">About <i
                                     class="mdi mdi-chevron-down"></i></span>

@@ -45,7 +45,6 @@ class TermsController extends Controller
                 ],
                 [
                     'title' => 'Terms & Conditions',
-                    'slug' => 'terms',
                     'content' => $validated['editor_content'],
                     'status' => 'off'
                 ]

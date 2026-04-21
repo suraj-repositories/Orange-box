@@ -20,10 +20,14 @@
                             <li class="breadcrumb-item">
                                 <a href="{{ authRoute('user.documentation.index') }}">Documentations</a>
                             </li>
+
                             <li class="breadcrumb-item">
                                 <a
-                                    href="{{ authRoute('user.documentation.show.latest', ['documentation' => $documentation]) }}">{{ $documentation->title }}</a>
+                                    href="{{ authRoute('user.documentation.document.pages.index', ['documentation' => $documentation]) }}">
+                                    Page Editor
+                                </a>
                             </li>
+
                             <li class="breadcrumb-item active">{{ $title }}</li>
                         </ol>
                     </div>
@@ -52,7 +56,8 @@
 
                                     <div class="ms-auto fw-semibold d-flex gap-1">
 
-                                        <a href="{{ authRoute('user.documentation.partners.create', ['documentation' => $documentation]) }}"
+
+                                        <a href="{{ authRoute('user.documentation.partners.create', ['document' => $document]) }}"
                                             class="btn btn-light btn-sm border center-content gap-1">
                                             <i class="bx bx-plus fs-5"></i>
                                             <div>Add Partner</div>

@@ -2,12 +2,10 @@
 
 @section('title', $title)
 
-
 @section('css')
     <link href="{{ asset('assets/css/editorjs-custom.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/libs/tagify/tagify.css') }}" rel="stylesheet">
 @endsection
-
 
 @section('content')
     <div class="content-page">
@@ -23,16 +21,21 @@
                         <ol class="breadcrumb m-0 py-0">
 
                             <li class="breadcrumb-item">
-                                <a href="{{ authRoute('user.profile.index') }}">Dashboard</a>
+                                <a href="{{ authRoute('user.profile.index') }}">
+                                    Dashboard
+                                </a>
                             </li>
 
                             <li class="breadcrumb-item">
-                                <a href="{{ authRoute('user.documentation.index') }}">Documentation</a>
+                                <a href="{{ authRoute('user.documentation.index') }}">
+                                    Documentation
+                                </a>
                             </li>
 
                             <li class="breadcrumb-item">
-                                <a
-                                    href="{{ authRoute('user.documentation.partners.index', ['documentation' => $documentation->uuid]) }}">Partners</a>
+                                <a href="{{ authRoute('user.documentation.partners.index', ['document' => $document]) }}">
+                                    Partners
+                                </a>
                             </li>
 
                             <li class="breadcrumb-item active">
@@ -58,10 +61,8 @@
 
                             <div class="card-body">
 
-                                <form
-                                    action="{{ authRoute('user.documentation.partners.save', ['documentation' => $documentation->uuid]) }}"
+                                <form action="{{ authRoute('user.documentation.partners.save', ['document' => $document]) }}"
                                     method="POST" enctype="multipart/form-data">
-
                                     @csrf
                                     @isset($partner)
                                         <input type="hidden" name="partner_id" value="{{ $partner->id }}">

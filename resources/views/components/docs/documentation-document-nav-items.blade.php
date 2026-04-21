@@ -5,7 +5,7 @@
                 'user' => $user->username,
                 'documentationSlug' => $documentation->url,
                 'version' => $release->version ?? 'all',
-                'slug' => $document->slug,
+                'type' => $document->type,
             ]) }}">
             <span>{{ $document->title }}</span>
         </a>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User\Documentation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Documentation;
+use App\Models\DocumentationDocument;
 use App\Models\DocumentationPartner;
 use App\Models\User;
 use App\Services\FileService;
@@ -17,36 +18,46 @@ class PartnersController extends Controller
     public function __construct(public FileService $fileService) {}
 
     //
-    public function index(User $user, Documentation $documentation, Request $request)
+    public function index(User $user, DocumentationDocument $document, Request $request)
     {
 
         $title = "Partners";
-        $partners = DocumentationPartner::where('documentation_id', $documentation->id)
+        $partners = DocumentationPartner::where('documentation_document_id', $document->id)
             ->orderByDesc('is_spotlight_partner')
             ->orderBy('sort_order')
             ->paginate(10);
 
+        $documentation = $document->documentation;
+        $release = $document->release;
+
+
         return view('user.documentation.partners.partners-list', compact(
             'title',
             'partners',
-            'documentation'
+            'document',
+            'documentation',
+            'release',
         ));
     }
 
-    public function create(User $user, Documentation $documentation, Request $request)
+    public function create(User $user, DocumentationDocument $document, Request $request)
     {
         $title = 'Create Partener';
-        return view('user.documentation.partners.partners-form', compact('user', 'documentation', 'title'));
+        $documentation = $document->documentation;
+
+        return view('user.documentation.partners.partners-form', compact('user', 'documentation', 'document', 'title'));
     }
 
     public function edit(User $user, DocumentationPartner $partner)
     {
-        $documentation = $partner->documentation;
         $title = 'Edit Partener';
-        return view('user.documentation.partners.partners-form', compact('user', 'documentation', 'partner', 'title'));
+        $document = $partner->document;
+        $documentation = $document->documentation;
+
+        return view('user.documentation.partners.partners-form', compact('user', 'documentation', 'document',  'partner', 'title'));
     }
 
-    public function save(User $user, Documentation $documentation, Request $request)
+    public function save(User $user, DocumentationDocument $document, Request $request)
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -61,19 +72,16 @@ class PartnersController extends Controller
             'banner' => ['nullable', 'image', 'max:4096'],
         ]);
 
-
         if ($request->filled('partner_id')) {
-
-            $partner = DocumentationPartner::where('documentation_id', $documentation->id)
-                ->where('id', $request->partner_id)
-                ->firstOrFail();
+                $partner = DocumentationPartner::where('documentation_document_id', $document->id)
+                    ->where('id', $request->partner_id)
+                    ->firstOrFail();
         } else {
-
             $partner = new DocumentationPartner();
-            $partner->documentation_id = $documentation->id;
+            $partner->documentation_document_id = $document->id;
 
             $partner->sort_order =
-                DocumentationPartner::where('documentation_id', $documentation->id)->max('sort_order') + 1;
+                DocumentationPartner::where('documentation_document_id', $document->id)->max('sort_order') + 1;
         }
 
         $partner->name = $validated['name'];
@@ -130,7 +138,7 @@ class PartnersController extends Controller
         $partner->save();
 
         return redirect()
-            ->to(authRoute('user.documentation.partners.index', ['documentation' =>  $documentation]))
+            ->to(authRoute('user.documentation.partners.index', ['document' =>  $document]))
             ->with('success', 'Partner saved successfully.');
     }
 

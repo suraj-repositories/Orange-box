@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Documentation;
 use App\Models\DocumentationDocument;
 use App\Models\DocumentationFaq;
+use App\Models\DocumentationPartner;
 use App\Models\DocumentationRelease;
 use App\Models\DocumentationSponsor;
 use App\Models\User;
@@ -14,8 +15,9 @@ use Illuminate\Http\Request;
 class DocumentationDocumentController extends Controller
 {
     //
-    public function index(User $user, $documentationSlug, $version, $slug)
+    public function index(User $user, $documentationSlug, $version, $type)
     {
+
         $documentation = Documentation::where('user_id', $user->id)
             ->where('url', $documentationSlug ?? '')
             ->firstOrFail();
@@ -27,16 +29,18 @@ class DocumentationDocumentController extends Controller
                 ->firstOrFail();
         }
 
+
         $document = DocumentationDocument::where('documentation_id', $documentation->id)
             ->when(!empty($release), function ($query) use ($release) {
                 $query->where('release_id', $release->id);
             })
-            ->where('slug', $slug)
+            ->where('type', $type)
             ->where('status', 'live')
             ->latest()
             ->firstOrFail();
 
         $type = $document->type;
+
 
         switch ($type) {
 
@@ -55,7 +59,8 @@ class DocumentationDocumentController extends Controller
                 break;
 
             case 'partners':
-
+                $pageData = $this->partnersPageData($user, $documentation, $release, $document);
+                return view('docs.partner.partners', $pageData);
                 break;
 
             default:
@@ -90,6 +95,34 @@ class DocumentationDocumentController extends Controller
             'documentation' => $documentation,
             'sponsorDocument' => $sponsorDocument,
             'sponsors' => $sponsors
+        ];
+    }
+
+    private function partnersPageData($user, $documentation, $release, $document)
+    {
+        $title = 'Partners';
+
+        $partners = DocumentationPartner::where('documentation_document_id', $document->id)
+            ->where('status', 'active')
+            ->where('is_spotlight_partner', false)
+            ->orderBy('sort_order')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $spotlightPartner = DocumentationPartner::where('documentation_document_id', $document->id)
+            ->where('status', 'active')
+            ->where('is_spotlight_partner', true)
+            ->first();
+
+        return [
+            'title' => $title,
+            'user' => $user,
+            'release' => $release,
+            'documentation' => $documentation,
+            'partners' => $partners,
+            'spotlightPartner' => $spotlightPartner,
+            'document' => $document,
         ];
     }
 }

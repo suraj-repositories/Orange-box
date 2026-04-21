@@ -1171,6 +1171,7 @@ ul.topnav-menu button i.bx {
     gap: 8px;
     border: none;
     border-color: var(--primary);
+    border: 1px solid var(--gray-100);
 }
 
 .version-dropdown .btn.show {

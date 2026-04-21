@@ -11,7 +11,7 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         if(!Auth::check()){
-            return redirect()->route('login')->with('error', 'Please login first!');
+            return redirect()->route('login');
         }
 
         $user = Auth::user();

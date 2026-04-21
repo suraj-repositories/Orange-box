@@ -204,7 +204,6 @@
                                 ${p.status.charAt(0).toUpperCase() + p.status.slice(1)}
                             </span>
                         </div>
-                        <div class="pm-card-slug">${pmEscape(p.slug)}</div>
                     </div>
                     <div class="pm-card-actions">
                         <div class="form-check form-switch" onclick="event.stopPropagation()">
@@ -325,7 +324,6 @@
         pmEl('pm-page-modal-title').textContent = 'Edit Page';
         pmEl('pm-page-name').value = p.title;
         pmEl('pm-page-type').value = p.type;
-        pmEl('pm-page-slug').value = p.slug;
         pmEl('pm-page-status').value = p.status;
         pmEl('pm-page-description').value = p.description || '';
 
@@ -355,7 +353,7 @@
     });
 
     function pmResetPageForm() {
-        ['pm-page-name', 'pm-page-slug', 'pm-page-description'].forEach(id => {
+        ['pm-page-name', 'pm-page-description'].forEach(id => {
             const el = pmEl(id);
             if (el) el.value = '';
         });
@@ -404,7 +402,6 @@
         }
 
         const type = pmEl('pm-page-type').value;
-        const slug = pmEl('pm-page-slug').value.trim() || '/' + title.toLowerCase().replace(/\s+/g, '-');
         const status = pmEl('pm-page-status').value;
         const description = pmEl('pm-page-description').value.trim();
 
@@ -416,7 +413,6 @@
         const payload = {
             title,
             type,
-            slug,
             status,
             description,
             scope: pmScopeMode,

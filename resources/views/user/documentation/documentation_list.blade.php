@@ -139,7 +139,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="6">
+                                                <td colspan="8">
                                                     <x-no-data />
                                                 </td>
                                             </tr>

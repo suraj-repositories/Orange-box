@@ -84,7 +84,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            {{-- <div class="col-md-4">
                                 <div class="card mb-0 rounded-4 border hot-pages-card">
                                     <div class="card-body">
 
@@ -130,114 +130,27 @@
                                                 </div>
                                             </li>
 
-                                            <!-- Sponsor -->
-                                            <li
-                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <div class="fw-semibold">Sponsors</div>
-                                                    <span class="badge bg-warning-subtle text-warning">Unimplemented</span>
-                                                </div>
-
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm btn-light border square-30 center-content"
-                                                        data-bs-toggle="dropdown">
-                                                        <i class="bi bi-three-dots-vertical"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                        <li>
-                                                            <a class="dropdown-item"
-                                                                href="#">Edit
-                                                                Sponsors</a>
-                                                        </li>
-                                                        <li>
-                                                            <div
-                                                                class="dropdown-item d-flex justify-content-between align-items-center">
-                                                                <span>Disable Page</span>
-                                                                <div class="form-check form-switch m-0">
-                                                                    <input class="form-check-input change-status-checkbox"
-                                                                        type="checkbox">
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-
-                                            <!-- Partner -->
-                                            <li
-                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <div class="fw-semibold">Partners</div>
-                                                    <span class="badge bg-warning-subtle text-warning">Unimplemented</span>
-                                                </div>
-
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm btn-light border square-30 center-content"
-                                                        data-bs-toggle="dropdown">
-                                                        <i class="bi bi-three-dots-vertical"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                        <li>
-                                                            <a class="dropdown-item"
-                                                                href="{{ authRoute('user.documentation.partners.index', ['documentation' => $documentation]) }}">
-                                                                Edit Partners
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <div
-                                                                class="dropdown-item d-flex justify-content-between align-items-center">
-                                                                <span>Disable Page</span>
-                                                                <div class="form-check form-switch m-0">
-                                                                    <input class="form-check-input change-status-checkbox"
-                                                                        type="checkbox">
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-
-                                            <!-- FAQ -->
-                                            <li
-                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <div class="fw-semibold">FAQ</div>
-                                                    <span class="badge bg-warning-subtle text-warning">Unimplemented</span>
-                                                </div>
-
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm btn-light border square-30 center-content"
-                                                        data-bs-toggle="dropdown">
-                                                        <i class="bi bi-three-dots-vertical"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                        <li>
-                                                            <a class="dropdown-item"
-                                                                href="{{ authRoute('user.documentation.faqs.index', ['documentation' => $documentation, 'release' => $release]) }}">Edit</a>
-                                                        </li>
-                                                        <li>
-                                                            <div
-                                                                class="dropdown-item d-flex justify-content-between align-items-center">
-                                                                <span>Disable Page</span>
-                                                                <div class="form-check form-switch m-0">
-                                                                    <input class="form-check-input change-status-checkbox"
-                                                                        type="checkbox">
-                                                                </div>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
 
                                         </ul>
 
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-8">
+                            </div> --}}
+                            <div class="col-md-12">
                                 <div class="row  g-3">
                                     <div class="col-12">
-                                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 lh-cards">
+                                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3 lh-cards">
+                                            <div class="col">
+                                                <a
+                                                    href="{{ authRoute('user.documentation.releases', ['documentation' => $documentation]) }}">
+                                                    <div class="card mb-0 rounded-4 border">
+                                                        <div class="card-body d-flex align-items-center gap-2">
+                                                            <i class="bi bi-hdd-stack fs-4"></i>
+                                                            <h5 class="mb-0">Releases</h5>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
                                             <div class="col">
                                                 <a
                                                     href="{{ authRoute('user.documentation.pages.index', ['documentation' => $documentation, 'release' => $release]) }}">

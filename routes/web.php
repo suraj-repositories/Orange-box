@@ -87,7 +87,7 @@ Route::get(
     ->name('docs.show');
 
 Route::get(
-    '/{user:username}/docs-extras/{documentationSlug}/{version}/{slug}',
+    '/{user:username}/docs-extras/{documentationSlug}/{version}/{type}',
     [DocumentationDocumentController::class, 'index']
 )->name('docs.extras.show');
 

@@ -21,7 +21,7 @@ class DocumentationDocumentNavItems extends Component
         $this->documentationDocuments = DocumentationDocument::where('documentation_id', $documentation->id)
             ->where('release_id', $release->id)
             ->whereNotIn('type', ['sponsors', 'partners'])
-            ->select('status', 'type', 'id', 'title', 'slug', 'documentation_id', 'release_id')
+            ->select('status', 'type', 'id', 'title',  'documentation_id', 'release_id')
             ->get()
             ->keyBy('type');
     }

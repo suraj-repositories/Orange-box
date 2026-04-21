@@ -255,15 +255,6 @@ Route::controller(FaqController::class)->group(function () {
     Route::delete('documentation-faqs/{faq}', 'destroy')->name('documentation.faqs.delete');
 });
 
-// Route::controller(DocumentationDocumentController::class)->group(function () {
-//     Route::get('documentation/{documentation}/documentation-doc/pages', 'index')->name('documentation.document.pages.index');
-//     Route::post('documentation-doc/editor/images/store', 'uploadEditorImages')->name('documentation.document.editor.images.store');
-//     Route::post('documentation-doc/editor/fetch-url-media', 'fetchMediaFromUrl')->name('documentation.document.editor.fetch-url-media');
-//     Route::get('documentation-doc/editor/fetch-url-data', 'fetchUrlData')->name('documentation.document.editor.fetch-url-data');
-//     Route::patch('documentation-doc/{document}/status-update', 'changeStatus')->name('documentation.document.status.update');
-// });
-
-
 Route::controller(DocumentationDocumentController::class)->group(function () {
 
     Route::get('documentation/{documentation}/documentation-doc/pages', 'index')->name('documentation.document.pages.index');
@@ -300,9 +291,9 @@ Route::controller(DocumentationSponsorController::class)->group(function () {
 });
 
 Route::controller(DocumentationPartnersController::class)->group(function () {
-    Route::get('documentation/{documentation}/partners', 'index')->name('documentation.partners.index');
-    Route::get('documentation/{documentation}/partners/new', 'create')->name('documentation.partners.create');
-    Route::post('documentation/{documentation}/partners', 'save')->name('documentation.partners.save');
+    Route::get('documentation-doc/{document}/partners', 'index')->name('documentation.partners.index');
+    Route::get('documentation-doc/{document}/partners/new', 'create')->name('documentation.partners.create');
+    Route::post('documentation-doc/{document}/partners', 'save')->name('documentation.partners.save');
     Route::get('documentation-partner/{partner}', 'edit')->name('documentation.partner.edit');
     Route::patch('documentation-partner/{partner}/status', 'updateStatus')->name('documentation.partner.status.update');
     Route::patch('documentation-partner/{partner}/sportlight', 'markSpotlight')->name('documentation.partner.mark-spotlight');

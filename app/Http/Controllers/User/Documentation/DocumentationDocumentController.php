@@ -66,7 +66,7 @@ class DocumentationDocumentController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                    ->orWhere('slug', 'like', "%{$search}%");
+                    ->orWhere('type', 'like', "%{$search}%");
             });
         }
 
@@ -106,7 +106,7 @@ class DocumentationDocumentController extends Controller
         $validator = Validator::make($request->all(), [
             'title'      => 'required|string|max:255',
             'type'       => 'required|string|in:privacy,terms,code_of_conduct,sponsors,partners,guide,faq,cookie,custom',
-            'slug'       => 'nullable|string|max:255',
+
             'status'     => 'required|string|in:draft,live,off',
             'description'    => 'nullable|string',
             'scope'      => 'required|string|in:all,specific',
@@ -121,9 +121,6 @@ class DocumentationDocumentController extends Controller
             ], 422);
         }
 
-        $slug = $request->filled('slug')
-            ? $request->slug
-            : '/' . Str::slug($request->title);
 
         $releaseId = ($request->scope === 'specific') ? $request->release_id : null;
 
@@ -131,7 +128,6 @@ class DocumentationDocumentController extends Controller
             'documentation_id' => $documentation->id,
             'release_id'       => $releaseId,
             'title'            => $request->title,
-            'slug'             => $slug,
             'type'             => $request->type,
             'description'          => $request->description ?? '',
             'status'           => $request->status,
@@ -165,7 +161,7 @@ class DocumentationDocumentController extends Controller
         $validator = Validator::make($request->all(), [
             'title'      => 'required|string|max:255',
             'type'       => 'required|string|in:privacy,terms,code_of_conduct,sponsors,partners,guide,faq,cookie,custom',
-            'slug'       => 'nullable|string|max:255',
+
             'status'     => 'required|string|in:draft,live,off',
             'description'    => 'nullable|string',
             'scope'      => 'required|string|in:all,specific',
@@ -180,16 +176,14 @@ class DocumentationDocumentController extends Controller
             ], 422);
         }
 
-        $slug = $request->filled('slug')
-            ? $request->slug
-            : '/' . Str::slug($request->title);
+
 
         $releaseId = ($request->scope === 'specific') ? $request->release_id : null;
 
         $document->update([
             'release_id' => $releaseId,
             'title'      => $request->title,
-            'slug'       => $slug,
+
             'type'       => $request->type,
             'description'    => $request->description ?? '',
             'status'     => $request->status,
@@ -334,7 +328,9 @@ class DocumentationDocumentController extends Controller
             'sponsors' =>  authRoute('user.documentation.document.sponsors.index', [
                 'document' => $doc
             ]),
-            'partners' => 0,
+            'partners' => authRoute('user.documentation.partners.index', [
+                'document' => $doc
+            ]),
             'faq' => 0,
             'cookie' => 0,
             'custom' => 0,
@@ -343,7 +339,6 @@ class DocumentationDocumentController extends Controller
         return [
             'id'         => $doc->id,
             'title'      => $doc->title,
-            'slug'       => $doc->slug,
             'type'       => $doc->type,
             'status'     => $doc->status,
             'description'    => $doc->description,
