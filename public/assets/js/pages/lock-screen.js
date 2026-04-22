@@ -75,6 +75,9 @@ class LockScreenControl {
         const documentbody = document.querySelector("body");
 
         lockBtns.forEach(btn => {
+
+            const prevBtnHtml = btn.innerHTML;
+
             btn.addEventListener('click', function () {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -92,7 +95,6 @@ class LockScreenControl {
                     .then(data => {
 
                         if (data.status == "success") {
-
                             window.location.href = data.redirect_url;
                         } else {
                             Swal.fire({
@@ -103,7 +105,7 @@ class LockScreenControl {
                             documentbody.classList.remove('locking')
                         }
                         btn.disabled = false;
-                        btn.textContent = "Lock Screen";
+                        btn.innerHTML = prevBtnHtml;
 
                     })
                     .catch(error => {
@@ -114,7 +116,7 @@ class LockScreenControl {
                             icon: "error"
                         });
                         btn.disabled = false;
-                        btn.textContent = "Lock Screen";
+                        btn.innerHTML = prevBtnHtml;
                         documentbody.classList.remove('locking')
                     });
             });

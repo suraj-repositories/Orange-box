@@ -11,9 +11,6 @@
         <div class="content">
             <div class="container-xxl">
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
-
-                    <x-alert-component />
-
                     <div class="flex-grow-1">
                         <h4 class="fs-18 fw-semibold m-0">{{ $title }} </h4>
                     </div>
@@ -25,21 +22,19 @@
                             </li>
                             <li class="breadcrumb-item">
                                 <a
-                                    href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">{{ $documentation->title }}</a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a
-                                    href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">{{ $release->version }}</a>
+                                    href="{{ authRoute('user.documentation.document.pages.index', ['documentation' => $documentation]) }}">
+                                    Page Editor
+                                </a>
                             </li>
                             <li class="breadcrumb-item active">{{ $title }}</li>
                         </ol>
                     </div>
                 </div>
+                <x-alert-component />
 
                 <div class="row">
                     <div class="col-12">
-                        <form
-                            action="{{ authRoute('user.documentation.community-guide.save', ['documentation' => $documentation, 'release' => $release]) }}"
+                        <form action="{{ authRoute('user.documentation.community-guide.save', ['document' => $document]) }}"
                             id="saveCommunityGuideForm" method="POST">
                             @csrf
                             <div class="card">
@@ -67,7 +62,7 @@
                                         data-ob-image-upload-url="{{ authRoute('user.documentation.document.editor.images.store') }}"
                                         data-ob-preview-toggle-checkbox="#previewToggleCheckbox"
                                         data-ob-cacheable-id="syntax-store-editorjs"
-                                        @if (!empty($documentationDocument)) data-ob-content='{{ $documentationDocument->content }}' @endif
+                                        @if (!empty($document)) data-ob-content='{{ $document->content }}' @endif
                                         data-ob-fetch-online-media-url="{{ authRoute('user.documentation.document.editor.fetch-url-media') }}"
                                         data-ob-fetch-data-url="{{ authRoute('user.documentation.document.editor.fetch-url-data') }}">
                                     </div>
@@ -86,7 +81,5 @@
 @endsection
 
 @section('js')
-
-
 
 @endsection

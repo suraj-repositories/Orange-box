@@ -210,9 +210,7 @@ class DocumentationController extends Controller
                 ->to(authRoute('user.documentation.index'))
                 ->with('success', 'Documentation Updated Successfully!');
         } catch (Exception $ex) {
-
-            return back()->withInput()
-                ->with('error', 'Error: ' . $ex->getMessage());
+            return back()->withInput()->with('error', 'Error: ' . $ex->getMessage());
         }
     }
 }

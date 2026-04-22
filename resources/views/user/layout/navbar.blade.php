@@ -39,26 +39,28 @@
                         </span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
-                        <!-- item-->
+
                         <div class="dropdown-header noti-title">
                             <h6 class="text-overflow m-0">Welcome {{ auth()->user()->name() }}!</h6>
                         </div>
 
-                        <!-- item-->
                         <a class='dropdown-item notify-item' href='{{ authRoute('user.profile.index') }}'>
                             <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
                             <span>My Profile</span>
                         </a>
 
-                        <!-- item-->
                         <button class='dropdown-item notify-item lock_screen_btn'  >
                             <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
                             <span>Lock Screen</span>
                         </button>
 
+                        <a class='dropdown-item notify-item' href='{{ authRoute('user.settings.index') }}'>
+                            <i class="mdi mdi-cog-outline fs-16 align-middle"></i>
+                            <span>Settings</span>
+                        </a>
+
                         <div class="dropdown-divider"></div>
 
-                        <!-- item-->
                         <form action="{{ route('auth.logout') }}" method="POST">
                             @csrf
                             <button class='dropdown-item notify-item'>

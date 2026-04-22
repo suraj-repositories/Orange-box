@@ -13,48 +13,31 @@ use Throwable;
 class PrivacyPolicyController extends Controller
 {
     //
-    public function updateOrNewPage(User $user, Documentation $documentation, DocumentationRelease $release)
+    public function editOrNewPage(User $user, DocumentationDocument $document)
     {
         $title = 'Privacy Policy';
-
-        $documentationDocument = DocumentationDocument::where('documentation_id', $documentation->id)
-            ->where('release_id', $release->id)
-            ->where('type', 'privacy')
-            ->first();
 
         return view('user.documentation.privacy-policy.privacy-policy-form', [
             'title' => $title,
             'user' => $user,
-            'documentationDocument' => $documentationDocument,
-            'documentation' => $documentation,
-            'release' => $release
+            'document' => $document,
+            'documentation' => $document->documentation,
+            'release' => $document->release
         ]);
     }
 
-    public function saveOrUpdate(User $user, Documentation $documentation, DocumentationRelease $release, Request $request)
+    public function update(User $user, DocumentationDocument $document, Request $request)
     {
         $validated = $request->validate([
             'editor_content' => 'required',
         ]);
 
         try {
-            DocumentationDocument::updateOrCreate(
-                [
-                    'documentation_id' => $documentation->id,
-                    'release_id' => $release->id,
-                    'type' => 'privacy'
-                ],
-                [
-                    'title' => 'Privacy Policy',
-                    'content' => $validated['editor_content'],
-                    'status' => 'inactive'
-                ]
-            );
 
-            return redirect()->to(authRoute('user.documentation.show', [
-                'documentation' => $documentation,
-                'release' => $release
-            ]));
+            $document->content = $validated['editor_content'];
+            $document->save();
+
+            return redirect()->back()->with('success', 'Saved Successfully!');
         } catch (Throwable $ex) {
             return redirect()->back()->with('error', $ex->getMessage());
         }

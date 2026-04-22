@@ -321,10 +321,18 @@ class DocumentationDocumentController extends Controller
 
 
         $typeRoutes = [
-            'privacy' => 0,
-            'terms' => 0,
-            'code_of_conduct' => 0,
-            'guide' => 0,
+            'privacy' => authRoute('user.documentation.privacy-policy.edit', [
+                'document' => $doc
+            ]),
+            'terms' => authRoute('user.documentation.terms.edit', [
+                'document' => $doc
+            ]),
+            'code_of_conduct' => authRoute('user.documentation.code-of-conduct.edit', [
+                'document' => $doc
+            ]),
+            'guide' => authRoute('user.documentation.community-guide.edit', [
+                'document' => $doc
+            ]),
             'sponsors' =>  authRoute('user.documentation.document.sponsors.index', [
                 'document' => $doc
             ]),

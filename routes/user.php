@@ -229,28 +229,28 @@ Route::controller(DocumentationController::class)->group(function () {
 });
 
 Route::controller(PrivacyPolicyController::class)->group(function () {
-    Route::get('documentation/{documentation}/v/{release}/privacy-policy/edit', 'updateOrNewPage')->name('documentation.privacy-policy.edit');
-    Route::post('documentation/{documentation}/v/{release}/privacy-policy', 'saveOrUpdate')->name('documentation.privacy-policy.save');
+    Route::get('documentation-doc/{document}/privacy-policy/edit', 'editOrNewPage')->name('documentation.privacy-policy.edit');
+    Route::post('documentation-doc/{document}/privacy-policy', 'update')->name('documentation.privacy-policy.save');
 });
 
 Route::controller(TermsController::class)->group(function () {
-    Route::get('documentation/{documentation}/v/{release}/terms/edit', 'updateOrNewPage')->name('documentation.terms.edit');
-    Route::post('documentation/{documentation}/v/{release}/terms', 'saveOrUpdate')->name('documentation.terms.save');
+    Route::get('documentation-doc/{document}/terms/edit', 'editOrNewPage')->name('documentation.terms.edit');
+    Route::post('documentation-doc/{document}/terms', 'update')->name('documentation.terms.save');
 });
 
 Route::controller(CodeOfConductController::class)->group(function () {
-    Route::get('documentation/{documentation}/v/{release}/coc/edit', 'updateOrNewPage')->name('documentation.code-of-conduct.edit');
-    Route::post('documentation/{documentation}/v/{release}/coc', 'saveOrUpdate')->name('documentation.code-of-conduct.save');
+    Route::get('documentation-doc/{document}/coc/edit', 'editOrNewPage')->name('documentation.code-of-conduct.edit');
+    Route::post('documentation-doc/{document}/coc', 'update')->name('documentation.code-of-conduct.save');
 });
 
 Route::controller(CommunityGuideController::class)->group(function () {
-    Route::get('documentation/{documentation}/v/{release}/community-guide/edit', 'updateOrNewPage')->name('documentation.community-guide.edit');
-    Route::post('documentation/{documentation}/v/{release}/community-guide', 'saveOrUpdate')->name('documentation.community-guide.save');
+    Route::get('documentation-doc/{document}/community-guide/edit', 'editOrNewPage')->name('documentation.community-guide.edit');
+    Route::post('documentation-doc/{document}/community-guide', 'update')->name('documentation.community-guide.save');
 });
 
 Route::controller(FaqController::class)->group(function () {
-    Route::get('documentation/{documentation}/v/{release}/faqs', 'index')->name('documentation.faqs.index');
-    Route::post('documentation/{documentation}/v/{release}/faqs', 'store')->name('documentation.faqs.save');
+    Route::get('documentation-doc/{document}/faqs', 'index')->name('documentation.faqs.index');
+    Route::post('documentation-doc/{document}/faqs', 'store')->name('documentation.faqs.save');
     Route::patch('documentation-faqs/{faq}/status', 'updateStatus')->name('documentation.faqs.status.update');
     Route::delete('documentation-faqs/{faq}', 'destroy')->name('documentation.faqs.delete');
 });

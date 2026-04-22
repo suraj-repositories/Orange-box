@@ -12,48 +12,30 @@ use Throwable;
 
 class CodeOfConductController extends Controller
 {
-    public function updateOrNewPage(User $user, Documentation $documentation, DocumentationRelease $release)
+    public function editOrNewPage(User $user, DocumentationDocument $document)
     {
         $title = 'Code Of Conduct';
-
-        $documentationDocument = DocumentationDocument::where('documentation_id', $documentation->id)
-            ->where('release_id', $release->id)
-            ->where('type', 'code_of_conduct')
-            ->first();
 
         return view('user.documentation.code-of-conduct.code-of-conduct-editor', [
             'title' => $title,
             'user' => $user,
-            'documentationDocument' => $documentationDocument,
-            'documentation' => $documentation,
-            'release' => $release
+            'document' => $document,
+            'documentation' => $document->documentation,
+            'release' => $document->release
         ]);
     }
 
-    public function saveOrUpdate(User $user, Documentation $documentation, DocumentationRelease $release, Request $request)
+    public function update(User $user, DocumentationDocument $document, Request $request)
     {
         $validated = $request->validate([
             'editor_content' => 'required',
         ]);
 
         try {
-            DocumentationDocument::updateOrCreate(
-                [
-                    'documentation_id' => $documentation->id,
-                    'release_id' => $release->id,
-                    'type' => 'code_of_conduct'
-                ],
-                [
-                    'title' => 'Code of Conduct',
-                    'content' => $validated['editor_content'],
-                    'status' => 'off'
-                ]
-            );
+            $document->content = $validated['editor_content'];
+            $document->save();
 
-            return redirect()->to(authRoute('user.documentation.show', [
-                'documentation' => $documentation,
-                'release' => $release
-            ]));
+            return redirect()->back()->with('success', 'Saved Successfully!');
         } catch (Throwable $ex) {
             return redirect()->back()->with('error', $ex->getMessage());
         }
