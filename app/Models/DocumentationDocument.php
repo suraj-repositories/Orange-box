@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 
 class DocumentationDocument extends Model
 {
+    use HasUuid;
+
     protected $fillable = [
+        'uuid',
         'documentation_id',
         'release_id',
         'title',

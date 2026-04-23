@@ -15,11 +15,11 @@ use Illuminate\Http\Request;
 class DocumentationDocumentController extends Controller
 {
     //
-    public function index(User $user, $documentationSlug, $version, $type)
+    public function index(User $user, $slug, $version, $type)
     {
 
         $documentation = Documentation::where('user_id', $user->id)
-            ->where('url', $documentationSlug ?? '')
+            ->where('url', $slug ?? '')
             ->firstOrFail();
 
         $release = null;

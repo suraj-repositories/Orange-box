@@ -1,7 +1,7 @@
 @if (!empty($document))
     <a href="{{ route('docs.extras.show', [
         'user' => $user,
-        'documentationSlug' => $documentation->url,
+        'slug' => $documentation->url,
         'version' => $release->version ?? 'all',
         'type' => $document->type,
     ]) }}"

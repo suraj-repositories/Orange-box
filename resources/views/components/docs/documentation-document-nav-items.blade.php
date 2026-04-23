@@ -3,7 +3,7 @@
         <a class="dropdown-item notify-item"
             href="{{ route('docs.extras.show', [
                 'user' => $user->username,
-                'documentationSlug' => $documentation->url,
+                'slug' => $documentation->url,
                 'version' => $release->version ?? 'all',
                 'type' => $document->type,
             ]) }}">
@@ -17,7 +17,7 @@
         <a class="dropdown-item notify-item"
             href="{{ route('docs.extras.show', [
                 'user' => $user->username,
-                'documentationSlug' => $documentation->url,
+                'slug' => $documentation->url,
                 'version' => $release->version ?? 'all',
                 'type' => $document->type,
                 'u' => $uuid,

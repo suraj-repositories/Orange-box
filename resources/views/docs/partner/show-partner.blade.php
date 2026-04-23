@@ -7,11 +7,11 @@
         <div class="content">
 
             <div class="mx-width-container mt-4">
-                <a
-                {{-- href="{{ route('docs.partners.all.index', [
+                <a href="{{ route('docs.partners.all.index', [
                     'user' => $user,
                     'slug' => request('slug'),
-                ]) }}" --}}
+                    'version' => request('version'),
+                ]) }}"
                     class="btn border mt-4 d-flex align-items-center w-fit back-btn">
                     <i class='bx bx-chevron-left fs-5'></i> Back to all partners
                 </a>
@@ -35,9 +35,9 @@
 
                                     <h6 class="fw-semibold">Proficiencies</h6>
                                     <div class="d-flex gap-2 flex-wrap">
-                                        @foreach ([1, 2, 3, 5, 6] as $tag)
+                                        @foreach ($partner->tags ?? [] as $tag)
                                             <div class="badge tech-badge">
-                                                Tech
+                                                {{ $tag }}
                                             </div>
                                         @endforeach
                                     </div>

@@ -81,7 +81,7 @@
                                 <div class="in-page-search-box mb-4">
                                     <i class="bx bx-search"></i>
                                     <input type="text" class="form-control" id="partnersSearchInput"
-                                        {{-- data-search-url="{{ route('docs.partners.search.component', ['user' => $user, 'slug' => request('slug')]) }}" --}}
+                                        data-search-url="{{ route('docs.partners.search.component', ['user' => $user, 'slug' => request('slug'), 'version' => request('version') ?? 'all']) }}"
                                         placeholder="Search partners by name or region">
                                 </div>
                             @endif

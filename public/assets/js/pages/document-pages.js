@@ -25,7 +25,6 @@
         } else if (type == 'error') {
             Toastify.error(msg);
         }
-
     }
 
     function pmSetLoading(state) {
@@ -212,13 +211,13 @@
            role="switch"
            id="pmSwitch_${p.id}"
            ${p.status === 'live' ? 'checked' : ''}
-           onchange="pmTogglePage(${p.id}, event)"
+           onchange="pmTogglePage('${p.uuid}', event)"
            title="${p.status === 'live' ? 'Disable' : 'Enable'}">
 </div>
-                        <button class="pm-icon-btn" onclick="pmEditPage(${p.id})" title="Edit">
+                        <button class="pm-icon-btn" onclick="pmEditPage('${p.uuid}')" title="Edit">
                            <i class="bx bx-edit"></i>
                         </button>
-                        <button class="pm-icon-btn pm-danger" onclick="pmDeletePage(${p.id})" title="Delete">
+                        <button class="pm-icon-btn pm-danger" onclick="pmDeletePage('${p.uuid}')" title="Delete">
                             <i class="bx bx-trash"></i>
                         </button>
                     </div>
@@ -276,17 +275,17 @@
     });
 
 
-    async function pmTogglePage(id, e) {
+    async function pmTogglePage(uuid, e) {
         e.stopPropagation();
 
         const checkbox = e.target;
-        const p = pmPages.find(x => x.id === id);
+        const p = pmPages.find(x => x.uuid === uuid);
         if (!p) return;
 
         const previousState = p.status;
 
         try {
-            const res = await apiFetch(`${API_BASE}/${id}/toggle`, { method: 'PATCH' });
+            const res = await apiFetch(`${API_BASE}/${uuid}/toggle`, { method: 'PATCH' });
 
             p.status = res.data.status;
 
@@ -302,13 +301,13 @@
     }
 
 
-    async function pmDeletePage(id) {
-        const p = pmPages.find(x => x.id === id);
+    async function pmDeletePage(uuid) {
+        const p = pmPages.find(x => x.uuid === uuid);
         if (!p || !confirm(`Delete "${p.title}"?`)) return;
 
         try {
-            const res = await apiFetch(`${API_BASE}/${id}`, { method: 'DELETE' });
-            pmPages = pmPages.filter(x => x.id !== id);
+            const res = await apiFetch(`${API_BASE}/${uuid}`, { method: 'DELETE' });
+            pmPages = pmPages.filter(x => x.uuid !== uuid);
             pmRenderPages();
             pmNotify(res.message);
         } catch (err) {
@@ -316,11 +315,11 @@
         }
     }
 
-    function pmEditPage(id) {
-        const p = pmPages.find(x => x.id === id);
+    function pmEditPage(uuid) {
+        const p = pmPages.find(x => x.uuid === uuid);
         if (!p) return;
 
-        pmEditingId = id;
+        pmEditingId = uuid;
         pmEl('pm-page-modal-title').textContent = 'Edit Page';
         pmEl('pm-page-name').value = p.title;
         pmEl('pm-page-type').value = p.type;

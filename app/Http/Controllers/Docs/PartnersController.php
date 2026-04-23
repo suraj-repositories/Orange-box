@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Docs;
 
 use App\Http\Controllers\Controller;
 use App\Models\Documentation;
+use App\Models\DocumentationDocument;
 use App\Models\DocumentationPartner;
 use App\Models\DocumentationRelease;
 use App\Models\User;
@@ -11,64 +12,34 @@ use Illuminate\Http\Request;
 
 class PartnersController extends Controller
 {
-    //
-
-    public function index(User $user, $slug)
+    public function partnersAll(User $user, $slug, $version, Request $request)
     {
         $documentation = Documentation::where('user_id', $user->id)
             ->where('url', $slug ?? '')
+
             ->firstOrFail();
 
-        // latest stable release
-        $release = DocumentationRelease::where('documentation_id', $documentation->id)
-            ->where('is_current', true)
-            ->where('is_published', true)
-            ->latest()->first();
-
-        $title = 'Partners';
-
-        $partners = DocumentationPartner::where('documentation_id', $documentation->id)
-            ->where('status', 'active')
-            ->where('is_spotlight_partner', false)
-            ->orderBy('sort_order')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $spotlightPartner = DocumentationPartner::where('documentation_id', $documentation->id)
-            ->where('status', 'active')
-            ->where('is_spotlight_partner', true)
-            ->first();
-
-
-        return view(
-            'docs.partner.partners',
-            compact(
-                'title',
-                'user',
-                'release',
-                'documentation',
-                'partners',
-                'spotlightPartner'
-            )
-        );
-    }
-
-    public function partnersAll(User $user, $slug, Request $request)
-    {
-        $documentation = Documentation::where('user_id', $user->id)
-            ->where('url', $slug ?? '')
-            ->firstOrFail();
-
-        $release = DocumentationRelease::where('documentation_id', $documentation->id)
-            ->where('is_current', true)
-            ->where('is_published', true)
-            ->latest()->first();
+        $release = null;
+        if ($version != 'all') {
+            $release = DocumentationRelease::where('version', $version)
+                ->where('documentation_id', $documentation->id)
+                 ->where('is_published', true)
+                ->firstOrFail();
+        }
 
         $title = 'Partners';
         $searchable = true;
 
-        $partners = DocumentationPartner::where('documentation_id', $documentation->id)
+        $document = DocumentationDocument::where('documentation_id', $documentation->id)
+            ->when(!empty($release), function ($query) use ($release) {
+                $query->where('release_id', $release->id);
+            })
+            ->where('type', 'partners')
+            ->where('status', 'live')
+            ->latest()
+            ->firstOrFail();
+
+        $partners = DocumentationPartner::where('documentation_document_id', $document->id)
             ->where('status', 'active')
             ->orderBy('sort_order')
             ->latest()
@@ -82,14 +53,14 @@ class PartnersController extends Controller
                 'release',
                 'documentation',
                 'partners',
-                'searchable'
+                'searchable',
+                'document'
             )
         );
     }
 
-    public function show(User $user, $slug, $uuid)
+    public function show(User $user, $slug, $version, $uuid)
     {
-
         $documentation = Documentation::where('user_id', $user->id)
             ->where('url', $slug ?? '')
             ->firstOrFail();
@@ -111,20 +82,32 @@ class PartnersController extends Controller
         ]));
     }
 
-    public function partnersSearchComponent(User $user, $slug, Request $request)
+    public function partnersSearchComponent(User $user, $slug, $version, Request $request)
     {
         $documentation = Documentation::where('user_id', $user->id)
             ->where('url', $slug ?? '')
             ->firstOrFail();
 
-        $release = DocumentationRelease::where('documentation_id', $documentation->id)
-            ->where('is_current', true)
-            ->where('is_published', true)
-            ->latest()->first();
+        $release = null;
+        if ($version != 'all') {
+            $release = DocumentationRelease::where('version', $version)
+                ->where('documentation_id', $documentation->id)
+                 ->where('is_published', true)
+                ->firstOrFail();
+        }
 
         $search = $request->search;
 
-        $partners = DocumentationPartner::where('documentation_id', $documentation->id)
+        $document = DocumentationDocument::where('documentation_id', $documentation->id)
+            ->when(!empty($release), function ($query) use ($release) {
+                $query->where('release_id', $release->id);
+            })
+            ->where('type', 'partners')
+            ->where('status', 'live')
+            ->latest()
+            ->firstOrFail();
+
+        $partners = DocumentationPartner::where('documentation_document_id', $document->id)
             ->when(!empty($search), function ($query) use ($search) {
                 $query->where('name', 'like', "%$search%")
                     ->orWhere('location', 'like', "%$search%");

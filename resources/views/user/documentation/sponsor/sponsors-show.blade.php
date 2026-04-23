@@ -24,25 +24,14 @@
                             <li class="breadcrumb-item">
                                 <a href="{{ authRoute('user.documentation.index') }}">Documentations</a>
                             </li>
-                            @if (!empty($release))
-                                <li class="breadcrumb-item">
-                                    <a
-                                        href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">{{ $documentation->title }}</a>
-                                </li>
-                                <li class="breadcrumb-item">
-                                    <a
-                                        href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">
-                                        {{ $release->version }}
-                                    </a>
-                                </li>
-                            @else
-                                <li class="breadcrumb-item">
-                                    <a
-                                        href="{{ authRoute('user.documentation.document.pages.index', ['documentation' => $documentation]) }}">
-                                       Page Editor
-                                    </a>
-                                </li>
-                            @endif
+
+                            <li class="breadcrumb-item">
+                                <a
+                                    href="{{ authRoute('user.documentation.document.pages.index', ['documentation' => $documentation]) }}">
+                                    Page Editor
+                                </a>
+                            </li>
+
                             <li class="breadcrumb-item active">{{ $title }}</li>
                         </ol>
                     </div>

@@ -70,7 +70,7 @@ class DocumentationDocumentController extends Controller
             });
         }
 
-        $documents = $query->latest()->get()->map(fn($d) => $this->formatDocument($d));
+        $documents = $query->take(100)->latest()->get()->map(fn($d) => $this->formatDocument($d));
 
         $defaultSidebarData = [
             'total' => 0,
@@ -175,8 +175,6 @@ class DocumentationDocumentController extends Controller
                 'errors'  => $validator->errors(),
             ], 422);
         }
-
-
 
         $releaseId = ($request->scope === 'specific') ? $request->release_id : null;
 
@@ -350,6 +348,7 @@ class DocumentationDocumentController extends Controller
 
         return [
             'id'         => $doc->id,
+            'uuid'         => $doc->uuid,
             'title'      => $doc->title,
             'type'       => $doc->type,
             'status'     => $doc->status,

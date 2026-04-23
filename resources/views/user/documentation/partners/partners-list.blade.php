@@ -133,12 +133,10 @@
                                                         </small>
                                                     </td>
                                                     <td>
-
-
                                                         <div class="form-check">
                                                             <input class="form-check-input spotlightUpdateRadio"
                                                                 type="radio" name="is_spotlight_partner"
-                                                                data-documentation-partner-id="{{ $partner->id }}"
+                                                                data-documentation-partner-id="{{ $partner->uuid }}"
                                                                 {{ $partner->is_spotlight_partner == '1' ? 'checked' : '' }}>
                                                         </div>
 
@@ -147,7 +145,7 @@
                                                         <div class="form-check form-switch">
                                                             <input class="form-check-input partnerStatusToggleSwitch"
                                                                 type="checkbox" role="switch"
-                                                                data-documentation-partner-id="{{ $partner->id }}"
+                                                                data-documentation-partner-id="{{ $partner->uuid }}"
                                                                 {{ $partner->status == 'active' ? 'checked' : '' }}>
                                                         </div>
                                                     </td>

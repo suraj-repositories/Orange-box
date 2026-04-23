@@ -2,12 +2,12 @@
     @foreach ($partners as $partner)
         <div class="col-12 col-sm-6">
             <a
-                {{-- href="{{ route('docs.partners.show', [
+                href="{{ route('docs.partners.show', [
                     'user' => request('user'),
-                    'slug' => request('slug'),
+                    'slug' => $partner?->document?->documentation?->url,
+                    'version' => $partner?->document?->release?->version ?? 'all',
                     'uuid' => $partner->uuid,
-                ]) }}" --}}
-                >
+                ]) }}">
                 <div class="card border h-100">
                     <div class="card-body p-3 pb-0">
 
