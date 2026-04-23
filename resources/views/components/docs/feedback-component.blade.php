@@ -1,10 +1,10 @@
-<div class="feedback-card">
+<div class="feedback-card" data-page-id="{{ $page->id }}">
     <div class="p-3">
         <div class="d-flex flex-wrap align-items-center justify-content-center gap-2 feedback-btns px-2">
             <p class="mb-0">Was this helpful?</p>
 
             <div class="d-flex align-items-center justify-content-center gap-2 feedback-btns px-2">
-                <button type="button">
+                <button type="button" data-rating="1">
                     <svg viewBox="0 0 16 16" height="16" width="16" fill="currentColor">
                         <path fill-rule="evenodd" d="M4 9v7h1.5V9zm8 0v7h-1.5V9z" clip-rule="evenodd"></path>
                         <path fill-rule="evenodd"
@@ -13,7 +13,7 @@
                     </svg>
                 </button>
 
-                <button type="button">
+                <button type="button" data-rating="2">
                     <svg viewBox="0 0 16 16" height="16" width="16" fill="currentColor">
                         <path
                             d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0m0 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13m0 7.88c1.47 0 2.76.75 3.52 1.88l.35.52-1.04.7-.34-.52a3 3 0 0 0-4.97 0l-.35.51-1.04-.7.35-.51A4.2 4.2 0 0 1 8 9.38M5.75 5.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5m4.5 0a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5">
@@ -21,7 +21,7 @@
                     </svg>
                 </button>
 
-                <button type="button">
+                <button type="button" data-rating="3">
                     <svg viewBox="0 0 16 16" height="16" width="16" fill="currentColor">
                         <path
                             d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0m0 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13m3.87 8.83-.35.52a4.24 4.24 0 0 1-7.04 0l-.35-.51 1.04-.7.35.52a3 3 0 0 0 4.97 0l.34-.53zM5.75 5.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5m4.5 0a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5">
@@ -29,7 +29,7 @@
                     </svg>
                 </button>
 
-                <button type="button">
+                <button type="button" data-rating="4">
                     <svg viewBox="0 0 16 16" height="16" width="16" fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M14.5 8a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-11.5.97h-.62v.63c0 1.87 1.93 3.26 4.12 3.26s4.13-1.38 4.13-3.26v-.63H4.5M8 11.61c-1.4 0-2.36-.66-2.72-1.38h5.44c-.36.72-1.31 1.38-2.72 1.38"
@@ -48,6 +48,13 @@
         <div class="align-items-center gap-1 md-supported">
             <i class='bx bxl-markdown ms-auto'></i> Supported
         </div>
+
+        <div class="feedback-submit-success text-center py-4">
+            <i class="bx bxs-check-circle fs-1 text-success"></i>
+            <p class="mb-1">You feedback has been received!</p>
+            <p class="mb-1 text-muted">Thank you for your help.</p>
+        </div>
+
     </div>
 
     <div class="card-footer">

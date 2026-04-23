@@ -773,6 +773,19 @@ ul.topnav-menu button i.bx {
     border-color: var(--primary);
 }
 
+.feedback-submit-success {
+    display: none;
+}
+.feedback-card.feedback-send-success .feedback-submit-success{
+    display: block;
+}
+.feedback-submit-error {
+    display: none;
+}
+.feedback-card.feedback-send-error .feedback-submit-error{
+    display: block;
+}
+
 .feedback-card .card-footer button {
     background: var(--dark);
     color: var(--light);

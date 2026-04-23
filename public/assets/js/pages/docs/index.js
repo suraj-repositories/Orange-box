@@ -3,7 +3,7 @@ enableDarkTheme("#themeToggle");
 document.addEventListener('DOMContentLoaded', function () {
     enableSidebarBackdropCloseable();
     enableScrollSpy("#documentationContent");
-    enableFeedbackBtns(".feedback-card");
+    enableFeedbackSystem(".feedback-card");
     enableFullScreenNav();
 });
 
@@ -93,6 +93,84 @@ function enableFeedbackBtns(selector) {
     }
 }
 
+function enableFeedbackSystem(selector) {
+    const section = document.querySelector(selector);
+    if (!section) return;
+
+    const buttons = section.querySelectorAll('.feedback-btns button');
+    const textarea = section.querySelector('textarea');
+    const submitBtn = section.querySelector('.card-footer button');
+
+    let selectedRating = null;
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                selectedRating = null;
+            } else {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                selectedRating = btn.dataset.rating;
+            }
+        });
+    });
+
+    submitBtn.addEventListener('click', async () => {
+        const pageId = section.dataset.pageId;
+        const feedbackText = textarea.value;
+
+        if (!selectedRating) {
+            alert('Please select a rating');
+            return;
+        }
+
+        try {
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Sending...';
+
+            const response = await fetch('/feedback/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    documentation_page_id: pageId,
+                    rating: selectedRating,
+                    feedback: feedbackText
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+
+                textarea.value = '';
+                buttons.forEach(b => b.classList.remove('active'));
+                selectedRating = null;
+                section.classList.add('feedback-send-success');
+
+                setTimeout(() => {
+                    section.classList.remove('feedback-send-success');
+                }, 3000);
+
+            } else {
+                alert(data.message || 'Something went wrong');
+
+            }
+              submitBtn.innerText = 'Send';
+
+        } catch (error) {
+            console.error(error);
+            alert('Network error');
+            submitBtn.innerText = 'Send';
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
+}
+
 function enableFullScreenNav() {
     const btn = document.querySelector('#fullScreenNavToggle');
     if (btn) {
@@ -109,8 +187,8 @@ function enableFullScreenNav() {
 }
 
 /* -------------------------------------------
-| On This page - Start
----------------------------------------------- */
+|           On This page - Start             |
+------------------------------------------- */
 
 function enableScrollSpy(contentSelector) {
 

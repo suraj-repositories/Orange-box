@@ -17,7 +17,6 @@ class DocumentationDocumentController extends Controller
     //
     public function index(User $user, $slug, $version, $type)
     {
-
         $documentation = Documentation::where('user_id', $user->id)
             ->where('url', $slug ?? '')
             ->firstOrFail();

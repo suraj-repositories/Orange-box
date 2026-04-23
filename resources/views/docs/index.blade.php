@@ -55,7 +55,7 @@
                             @endif
 
                             <div class="my-5 d-flex align-items-center justify-content-center">
-                                <x-docs.feedback-component />
+                                <x-docs.feedback-component :page="$currentPage"/>
                             </div>
 
                         </div>

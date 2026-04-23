@@ -20,9 +20,11 @@ class DocumentationController extends Controller
 
         $release = DocumentationRelease::where('version', $version)
             ->where('documentation_id', $documentation->id)
+            ->where('is_published', true)
             ->firstOrFail();
 
         $top5Releases = DocumentationRelease::where('documentation_id', $documentation->id)
+            ->where('is_published', true)
             ->latest()
             ->limit(5)
             ->get();

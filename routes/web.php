@@ -10,6 +10,7 @@ use App\Http\Controllers\Common\SettingsController;
 use App\Http\Controllers\Common\UserController;
 use App\Http\Controllers\Docs\DocumentationController;
 use App\Http\Controllers\Docs\DocumentationDocumentController;
+use App\Http\Controllers\Docs\DocumentationFeedbackController;
 use App\Http\Controllers\Docs\FaqController;
 use App\Http\Controllers\Docs\PartnersController;
 use App\Http\Controllers\Docs\ReleaseController;
@@ -98,6 +99,8 @@ Route::get('/{user:username}/docs-xt/{slug}/{version}/faqs', [FaqController::cla
 Route::get('/{user:username}/docs-v/{slug}/{version}/partners-all', [PartnersController::class, 'partnersAll'])->name('docs.partners.all.index');
 Route::get('/{user:username}/docs-v/{slug}/{version}/partner/{uuid}', [PartnersController::class, 'show'])->name('docs.partners.show');
 Route::post('/{user:username}/docs-v-ajax/{slug}/{version}/partners-search', [PartnersController::class, 'partnersSearchComponent'])->name('docs.partners.search.component');
+
+Route::post('/feedback/save', [DocumentationFeedbackController::class, 'save'])->name('docs.feedback.save');
 
 /* ---------------------------------------------
 | END - DOC-routes

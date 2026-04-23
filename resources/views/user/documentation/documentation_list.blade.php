@@ -106,7 +106,9 @@
                                                     {{ $doc->latestRelease?->version }}
                                                 </td>
                                                 <td>
-                                                    {{ $doc->updated_at?->diffForHumans() ?? '' }}
+                                                    <small class="text-muted">
+                                                        {{ $doc->updated_at?->diffForHumans() ?? '' }}
+                                                    </small>
                                                 </td>
                                                 <td>
 
