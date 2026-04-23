@@ -318,8 +318,6 @@ class DocumentationDocumentController extends Controller
 
     private function formatDocument(DocumentationDocument $doc): array
     {
-
-
         $typeRoutes = [
             'privacy' => authRoute('user.documentation.privacy-policy.edit', [
                 'document' => $doc
@@ -339,9 +337,15 @@ class DocumentationDocumentController extends Controller
             'partners' => authRoute('user.documentation.partners.index', [
                 'document' => $doc
             ]),
-            'faq' => 0,
-            'cookie' => 0,
-            'custom' => 0,
+            'faq' => authRoute('user.documentation.faqs.index', [
+                'document' => $doc
+            ]),
+            'cookie' => authRoute('user.documentation.cookie.edit', [
+                'document' => $doc
+            ]),
+            'custom' => authRoute('user.documentation.custom-document.edit', [
+                'document' => $doc
+            ]),
         ];
 
         return [

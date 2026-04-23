@@ -8,6 +8,8 @@ use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\Documentation\CodeOfConductController;
 use App\Http\Controllers\User\Documentation\CommunityGuideController;
+use App\Http\Controllers\User\Documentation\CookieController;
+use App\Http\Controllers\User\Documentation\CustomDocumentController;
 use App\Http\Controllers\User\Documentation\DocumentationController;
 use App\Http\Controllers\User\Documentation\DocumentationDocumentController;
 use App\Http\Controllers\User\Documentation\DocumentationPagesController;
@@ -253,6 +255,16 @@ Route::controller(FaqController::class)->group(function () {
     Route::post('documentation-doc/{document}/faqs', 'store')->name('documentation.faqs.save');
     Route::patch('documentation-faqs/{faq}/status', 'updateStatus')->name('documentation.faqs.status.update');
     Route::delete('documentation-faqs/{faq}', 'destroy')->name('documentation.faqs.delete');
+});
+
+Route::controller(CookieController::class)->group(function () {
+    Route::get('documentation-doc/{document}/cookie/edit', 'editOrNewPage')->name('documentation.cookie.edit');
+    Route::post('documentation-doc/{document}/cookie', 'update')->name('documentation.cookie.save');
+});
+
+Route::controller(CustomDocumentController::class)->group(function () {
+    Route::get('documentation-doc/{document}/custom-document/edit', 'editOrNewPage')->name('documentation.custom-document.edit');
+    Route::post('documentation-doc/{document}/custom-document', 'update')->name('documentation.custom-document.save');
 });
 
 Route::controller(DocumentationDocumentController::class)->group(function () {

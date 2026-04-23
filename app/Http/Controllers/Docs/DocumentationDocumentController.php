@@ -29,10 +29,17 @@ class DocumentationDocumentController extends Controller
                 ->firstOrFail();
         }
 
+        $uuid = null;
+        if ($type == 'custom') {
+            $uuid = request('u');
+        }
 
         $document = DocumentationDocument::where('documentation_id', $documentation->id)
             ->when(!empty($release), function ($query) use ($release) {
                 $query->where('release_id', $release->id);
+            })
+            ->when(!empty($uuid), function ($query) use ($uuid) {
+                $query->where('uuid', $uuid);
             })
             ->where('type', $type)
             ->where('status', 'live')
@@ -45,12 +52,8 @@ class DocumentationDocumentController extends Controller
         switch ($type) {
 
             case 'faq':
-                $faqs = DocumentationFaq::where('documentation_id', $documentation->id)
-                    ->where('release_id', $release->id)
-                    ->where('is_active', true)
-                    ->paginate(20);
-
-                return view('docs.faqs', compact('user', 'documentation', 'release', 'faqs'));
+                $pageData = $this->faqPageData($user, $documentation, $release, $document);
+                return view('docs.faqs',  $pageData);
                 break;
 
             case 'sponsors':
@@ -68,6 +71,21 @@ class DocumentationDocumentController extends Controller
         }
 
         return view('docs.extras.index', compact('documentation', 'release', 'document', 'user'));
+    }
+
+    private function faqPageData($user, $documentation, $release, $document)
+    {
+        $faqs = DocumentationFaq::where('documentation_document_id', $document->id)
+            ->where('is_active', true)
+            ->paginate(20);
+
+        return [
+            'user' => $user,
+            'documentation' => $documentation,
+            'release' => $release,
+            'faqs' => $faqs,
+            'document' => $document
+        ];
     }
 
     private function sponsorPageData($user, $documentation, $release, $document)

@@ -11,6 +11,7 @@ class DocumentationDocumentNavItems extends Component
 {
 
     public $documentationDocuments = [];
+    public $customDocumentationDocuments = [];
     /**
      * Create a new component instance.
      */
@@ -20,10 +21,17 @@ class DocumentationDocumentNavItems extends Component
 
         $this->documentationDocuments = DocumentationDocument::where('documentation_id', $documentation->id)
             ->where('release_id', $release->id)
-            ->whereNotIn('type', ['sponsors', 'partners'])
+            ->whereNotIn('type', ['sponsors', 'partners', 'custom'])
             ->select('status', 'type', 'id', 'title',  'documentation_id', 'release_id')
             ->get()
             ->keyBy('type');
+
+        $this->customDocumentationDocuments = DocumentationDocument::where('documentation_id', $documentation->id)
+            ->where('release_id', $release->id)
+            ->where('type','custom')
+            ->select('status', 'type', 'id', 'title',  'documentation_id', 'release_id', 'uuid')
+            ->get()
+            ->keyBy('uuid');
     }
 
     /**

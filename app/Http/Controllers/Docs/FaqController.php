@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Docs;
 
 use App\Http\Controllers\Controller;
 use App\Models\Documentation;
+use App\Models\DocumentationDocument;
 use App\Models\DocumentationFaq;
 use App\Models\DocumentationRelease;
 use App\Models\User;
@@ -14,6 +15,8 @@ class FaqController extends Controller
     //
     public function index(User $user, $slug, $version)
     {
+        dd($slug, $version);
+
         $documentation = Documentation::where('user_id', $user->id)
             ->where('url', $slug ?? '')
             ->firstOrFail();
@@ -22,8 +25,13 @@ class FaqController extends Controller
             ->where('documentation_id', $documentation->id)
             ->firstOrFail();
 
-        $faqs = DocumentationFaq::where('documentation_id', $documentation->id)
+        $document = DocumentationDocument::where('documentation_id', $documentation->id)
             ->where('release_id', $release->id)
+            ->where('status', 'live')
+            ->where('type', 'faq')
+            ->first();
+
+        $faqs = DocumentationFaq::where('documentation_document_id', $document->id)
             ->where('is_active', true)
             ->paginate(20);
 

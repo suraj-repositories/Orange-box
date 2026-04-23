@@ -20,13 +20,11 @@
                             <li class="breadcrumb-item">
                                 <a href="{{ authRoute('user.documentation.index') }}">Documentations</a>
                             </li>
-                            <li class="breadcrumb-item">
+                                 <li class="breadcrumb-item">
                                 <a
-                                    href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">{{ $documentation->title }}</a>
-                            </li>
-                            <li class="breadcrumb-item">
-                                <a
-                                    href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">{{ $release->version }}</a>
+                                    href="{{ authRoute('user.documentation.document.pages.index', ['documentation' => $documentation]) }}">
+                                    Page Editor
+                                </a>
                             </li>
                             <li class="breadcrumb-item active">{{ $title }}</li>
                         </ol>
@@ -62,7 +60,7 @@
                                             <div class="modal-dialog modal-lg modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <form id="faq-creation-form" data-submit-type="ajax"
-                                                        action="{{ authRoute('user.documentation.faqs.save', ['documentation' => $documentation, 'release' => $release]) }}"
+                                                        action="{{ authRoute('user.documentation.faqs.save', ['document' => $document]) }}"
                                                         method="post">
                                                         @csrf
 
