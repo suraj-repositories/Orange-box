@@ -38,13 +38,15 @@
                 </li>
 
                 <li class="d-none d-lg-block">
-                    <div class="position-relative topbar-search">
+                    <div class="position-relative topbar-search" id="search-button">
                         <input type="text" class="form-control bg-light bg-opacity-75 ps-4" placeholder="Search...">
                         <i
                             class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
 
                         <span class="shortcut-badge">Ctrl K</span>
                     </div>
+
+
                 </li>
             </ul>
 
@@ -143,4 +145,57 @@
 
     </div>
 
+</div>
+<div class="modal fade ux-search-modal" id="searchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ux-search-dialog">
+        <div class="modal-content ux-search-content">
+
+            <!-- Search Input -->
+            <div class="ux-search-header">
+                <input
+                    type="text"
+                    class="ux-search-input"
+                    placeholder="Search docs, guides, or anything..."
+                    autofocus
+                >
+                <button type="button" class="ux-search-close" data-bs-dismiss="modal">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Results -->
+            <div class="ux-search-body">
+                <div class="ux-search-group">
+                    <p class="ux-search-group-title">Suggestions</p>
+
+                    <a href="#" class="ux-search-item">
+                        <span class="ux-search-title">Getting Started</span>
+                        <span class="ux-search-meta">Docs</span>
+                    </a>
+
+                    <a href="#" class="ux-search-item">
+                        <span class="ux-search-title">API Authentication</span>
+                        <span class="ux-search-meta">Guide</span>
+                    </a>
+                </div>
+
+                <div class="ux-search-group">
+                    <p class="ux-search-group-title">Recent</p>
+
+                    <a href="#" class="ux-search-item">
+                        <span class="ux-search-title">Laravel UUID Setup</span>
+                        <span class="ux-search-meta">Page</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Footer hint -->
+            <div class="ux-search-footer">
+                <span>↑ ↓ to navigate</span>
+                <span>Enter to select</span>
+                <span>Esc to close</span>
+            </div>
+
+        </div>
+    </div>
 </div>

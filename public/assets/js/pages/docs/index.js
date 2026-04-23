@@ -1,6 +1,7 @@
 enableDarkTheme("#themeToggle");
 
 document.addEventListener('DOMContentLoaded', function () {
+    enableSearch('#search-button');
     enableSidebarBackdropCloseable();
     enableScrollSpy("#documentationContent");
     enableFeedbackSystem(".feedback-card");
@@ -159,7 +160,7 @@ function enableFeedbackSystem(selector) {
                 alert(data.message || 'Something went wrong');
 
             }
-              submitBtn.innerText = 'Send';
+            submitBtn.innerText = 'Send';
 
         } catch (error) {
             console.error(error);
@@ -202,3 +203,65 @@ function enableScrollSpy(contentSelector) {
 /* -------------------------------------------
 | On This page - END
 ---------------------------------------------- */
+
+function enableSearch(selector) {
+    const btn = document.querySelector(selector);
+    if (!btn) {
+        return;
+    }
+    const modal = document.querySelector('#searchModal');
+    if (!modal) {
+        return;
+    }
+    const input = modal.querySelector('.ux-search-input');
+    const body = modal.querySelector('.ux-search-body');
+
+    btn.addEventListener('click', function () {
+        $(modal).modal('show');
+
+    });
+
+    $(modal).on('shown.bs.modal', function () {
+        input.value = '';
+        input.focus();
+    });
+
+    $(modal).on('hidden.bs.modal', function () {
+        input.value = '';
+    });
+
+    input.addEventListener('input', function () {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        body.innerHTML = `<div class="text-center py-4">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>`;
+
+        fetch(`/docs/search?q=${input.value}`, {
+            method: 'GET',
+            headers: {
+                'x-csrf-token': csrfToken
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (body) {
+                        body.innerHTML = data.html;
+                    }
+                } else {
+                    if (body) {
+                        body.innerHTML = ` <p class="text-center text-muted fst-italic py-4">No Results...</p>`;
+                    }
+                }
+            })
+            .catch(error => {
+                if (body) {
+                    body.innerHTML = ` <p class="text-center text-muted fst-italic py-4">No Results...</p>`;
+                }
+                console.error('Error:', error);
+            });
+    });
+}

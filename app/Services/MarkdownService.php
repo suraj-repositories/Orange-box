@@ -6,4 +6,5 @@ interface MarkdownService
 {
     function toPlainText(string $markdown): string;
 
+    function extractHeadings($markdown);
 }

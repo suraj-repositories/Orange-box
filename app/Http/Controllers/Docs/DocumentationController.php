@@ -9,6 +9,7 @@ use App\Models\DocumentationPage;
 use App\Models\DocumentationRelease;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Throwable;
 
 class DocumentationController extends Controller
 {
@@ -246,5 +247,44 @@ class DocumentationController extends Controller
         }
 
         return implode('/', $segments);
+    }
+
+    public function search(Request $request)
+    {
+        try {
+            $query = trim($request->q ?? "");
+
+            if (!$query || strlen($query) < 2) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Query too short',
+                    'html' => ''
+                ]);
+            }
+
+            $results = DocumentationPage::search($query)->take(20)->get();
+
+            if ($results->isEmpty()) {
+                $results = DocumentationPage::query()
+                    ->where(function ($q) use ($query) {
+                        $q->where('title', 'LIKE', "%{$query}%")
+                            ->orWhere('h1', 'LIKE', "%{$query}%")
+                            ->orWhere('h2', 'LIKE', "%{$query}%");
+                    })
+                    ->limit(10)
+                    ->get();
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Result obtained successfully',
+                'html' => view('components.search.results', compact('results', 'query'))->render()
+            ]);
+        } catch (Throwable $th) {
+            response()->json([
+                'success' => false,
+                'message' => 'Something went wrong!',
+            ]);
+        }
     }
 }

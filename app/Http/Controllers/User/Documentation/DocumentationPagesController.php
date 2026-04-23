@@ -8,6 +8,7 @@ use App\Models\DocumentationPage;
 use App\Models\DocumentationRelease;
 use App\Models\User;
 use App\Services\GitService;
+use App\Services\MarkdownService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +17,7 @@ use Throwable;
 
 class DocumentationPagesController extends Controller
 {
-    public function __construct(public GitService $gitService) {}
+    public function __construct(public GitService $gitService, public MarkdownService $markdownService) {}
 
     public function index(User $user, Documentation $documentation, DocumentationRelease $release)
     {
@@ -112,6 +113,13 @@ class DocumentationPagesController extends Controller
             $docPage->content_format = 'markdown';
             $docPage->content = $request->markdown;
             $docPage->git_link = $request->git_link ?? null;
+
+            $data = $this->markdownService->extractHeadings($request->markdown);
+
+            $docPage->headings = $data['headings'] ?? null;
+            $docPage->h1 = $data['h1'] ?? null;
+            $docPage->h2 = $data['h2'] ?? null;
+
             $docPage->save();
 
             return response()->json([

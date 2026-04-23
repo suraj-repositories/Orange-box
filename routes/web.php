@@ -92,6 +92,8 @@ Route::get(
     [DocumentationDocumentController::class, 'index']
 )->name('docs.extras.show');
 
+Route::get('/docs/search', [DocumentationController::class, 'search'])->name('docs.search');
+
 Route::get('/{user:username}/docs-v/{slug}/releases', [ReleaseController::class, 'index'])->name('docs.releases.index');
 
 Route::get('/{user:username}/docs-xt/{slug}/{version}/faqs', [FaqController::class, 'index'])->name('docs.faq.index');
@@ -101,6 +103,7 @@ Route::get('/{user:username}/docs-v/{slug}/{version}/partner/{uuid}', [PartnersC
 Route::post('/{user:username}/docs-v-ajax/{slug}/{version}/partners-search', [PartnersController::class, 'partnersSearchComponent'])->name('docs.partners.search.component');
 
 Route::post('/feedback/save', [DocumentationFeedbackController::class, 'save'])->name('docs.feedback.save');
+
 
 /* ---------------------------------------------
 | END - DOC-routes
