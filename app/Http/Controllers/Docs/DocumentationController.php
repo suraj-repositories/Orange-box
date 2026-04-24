@@ -7,6 +7,7 @@ use App\Models\Documentation;
 use App\Models\DocumentationDocument;
 use App\Models\DocumentationPage;
 use App\Models\DocumentationRelease;
+use App\Models\DocumentationSection;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Throwable;
@@ -249,12 +250,12 @@ class DocumentationController extends Controller
         return implode('/', $segments);
     }
 
-    public function search(Request $request)
+    public function search(Request $request, User $user, $slug, $version = null)
     {
         try {
             $query = trim($request->q ?? "");
 
-            if (!$query || strlen($query) < 2) {
+            if ($query === "") {
                 return response()->json([
                     'success' => false,
                     'message' => 'Query too short',
@@ -262,28 +263,52 @@ class DocumentationController extends Controller
                 ]);
             }
 
-            $results = DocumentationPage::search($query)->take(20)->get();
+            $documentation = Documentation::where('url', $slug)->firstOrFail();
 
-            if ($results->isEmpty()) {
-                $results = DocumentationPage::query()
-                    ->where(function ($q) use ($query) {
-                        $q->where('title', 'LIKE', "%{$query}%")
-                            ->orWhere('h1', 'LIKE', "%{$query}%")
-                            ->orWhere('h2', 'LIKE', "%{$query}%");
-                    })
-                    ->limit(10)
-                    ->get();
+            $releaseId = null;
+
+            if ($version) {
+                $release = DocumentationRelease::where('version', $version)
+                    ->where('documentation_id', $documentation->id)
+                    ->first();
+
+                $releaseId = $release?->id;
             }
+
+            $results = DocumentationSection::search($query)
+                ->query(function ($q) use ($documentation, $releaseId) {
+                    $q->whereHas('page', function ($q2) use ($documentation, $releaseId) {
+                        $q2->where('documentation_id', $documentation->id);
+
+                        if ($releaseId) {
+                            $q2->where('release_id', $releaseId);
+                        }
+                    });
+                })
+                ->take(20)
+                ->get()
+                ->load('page.parent', 'page.documentation', 'page.documentationRelease', 'page.user');
+
+
+            $structured = $results->groupBy(function ($section) {
+                return optional($section->page->parent)->title
+                    ?? $section->page->title
+                    ?? 'General';
+            });
 
             return response()->json([
                 'success' => true,
                 'message' => 'Result obtained successfully',
-                'html' => view('components.search.results', compact('results', 'query'))->render()
+                'html' => view('components.search.results', [
+                    'groups' => $structured,
+                    'query' => $query
+                ])->render()
             ]);
         } catch (Throwable $th) {
-            response()->json([
+            return response()->json([
                 'success' => false,
                 'message' => 'Something went wrong!',
+                'error' => $th->getMessage()
             ]);
         }
     }

@@ -563,10 +563,16 @@ ul.topnav-menu button i.bx {
     align-items: center;
 }
 
+.topbar-search {
+    cursor: pointer;
+}
+
 .topbar-search input {
     background-color: var(--light) !important;
     color: var(--text-dark);
     border: 1px solid var(--gray-100);
+    cursor: pointer;
+    pointer-events: none;
 }
 
 .topbar-search .shortcut-badge {
@@ -1405,6 +1411,14 @@ ul.topnav-menu button i.bx {
     background: var(--light);
 }
 
+.ux-search-header .lence-icon {
+    font-size: 27px;
+    margin-right: 6px;
+    color: var(--text-second-dark);
+    position: relative;
+    top: 2px;
+}
+
 .ux-search-input {
     flex: 1;
     border: none;
@@ -1424,15 +1438,55 @@ ul.topnav-menu button i.bx {
     font-size: 18px;
     cursor: pointer;
     color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    color: var(--text-dark);
+    user-select: none;
+    height: 27px;
+    width: 26px;
+    border-radius: 50%;
+
+}
+
+.ux-search-group mark {
+    color: var(--primary);
+    padding: 0;
+    background-color: unset;
+    text-decoration: underline;
 
 }
 
 /* Body */
 .ux-search-body {
     height: 65dvh;
-    max-height: 400px;
+    max-height: 350px;
     overflow-y: auto;
     padding: 10px 0;
+
+    scroll-behavior: smooth;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--gray-200) transparent;
+}
+
+.ux-search-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ux-search-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ux-search-body::-webkit-scrollbar-thumb {
+    background-color: var(--gray-200);
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.ux-search-body::-webkit-scrollbar-thumb:hover {
+    background-color: var(--gray-100);
 }
 
 /* Group */
@@ -1451,15 +1505,67 @@ ul.topnav-menu button i.bx {
 /* Item */
 .ux-search-item {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 10px 16px;
     text-decoration: none;
+    align-items: center;
     color: var(--text-dark);
     transition: background 0.2s;
+    gap: 10px;
 }
 
 .ux-search-item:hover {
     background: var(--gray-100);
+}
+
+.ux-search-item.active {
+    background-color: var(--primary-light);
+    border-radius: 6px;
+    outline: 1px solid var(--primary);
+}
+
+.ux-search-item-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: var(--text-dark);
+    width: 100%;
+    gap: 10px;
+}
+
+.ux-search-item .left-icon-box,
+.ux-search-item .right-icon-box,
+.ux-search-item .right-icon-x-box {
+    font-size: 25px;
+    color: var(--text-second-dark);
+}
+
+.ux-search-item .right-icon-x-box {
+    font-size: 22px;
+    margin-left: auto;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+
+
+.ux-search-item .right-icon-box {
+    margin-left: auto;
+    display: none;
+}
+
+.ux-search-item.active .right-icon-box {
+    display: block;
+}
+
+.ux-search-item .right-icon-x-box:hover {
+    background: var(--gray-200);
 }
 
 .ux-search-title {
@@ -1479,4 +1585,24 @@ ul.topnav-menu button i.bx {
     border-top: 1px solid var(--gray-200);
     background: var(--gray-100);
     color: var(--text-dark);
+}
+
+.ux-search-footer .shortcut-badge {
+    background-color: var(--gray-200);
+    padding: 4px 6px;
+    border-radius: 5px;
+}
+
+.bx.bx-recent-clock {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23000' d='M20.59 22L15 16.41V7h2v8.58l5 5.01z' stroke-width='0.8' stroke='%23000'/%3E%3Cpath fill='%23000' d='M16 2A13.94 13.94 0 0 0 6 6.23V2H4v8h8V8H7.08A12 12 0 1 1 4 16H2A14 14 0 1 0 16 2' stroke-width='0.8' stroke='%23000'/%3E%3C/svg%3E");
+    background-color: currentColor;
+    -webkit-mask-image: var(--svg);
+    mask-image: var(--svg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
 }

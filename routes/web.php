@@ -87,12 +87,13 @@ Route::get(
 )->where('path', '.*')
     ->name('docs.show');
 
+
 Route::get(
     '/{user:username}/docs-extras/{slug}/{version}/{type}',
     [DocumentationDocumentController::class, 'index']
 )->name('docs.extras.show');
 
-Route::get('/docs/search', [DocumentationController::class, 'search'])->name('docs.search');
+Route::get('/{user:username}/docs-search/{slug}/{version?}', [DocumentationController::class, 'search'])->name('docs.search');
 
 Route::get('/{user:username}/docs-v/{slug}/releases', [ReleaseController::class, 'index'])->name('docs.releases.index');
 

@@ -142,58 +142,34 @@
                 </ul>
             </div>
         </div>
-
     </div>
-
 </div>
-<div class="modal fade ux-search-modal" id="searchModal" tabindex="-1" aria-hidden="true">
+
+<div class="modal ux-search-modal" id="searchModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered ux-search-dialog">
         <div class="modal-content ux-search-content">
 
-            <!-- Search Input -->
             <div class="ux-search-header">
-                <input
-                    type="text"
-                    class="ux-search-input"
-                    placeholder="Search docs, guides, or anything..."
-                    autofocus
-                >
+                <i class="bx bx-search lence-icon"></i>
+                <input type="text" class="ux-search-input" id="search-input" placeholder="Search docs, guides, or anything..."
+                    autofocus data-username="{{ request('user')['username'] ?? "" }}" data-slug="{{ request('slug') }}"
+                    data-version="{{ request('version') }}">
                 <button type="button" class="ux-search-close" data-bs-dismiss="modal">
-                    ✕
+                    <i class="bx bx-x"></i>
                 </button>
+                <script>
+                    window.searchText = '{{ request("q") }}';
+                </script>
             </div>
 
-            <!-- Results -->
-            <div class="ux-search-body">
-                <div class="ux-search-group">
-                    <p class="ux-search-group-title">Suggestions</p>
+            <div class="ux-search-body p-2">
 
-                    <a href="#" class="ux-search-item">
-                        <span class="ux-search-title">Getting Started</span>
-                        <span class="ux-search-meta">Docs</span>
-                    </a>
-
-                    <a href="#" class="ux-search-item">
-                        <span class="ux-search-title">API Authentication</span>
-                        <span class="ux-search-meta">Guide</span>
-                    </a>
-                </div>
-
-                <div class="ux-search-group">
-                    <p class="ux-search-group-title">Recent</p>
-
-                    <a href="#" class="ux-search-item">
-                        <span class="ux-search-title">Laravel UUID Setup</span>
-                        <span class="ux-search-meta">Page</span>
-                    </a>
-                </div>
             </div>
 
-            <!-- Footer hint -->
             <div class="ux-search-footer">
-                <span>↑ ↓ to navigate</span>
-                <span>Enter to select</span>
-                <span>Esc to close</span>
+                <span><span class="shortcut-badge">↑</span> <span class="shortcut-badge">↓</span> to navigate</span>
+                <span><span class="shortcut-badge">Enter</span> to select</span>
+                <span> <span class="shortcut-badge">Esc</span> to close</span>
             </div>
 
         </div>

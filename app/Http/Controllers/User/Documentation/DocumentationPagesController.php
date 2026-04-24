@@ -111,16 +111,54 @@ class DocumentationPagesController extends Controller
 
         try {
             $docPage->content_format = 'markdown';
-            $docPage->content = $request->markdown;
+
+            $markdown = $request->markdown;
+            $docPage->content = $markdown;
             $docPage->git_link = $request->git_link ?? null;
 
-            $data = $this->markdownService->extractHeadings($request->markdown);
-
-            $docPage->headings = $data['headings'] ?? null;
-            $docPage->h1 = $data['h1'] ?? null;
-            $docPage->h2 = $data['h2'] ?? null;
-
             $docPage->save();
+
+            $docPage->sections()->delete();
+
+            /*
+            |--------------------------------------------------------------------------
+            | Extract headings + sections
+            |--------------------------------------------------------------------------
+            */
+            preg_match_all('/^(#{1,6})\s+(.*)$/m', $markdown, $matches, PREG_OFFSET_CAPTURE);
+
+            $headings = $matches[2];
+            $levels   = $matches[1];
+
+            for ($i = 0; $i < count($headings); $i++) {
+
+                $headingText = trim($headings[$i][0]);
+                $headingLevel = strlen($levels[$i][0]);
+
+                $startPos = $headings[$i][1];
+
+                $endPos = isset($headings[$i + 1])
+                    ? $headings[$i + 1][1]
+                    : strlen($markdown);
+
+                $sectionContent = substr($markdown, $startPos, $endPos - $startPos);
+
+                $baseSlug = Str::slug($headingText);
+                $slug = $baseSlug;
+                $counter = 1;
+
+                while ($docPage->sections()->where('slug', $slug)->exists()) {
+                    $slug = $baseSlug . '-' . $counter++;
+                }
+
+                $docPage->sections()->create([
+                    'heading'  => $headingText,
+                    'slug'     => $slug,
+                    'content'  => $sectionContent,
+                    'position' => $i,
+                    'level' => $headingLevel,
+                ]);
+            }
 
             return response()->json([
                 'success' => true,

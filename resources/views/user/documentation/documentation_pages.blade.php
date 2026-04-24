@@ -20,6 +20,13 @@
                             <li class="breadcrumb-item"><a
                                     href="{{ authRoute('user.documentation.index') }}">Documentation</a></li>
 
+                            <li class="breadcrumb-item">
+                                <a
+                                    href="{{ authRoute('user.documentation.show', ['documentation' => $documentation, 'release' => $release]) }}">
+                                    {{ $documentation->title }} <small class="text-muted">({{ $release->version }})</small>
+                                </a>
+                            </li>
+
                             <li class="breadcrumb-item active">Pages</li>
                         </ol>
                     </div>
@@ -45,13 +52,11 @@
                                     @endif
                                     <div class="badge border ms-1">
                                         {{ $release->version }}
-                                     <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $release->version, '/']) }}"
-                                        target="_blank" class=" text-dark">
-                                        <i class="bi bi-box-arrow-up-right fs-7 ms-1"></i>
-                                    </a>
+                                        <a href="{{ route('docs.show', [$documentation->user, $documentation->url, $release->version, '/']) }}"
+                                            target="_blank" class=" text-dark">
+                                            <i class="bi bi-box-arrow-up-right fs-7 ms-1"></i>
+                                        </a>
                                     </div>
-
-
 
                                     <input type="hidden" name="documentation_uuid" value="{{ $documentation->uuid }}"
                                         id="documentationUuidInput">

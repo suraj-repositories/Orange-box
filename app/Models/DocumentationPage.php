@@ -22,9 +22,6 @@ class DocumentationPage extends Model
         'release_id',
         'git_link',
         'content',
-        'headings',
-        'h1',
-        'h2',
         'content_format',
         'parent_id',
         'sort_order',
@@ -39,8 +36,6 @@ class DocumentationPage extends Model
     ];
 
     protected $casts = [
-        'headings' => 'array',
-        'h2' => 'array',
         'is_published' => 'boolean',
     ];
 
@@ -50,10 +45,9 @@ class DocumentationPage extends Model
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'h1' => $this->h1,
-            'h2' => implode(' ', $this->h2 ?? []),
-            // 'h3' => $this->h3 ?? [],
             'content' => strip_tags($this->content),
+            'documentation_id' => $this->documentation_id,
+            'release_id' => $this->release_id,
         ];
     }
 
@@ -131,31 +125,9 @@ class DocumentationPage extends Model
         return $this->belongsTo(DocumentationRelease::class, 'release_id', 'id');
     }
 
-   public function getH2Attribute($value)
-{
-    if (is_array($value)) {
-        return $value;
+
+    public function sections()
+    {
+        return $this->hasMany(DocumentationSection::class);
     }
-
-    if (is_string($value)) {
-        $decoded = json_decode($value, true);
-        return is_array($decoded) ? $decoded : [];
-    }
-
-    return [];
-}
-
-public function getHeadingsAttribute($value)
-{
-    if (is_array($value)) {
-        return $value;
-    }
-
-    if (is_string($value)) {
-        $decoded = json_decode($value, true);
-        return is_array($decoded) ? $decoded : [];
-    }
-
-    return [];
-}
 }

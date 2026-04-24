@@ -1,7 +1,8 @@
 enableDarkTheme("#themeToggle");
 
 document.addEventListener('DOMContentLoaded', function () {
-    enableSearch('#search-button');
+    new DocSearch('#search-button');
+
     enableSidebarBackdropCloseable();
     enableScrollSpy("#documentationContent");
     enableFeedbackSystem(".feedback-card");
@@ -204,64 +205,369 @@ function enableScrollSpy(contentSelector) {
 | On This page - END
 ---------------------------------------------- */
 
-function enableSearch(selector) {
-    const btn = document.querySelector(selector);
-    if (!btn) {
-        return;
+class DocSearch {
+    constructor(selector) {
+        this.btn = document.querySelector(selector);
+        if (!this.btn) return;
+
+        this.modal = document.querySelector('#searchModal');
+        if (!this.modal) return;
+
+        this.input = this.modal.querySelector('.ux-search-input');
+        this.body = this.modal.querySelector('.ux-search-body');
+
+        this.debounceTimer = null;
+        this.controller = null;
+
+        this.init();
     }
-    const modal = document.querySelector('#searchModal');
-    if (!modal) {
-        return;
+
+    init() {
+        this.bindButton();
+        this.bindModalEvents();
+        this.bindInput();
+        this.bindResultClick();
+        this.enableNavigation();
     }
-    const input = modal.querySelector('.ux-search-input');
-    const body = modal.querySelector('.ux-search-body');
 
-    btn.addEventListener('click', function () {
-        $(modal).modal('show');
+    bindButton() {
+        const openModal = () => {
+            $(this.modal).modal('show');
+        };
 
-    });
+        this.btn.addEventListener('click', openModal);
 
-    $(modal).on('shown.bs.modal', function () {
-        input.value = '';
-        input.focus();
-    });
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                openModal();
+            }
+        });
+    }
 
-    $(modal).on('hidden.bs.modal', function () {
-        input.value = '';
-    });
+    bindModalEvents() {
+        $(this.modal).on('shown.bs.modal', () => {
+            this.resetState();
+            this.input.focus();
+        });
 
-    input.addEventListener('input', function () {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        $(this.modal).on('hidden.bs.modal', () => {
+            this.resetState();
+        });
+    }
 
-        body.innerHTML = `<div class="text-center py-4">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>`;
+    bindInput() {
+        this.input.addEventListener('input', () => this.handleInput());
+    }
 
-        fetch(`/docs/search?q=${input.value}`, {
+    bindResultClick() {
+        this.body.addEventListener('click', (e) => this.handleResultClick(e));
+    }
+
+    resetState() {
+        this.input.value = '';
+        this.renderSearchHistory(this.body);
+    }
+
+    handleInput() {
+        const value = this.input.value.trim();
+
+        if (value === "") {
+            this.abortRequest();
+            clearTimeout(this.debounceTimer);
+            this.renderSearchHistory(this.body);
+            return;
+        }
+
+        clearTimeout(this.debounceTimer);
+
+        this.debounceTimer = setTimeout(() => {
+            if (value !== this.input.value.trim()) return;
+
+            this.performSearch(value);
+        }, 300);
+    }
+
+    performSearch(value) {
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute('content');
+
+        const username = this.input.getAttribute('data-username');
+        const slug = this.input.getAttribute('data-slug');
+        const version = this.input.getAttribute('data-version');
+
+        this.abortRequest();
+        this.controller = new AbortController();
+
+        this.showLoader();
+
+        fetch(`/${username}/docs-search/${slug}/${version}?q=${encodeURIComponent(value)}`, {
             method: 'GET',
             headers: {
                 'x-csrf-token': csrfToken
             },
+            signal: this.controller.signal
         })
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
-                if (data.success) {
-                    if (body) {
-                        body.innerHTML = data.html;
-                    }
-                } else {
-                    if (body) {
-                        body.innerHTML = ` <p class="text-center text-muted fst-italic py-4">No Results...</p>`;
-                    }
-                }
+                if (this.input.value.trim() !== value) return;
+
+                this.body.innerHTML = data.success
+                    ? data.html
+                    : this.noResultsHTML();
             })
-            .catch(error => {
-                if (body) {
-                    body.innerHTML = ` <p class="text-center text-muted fst-italic py-4">No Results...</p>`;
-                }
-                console.error('Error:', error);
+            .catch(error => this.handleError(error));
+    }
+
+    abortRequest() {
+        if (this.controller) {
+            this.controller.abort();
+            this.controller = null;
+        }
+    }
+
+    showLoader() {
+        this.body.innerHTML = `
+            <div class="text-center py-4">
+                <div class="spinner-border" role="status"></div>
+            </div>
+        `;
+    }
+
+    noResultsHTML() {
+        return `<p class="text-center text-muted fst-italic py-4">No Results...</p>`;
+    }
+
+    handleError(error) {
+        if (error.name === 'AbortError') {
+            if (this.input.value.trim() === "") {
+                this.renderSearchHistory(this.body);
+            }
+            return;
+        }
+        console.error(error);
+        this.body.innerHTML = this.noResultsHTML();
+    }
+
+    handleResultClick(e) {
+        const link = e.target.closest('.ux-search-item');
+
+        if (!link) return;
+
+        this.openResultLink(link, e);
+    }
+
+    openResultLink(link, event) {
+        if (!link.querySelector('a.ux-search-item-link')) {
+            const item = {
+                title: link.querySelector('.ux-search-title')?.innerText || '',
+                meta: link.querySelector('.ux-search-meta')?.innerText || '',
+                url: link.href,
+                folder: link.closest('.ux-search-folder')
+                    ?.querySelector('.ux-search-folder-title')?.innerText || 'General'
+            };
+
+            this.saveSearchHistory(item);
+        }
+
+        const url = new URL(link.getAttribute('data-url'));
+        const current = new URL(window.location.href);
+
+        const isSamePage =
+            url.pathname === current.pathname &&
+            url.search === current.search;
+
+        $(this.modal).modal('hide');
+
+        if (isSamePage) {
+            event.preventDefault();
+
+            const targetId = url.hash.replace('#', '');
+            const el = document.getElementById(targetId);
+
+            if (el) {
+                setTimeout(() => {
+                    el.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+
+                    history.pushState(null, '', url.hash);
+
+                    el.classList.add('search-hit');
+                    setTimeout(() => el.classList.remove('search-hit'), 1500);
+
+                }, 300);
+            }
+        }
+    }
+
+    saveSearchHistory(item) {
+        const key = 'doc_search_history';
+        let history = JSON.parse(localStorage.getItem(key)) || [];
+
+        history = history.filter(i => i.url !== item.url);
+
+        history.unshift(item);
+
+        if (history.length > 10) {
+            history = history.slice(0, 10);
+        }
+
+        localStorage.setItem(key, JSON.stringify(history));
+    }
+
+    renderSearchHistory(container) {
+        const key = 'doc_search_history';
+        let history = JSON.parse(localStorage.getItem(key)) || [];
+
+        if (!history.length) {
+            container.innerHTML = `
+                <p class="text-center text-muted fst-italic py-4">
+                    No recent searches
+                </p>
+            `;
+            return;
+        }
+
+        const groups = {};
+        history.forEach(item => {
+            if (!groups[item.folder]) groups[item.folder] = [];
+            groups[item.folder].push(item);
+        });
+
+        let html = `
+            <div class="ux-search-group">
+                <h6 class="ux-search-folder-title text-muted px-2 my-1">
+                    Recent
+                </h6>
+        `;
+
+        Object.keys(groups).forEach(folder => {
+            html += `<div class="ux-search-folder mb-1">`;
+
+            groups[folder].forEach(item => {
+                html += `
+                <div class="ux-search-item px-2 py-2" data-url="${item.url}">
+
+                    <a href="${item.url}" class="ux-search-item-link d-flex align-items-center text-decoration-none flex-grow-1">
+                        <div class="left-icon-box">
+                            <i class='bx bx-recent-clock'></i>
+                        </div>
+
+                        <div>
+                            <div class="ux-search-title fw-semibold">
+                                ${item.title}
+                            </div>
+
+                            <div class="ux-search-meta small text-muted">
+                                ${item.meta}
+                            </div>
+                        </div>
+                    </a>
+
+                    <div class="right-icon-x-box ms-auto" role="button">
+                        <i class="bx bx-x"></i>
+                    </div>
+
+                </div>
+            `;
             });
-    });
+
+            html += `</div>`;
+        });
+
+        html += `</div>`;
+
+        container.innerHTML = html;
+
+        if (!container.dataset.historyBound) {
+            container.dataset.historyBound = "true";
+
+            container.addEventListener('click', (e) => {
+                const removeBtn = e.target.closest('.right-icon-x-box');
+                if (!removeBtn) return;
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                const itemEl = removeBtn.closest('.ux-search-item');
+                const url = itemEl.getAttribute('data-url');
+
+                let history = JSON.parse(localStorage.getItem(key)) || [];
+
+                history = history.filter(item => item.url !== url);
+
+                localStorage.setItem(key, JSON.stringify(history));
+
+                this.renderSearchHistory(container);
+            });
+        }
+    }
+
+    enableNavigation() {
+        const input = document.querySelector('#search-input');
+        const container = document.querySelector('.ux-search-body');
+        const classObj = this;
+
+        let currentIndex = -1;
+
+        function getItems() {
+            return container.querySelectorAll('.ux-search-item');
+        }
+
+        function setActive(index) {
+            const items = getItems();
+
+            items.forEach(item => item.classList.remove('active'));
+
+            if (items[index]) {
+                items[index].classList.add('active');
+                items[index].scrollIntoView({
+                    block: 'nearest'
+                });
+            }
+        }
+
+        input.addEventListener('keydown', function (e) {
+            const items = getItems();
+
+            if (!items.length) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                currentIndex = (currentIndex + 1) % items.length;
+                setActive(currentIndex);
+            }
+
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                currentIndex = (currentIndex - 1 + items.length) % items.length;
+                setActive(currentIndex);
+            }
+
+            if (e.key === 'Enter') {
+                if (currentIndex >= 0 && items[currentIndex]) {
+                    const linkItem = document.querySelector('.ux-search-body .ux-search-item.active');
+                    if (linkItem) {
+                        classObj.openResultLink(linkItem, e);
+                    }
+
+                    const url = items[currentIndex].dataset.url;
+                    if (url) window.location.href = url;
+                }
+            }
+        });
+
+        container.addEventListener('mouseover', (e) => {
+            const item = e.target.closest('.ux-search-item');
+            if (!item) return;
+
+            const items = Array.from(getItems());
+            currentIndex = items.indexOf(item);
+            setActive(currentIndex);
+        });
+    }
 }
+
