@@ -77,7 +77,7 @@
                 </div>
 
 
-                @include('layout.components.copyright')
+
 
             </div>
 

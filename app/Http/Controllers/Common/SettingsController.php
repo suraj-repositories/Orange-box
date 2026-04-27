@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use phpseclib3\Crypt\RSA;
+use Throwable;
 
 class SettingsController extends Controller
 {
@@ -86,55 +87,43 @@ class SettingsController extends Controller
             ], 500);
         }
     }
-    public function changeEmail(Request $request)
+
+    public function changePrimaryEmail(Request $request)
     {
+        $user = Auth::user();
+
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|min:3|max:30'
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($user->id),
+            ],
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors()->first('username')
+                'message' => $validator->errors()->first('email')
             ], 422);
         }
-
-        $username = $request->username;
 
         DB::beginTransaction();
 
         try {
-            $isExists = User::where('username', $username)->exists();
-
-            if ($isExists) {
-
-                $suggestions = $this->suggestionService->suggestUsername($username);
-
-                return response()->json([
-                    'success' => false,
-                    'suggestions' => $suggestions,
-                    'message' => 'Username "' . $username . '" is not available. Please choose another.'
-                ], 200);
-            }
-
-            User::where('id', Auth::id())->update([
-                'username' => $username
+            $user->update([
+                'email' => $request->email
             ]);
-
-            $user = User::find(Auth::id());
-
-            Auth::login($user, true);
 
             DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Username changed successfully!',
-                'username' => $username,
+                'message' => 'Primary email changed successfully!',
+                'email' => $request->email,
                 'redirect_url' => authRoute('user.settings.index')
             ], 200);
         } catch (\Exception $e) {
-
             DB::rollBack();
 
             return response()->json([
@@ -453,12 +442,12 @@ class SettingsController extends Controller
                 'message' => 'This theme not exists!'
             ]);
         }
-        $setting = Settings::where('key', 'app_theme')->where('is_enabled', true)->first();
+        $setting = Settings::where('key', 'app_theme')->first();
 
         if (!$setting) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invaid Setting Update!'
+                'message' => 'Invalid Setting Update!'
             ]);
         }
 
@@ -475,7 +464,25 @@ class SettingsController extends Controller
         return response()->json([
             'success' => true,
             'message' => $theme->title . ' theme applied successfully!',
-             'theme' => $theme->theme_key
+            'theme' => $theme->theme_key
         ]);
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        try {
+            $uid = Auth::id();
+            $user = User::findOrFail($uid);
+
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            $user->delete();
+
+            return redirect()->route('login')->with('success', 'Account removed successfully!');
+        } catch (Throwable $ex) {
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
     }
 }

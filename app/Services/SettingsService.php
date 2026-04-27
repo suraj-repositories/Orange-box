@@ -12,6 +12,8 @@ interface SettingsService
 
     public function set(string $key, mixed $value): mixed;
 
+    public function getIcon(string $key, mixed $default = 'bx bx-cog'): mixed;
+
     public function allGroupedByCategory(): Collection;
 
     public function all(): array;

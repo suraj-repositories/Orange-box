@@ -1,7 +1,9 @@
 @if (Setting::get('enable_change_password', false))
     <div class="d-flex align-items-center mb-3">
         <div class="d-flex align-items-center">
-            <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
+            <div class="circle-30 me-2">
+                <i class="{{ Setting::getIcon('enable_change_password') }} fs-5"></i>
+            </div>
             <div>
                 <h2 class="fs-7 m-0">Change Password
                 </h2>
@@ -87,10 +89,12 @@
     </div>
 @endif
 
-@if (Setting::get('lock_screen_enabled'))
+@if (Setting::get('lock_screen_enabled') == true)
     <div class="d-flex align-items-center mb-3">
         <div class="d-flex align-items-center">
-            <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
+            <div class="circle-30 me-2">
+                <i class="{{ Setting::getIcon('lock_screen_enabled') }} fs-5"></i>
+            </div>
             <div>
                 <h2 class="fs-7 m-0">Lock Screen Key
                     @if (($userSettings['lock_screen_enabled'] ?? '0') == '1')
@@ -193,7 +197,9 @@
 @if (Setting::get('pem_key_enabled'))
     <div class="d-flex align-items-center mb-3">
         <div class="d-flex align-items-center">
-            <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
+            <div class="circle-30 me-2">
+                <i class="{{ Setting::getIcon('pem_key_enabled') }} fs-5"></i>
+            </div>
             <div>
                 <h2 class="fs-7 m-0">PEM File Setup
                     @if (($userSettings['pem_key_enabled'] ?? '0') == '1')
@@ -277,7 +283,9 @@
 @if (Setting::get('master_password_enabled'))
     <div class="d-flex align-items-center mb-3">
         <div class="d-flex align-items-center">
-            <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
+            <div class="circle-30 me-2">
+                <i class="{{ Setting::getIcon('master_password_enabled') }} fs-5"></i>
+            </div>
             <div>
                 <h2 class="fs-7 m-0">Master Key Setup
                     @if (($userSettings['master_password_enabled'] ?? '0') == '1')
@@ -376,7 +384,9 @@
 @if (Setting::get('app_auth_enabled'))
     <div class="d-flex align-items-center mb-3">
         <div class="d-flex align-items-center">
-            <img class="circle-30 me-2" src="https://placehold.co/400" alt="alter">
+            <div class="circle-30 me-2">
+                <i class="{{ Setting::getIcon('app_auth_enabled') }} fs-5"></i>
+            </div>
             <div>
                 <h2 class="fs-7 m-0">App Based Authentication
                     @if (Setting::get('is_app_auth_set') == true)

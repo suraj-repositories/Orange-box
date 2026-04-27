@@ -33,6 +33,7 @@ class SettingsServiceImpl implements SettingsService
         if (!$setting) {
             return $default;
         }
+
         if ($setting->is_enabled && $setting->value === null) {
             return true;
         }
@@ -64,6 +65,18 @@ class SettingsServiceImpl implements SettingsService
         Cache::put('settings.global', $this->settings);
 
         return $setting;
+    }
+
+    public function getIcon(string $key, mixed $default = 'bx bx-cog'): mixed
+    {
+        $setting = $this->settings->get($key);
+
+        if (!$setting) {
+            return $default;
+        }
+
+
+        return $setting->icon ?? $default;
     }
 
     public function all(): array

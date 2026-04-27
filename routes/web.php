@@ -59,6 +59,8 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
 
     Route::controller(SettingsController::class)->group(function () {
         Route::post('settings/account-settings/change-username', 'changeUsername')->name('settings.account.change.username');
+        Route::post('settings/account-settings/change-primary-email', 'changePrimaryEmail')->name('settings.account.change.primary-email');
+        Route::delete('settings/account-settings/permanent-delete-account', 'deleteAccount')->name('settings.account.delete-account');
 
         Route::post('settings/secutiy-settings/change-password', 'changePassword')->name('settings.security.change.password');
         Route::post('settings/secutiy-settings/lock-screen-pin', 'setLockScreen')->name('settings.security.update.lock.screen.pin');

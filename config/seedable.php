@@ -7,33 +7,25 @@ return [
                 "id" => 1,
                 "name" => "Account Settings",
                 "description" => "",
-                "icon" => 'assets/icons/ob-svg/setting/account.svg'
-
+                "icon" => 'bx bx-user-circle'
             ],
             [
                 "id" => 2,
                 "name" => "Notifications",
                 "description" => "",
-                "icon" => 'assets/icons/ob-svg/setting/notification.svg'
+                "icon" => 'bx bx-bell'
             ],
             [
                 "id" => 3,
                 "name" => "Security Settings",
                 "description" => "",
-                "icon" => 'assets/icons/ob-svg/setting/security.svg'
+                "icon" => 'bx bx-shield'
             ],
             [
                 "id" => 4,
                 "name" => "Theme",
                 "description" => "",
-                "icon" => 'assets/icons/ob-svg/setting/theme.svg'
-            ],
-
-            [
-                "id" => 5,
-                "name" => "App Modules",
-                "description" => "Mange different supported module on this app",
-                "icon" => 'assets/icons/ob-svg/setting/module.svg'
+                "icon" => 'bx bx-palette'
             ],
         ],
         'default_settings' => [
@@ -45,6 +37,7 @@ return [
                 'is_enabled' => true,
                 'description' => 'User can change their usernames!',
                 'settings_category_id' => 1,
+                'icon' => 'bx bx-user-circle'
             ],
             [
                 'title' => 'Change Primary Email',
@@ -52,6 +45,7 @@ return [
                 'is_enabled' => true,
                 'description' => 'User can change their primary email!',
                 'settings_category_id' => 1,
+                'icon' => 'bx bx-envelope'
             ],
             [
                 'title' => 'Delete Account',
@@ -59,15 +53,17 @@ return [
                 'is_enabled' => true,
                 'description' => 'Danger! Account deletion is hard to revert.',
                 'settings_category_id' => 1,
+                'icon' => 'bx bx-trash'
             ],
 
-
+            // Category: Notifications
             [
                 'title' => 'Task Notifications',
                 'key' => 'task_notification',
                 'is_enabled' => true,
                 'description' => 'Notify when assigned a task.',
                 'settings_category_id' => 2,
+                'icon' => 'bx bx-task'
             ],
             [
                 'title' => 'Module Notifications',
@@ -75,6 +71,7 @@ return [
                 'is_enabled' => true,
                 'description' => 'Notify when someone joins your module.',
                 'settings_category_id' => 2,
+                'icon' => 'bx bx-layer'
             ],
             [
                 'title' => 'Comment Notifications',
@@ -82,6 +79,7 @@ return [
                 'is_enabled' => true,
                 'description' => 'Notify when someone comments.',
                 'settings_category_id' => 2,
+                'icon' => 'bx bx-comment'
             ],
             [
                 'title' => 'Comment Reply Notifications',
@@ -89,6 +87,7 @@ return [
                 'is_enabled' => true,
                 'description' => 'Notify when someone replies.',
                 'settings_category_id' => 2,
+                'icon' => 'bx bx-chat'
             ],
             [
                 'title' => 'Unlisted Visit Notifications',
@@ -96,29 +95,32 @@ return [
                 'is_enabled' => true,
                 'description' => 'Notify when someone visits your unlisted post.',
                 'settings_category_id' => 2,
+                'icon' => 'bx bx-show'
             ],
-
 
             [
                 'title' => 'Master Password',
                 'key' => 'master_password_enabled',
-                'is_enabled' => false,
+                'is_enabled' => true,
                 'description' => 'Enable master password feature.',
                 'settings_category_id' => 3,
+                'icon' => 'bx bx-key'
             ],
             [
                 'title' => 'Lock Screen Password',
                 'key' => 'lock_screen_enabled',
-                'is_enabled' => false,
+                'is_enabled' => true,
                 'description' => 'Enable lock-screen.',
                 'settings_category_id' => 3,
+                'icon' => 'bx bx-lock'
             ],
             [
                 'title' => 'Pem key Setup',
                 'key' => 'pem_key_enabled',
-                'is_enabled' => false,
+                'is_enabled' => true,
                 'description' => 'Enable PEM key setup.',
                 'settings_category_id' => 3,
+                'icon' => 'bx bx-file'
             ],
             [
                 'title' => 'Change Password',
@@ -126,6 +128,7 @@ return [
                 'is_enabled' => true,
                 'description' => 'Allow password updates.',
                 'settings_category_id' => 3,
+                'icon' => 'bx bx-lock-alt'
             ],
             [
                 'title' => 'App Based Authentication',
@@ -133,8 +136,8 @@ return [
                 'is_enabled' => false,
                 'description' => 'Enable app-based authentication.',
                 'settings_category_id' => 3,
+                'icon' => 'bx bx-shield'
             ],
-
 
             // Category: Theme (MODEL-BASED)
             [
@@ -144,35 +147,7 @@ return [
                 'value' => 1,
                 'description' => 'Choose a theme.',
                 'settings_category_id' => 4,
-            ],
-
-            [
-                'title' => 'Enable Project Module',
-                'key' => 'enable_project_module',
-                'is_enabled' => true,
-                'description' => 'Enable project & task management.',
-                'settings_category_id' => 5,
-            ],
-            [
-                'title' => 'Enable Project Contribution Module',
-                'key' => 'enable_contribution_module',
-                'is_enabled' => true,
-                'description' => 'Enable project contribution.',
-                'settings_category_id' => 5,
-            ],
-            [
-                'title' => 'Enable Git Module',
-                'key' => 'enable_git_module',
-                'is_enabled' => true,
-                'description' => 'Enable git support.',
-                'settings_category_id' => 5,
-            ],
-            [
-                'title' => 'Enable Orbit Zone Module',
-                'key' => 'enable_orbit_zone_module',
-                'is_enabled' => true,
-                'description' => 'Enable Orbit Zone.',
-                'settings_category_id' => 5,
+                'icon' => 'bx bx-palette'
             ],
 
         ]

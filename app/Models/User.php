@@ -65,6 +65,16 @@ class User extends Authenticatable
         return 'username';
     }
 
+    protected static function booted()
+    {
+        static::deleting(function ($user) {
+            // if ($user->isForceDeleting()) {
+            //     $user->addresses()->forceDelete();
+            // } else {
+            //     $user->addresses()->delete();
+            // }
+        });
+    }
 
     public function name()
     {

@@ -79,7 +79,7 @@
 
                             </nav>
                             <div class="mt-3">
-                                <x-docs.sidebar-sponsors :documentation="$documentation" />
+                                <x-docs.sidebar-sponsors :documentation="$documentation" :page="$currentPage" />
                             </div>
                         </div>
 
@@ -91,8 +91,6 @@
 
             </div>
         </div>
-
-        @include('layout.components.copyright')
 
     </div>
 

@@ -41,9 +41,9 @@
                                                         class="file-toggle d-flex align-items-center overflow-hidden w-sm-100 min-w-200  me-sm-4">
                                                         <div class="icon me-2 position-relative">
 
-                                                            <img class="img-badge-40 rounded-circle avatar p-1"
-                                                                src="{{ asset($appSetting->icon_url) }}" alt="">
-
+                                                            <div class="img-badge-40 rounded-circle avatar text-primary  p-1">
+                                                                <i class="{{ $appSetting->icon }} fs-2"> </i>
+                                                            </div>
                                                         </div>
                                                         <div class="name me-2 w-100 ">
                                                             <div class="w-100 d-flex">
@@ -76,8 +76,10 @@
                                                         @foreach ($appSetting->settings as $setting)
                                                             <div class="d-flex align-items-center mb-3">
                                                                 <div class="d-flex align-items-center">
-                                                                    <img class="circle-30 me-2"
-                                                                        src="https://placehold.co/400" alt="alter">
+
+                                                                    <div class="circle-30 me-2">
+                                                                        <i class="{{ $setting->icon }} fs-5"></i>
+                                                                    </div>
                                                                     <div>
                                                                         <h2 class="fs-7 m-0">{{ $setting->title }} </h2>
                                                                         <p class="fs-8 m-0 text-muted">
@@ -87,7 +89,10 @@
 
                                                                 <div class="buttonArea px-2 ps-3 border-start ms-auto">
                                                                     <label class="switch">
-                                                                        <input type="checkbox" {{ ($userSettings[$setting->key] ?? '0') == '1' ? 'checked' : ''  }} id="setting_{{ $setting->key }}" data-setting-key="{{ $setting->key }}">
+                                                                        <input type="checkbox"
+                                                                            {{ ($userSettings[$setting->key] ?? '0') == '1' ? 'checked' : '' }}
+                                                                            id="setting_{{ $setting->key }}"
+                                                                            data-setting-key="{{ $setting->key }}">
                                                                         <span class="slider round"></span>
                                                                     </label>
                                                                 </div>
@@ -120,5 +125,5 @@
 @endsection
 
 @section('js')
-<script src="{{ asset('assets/js/pages/settings.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/settings.js') }}"></script>
 @endsection

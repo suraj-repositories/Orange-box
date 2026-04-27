@@ -92,7 +92,6 @@
             </div>
         </div>
 
-        @include('layout.components.copyright')
     </div>
 
 @endsection

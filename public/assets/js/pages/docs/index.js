@@ -219,6 +219,8 @@ class DocSearch {
         this.debounceTimer = null;
         this.controller = null;
 
+        this.currentIndex = -1;
+
         this.init();
     }
 
@@ -316,6 +318,8 @@ class DocSearch {
                 this.body.innerHTML = data.success
                     ? data.html
                     : this.noResultsHTML();
+
+                this.currentIndex = -1;
             })
             .catch(error => this.handleError(error));
     }
@@ -481,6 +485,7 @@ class DocSearch {
         html += `</div>`;
 
         container.innerHTML = html;
+        this.currentIndex = -1;
 
         if (!container.dataset.historyBound) {
             container.dataset.historyBound = "true";
@@ -488,6 +493,8 @@ class DocSearch {
             container.addEventListener('click', (e) => {
                 const removeBtn = e.target.closest('.right-icon-x-box');
                 if (!removeBtn) return;
+
+                console.log('here-x', removeBtn);
 
                 e.preventDefault();
                 e.stopPropagation();
@@ -511,8 +518,6 @@ class DocSearch {
         const container = document.querySelector('.ux-search-body');
         const classObj = this;
 
-        let currentIndex = -1;
-
         function getItems() {
             return container.querySelectorAll('.ux-search-item');
         }
@@ -530,31 +535,31 @@ class DocSearch {
             }
         }
 
-        input.addEventListener('keydown', function (e) {
+        input.addEventListener('keydown', (e) => {
             const items = getItems();
-
             if (!items.length) return;
 
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
-                currentIndex = (currentIndex + 1) % items.length;
-                setActive(currentIndex);
+                classObj.currentIndex = (classObj.currentIndex + 1) % items.length;
+                setActive(classObj.currentIndex);
             }
 
             if (e.key === 'ArrowUp') {
                 e.preventDefault();
-                currentIndex = (currentIndex - 1 + items.length) % items.length;
-                setActive(currentIndex);
+                classObj.currentIndex =
+                    (classObj.currentIndex - 1 + items.length) % items.length;
+                setActive(classObj.currentIndex);
             }
 
             if (e.key === 'Enter') {
-                if (currentIndex >= 0 && items[currentIndex]) {
+                if (classObj.currentIndex >= 0 && items[classObj.currentIndex]) {
                     const linkItem = document.querySelector('.ux-search-body .ux-search-item.active');
                     if (linkItem) {
                         classObj.openResultLink(linkItem, e);
                     }
 
-                    const url = items[currentIndex].dataset.url;
+                    const url = items[classObj.currentIndex].dataset.url;
                     if (url) window.location.href = url;
                 }
             }
@@ -565,8 +570,8 @@ class DocSearch {
             if (!item) return;
 
             const items = Array.from(getItems());
-            currentIndex = items.indexOf(item);
-            setActive(currentIndex);
+            classObj.currentIndex = items.indexOf(item);
+            setActive(classObj.currentIndex);
         });
     }
 }
