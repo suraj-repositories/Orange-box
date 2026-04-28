@@ -65,6 +65,8 @@ AWS_USE_PATH_STYLE_ENDPOINT=false
 
 VITE_APP_NAME="${APP_NAME}"
 
+APP_PER_USER_STORAGE=5368709120 # 5GB
+
 
 GOOGLE_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 GOOGLE_SECRET_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

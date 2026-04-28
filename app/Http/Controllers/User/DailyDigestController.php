@@ -78,8 +78,8 @@ class DailyDigestController extends Controller
         $dailyDigest->user_id = $user->id;
         $dailyDigest->title = $request->input('title');
         $dailyDigest->sub_title = $request->input('sub_title', null);
-        $dailyDigest->description =  $request->input('description', null) ;
-        $dailyDigest->visibility =  $request->input('visibility', null)?? 'private';
+        $dailyDigest->description =  $request->input('description', null);
+        $dailyDigest->visibility =  $request->input('visibility', null) ?? 'private';
         $dailyDigest->save();
 
         if ($request->has('media_files')) {
@@ -118,6 +118,8 @@ class DailyDigestController extends Controller
     {
         Gate::authorize('view', $dailyDigest);
         $media = $this->fileService->getMediaMetadata($dailyDigest->files);
+
+        $dailyDigest->recordView();
 
         return view('user.thinkspace.daily_digest.show_daily_digest', compact('dailyDigest', 'media'));
     }

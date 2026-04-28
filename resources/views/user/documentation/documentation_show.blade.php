@@ -174,7 +174,7 @@
                                     :release-id="$release->id" />
                             </div>
                             <div class="col-12 col-md-6">
-                                <x-user.analytics.documentation-audience-heatmap-card duration="week" :documentation-id="$documentation->id"
+                                <x-user.analytics.documentation-audience-heatmap-card  :documentation-id="$documentation->id"
                                     :release-id="$release->id" />
                             </div>
                         </div>

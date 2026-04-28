@@ -111,6 +111,7 @@ class ThinkPadController extends Controller
         Gate::authorize('view', $thinkPad);
         $media = $this->fileService->getMediaMetadata($thinkPad->files);
 
+        $thinkPad->recordView();
         return view('user.thinkspace.think_pad.show_think_pad', compact('thinkPad', 'media'));
     }
 

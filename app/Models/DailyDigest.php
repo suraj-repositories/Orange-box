@@ -4,13 +4,14 @@ namespace App\Models;
 
 use App\Traits\Commentable;
 use App\Traits\Likeable;
+use App\Traits\Viewable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class DailyDigest extends Model
 {
-    use SoftDeletes, Likeable, Commentable;
+    use SoftDeletes, Likeable, Commentable, Viewable;
 
     protected $primaryKey = 'id';
     //
@@ -90,5 +91,7 @@ class DailyDigest extends Model
     public function getVisitUrlAttribute(){
         return authRoute('user.daily-digest.show', ['dailyDigest' => $this]);
     }
+
+
 
 }

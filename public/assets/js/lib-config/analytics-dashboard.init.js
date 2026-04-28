@@ -1,259 +1,254 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-
     enableDocumentationVisitors();
     enableBounceRateCharts();
     enableAudienceDailyChart();
-
+    enableMemoryTracker("#memory-tracker");
 
     const isDashboard = document.querySelector('.analytics-dashboard');
     if (!isDashboard) {
         return;
     }
 
-    // =====================================
-    // Analytics Chart
-    // =====================================
-    var options = {
-        chart: {
-            type: "area",
-            fontFamily: 'inherit',
-            height: 45,
-            sparkline: {
-                enabled: true
-            },
-            animations: {
-                enabled: false
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        fill: {
-            opacity: .16,
-            type: 'solid'
-        },
-        stroke: {
-            width: 2,
-            lineCap: "round",
-            curve: "smooth",
-        },
-        series: [{
-            name: "Profits",
-            data: [63, 16, 8, 22, 20, 7, 26, 10, 63, 5, 25, 19, 16, 11, 16, 1, 37, 23, 31, 1, 24, 15, 2, 17, 5, 25, 19, 16, 11, 28]
-        }],
-        tooltip: {
-            theme: 'light'
-        },
-        grid: {
-            strokeDashArray: 4,
-        },
-        xaxis: {
-            labels: {
-                padding: 0,
-            },
-            tooltip: {
-                enabled: false
-            },
-            axisBorder: {
-                show: false,
-            },
-            type: 'datetime',
-        },
-        yaxis: {
-            labels: {
-                padding: 4
-            },
-        },
-        labels: [
-            '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19', '2020-07-20'
-        ],
-        colors: ["#FF8600"],
-        legend: {
-            show: false,
-        },
-    };
-    var chart = new ApexCharts(document.querySelector("#website-visitors"), options);
-    chart.render();
+    // // =====================================
+    // // Analytics Chart
+    // // =====================================
+    // var options = {
+    //     chart: {
+    //         type: "area",
+    //         fontFamily: 'inherit',
+    //         height: 45,
+    //         sparkline: {
+    //             enabled: true
+    //         },
+    //         animations: {
+    //             enabled: false
+    //         },
+    //     },
+    //     dataLabels: {
+    //         enabled: false,
+    //     },
+    //     fill: {
+    //         opacity: .16,
+    //         type: 'solid'
+    //     },
+    //     stroke: {
+    //         width: 2,
+    //         lineCap: "round",
+    //         curve: "smooth",
+    //     },
+    //     series: [{
+    //         name: "Profits",
+    //         data: [63, 16, 8, 22, 20, 7, 26, 10, 63, 5, 25, 19, 16, 11, 16, 1, 37, 23, 31, 1, 24, 15, 2, 17, 5, 25, 19, 16, 11, 28]
+    //     }],
+    //     tooltip: {
+    //         theme: 'light'
+    //     },
+    //     grid: {
+    //         strokeDashArray: 4,
+    //     },
+    //     xaxis: {
+    //         labels: {
+    //             padding: 0,
+    //         },
+    //         tooltip: {
+    //             enabled: false
+    //         },
+    //         axisBorder: {
+    //             show: false,
+    //         },
+    //         type: 'datetime',
+    //     },
+    //     yaxis: {
+    //         labels: {
+    //             padding: 4
+    //         },
+    //     },
+    //     labels: [
+    //         '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19', '2020-07-20'
+    //     ],
+    //     colors: ["#FF8600"],
+    //     legend: {
+    //         show: false,
+    //     },
+    // };
+    // var chart = new ApexCharts(document.querySelector("#website-visitors"), options);
+    // chart.render();
 
-    // Conversion Chart
-    var options = {
-        chart: {
-            type: "area",
-            fontFamily: 'inherit',
-            height: 45,
-            sparkline: {
-                enabled: true
-            },
-            animations: {
-                enabled: false
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        fill: {
-            opacity: .16,
-            type: 'solid'
-        },
-        stroke: {
-            width: 2,
-            lineCap: "round",
-            curve: "smooth",
-        },
-        series: [{
-            name: "Profits",
-            data: [27, 21, 18, 24, 29, 19, 23, 3, 20, 26, 12, 28, 25, 37, 12, 18, 21, 18, 24, 29, 19, 17, 10, 34, 9, 22, 8, 31, 18, 27],
-        }],
-        tooltip: {
-            theme: 'light'
-        },
-        grid: {
-            strokeDashArray: 4,
-        },
-        xaxis: {
-            labels: {
-                padding: 0,
-            },
-            tooltip: {
-                enabled: false
-            },
-            axisBorder: {
-                show: false,
-            },
-            type: 'datetime',
-        },
-        yaxis: {
-            labels: {
-                padding: 4
-            },
-        },
-        labels: [
-            '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19', '2020-07-20'
-        ],
-        colors: ["#ec8290"],
-        legend: {
-            show: false,
-        },
-    };
-    var chart = new ApexCharts(document.querySelector("#conversion-visitors"), options);
-    chart.render();
-
-
-    // Session Chart
-    var options = {
-        chart: {
-            type: "line",
-            height: 45,
-            sparkline: {
-                enabled: true
-            },
-            animations: {
-                enabled: false
-            },
-        },
-        fill: {
-            opacity: 1,
-        },
-        stroke: {
-            width: [2],
-            dashArray: [0, 3],
-            lineCap: "round",
-            curve: "smooth",
-        },
-        series: [{
-            name: "May",
-            data: [40, 51, 62, 70, 65, 53, 51, 46, 62, 93, 62, 61, 51, 62, 51, 66, 70, 53, 62, 44, 53, 46, 40, 65, 55, 62, 70, 75, 78, 80]
-        }],
-        tooltip: {
-            theme: 'light'
-        },
-        grid: {
-            strokeDashArray: 4,
-        },
-        xaxis: {
-            labels: {
-                padding: 0,
-            },
-            tooltip: {
-                enabled: false
-            },
-            type: 'datetime',
-        },
-        yaxis: {
-            labels: {
-                padding: 4
-            },
-        },
-        labels: [
-            '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19', '2020-07-20'
-        ],
-        colors: ["#FF8600", "#343a40"],
-        legend: {
-            show: false,
-        },
-    };
-    var chart = new ApexCharts(document.querySelector("#session-visitors"), options);
-    chart.render();
+    // // Conversion Chart
+    // var options = {
+    //     chart: {
+    //         type: "area",
+    //         fontFamily: 'inherit',
+    //         height: 45,
+    //         sparkline: {
+    //             enabled: true
+    //         },
+    //         animations: {
+    //             enabled: false
+    //         },
+    //     },
+    //     dataLabels: {
+    //         enabled: false,
+    //     },
+    //     fill: {
+    //         opacity: .16,
+    //         type: 'solid'
+    //     },
+    //     stroke: {
+    //         width: 2,
+    //         lineCap: "round",
+    //         curve: "smooth",
+    //     },
+    //     series: [{
+    //         name: "Profits",
+    //         data: [27, 21, 18, 24, 29, 19, 23, 3, 20, 26, 12, 28, 25, 37, 12, 18, 21, 18, 24, 29, 19, 17, 10, 34, 9, 22, 8, 31, 18, 27],
+    //     }],
+    //     tooltip: {
+    //         theme: 'light'
+    //     },
+    //     grid: {
+    //         strokeDashArray: 4,
+    //     },
+    //     xaxis: {
+    //         labels: {
+    //             padding: 0,
+    //         },
+    //         tooltip: {
+    //             enabled: false
+    //         },
+    //         axisBorder: {
+    //             show: false,
+    //         },
+    //         type: 'datetime',
+    //     },
+    //     yaxis: {
+    //         labels: {
+    //             padding: 4
+    //         },
+    //     },
+    //     labels: [
+    //         '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19', '2020-07-20'
+    //     ],
+    //     colors: ["#ec8290"],
+    //     legend: {
+    //         show: false,
+    //     },
+    // };
+    // var chart = new ApexCharts(document.querySelector("#conversion-visitors"), options);
+    // chart.render();
 
 
-    // Active Users
-    var options = {
-        series: [
-            {
-                data: [40, 30, 38, 47, 42, 36, 47, 75, 65, 42, 35, 48, 46, 55, 24],
-            },
-        ],
-        chart: {
-            height: 45,
-            type: "bar",
-            sparkline: {
-                enabled: true,
-            },
-            animations: {
-                enabled: false
-            },
-        },
-        colors: ["#FF8600"],
-        plotOptions: {
-            bar: {
-                columnWidth: "35%",
-                borderRadius: 3,
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        fill: {
-            opacity: 1,
-        },
-        grid: {
-            strokeDashArray: 4,
-        },
-        labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-        xaxis: {
-            crosshairs: {
-                width: 1,
-            },
-        },
-        yaxis: {
-            labels: {
-                padding: 4
-            },
-        },
-        tooltip: {
-            theme: 'light'
-        },
-        legend: {
-            show: false,
-        },
-    };
-    var chartOne = new ApexCharts(document.querySelector('#active-users'), options);
-    chartOne.render();
+    // // Session Chart
+    // var options = {
+    //     chart: {
+    //         type: "line",
+    //         height: 45,
+    //         sparkline: {
+    //             enabled: true
+    //         },
+    //         animations: {
+    //             enabled: false
+    //         },
+    //     },
+    //     fill: {
+    //         opacity: 1,
+    //     },
+    //     stroke: {
+    //         width: [2],
+    //         dashArray: [0, 3],
+    //         lineCap: "round",
+    //         curve: "smooth",
+    //     },
+    //     series: [{
+    //         name: "May",
+    //         data: [40, 51, 62, 70, 65, 53, 51, 46, 62, 93, 62, 61, 51, 62, 51, 66, 70, 53, 62, 44, 53, 46, 40, 65, 55, 62, 70, 75, 78, 80]
+    //     }],
+    //     tooltip: {
+    //         theme: 'light'
+    //     },
+    //     grid: {
+    //         strokeDashArray: 4,
+    //     },
+    //     xaxis: {
+    //         labels: {
+    //             padding: 0,
+    //         },
+    //         tooltip: {
+    //             enabled: false
+    //         },
+    //         type: 'datetime',
+    //     },
+    //     yaxis: {
+    //         labels: {
+    //             padding: 4
+    //         },
+    //     },
+    //     labels: [
+    //         '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19', '2020-07-20'
+    //     ],
+    //     colors: ["#FF8600", "#343a40"],
+    //     legend: {
+    //         show: false,
+    //     },
+    // };
+    // var chart = new ApexCharts(document.querySelector("#session-visitors"), options);
+    // chart.render();
 
 
-
-
+    // // Active Users
+    // var options = {
+    //     series: [
+    //         {
+    //             data: [40, 30, 38, 47, 42, 36, 47, 75, 65, 42, 35, 48, 46, 55, 24],
+    //         },
+    //     ],
+    //     chart: {
+    //         height: 45,
+    //         type: "bar",
+    //         sparkline: {
+    //             enabled: true,
+    //         },
+    //         animations: {
+    //             enabled: false
+    //         },
+    //     },
+    //     colors: ["#FF8600"],
+    //     plotOptions: {
+    //         bar: {
+    //             columnWidth: "35%",
+    //             borderRadius: 3,
+    //         },
+    //     },
+    //     dataLabels: {
+    //         enabled: false,
+    //     },
+    //     fill: {
+    //         opacity: 1,
+    //     },
+    //     grid: {
+    //         strokeDashArray: 4,
+    //     },
+    //     labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    //     xaxis: {
+    //         crosshairs: {
+    //             width: 1,
+    //         },
+    //     },
+    //     yaxis: {
+    //         labels: {
+    //             padding: 4
+    //         },
+    //     },
+    //     tooltip: {
+    //         theme: 'light'
+    //     },
+    //     legend: {
+    //         show: false,
+    //     },
+    // };
+    // var chartOne = new ApexCharts(document.querySelector('#active-users'), options);
+    // chartOne.render();
 
 });
 
@@ -322,9 +317,9 @@ function enableDocumentationVisitors() {
     let categories = [];
     let data = [];
 
-     const color = getComputedStyle(document.documentElement)
-            .getPropertyValue('--chart-color')
-            .trim();
+    const color = getComputedStyle(document.documentElement)
+        .getPropertyValue('--chart-color')
+        .trim();
 
 
     try {
@@ -412,8 +407,8 @@ function enableAudienceDailyChart() {
     }
 
     const color = getComputedStyle(document.documentElement)
-            .getPropertyValue('--sparkline-color')
-            .trim();
+        .getPropertyValue('--sparkline-color')
+        .trim();
 
     const options = {
         series: series,
@@ -444,4 +439,66 @@ function enableAudienceDailyChart() {
 
     el._chart = new ApexCharts(el, options);
     el._chart.render();
+}
+
+
+function enableMemoryTracker(selector) {
+    const showMemoryUsage = document.querySelector(selector);
+    let memoryUsed = 0;
+    if (showMemoryUsage) {
+        memoryUsed = showMemoryUsage.getAttribute('data-memory-used');
+    }
+
+    const color1 = getComputedStyle(document.documentElement)
+        .getPropertyValue('--bs-primary')
+        .trim();
+    const color2 = getComputedStyle(document.documentElement)
+        .getPropertyValue('--bs-primary')
+        .trim();
+    const color3 = getComputedStyle(document.documentElement)
+        .getPropertyValue('--bs-primary-bg-subtle-light')
+        .trim();
+
+    var options = {
+        chart: {
+            height: 280,
+            type: "radialBar"
+        },
+        plotOptions: {
+            radialBar: {
+                startAngle: -135,
+                endAngle: 135,
+                dataLabels: {
+                    name: {
+                        fontSize: "14px",
+                        offsetY: 100
+                    },
+                    value: {
+                        offsetY: 55,
+                        fontSize: "20px",
+                        color: void 0,
+                        formatter: function (e) {
+                            return e + "%"
+                        }
+                    }
+                },
+                track: {
+                    background: color3,
+                    margin: 0
+                }
+            }
+        },
+
+        stroke: {
+            dashArray: 2
+        },
+        colors: [color1, color2],
+        series: [memoryUsed],
+        labels: ["Memory Usage"],
+
+    },
+
+        chart = new ApexCharts(showMemoryUsage, options);
+    chart.render();
+    document.querySelector(".apexcharts-canvas").style.height = "260px";
 }

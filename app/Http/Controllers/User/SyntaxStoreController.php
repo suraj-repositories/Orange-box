@@ -102,6 +102,9 @@ class SyntaxStoreController extends Controller
     public function show(User $user, SyntaxStore $syntaxStore, Request $request)
     {
         Gate::authorize('view', $syntaxStore);
+
+        $syntaxStore->recordView();
+
         return view('user.thinkspace.syntax_store.show_syntax_store', compact('syntaxStore', 'user'));
     }
 

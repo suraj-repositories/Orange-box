@@ -17,7 +17,6 @@ class DocumentationAudienceHeatmapCard extends Component
      */
 
     public function __construct(
-        public ?string $duration = 'month',
         public ?int $documentationId = null,
         public ?int $releaseId = null
     ) {

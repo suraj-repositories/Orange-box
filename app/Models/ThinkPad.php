@@ -4,13 +4,14 @@ namespace App\Models;
 
 use App\Traits\Commentable;
 use App\Traits\Likeable;
+use App\Traits\Viewable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class ThinkPad extends Model
 {
-    use SoftDeletes, Likeable, Commentable;
+    use SoftDeletes, Likeable, Commentable, Viewable;
     //
     protected $fillable = [
         'user_id',
