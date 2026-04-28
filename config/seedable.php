@@ -160,24 +160,24 @@ return [
             'theme_image' => '/assets/images/themes/orange_box.png',
             'logo_image' => '/assets/images/logo/orange_box.svg'
         ],
-        [
-            'title' => 'Fresh Fiber',
-            'theme_key' => 'fresh_fiber',
-            'theme_image' => '/assets/images/themes/fresh_fiber.png',
-            'logo_image' => '/assets/images/logo/fresh_fiber.svg'
-        ],
-        [
-            'title' => 'Bright Red',
-            'theme_key' => 'bright_red',
-            'theme_image' => '/assets/images/themes/bright_red.png',
-            'logo_image' => '/assets/images/logo/bright_red.svg'
-        ],
-        [
-            'title' => 'Sweet Blue',
-            'theme_key' => 'sweet_blue',
-            'theme_image' => '/assets/images/themes/sweet_blue.png',
-            'logo_image' => '/assets/images/logo/sweet_blue.svg'
-        ],
+        // [
+        //     'title' => 'Fresh Fiber',
+        //     'theme_key' => 'fresh_fiber',
+        //     'theme_image' => '/assets/images/themes/fresh_fiber.png',
+        //     'logo_image' => '/assets/images/logo/fresh_fiber.svg'
+        // ],
+        // [
+        //     'title' => 'Bright Red',
+        //     'theme_key' => 'bright_red',
+        //     'theme_image' => '/assets/images/themes/bright_red.png',
+        //     'logo_image' => '/assets/images/logo/bright_red.svg'
+        // ],
+        // [
+        //     'title' => 'Sweet Blue',
+        //     'theme_key' => 'sweet_blue',
+        //     'theme_image' => '/assets/images/themes/sweet_blue.png',
+        //     'logo_image' => '/assets/images/logo/sweet_blue.svg'
+        // ],
     ],
 
 
