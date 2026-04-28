@@ -111,7 +111,9 @@
     --bs-form-valid-color: #29aa85;
     --bs-form-valid-border-color: #29aa85;
     --bs-form-invalid-color: #ec8290;
-    --bs-form-invalid-border-color: #ec8290
+    --bs-form-invalid-border-color: #ec8290;
+    --sparkline-color: var(--bs-primary);
+    --chart-color: var(--bs-primary-bg-subtle);
 }
 
 [data-bs-theme=dark] {
@@ -3398,9 +3400,11 @@ ul.directory-list.active {
     flex-wrap: wrap;
     margin-bottom: 3px;
 }
-.pm-root a.pm-page-name:hover{
+
+.pm-root a.pm-page-name:hover {
     color: var(--bs-primary);
 }
+
 .pm-root .pm-page-name {
     font-weight: 700;
     font-size: 0.825rem;

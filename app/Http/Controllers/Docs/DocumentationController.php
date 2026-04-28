@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Documentation;
 use App\Models\DocumentationDocument;
 use App\Models\DocumentationPage;
+use App\Models\DocumentationPageView;
 use App\Models\DocumentationRelease;
 use App\Models\DocumentationSection;
 use App\Models\User;
@@ -132,6 +133,17 @@ class DocumentationController extends Controller
             $nextPath = $this->buildFullPath($nextPage);
         }
 
+        $view = null;
+        if ($currentPage) {
+            $view = DocumentationPageView::create([
+                'documentation_page_id' => $currentPage->id,
+                'session_id' => session()->getId(),
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'visited_at' => now(),
+            ]);
+        }
+
         return view('docs.index', compact(
             'documentation',
             'pages',
@@ -144,6 +156,7 @@ class DocumentationController extends Controller
             'version',
             'top5Releases',
             'user',
+            'view',
         ));
     }
 

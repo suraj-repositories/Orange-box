@@ -55,7 +55,7 @@
                             @endif
 
                             <div class="my-5 d-flex align-items-center justify-content-center">
-                                <x-docs.feedback-component :page="$currentPage"/>
+                                <x-docs.feedback-component :page="$currentPage" />
                             </div>
 
                         </div>
@@ -94,4 +94,11 @@
 
     </div>
 
+@endsection
+@section('js')
+    <script>
+        window.__view_id = {{ $view->id ?? 'null' }};
+        window.__page_exit_route = "{{ route('docs.user-activity.page-exit') }}";
+    </script>
+    <script src="{{ asset('assets/js/pages/docs/docs.js') }}"></script>
 @endsection

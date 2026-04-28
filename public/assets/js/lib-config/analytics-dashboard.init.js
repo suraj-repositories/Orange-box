@@ -1,10 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+
+    enableDocumentationVisitors();
+    enableBounceRateCharts();
+    enableAudienceDailyChart();
+
+
     const isDashboard = document.querySelector('.analytics-dashboard');
     if (!isDashboard) {
         return;
     }
-    console.log('here');
+
     // =====================================
     // Analytics Chart
     // =====================================
@@ -246,59 +252,123 @@ document.addEventListener('DOMContentLoaded', function () {
     chartOne.render();
 
 
-    // Monthly Sales
-    var options = {
+
+
+
+});
+
+
+function enableBounceRateCharts() {
+    document.querySelectorAll('.sparkline-bounce').forEach((el) => {
+
+        let values = [];
+
+        try {
+            values = JSON.parse(el.dataset.values || '[]');
+        } catch (e) {
+            values = [];
+        }
+
+        let labels = [];
+
+        try {
+            labels = JSON.parse(el.dataset.labels || '[]');
+        } catch (e) {
+            labels = [];
+        }
+
+        const color = getComputedStyle(document.documentElement)
+            .getPropertyValue('--sparkline-color')
+            .trim();
+
+        const options = {
+            chart: {
+                type: "line",
+                height: 24,
+                parentHeightOffset: 0,
+                toolbar: { show: false },
+                animations: { enabled: false },
+                sparkline: { enabled: true },
+            },
+            series: [{
+                name: 'Views',
+                data: values
+            }],
+            labels: labels,
+            colors: [color],
+            tooltip: {
+                enabled: true,
+                y: {
+                    formatter: function (val) {
+                        return val;
+                    }
+                }
+            },
+            stroke: {
+                width: 2,
+                lineCap: "round",
+                curve: "smooth"
+            },
+        };
+
+        new ApexCharts(el, options).render();
+    });
+}
+
+function enableDocumentationVisitors() {
+    const el = document.querySelector('#documentation-visitors');
+    if (!el) return;
+
+    let categories = [];
+    let data = [];
+
+     const color = getComputedStyle(document.documentElement)
+            .getPropertyValue('--chart-color')
+            .trim();
+
+
+    try {
+        categories = JSON.parse(el.dataset.categories || '[]');
+        data = JSON.parse(el.dataset.series || '[]');
+    } catch (e) {
+        categories = [];
+        data = [];
+    }
+
+    const options = {
         chart: {
             type: "bar",
             height: 307,
             parentHeightOffset: 0,
-            toolbar: {
-                show: false
-            },
+            toolbar: { show: false },
         },
-        colors: ["#ff880093"],
+        colors: [color],
         series: [{
-            name: 'Sales',
-            data: [145, 96, 108, 140, 130, 150, 170, 138, 114, 128, 138]
+            name: 'Visitors',
+            data: data
         }],
-        fill: {
-            opacity: 1,
-        },
+        fill: { opacity: 1 },
         plotOptions: {
             bar: {
                 columnWidth: "50%",
                 borderRadius: 4,
-                borderRadiusApplication: 'end', // 'around', 'end'
-                borderRadiusWhenStacked: 'last', // 'all', 'last'
-                dataLabels: {
-                    position: 'top',
-                    orientation: 'vertical',
-                }
+                borderRadiusApplication: 'end',
             },
         },
         grid: {
             strokeDashArray: 4,
-            padding: {
-                top: -20,
-                right: 0,
-                bottom: -4
-            },
-            xaxis: {
-                lines: {
-                    show: true
-                }
-            }
+            padding: { top: -20, right: 0, bottom: -4 },
         },
         xaxis: {
-            type: 'datetime',
-            categories: ['01/01/2024', '02/01/2024', '03/01/2024', '04/01/2024', '05/01/2024', '06/01/2024', '07/01/2024', '08/01/2024', '09/01/2024', '10/01/2024', '11/01/2024'],
-            axisTicks: {
-                color: "#f0f4f7",
-            },
+            type: 'category',
+            categories: categories,
+            labels: {
+                rotate: -45
+            }
         },
         yaxis: {
             title: {
-                text: 'Documenation Visitors',
+                text: 'Documentation Visitors',
                 style: {
                     fontSize: '12px',
                     fontWeight: 600,
@@ -306,535 +376,72 @@ document.addEventListener('DOMContentLoaded', function () {
             },
         },
         tooltip: {
-            theme: 'light'
+            x: {
+                formatter: function (val, opts) {
+                    return categories[opts.dataPointIndex] || val;
+                }
+            }
         },
         legend: {
             position: 'top',
-            show: true,
             horizontalAlign: 'center',
         },
-        stroke: {
-            width: 0
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        theme: {
-            mode: 'light'
-        },
+        stroke: { width: 0 },
+        dataLabels: { enabled: false },
+        theme: { mode: 'light' },
     };
-    console.log(options);
-    var chartOne = new ApexCharts(document.querySelector('#monthly-sales'), options);
-    chartOne.render();
 
+    if (el._chart) {
+        el._chart.destroy();
+    }
 
+    el._chart = new ApexCharts(el, options);
+    el._chart.render();
+}
 
-    // Audiences Daily Chart
-    var options = {
-        series: [
-            {
-                name: 'Fri',
-                data: [{
-                    y: 18,
-                    x: "12 AM",
-                },
-                {
-                    y: 6,
-                    x: "3 AM",
-                },
-                {
-                    y: 12,
-                    x: "6 AM",
-                },
-                {
-                    y: 8,
-                    x: "9 AM",
-                },
-                {
-                    y: 15,
-                    x: "12 PM",
-                },
-                {
-                    y: 15,
-                    x: "3 PM",
-                },
-                {
-                    y: 10,
-                    x: "6 PM",
-                },
-                {
-                    y: 6,
-                    x: "9 PM",
-                }],
-            },
-            {
-                name: 'Thu',
-                data: [{
-                    y: 6,
-                    x: "12 AM",
-                },
-                {
-                    y: 12,
-                    x: "3 AM",
-                },
-                {
-                    y: 15,
-                    x: "6 AM",
-                },
-                {
-                    y: 18,
-                    x: "9 AM",
-                },
-                {
-                    y: 15,
-                    x: "12 PM",
-                },
-                {
-                    y: 6,
-                    x: "3 PM",
-                },
-                {
-                    y: 9,
-                    x: "6 PM",
-                },
-                {
-                    y: 6,
-                    x: "9 PM",
-                }],
-            },
-            {
-                name: 'Wed',
-                data: [{
-                    y: 6,
-                    x: "12 AM",
-                },
-                {
-                    y: 14,
-                    x: "3 AM",
-                },
-                {
-                    y: 8,
-                    x: "6 AM",
-                },
-                {
-                    y: 17,
-                    x: "9 AM",
-                },
-                {
-                    y: 6,
-                    x: "12 PM",
-                },
-                {
-                    y: 9,
-                    x: "3 PM",
-                },
-                {
-                    y: 12,
-                    x: "6 PM",
-                },
-                {
-                    y: 16,
-                    x: "9 PM",
-                }],
-            },
-            {
-                name: 'Tue',
-                data: [{
-                    y: 12,
-                    x: "9 AM",
-                },
-                {
-                    y: 6,
-                    x: "3 AM",
-                },
-                {
-                    y: 14,
-                    x: "6 AM",
-                },
-                {
-                    y: 9,
-                    x: "9 AM",
-                },
-                {
-                    y: 6,
-                    x: "12 PM",
-                },
-                {
-                    y: 18,
-                    x: "3 PM",
-                },
-                {
-                    y: 12,
-                    x: "6 PM",
-                },
-                {
-                    y: 6,
-                    x: "9 PM",
-                }],
-            },
-            {
-                name: 'Mon',
-                data: [{
-                    y: 6,
-                    x: "12 AM",
-                },
-                {
-                    y: 12,
-                    x: "3 AM",
-                },
-                {
-                    y: 12,
-                    x: "6 AM",
-                },
-                {
-                    y: 10,
-                    x: "9 AM",
-                },
-                {
-                    y: 15,
-                    x: "12 PM",
-                },
-                {
-                    y: 9,
-                    x: "3 PM",
-                },
-                {
-                    y: 6,
-                    x: "6 PM",
-                },
-                {
-                    y: 9,
-                    x: "9 PM",
-                }],
-            },
-            {
-                name: 'Sun',
-                data: [{
-                    y: 8,
-                    x: "12 AM",
-                },
-                {
-                    y: 11,
-                    x: "3 AM",
-                },
-                {
-                    y: 11,
-                    x: "6 AM",
-                },
-                {
-                    y: 6,
-                    x: "9 AM",
-                },
-                {
-                    y: 10,
-                    x: "12 PM",
-                },
-                {
-                    y: 15,
-                    x: "3 PM",
-                },
-                {
-                    y: 10,
-                    x: "6 PM",
-                },
-                {
-                    y: 9,
-                    x: "9 PM",
-                }],
-            },
-            {
-                name: 'Sat',
-                data: [{
-                    y: 8,
-                    x: "12 AM",
-                },
-                {
-                    y: 8,
-                    x: "3 AM",
-                },
-                {
-                    y: 10,
-                    x: "6 AM",
-                },
-                {
-                    y: 7,
-                    x: "9 AM",
-                },
-                {
-                    y: 18,
-                    x: "12 PM",
-                },
-                {
-                    y: 8,
-                    x: "3 PM",
-                },
-                {
-                    y: 15,
-                    x: "6 PM",
-                },
-                {
-                    y: 8,
-                    x: "9 PM",
-                }],
-            },
-        ],
+function enableAudienceDailyChart() {
+    const el = document.querySelector('#audiences-daily');
+    if (!el) return;
+
+    let series = [];
+
+    try {
+        series = JSON.parse(el.dataset.series || '[]');
+    } catch (e) {
+        series = [];
+    }
+
+    const color = getComputedStyle(document.documentElement)
+            .getPropertyValue('--sparkline-color')
+            .trim();
+
+    const options = {
+        series: series,
         chart: {
             height: 345,
             type: 'heatmap',
             parentHeightOffset: 0,
-            toolbar: {
-                show: false
-            },
+            toolbar: { show: false },
         },
         plotOptions: {
             heatmap: {
                 radius: 10,
                 enableShades: true,
-                shadeIntensity: 2
+                shadeIntensity: 0.5
             }
         },
-        grid: {
-            show: false,
-        },
-        dataLabels: {
-            enabled: false
-        },
-        colors: ["#FF8600"],
+        grid: { show: false },
+        dataLabels: { enabled: false },
+        colors: [color],
         legend: {
             show: true,
             position: "top",
             horizontalAlign: "center",
         },
-
     };
-    var chart = new ApexCharts(document.querySelector("#audiences-daily"), options);
-    chart.render();
 
+    if (el._chart) el._chart.destroy();
 
-
-    // Sparkline Bounce Rate
-    var options = {
-        chart: {
-            type: "line",
-            height: 24,
-            parentHeightOffset: 0,
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: false
-            },
-            sparkline: {
-                enabled: true
-            },
-        },
-        series: [{
-            data: [5, 17, 1, 24, 4, 10, 18, 20, 13]
-        }],
-        colors: ["#FF8600"],
-        tooltip: {
-            enabled: false,
-        },
-        stroke: {
-            width: 2,
-            lineCap: "round",
-        },
-    };
-    var chartOne = new ApexCharts(document.querySelector('#sparkline-bounce-1'), options);
-    chartOne.render();
-
-
-    // Sparkline 2
-    var options = {
-        chart: {
-            type: "line",
-            height: 24,
-            parentHeightOffset: 0,
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: false
-            },
-            sparkline: {
-                enabled: true
-            },
-        },
-        series: [{
-            data: [27, 8, 33, 41, 16, 13, 30, 4, 37]
-        }],
-        colors: ["#FF8600"],
-        tooltip: {
-            enabled: false,
-        },
-        stroke: {
-            width: 2,
-            lineCap: "round",
-        },
-    };
-    var chartOne = new ApexCharts(document.querySelector('#sparkline-bounce-2'), options);
-    chartOne.render();
-
-
-
-    // Sparkline 3
-    var options = {
-        chart: {
-            type: "line",
-            height: 24,
-            parentHeightOffset: 0,
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: false
-            },
-            sparkline: {
-                enabled: true
-            },
-        },
-        series: [{
-            data: [10, 13, 10, 4, 17, 3, 23, 22, 19]
-        }],
-        colors: ["#FF8600"],
-        tooltip: {
-            enabled: false,
-        },
-        stroke: {
-            width: 2,
-            lineCap: "round",
-        },
-    };
-    var chartOne = new ApexCharts(document.querySelector('#sparkline-bounce-3'), options);
-    chartOne.render();
-
-
-    // Sparkline 4
-    var options = {
-        chart: {
-            type: "line",
-            height: 24,
-            parentHeightOffset: 0,
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: false
-            },
-            sparkline: {
-                enabled: true
-            },
-        },
-        series: [{
-            data: [26, 9, 26, 6, 18, 5, 31, 30, 27]
-        }],
-        colors: ["#FF8600"],
-        tooltip: {
-            enabled: false,
-        },
-        stroke: {
-            width: 2,
-            lineCap: "round",
-        },
-
-    };
-    var chartOne = new ApexCharts(document.querySelector('#sparkline-bounce-4'), options);
-    chartOne.render();
-
-
-    // Sparkline 5
-    var options = {
-        chart: {
-            type: "line",
-            height: 24,
-            parentHeightOffset: 0,
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: false
-            },
-            sparkline: {
-                enabled: true
-            },
-        },
-        series: [{
-            data: [29, 6, 19, 16, 25, 24, 10, 31, 26, 16]
-        }],
-        colors: ["#FF8600"],
-        tooltip: {
-            enabled: false,
-        },
-        stroke: {
-            width: 2,
-            lineCap: "round",
-        },
-    };
-    var chartOne = new ApexCharts(document.querySelector('#sparkline-bounce-5'), options);
-    chartOne.render();
-
-
-    // Sparkline 6
-    var options = {
-        chart: {
-            type: "line",
-            height: 24,
-            parentHeightOffset: 0,
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: false
-            },
-            sparkline: {
-                enabled: true
-            },
-        },
-        series: [{
-            data: [17, 9, 4, 11, 2, 20, 5, 22, 15, 11],
-        }],
-        colors: ["#FF8600"],
-        tooltip: {
-            enabled: false,
-        },
-        stroke: {
-            width: 2,
-            lineCap: "round",
-        },
-    };
-    var chartOne = new ApexCharts(document.querySelector('#sparkline-bounce-6'), options);
-    chartOne.render();
-
-    // Sparkline 7
-    var options = {
-        chart: {
-            type: "line",
-            height: 24,
-            parentHeightOffset: 0,
-            toolbar: {
-                show: false
-            },
-            animations: {
-                enabled: false
-            },
-            sparkline: {
-                enabled: true
-            },
-        },
-        series: [{
-            data: [29, 18, 10, 22, 6, 26, 17, 28, 22, 17],
-        }],
-        colors: ["#FF8600"],
-        tooltip: {
-            enabled: false,
-        },
-        stroke: {
-            width: 2,
-            lineCap: "round",
-        },
-    };
-    var chartOne = new ApexCharts(document.querySelector('#sparkline-bounce-7'), options);
-    chartOne.render();
-
-
-});
+    el._chart = new ApexCharts(el, options);
+    el._chart.render();
+}

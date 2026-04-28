@@ -26,7 +26,25 @@ class DashboardController extends Controller
                 ", [$user->id, $user->id, $user->id, $user->id])
             ->first();
 
-        return view('user.dashboard', [
+
+        return view('user.dashboard.dashboard', [
+            'counts' => $counts
+        ]);
+    }
+
+public function analyticalDashboard(User $user)
+    {
+        $counts = DB::table('users')
+            ->selectRaw("
+                    (SELECT COUNT(*) FROM daily_digests WHERE user_id = ?) AS digestionCount,
+                    (SELECT COUNT(*) FROM think_pads WHERE user_id = ?) AS thinkPadCount,
+                    (SELECT COUNT(*) FROM syntax_stores WHERE user_id = ?) AS syntaxCount,
+                    (SELECT COUNT(*) FROM documentations WHERE user_id = ?) AS documentationCount
+                ", [$user->id, $user->id, $user->id, $user->id])
+            ->first();
+
+
+        return view('user.dashboard.analytics-dashboard', [
             'counts' => $counts
         ]);
     }

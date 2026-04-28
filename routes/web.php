@@ -15,6 +15,7 @@ use App\Http\Controllers\Docs\FaqController;
 use App\Http\Controllers\Docs\PartnersController;
 use App\Http\Controllers\Docs\ReleaseController;
 use App\Http\Controllers\Docs\SponsorsController;
+use App\Http\Controllers\Docs\UserActivityController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Test\TestingController;
 use Illuminate\Support\Facades\Route;
@@ -89,7 +90,6 @@ Route::get(
 )->where('path', '.*')
     ->name('docs.show');
 
-
 Route::get(
     '/{user:username}/docs-extras/{slug}/{version}/{type}',
     [DocumentationDocumentController::class, 'index']
@@ -107,7 +107,7 @@ Route::post('/{user:username}/docs-v-ajax/{slug}/{version}/partners-search', [Pa
 
 Route::post('/feedback/save', [DocumentationFeedbackController::class, 'save'])->name('docs.feedback.save');
 
-
+Route::post('/page-exit', [UserActivityController::class, 'pageExit'])->name('docs.user-activity.page-exit');
 /* ---------------------------------------------
 | END - DOC-routes
 -----------------------------------------------*/

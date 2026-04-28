@@ -84,58 +84,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="row g-3">
-                            {{-- <div class="col-md-4">
-                                <div class="card mb-0 rounded-4 border hot-pages-card">
-                                    <div class="card-body">
 
-                                        <!-- Header -->
-                                        <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
-                                            <div
-                                                class="icon-box p-2 square-50 d-flex align-items-center justify-content-center border rounded-4">
-                                                <i class="bi bi-cup-hot fs-3"></i>
-                                            </div>
-                                            <div>
-                                                <h5 class="mb-1 fs-6 fw-bold">
-                                                    <a href="/" class="text-dark">Hot Pages</a>
-                                                </h5>
-                                                <small>Other important static pages</small>
-                                            </div>
-                                        </div>
-
-                                        <!-- Pages List -->
-                                        <ul class="list-group list-group-flush">
-
-                                            <!-- Release -->
-                                            <li
-                                                class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <div class="fw-semibold">Releases</div>
-                                                    <small class="text-muted fs-7">Manage documentation versions</small>
-                                                </div>
-
-                                                <div class="dropdown">
-                                                    <button class="btn btn-sm btn-light border square-30 center-content"
-                                                        data-bs-toggle="dropdown">
-                                                        <i class="bi bi-three-dots-vertical"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end p-2">
-                                                        <li>
-                                                            <a class="dropdown-item"
-                                                                href="{{ authRoute('user.documentation.releases', ['documentation' => $documentation]) }}">
-                                                                Edit Releases
-                                                            </a>
-                                                        </li>
-
-                                                    </ul>
-                                                </div>
-                                            </li>
-
-
-                                        </ul>
-
-                                    </div>
-                                </div>
-                            </div> --}}
                             <div class="col-md-12">
                                 <div class="row  g-3">
                                     <div class="col-12">
@@ -167,7 +116,7 @@
                                                     href="{{ authRoute('user.documentation.edit', ['documentation' => $documentation]) }}">
                                                     <div class="card mb-0 rounded-4 border">
                                                         <div class="card-body d-flex align-items-center gap-2">
-                                                           <i class='bx bx-edit fs-3'></i>
+                                                            <i class='bx bx-edit fs-3'></i>
                                                             <h5 class="mb-0">Edit Doc</h5>
                                                         </div>
                                                     </div>
@@ -213,6 +162,23 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-12">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <x-user.analytics.most-visisted-pages-card duration="week" :release-id="$release->id"  />
+                            </div>
+
+                            <div class="col-12 col-md-6">
+                                <x-user.analytics.documentation-visitors-card duration="week" :documentation-id="$documentation->id"
+                                    :release-id="$release->id" />
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <x-user.analytics.documentation-audience-heatmap-card duration="week" :documentation-id="$documentation->id"
+                                    :release-id="$release->id" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -228,4 +194,6 @@
 
 @section('js')
     <script src="{{ asset('assets/js/pages/documentation-show.js') }}"></script>
+    <script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ asset('assets/js/lib-config/analytics-dashboard.init.js') }}"></script>
 @endsection

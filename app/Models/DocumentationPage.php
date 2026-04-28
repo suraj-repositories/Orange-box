@@ -66,6 +66,10 @@ class DocumentationPage extends Model
         return $this->belongsTo(documentation::class);
     }
 
+    public function release(){
+        return $this->belongsTo(documentationRelease::class, 'release_id');
+    }
+
     public function children()
     {
         return $this->hasMany(self::class, 'parent_id')

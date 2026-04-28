@@ -36,10 +36,10 @@
                     <div class="collapse" id="sidebarDashboards">
                         <ul class="nav-second-level">
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.dashboard') }}'>Analytical</a>
+                                <a class='tp-link' href='{{ authRoute('user.dashboard') }}'>Home</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='#'>Management</a>
+                                <a class='tp-link' href='{{ authRoute('user.dashboard.analytics') }}'>Analytical</a>
                             </li>
                         </ul>
                     </div>

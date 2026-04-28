@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(DashboardController::class)->group(function () {
     Route::get('dashboard', 'index')->name('dashboard');
+    Route::get('dashboard/analytics', 'analyticalDashboard')->name('dashboard.analytics');
 });
 
 Route::controller(DailyDigestController::class)->group(function () {
