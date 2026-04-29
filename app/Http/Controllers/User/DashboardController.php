@@ -22,8 +22,25 @@ class DashboardController extends Controller
     {
         $title = "Dashboard";
 
+        $tags = [
+            'Daily Digests',
+            'Visible themes',
+            'Key strokes',
+            'Key strokes',
+            'Key strokes',
+            'Key strokes',
+            'Key strokes',
+            'Key strokes',
+            'Key strokes',
+            'Project Updates',
+            'Latest Releases',
+            'Future Plans',
+            'Locker safty',
+        ];
+
         return view('user.dashboard.dashboard', [
-            'title' => $title
+            'title' => $title,
+            'tags' => $tags
         ]);
     }
 
