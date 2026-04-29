@@ -7,6 +7,7 @@ use App\Models\DailyDigest;
 use App\Models\DocumentationPageStat;
 use App\Models\DocumentationPageView;
 use App\Models\PageView;
+use App\Models\QuickLink;
 use App\Models\SyntaxStore;
 use App\Models\ThinkPad;
 use App\Models\User;
@@ -22,25 +23,17 @@ class DashboardController extends Controller
     {
         $title = "Dashboard";
 
-        $tags = [
-            'Daily Digests',
-            'Visible themes',
-            'Key strokes',
-            'Key strokes',
-            'Key strokes',
-            'Key strokes',
-            'Key strokes',
-            'Key strokes',
-            'Key strokes',
-            'Project Updates',
-            'Latest Releases',
-            'Future Plans',
-            'Locker safty',
-        ];
+        $quickLinks = QuickLink::take(20)->get();
+
+        $users = User::role('user')
+            ->inRandomOrder()
+            ->take(10)
+            ->get();
 
         return view('user.dashboard.dashboard', [
             'title' => $title,
-            'tags' => $tags
+            'quickLinks' => $quickLinks,
+            'users' => $users
         ]);
     }
 

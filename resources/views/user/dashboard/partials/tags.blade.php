@@ -5,10 +5,22 @@
      </button>
 
      <div class="tag-scroll-container" id="tagScrollContainer">
-         @foreach ($tags as $tag)
-             <button class="tag-chip tag-chip-primary">
-                 <i class="bx bx-file"></i> {{ $tag }}
-             </button>
+         @foreach ($quickLinks as $quickLink)
+             @php
+                 $url = $quickLink->route_name
+                     ? route($quickLink->route_name, json_decode($quickLink->route_params ?? '[]', true))
+                     : $quickLink->external_url;
+             @endphp
+
+             <a href="{{ $url }}" target="{{ $quickLink->target ?? '_self' }}"
+                 class="tag-chip tag-chip-{{ $quickLink->color ?? 'primary' }}">
+
+                 @if ($quickLink->icon)
+                     <i class="{{ $quickLink->icon }}"></i>
+                 @endif
+
+                 <span class="text-dark">{{ $quickLink->title }}</span>
+             </a>
          @endforeach
      </div>
 

@@ -16,7 +16,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasApiTokens, Notifiable, HasRoles, HasPermissions, SoftDeletes;
+    use HasFactory, HasApiTokens, Notifiable, HasRoles, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -65,16 +65,7 @@ class User extends Authenticatable
         return 'username';
     }
 
-    protected static function booted()
-    {
-        static::deleting(function ($user) {
-            // if ($user->isForceDeleting()) {
-            //     $user->addresses()->forceDelete();
-            // } else {
-            //     $user->addresses()->delete();
-            // }
-        });
-    }
+
 
     public function name()
     {

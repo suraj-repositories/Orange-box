@@ -20,11 +20,11 @@
                     </div>
                 </div>
 
-                @include('user.dashboard.partials.tags', ['tags' => $tags])
+                @include('user.dashboard.partials.tags', ['quickLinks' => $quickLinks])
 
                 @include('user.dashboard.partials.dashboard-cards-section')
 
-                @include('user.dashboard.partials.who-to-follow')
+                @include('user.dashboard.partials.who-to-follow', ['users' => $users])
 
 
                 <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mb-2">
