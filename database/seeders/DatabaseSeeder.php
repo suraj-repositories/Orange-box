@@ -21,5 +21,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ProjectModuleTypeSeeder::class);
         $this->call(SocialMediaPlatformSeeder::class);
         $this->call(SettingsSeeder::class);
+        $this->call(AppThemeSeeder::class);
+        $this->call(QuickLinkSeeder::class);
+        $this->call(DocumentationTemplateSeeder::class);
     }
 }

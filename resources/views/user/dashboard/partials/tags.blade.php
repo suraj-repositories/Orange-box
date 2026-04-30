@@ -8,7 +8,7 @@
          @foreach ($quickLinks as $quickLink)
              @php
                  $url = $quickLink->route_name
-                     ? route($quickLink->route_name, json_decode($quickLink->route_params ?? '[]', true))
+                     ? authRoute($quickLink->route_name, json_decode($quickLink->route_params ?? '[]', true))
                      : $quickLink->external_url;
              @endphp
 

@@ -1,12 +1,6 @@
 @extends('user.layout.layout')
 @section('title', Route::is('user.dashboard') ? $title : '🟢🟢🟢')
 
-
-@section('css')
-    <style>
-
-    </style>
-@endsection
 @section('content')
 
     <div class="content-page analytics-dashboard">
@@ -20,25 +14,32 @@
                     </div>
                 </div>
 
-                @include('user.dashboard.partials.tags', ['quickLinks' => $quickLinks])
+                @if (!$quickLinks->isEmpty())
+                    @include('user.dashboard.partials.tags', ['quickLinks' => $quickLinks])
+                @endif
 
                 @include('user.dashboard.partials.dashboard-cards-section')
 
-                @include('user.dashboard.partials.who-to-follow', ['users' => $users])
+                @if (!$users->isEmpty())
+                    @include('user.dashboard.partials.who-to-follow', ['users' => $users])
+                @endif
 
 
-                <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mb-2">
-                    <h3 class="mb-0 fs-6 text-muted"> <i class="bi bi-gem me-1"></i> Featured Templates</h3>
-                </div>
+                @if (!$featuredTemplates->isEmpty())
+                    <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mb-2">
+                        <h3 class="mb-0 fs-6 text-muted"> <i class="bi bi-gem me-1"></i> Featured Templates</h3>
+                    </div>
 
-                <x-user.docs.template-list :templates="[1, 2, 3, 4, 5, 6]" />
+                    <x-user.docs.template-list :templates="$featuredTemplates" />
+                @endif
 
-                <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mb-2">
-                    <h3 class="mb-0 fs-6 text-muted"> <i class="bi bi-journal-richtext me-1"></i> Top Templates</h3>
-                </div>
+                @if (!$topTemplates->isEmpty())
+                    <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mb-2">
+                        <h3 class="mb-0 fs-6 text-muted"> <i class="bi bi-journal-richtext me-1"></i> Top Templates</h3>
+                    </div>
 
-
-                <x-user.docs.template-list :templates="[1, 2]" />
+                    <x-user.docs.template-list :templates="$topTemplates" />
+                @endif
 
                 <div class="my-4 mt-5 text-center">
                     <h2 class="fs-6 fw-bold">Need a quick walkthrough?</h2>
@@ -58,5 +59,4 @@
 @endsection
 @section('js')
     <script src="{{ asset('assets/js/pages/dashboard.js') }}"></script>
-
 @endsection

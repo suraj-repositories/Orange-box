@@ -15047,7 +15047,13 @@ body[data-menu-color=dark][data-leftbar-size=condensed] #wrapper .app-sidebar-me
 }
 
 .notification-list .profile-dropdown .notify-item {
-    padding: 7px 20px
+    padding: 7px 12px;
+}
+
+.logout-button:hover {
+    color: #f64646;
+    background: #fff0f0;
+    border-radius: 5px;
 }
 
 .profile-dropdown {
@@ -15095,7 +15101,7 @@ body[data-menu-color=dark][data-leftbar-size=condensed] #wrapper .app-sidebar-me
     }
 
     .topbar-custom .dropdown .dropdown-menu {
-        left: 10px !important;
+        /* left: 10px !important; */
         right: 10px !important
     }
 }

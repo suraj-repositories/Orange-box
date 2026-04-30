@@ -4071,12 +4071,12 @@ ul.directory-list.active {
 
 
 .tag-scroll-wrapper .tag-chip.tag-chip-danger {
-    background-color: #fdeaea;
+    background-color: #fdeaeac9;
     border-color: rgba(220, 53, 69, 0.2);
 }
 
 .tag-scroll-wrapper .tag-chip.tag-chip-danger:hover {
-    background-color: #f8d7da;
+    background-color: #f8d7dade;
     border-color: rgba(220, 53, 69, 0.35);
 }
 
@@ -4088,7 +4088,50 @@ ul.directory-list.active {
     color: #c82333;
 }
 
-/* arrows */
+.tag-scroll-wrapper .tag-chip.tag-chip-info {
+    background-color: #eafdfdc9;
+    border-color: rgba(53, 201, 220, 0.301);
+}
+
+.tag-scroll-wrapper .tag-chip.tag-chip-info:hover {
+    background-color: #d7f2f8de;
+    border-color: rgba(53, 209, 220, 0.466);
+}
+
+.tag-scroll-wrapper .tag-chip.tag-chip-info i {
+    color: #35c9dc;
+}
+
+.tag-scroll-wrapper .tag-chip.tag-chip-info:hover i {
+    color: #23b5c8;
+}
+.tag-scroll-wrapper .tag-chip.tag-chip-warning {
+    background-color: rgba(255, 223, 128, 0.21);
+    border-color: rgba(255, 193, 7, 0.25);
+}
+
+.tag-scroll-wrapper .tag-chip.tag-chip-warning:hover {
+    background-color: rgba(255, 223, 128, 0.315);
+    border-color: rgba(255, 193, 7, 0.4);
+}
+
+.tag-scroll-wrapper .tag-chip.tag-chip-warning i {
+    color: rgba(240, 180, 0, 0.93)
+}
+
+.tag-scroll-wrapper .tag-chip.tag-chip-warning:hover i {
+    color: rgb(231, 176, 11);
+}
+.tag-scroll-wrapper .tag-chip.tag-chip-secondary {
+      background-color: rgba(33, 37, 41, 0.04);
+    border-color: rgba(33, 37, 41, 0.2);
+}
+
+.tag-scroll-wrapper .tag-chip.tag-chip-secondary:hover {
+    background-color: rgba(33, 37, 41, 0.1);
+    border-color: rgba(33, 37, 41, 0.35);
+}
+
 .tag-scroll-wrapper .scroll-btn {
     position: absolute;
     top: 50%;

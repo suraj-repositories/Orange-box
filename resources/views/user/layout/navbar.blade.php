@@ -38,7 +38,7 @@
                                 class="mdi mdi-chevron-down"></i>
                         </span>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
+                    <div class="dropdown-menu dropdown-menu-end profile-dropdown p-2">
 
                         <div class="dropdown-header noti-title">
                             <h6 class="text-overflow m-0">Welcome {{ auth()->user()->name() }}!</h6>
@@ -58,12 +58,16 @@
                             <i class="mdi mdi-cog-outline fs-16 align-middle"></i>
                             <span>Settings</span>
                         </a>
+                        <a class='dropdown-item notify-item' href='{{ authRoute('user.settings.index') }}'>
+                            <i class="mdi mdi-help-circle-outline fs-16 align-middle"></i>
+                            <span>Help</span>
+                        </a>
 
                         <div class="dropdown-divider"></div>
 
                         <form action="{{ route('auth.logout') }}" method="POST">
                             @csrf
-                            <button class='dropdown-item notify-item'>
+                            <button class='dropdown-item notify-item logout-button'>
                                 <i class="mdi mdi-location-exit fs-16 align-middle"></i>
                                 <span>Logout</span>
                             </button>

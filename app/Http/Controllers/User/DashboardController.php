@@ -30,10 +30,15 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
+        $topTemplates = collect();
+        $featuredTemplates = collect();
+
         return view('user.dashboard.dashboard', [
             'title' => $title,
             'quickLinks' => $quickLinks,
-            'users' => $users
+            'users' => $users,
+            'topTemplates' => $topTemplates,
+            'featuredTemplates' => $featuredTemplates,
         ]);
     }
 
