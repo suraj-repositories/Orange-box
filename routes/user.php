@@ -23,6 +23,7 @@ use App\Http\Controllers\User\Documentation\SocialLinksController;
 use App\Http\Controllers\User\Documentation\TermsController;
 use App\Http\Controllers\User\EducationController;
 use App\Http\Controllers\User\FolderFactoryController;
+use App\Http\Controllers\User\FollowController;
 use App\Http\Controllers\User\NotificationController;
 use App\Http\Controllers\User\PasswordLockerController;
 use App\Http\Controllers\User\ProfileController;
@@ -331,6 +332,7 @@ Route::controller(DocumentationPagesController::class)->group(function () {
     Route::post('/documentation/pages/move', 'move')->name('documentation.pages.move');
 });
 
-Route::controller(FaqController::class)->group(function(){
-    Route::get('faqs', 'index')->name('faq.index');
-});
+Route::get('faqs', [FaqController::class, 'index'])->name('faq.index');
+
+Route::post('follow/{id}', [FollowController::class, 'follow'])->name('follow');
+Route::post('unfollow/{id}', [FollowController::class, 'unfollow'])->name('unfollow');

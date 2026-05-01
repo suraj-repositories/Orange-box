@@ -5,33 +5,36 @@
              <h5 class="fs-16 text-dark fw-semibold  text-capitalize">Experience</h5>
              <div class="ms-auto fw-semibold d-flex gap-2 align-items-center">
 
-                 <button id="create-work-experience" class="btn btn-light btn-sm border center-content gap-1">
-                     <i class="bx bx-plus fs-5"></i>
-                     <div>Create</div>
-                 </button>
+                 @php $editable = Route::is('user.profile.index'); @endphp
+                 @if ($editable)
+                     <button id="create-work-experience" class="btn btn-light btn-sm border center-content gap-1">
+                         <i class="bx bx-plus fs-5"></i>
+                         <div>Create</div>
+                     </button>
 
-                 <div class="dropdown">
-                     <a class="dropdown-toggle btn btn-light btn-sm border center-content" href="#" role="button"
-                         data-bs-toggle="dropdown" aria-expanded="false">
-                         <i class='bx bx-menu-alt-right fs-5 me-1'></i> Options
-                     </a>
-                     <ul class="dropdown-menu" style="min-width: 220px;">
-                         <li>
-                             <label class="dropdown-item d-flex align-items-center gap-2">
-                                 <input type="checkbox" class="form-check-input m-0" id="work-experience-enable-editing"
-                                     checked="false">
-                                 <span class="cursor-pointer">Enable Editing</span>
-                             </label>
-                         </li>
-                         <li>
-                             <label class="dropdown-item d-flex align-items-center gap-2">
-                                 <input type="checkbox" class="form-check-input m-0"
-                                     id="work-experience-enable-deletion" checked="false">
-                                 <span class="cursor-pointer">Enable Deletion</span>
-                             </label>
-                         </li>
-                     </ul>
-                 </div>
+                     <div class="dropdown">
+                         <a class="dropdown-toggle btn btn-light btn-sm border center-content" href="#"
+                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                             <i class='bx bx-menu-alt-right fs-5 me-1'></i> Options
+                         </a>
+                         <ul class="dropdown-menu" style="min-width: 220px;">
+                             <li>
+                                 <label class="dropdown-item d-flex align-items-center gap-2">
+                                     <input type="checkbox" class="form-check-input m-0"
+                                         id="work-experience-enable-editing" checked="false">
+                                     <span class="cursor-pointer">Enable Editing</span>
+                                 </label>
+                             </li>
+                             <li>
+                                 <label class="dropdown-item d-flex align-items-center gap-2">
+                                     <input type="checkbox" class="form-check-input m-0"
+                                         id="work-experience-enable-deletion" checked="false">
+                                     <span class="cursor-pointer">Enable Deletion</span>
+                                 </label>
+                             </li>
+                         </ul>
+                     </div>
+                 @endif
              </div>
          </div>
      </div>
@@ -48,25 +51,28 @@
 
 
                          </div>
-                         <div class="d-flex flex-column gap-2 p-2 mt-1">
-                             <button class="btn-no-style edit-btn edit-work-experience"
-                                 data-work-experience-id="{{ $experience->id }}"
-                                 data-job-title="{{ $experience->job_title }}"
-                                 data-employment-type="{{ $experience->employment_type }}"
-                                 data-company="{{ $experience->company }}"
-                                 data-company-logo="{{ $experience->logo_url }}"
-                                 data-currently-working="{{ $experience->currently_working ? 'yes' : '' }}"
-                                 data-start-date="{{ $experience->start_date?->format('Y-m-d') ?? '' }}"
-                                 data-end-date="{{ $experience->end_date?->format('Y-m-d') ?? '' }}"
-                                 data-currently-working="{{ $experience->currently_working }}"
-                                 data-description="{{ $experience->description }}"
-                                 data-location="{{ $experience->location }}">
-                                 <i class="bx bx-edit fs-5 text-success"></i>
-                             </button>
-                             <button class="btn-no-style delete-btn delete-work-experience"
-                                 data-delete-url="{{ authRoute('user.work_experience.delete', ['workExperience' => $experience]) }}"><i
-                                     class="bx bx-trash fs-5 text-danger"></i></button>
-                         </div>
+
+                         @if ($editable)
+                             <div class="d-flex flex-column gap-2 p-2 mt-1">
+                                 <button class="btn-no-style edit-btn edit-work-experience"
+                                     data-work-experience-id="{{ $experience->id }}"
+                                     data-job-title="{{ $experience->job_title }}"
+                                     data-employment-type="{{ $experience->employment_type }}"
+                                     data-company="{{ $experience->company }}"
+                                     data-company-logo="{{ $experience->logo_url }}"
+                                     data-currently-working="{{ $experience->currently_working ? 'yes' : '' }}"
+                                     data-start-date="{{ $experience->start_date?->format('Y-m-d') ?? '' }}"
+                                     data-end-date="{{ $experience->end_date?->format('Y-m-d') ?? '' }}"
+                                     data-currently-working="{{ $experience->currently_working }}"
+                                     data-description="{{ $experience->description }}"
+                                     data-location="{{ $experience->location }}">
+                                     <i class="bx bx-edit fs-5 text-success"></i>
+                                 </button>
+                                 <button class="btn-no-style delete-btn delete-work-experience"
+                                     data-delete-url="{{ authRoute('user.work_experience.delete', ['workExperience' => $experience]) }}"><i
+                                         class="bx bx-trash fs-5 text-danger"></i></button>
+                             </div>
+                         @endif
 
                      </div>
                      <div class="exper-item-list">

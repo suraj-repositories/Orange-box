@@ -1,6 +1,6 @@
 @extends('user.layout.layout')
 
-@section('title', Route::is('user.profile.index') ? 'My Profile' : '🟢🟢🟢')
+@section('title', Route::is('users.profile.index') ? 'Profile' : '🟢🟢🟢')
 
 @section('content')
     <div class="content-page">
@@ -9,12 +9,13 @@
             <div class="container-xxl">
                 <div class="py-3 d-flex align-items-sm-center flex-sm-row flex-column">
                     <div class="flex-grow-1">
-                        <h4 class="fs-18 fw-semibold m-0">My Profile</h4>
+                        <h4 class="fs-18 fw-semibold m-0">Profile</h4>
                     </div>
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ authRoute('user.dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('users.index') }}">Users</a></li>
                             <li class="breadcrumb-item active">Profile</li>
                         </ol>
                     </div>
@@ -35,13 +36,7 @@
                                             <img src="{{ $user->profilePicture() }}"
                                                 class="user_profile_picture rounded-circle avatar-xxl img-thumbnail float-start"
                                                 alt="image profile">
-                                            <label class="profile-edit-image-label">
-                                                <i class='bx bx-edit'></i>
-                                                <input type="file" class="hide" name="profile_picture"
-                                                    id="profile_image_edit_btn"
-                                                    data-image-submit-url="{{ authRoute('user.profile.profile_image.save') }}"
-                                                    accept=".png, .jpg, .jpeg, .avif, .webp, .gif, .svg, .ico">
-                                            </label>
+
                                         </div>
                                         <div class="overflow-hidden">
                                             <h4 class="m-0 text-dark fs-20">{{ $user->fullname() }} <small
@@ -92,20 +87,7 @@
                                             <span class="d-none d-sm-block">Education</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link p-2 {{ request('tab') == 'setting' ? 'active' : '' }}"
-                                            id="setting_tab" data-bs-toggle="tab" href="#tab_setting" role="tab">
-                                            <span class="d-block d-sm-none"><i class="mdi mdi-cog-outline"></i></span>
-                                            <span class="d-none d-sm-block">Setting</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link p-2 {{ request('tab') == 'locker' ? 'active' : '' }}"
-                                            id="locker_tab" data-bs-toggle="tab" href="#tab_locker" role="tab">
-                                            <span class="d-block d-sm-none"><i class="mdi mdi-lock-outline"></i></span>
-                                            <span class="d-none d-sm-block">Password Locker</span>
-                                        </a>
-                                    </li>
+
                                 </ul>
 
                                 <div class="tab-content text-muted bg-white">
@@ -122,42 +104,6 @@
                                     <div class="tab-pane pt-4 {{ request('tab') == 'education' ? 'active show' : '' }}"
                                         id="tab_education" role="tabpanel">
                                         <x-account.education-component :educations="$educations" />
-                                    </div>
-
-                                    <div class="tab-pane {{ request('tab') == 'setting' ? 'active show' : '' }}"
-                                        id="tab_setting" role="tabpanel">
-                                        <div class="row">
-
-                                            <div class="row g-3">
-                                                <div class="col-lg-6 col-xl-6">
-                                                    <div class="row g-3">
-                                                        <div class="col-12">
-                                                            @include('user.account.profile.personal_information_form')
-
-                                                        </div>
-                                                        <div class="col-12">
-                                                            @include('user.account.profile.address_details_form')
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-xl-6">
-                                                    <div class="row g-3">
-                                                        <div class="col-12">
-                                                            @include('user.account.profile.social_media_links_form')
-
-                                                        </div>
-                                                        <div class="col-12">
-                                                            @include('user.account.profile.user_skill_form')
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane {{ request('tab') == 'locker' ? 'active show' : '' }}"
-                                        id="tab_locker" role="tabpanel">
-                                        <x-account.password-locker-component :passwords="$passwords" />
                                     </div>
 
                                 </div>
@@ -177,7 +123,6 @@
 @endsection
 
 @section('js')
-    <script src="{{ asset('assets/js/pages/password-locker.js') }}"></script>
     <script src="{{ asset('assets/js/pages/work-experience.js') }}"></script>
     <script src="{{ asset('assets/js/pages/education.js') }}"></script>
     <script src="{{ asset('assets/js/pages/user-profile.js') }}"></script>

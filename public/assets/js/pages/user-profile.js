@@ -138,9 +138,10 @@ class ProfileImageEditor {
     init() {
 
         const input = document.querySelector(this.inputElementSelector);
+        if(!input)return;
         const submitUrl = input.getAttribute('data-image-submit-url');
 
-        if (!submitUrl || !input) {
+        if (!submitUrl) {
             return;
         }
         input.addEventListener('change', async () => {

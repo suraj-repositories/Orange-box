@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 class EducationControl {
     init() {
+        const createable = document.querySelector("#create-education");
+        if (!createable) return;
         this.enableEducationCreation("#create-education", authRoute('user.education.save'));
         this.enableEducationEditing(".edit-education");
         this.enableEducationDeletion(".delete-education");
@@ -245,49 +247,49 @@ class EducationControl {
 
 
 
- function enableEducationImagePick(input) {
+function enableEducationImagePick(input) {
 
-        const modal = document.getElementById("education-form-modal");
-        const imageBox = document.getElementById('institution-logo-preivew');
+    const modal = document.getElementById("education-form-modal");
+    const imageBox = document.getElementById('institution-logo-preivew');
 
-        const file = input.files[0];
+    const file = input.files[0];
 
-        if (file) {
-            const reader = new FileReader();
+    if (file) {
+        const reader = new FileReader();
 
-            reader.onload = function (e) {
+        reader.onload = function (e) {
 
-                const img = document.createElement('img');
-                img.classList.add('square-60');
-                img.classList.add('border');
-                img.classList.add('rounded');
+            const img = document.createElement('img');
+            img.classList.add('square-60');
+            img.classList.add('border');
+            img.classList.add('rounded');
 
-                img.src = e.target.result;
+            img.src = e.target.result;
 
-                if (modal.getAttribute('data-form-mode') == "create") {
+            if (modal.getAttribute('data-form-mode') == "create") {
+                imageBox.innerHTML = '';
+                imageBox.appendChild(img);
+            } else if (modal.getAttribute('data-form-mode') == "edit") {
+                const currentImage = imageBox.querySelector('.current-image');
+
+                if (currentImage) {
+                    imageBox.innerHTML = currentImage.outerHTML;
+                    imageBox.appendChild(img);
+                } else {
                     imageBox.innerHTML = '';
                     imageBox.appendChild(img);
-                } else if (modal.getAttribute('data-form-mode') == "edit") {
-                    const currentImage = imageBox.querySelector('.current-image');
-
-                    if (currentImage) {
-                        imageBox.innerHTML = currentImage.outerHTML;
-                        imageBox.appendChild(img);
-                    } else {
-                        imageBox.innerHTML = '';
-                        imageBox.appendChild(img);
-                    }
                 }
+            }
 
-            };
+        };
 
-            reader.readAsDataURL(file);
-        } else {
-            imageBox.innerHTML = '';
-        }
-
-
-
-
-
+        reader.readAsDataURL(file);
+    } else {
+        imageBox.innerHTML = '';
     }
+
+
+
+
+
+}

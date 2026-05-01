@@ -425,9 +425,9 @@ return [
             ],
 
             'config' => [
-                'default_mode' => 'light', // light | dark | auto
+                'default_mode' => 'light',
                 'allowed_modes' => ['light', 'dark'],
-                'layout' => 'wide', // wide | boxed
+                'layout' => 'wide',
                 'font' => 'inter',
             ],
 

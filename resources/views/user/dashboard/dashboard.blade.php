@@ -21,7 +21,16 @@
                 @include('user.dashboard.partials.dashboard-cards-section')
 
                 @if (!$users->isEmpty())
-                    @include('user.dashboard.partials.who-to-follow', ['users' => $users])
+                    <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mt-3 mb-2">
+                        <h3 class="mb-0 fs-6 text-muted"> <i class="bi bi-globe-americas me-1"></i> Who to Follow</h3>
+
+                        <a href="{{ route('users.index') }}" class="btn btn-light btn-sm border">Show All <i
+                                class="bi bi-arrow-right"></i></a>
+
+                    </div>
+                    @include('user.dashboard.partials.user-card-slider', [
+                        'users' => $users,
+                    ])
                 @endif
 
 

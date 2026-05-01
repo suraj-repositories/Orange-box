@@ -3,9 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
     initUserScroll();
 
     initUserBlurBackground();
+    enableFollowControl();
 });
 
- function initTagScroll() {
+function initTagScroll() {
     const container = document.getElementById('tagScrollContainer');
     if (!container) return;
 
@@ -74,39 +75,94 @@ function initUserBlurBackground() {
     });
 }
 
-
 function initUserScroll() {
-    const container = document.getElementById('userScrollContainer');
-    if (!container) return;
+    const containers = document.querySelectorAll('.user-scroll-container');
 
-    const wrapper = container.closest('.user-scroll-wrapper');
-    const leftBtn = wrapper?.querySelector('.scroll-btn.left');
-    const rightBtn = wrapper?.querySelector('.scroll-btn.right');
+    if (!containers.length) return;
 
-    if (!leftBtn || !rightBtn) return;
+    containers.forEach((container) => {
+        const wrapper = container.closest('.user-scroll-wrapper');
+        if (!wrapper) return;
 
-    function scrollUsers(direction) {
-        const amount = container.clientWidth * 0.8;
-        container.scrollBy({
-            left: direction * amount,
-            behavior: 'smooth'
-        });
+        const leftBtn = wrapper.querySelector('.scroll-btn.left');
+        const rightBtn = wrapper.querySelector('.scroll-btn.right');
+
+        if (!leftBtn || !rightBtn) return;
+
+        function scrollUsers(direction) {
+            const amount = container.clientWidth * 0.8;
+            container.scrollBy({
+                left: direction * amount,
+                behavior: 'smooth'
+            });
+        }
+
+        function updateUI() {
+            const maxScroll = container.scrollWidth - container.clientWidth;
+
+            const atStart = container.scrollLeft <= 0;
+            const atEnd = container.scrollLeft >= maxScroll - 1;
+
+            leftBtn.style.display = atStart ? 'none' : 'flex';
+            rightBtn.style.display = atEnd ? 'none' : 'flex';
+        }
+
+        // Attach button events per instance
+        leftBtn.addEventListener('click', () => scrollUsers(-1));
+        rightBtn.addEventListener('click', () => scrollUsers(1));
+
+        container.addEventListener('scroll', updateUI);
+        window.addEventListener('resize', updateUI);
+
+        updateUI();
+    });
+}
+
+function enableFollowControl() {
+    const buttons = document.querySelectorAll('.follow-btn');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => handleFollowToggle(button));
+    });
+
+    async function handleFollowToggle(button) {
+        const isFollowing = button.dataset.following === "true";
+        const url = isFollowing
+            ? button.dataset.unfollowUrl
+            : button.dataset.followUrl;
+
+        try {
+
+            button.disabled = true;
+            button.textContent = 'Loading...';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': getCsrfToken(),
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        button.dataset.following = (!isFollowing).toString();
+                    } else {
+                        Toastify.error(data.message);
+                    }
+                    button.textContent = isFollowing ? 'Follow' : 'Unfollow';
+                    button.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Toastify.error('Something went wrong!');
+
+                });
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
-    window.scrollUsers = scrollUsers;
-
-    function updateUI() {
-        const maxScroll = container.scrollWidth - container.clientWidth;
-
-        const atStart = container.scrollLeft <= 0;
-        const atEnd = container.scrollLeft >= maxScroll - 1;
-
-        leftBtn.style.display = atStart ? 'none' : 'flex';
-        rightBtn.style.display = atEnd ? 'none' : 'flex';
+    function getCsrfToken() {
+        return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     }
-
-    container.addEventListener('scroll', updateUI);
-    window.addEventListener('resize', updateUI);
-
-    updateUI();
 }

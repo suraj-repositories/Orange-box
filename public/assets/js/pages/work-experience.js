@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 class WorkExperienceControl {
     init() {
+        const createable = document.querySelector("#create-work-experience");
+        if (!createable) {
+            return;
+        }
         this.enableWorkExperienceCreation("#create-work-experience", authRoute('user.work_experience.save'));
         this.enableWorkExperienceEditing(".edit-work-experience");
         this.enableWorkExperienceDeletion(".delete-work-experience");
@@ -263,45 +267,45 @@ class WorkExperienceControl {
 
 }
 
- function enableWorkExperienceImagePick(input) {
+function enableWorkExperienceImagePick(input) {
 
-        const modal = document.getElementById("work-experience-form-modal");
-        const imageBox = document.getElementById('company-logo-preivew');
+    const modal = document.getElementById("work-experience-form-modal");
+    const imageBox = document.getElementById('company-logo-preivew');
 
-        const file = input.files[0];
+    const file = input.files[0];
 
-        if (file) {
-            const reader = new FileReader();
+    if (file) {
+        const reader = new FileReader();
 
-            reader.onload = function (e) {
+        reader.onload = function (e) {
 
-                const img = document.createElement('img');
-                img.classList.add('square-60');
-                img.classList.add('border');
-                img.classList.add('rounded');
+            const img = document.createElement('img');
+            img.classList.add('square-60');
+            img.classList.add('border');
+            img.classList.add('rounded');
 
-                img.src = e.target.result;
+            img.src = e.target.result;
 
-                if (modal.getAttribute('data-form-mode') == "create") {
+            if (modal.getAttribute('data-form-mode') == "create") {
+                imageBox.innerHTML = '';
+                imageBox.appendChild(img);
+            } else if (modal.getAttribute('data-form-mode') == "edit") {
+                const currentImage = imageBox.querySelector('.current-image');
+
+                if (currentImage) {
+                    imageBox.innerHTML = currentImage.outerHTML;
+                    imageBox.appendChild(img);
+                } else {
                     imageBox.innerHTML = '';
                     imageBox.appendChild(img);
-                } else if (modal.getAttribute('data-form-mode') == "edit") {
-                    const currentImage = imageBox.querySelector('.current-image');
-
-                    if (currentImage) {
-                        imageBox.innerHTML = currentImage.outerHTML;
-                        imageBox.appendChild(img);
-                    } else {
-                        imageBox.innerHTML = '';
-                        imageBox.appendChild(img);
-                    }
                 }
+            }
 
 
-            };
+        };
 
-            reader.readAsDataURL(file);
-        } else {
-            imageBox.innerHTML = '';
-        }
+        reader.readAsDataURL(file);
+    } else {
+        imageBox.innerHTML = '';
     }
+}
