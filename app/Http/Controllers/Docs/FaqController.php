@@ -15,8 +15,6 @@ class FaqController extends Controller
     //
     public function index(User $user, $slug, $version)
     {
-        dd($slug, $version);
-
         $documentation = Documentation::where('user_id', $user->id)
             ->where('url', $slug ?? '')
             ->firstOrFail();

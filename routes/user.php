@@ -15,7 +15,8 @@ use App\Http\Controllers\User\Documentation\DocumentationDocumentController;
 use App\Http\Controllers\User\Documentation\DocumentationPagesController;
 use App\Http\Controllers\User\Documentation\DocumentationReleaseController;
 use App\Http\Controllers\User\Documentation\DocumentationSponsorController;
-use App\Http\Controllers\User\Documentation\FaqController;
+use App\Http\Controllers\User\Documentation\FaqController as DocumentationFaqController;
+use App\Http\Controllers\User\FaqController;
 use App\Http\Controllers\User\Documentation\PartnersController as DocumentationPartnersController;
 use App\Http\Controllers\User\Documentation\PrivacyPolicyController;
 use App\Http\Controllers\User\Documentation\SocialLinksController;
@@ -251,7 +252,7 @@ Route::controller(CommunityGuideController::class)->group(function () {
     Route::post('documentation-doc/{document}/community-guide', 'update')->name('documentation.community-guide.save');
 });
 
-Route::controller(FaqController::class)->group(function () {
+Route::controller(DocumentationFaqController::class)->group(function () {
     Route::get('documentation-doc/{document}/faqs', 'index')->name('documentation.faqs.index');
     Route::post('documentation-doc/{document}/faqs', 'store')->name('documentation.faqs.save');
     Route::patch('documentation-faqs/{faq}/status', 'updateStatus')->name('documentation.faqs.status.update');
@@ -328,4 +329,8 @@ Route::controller(DocumentationPagesController::class)->group(function () {
     Route::patch('documentation/{docPage}/rename', 'renamePageOrFolder')->name('documentation.pages.rename');
     Route::delete('documentation/{docPage}/destroy', 'deletePageOrFolder')->name('documentation.pages.delete');
     Route::post('/documentation/pages/move', 'move')->name('documentation.pages.move');
+});
+
+Route::controller(FaqController::class)->group(function(){
+    Route::get('faqs', 'index')->name('faq.index');
 });

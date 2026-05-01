@@ -47,7 +47,7 @@
                         Learn how to manage projects, organize ideas, and use tools like Think Space and Project Tracker
                         efficiently.
                     </p>
-                    <button class="btn btn-primary btn-sm">View Guide</button>
+                    <a class="btn btn-primary btn-sm" href="{{ authRoute('user.faq.index') }}">View Guide</a>
                 </div>
 
             </div>

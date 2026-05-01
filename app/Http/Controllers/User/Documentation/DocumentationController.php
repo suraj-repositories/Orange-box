@@ -98,9 +98,10 @@ class DocumentationController extends Controller
 
             DocumentationRelease::create([
                 'documentation_id' => $documentation->id,
+                'title' => 'Beta',
                 'version' => 'v1.0.0',
                 'is_current' => true,
-                'is_published' => false
+                'is_published' => true
             ]);
 
             return redirect()

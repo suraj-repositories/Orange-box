@@ -58,7 +58,7 @@
                             <i class="mdi mdi-cog-outline fs-16 align-middle"></i>
                             <span>Settings</span>
                         </a>
-                        <a class='dropdown-item notify-item' href='{{ authRoute('user.settings.index') }}'>
+                        <a class='dropdown-item notify-item' href='{{ authRoute('user.faq.index') }}'>
                             <i class="mdi mdi-help-circle-outline fs-16 align-middle"></i>
                             <span>Help</span>
                         </a>

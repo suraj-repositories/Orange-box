@@ -1,16 +1,18 @@
   <div class="row g-0 sidebar-sponsors">
 
       <div class="col-12 sponsor-column">
-          <a href="{{ route('docs.extras.show', [
-              'user' => request('user')['username'],
-              'slug' => $documentation->url,
-              'version' => request('version') ?? 'all',
-              'type' => $document->type,
-          ]) }}"
-              class="border border-gray-100 sponsors-m-2 p-3 card-height text-center d-flex align-items-center justify-content-center">
-              <span>Inquire about special sponsorship</span>
+          @if (!empty($document))
+              <a href="{{ route('docs.extras.show', [
+                  'user' => request('user')['username'],
+                  'slug' => $documentation->url,
+                  'version' => request('version') ?? 'all',
+                  'type' => $document->type,
+              ]) }}"
+                  class="border border-gray-100 sponsors-m-2 p-3 card-height text-center d-flex align-items-center justify-content-center">
+                  <span>Inquire about special sponsorship</span>
 
-          </a>
+              </a>
+          @endif
       </div>
 
       @foreach ($sponsors as $sponsor)

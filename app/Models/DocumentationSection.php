@@ -20,7 +20,7 @@ class DocumentationSection extends Model
 
     public function page()
     {
-        return $this->belongsTo(DocumentationPage::class, 'documentation_page_id');
+        return $this->belongsTo(DocumentationPage::class, 'documentation_page_id', 'id');
     }
 
     public function toSearchableArray()
@@ -29,7 +29,7 @@ class DocumentationSection extends Model
             'id' => $this->id,
             'heading' => $this->heading,
             'content' => strip_tags($this->content),
-            'page_id' => $this->documentation_page_id,
+            'documentation_page_id' => $this->documentation_page_id,
         ];
     }
 }
