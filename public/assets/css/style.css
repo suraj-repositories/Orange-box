@@ -4105,6 +4105,7 @@ ul.directory-list.active {
 .tag-scroll-wrapper .tag-chip.tag-chip-info:hover i {
     color: #23b5c8;
 }
+
 .tag-scroll-wrapper .tag-chip.tag-chip-warning {
     background-color: rgba(255, 223, 128, 0.21);
     border-color: rgba(255, 193, 7, 0.25);
@@ -4122,8 +4123,9 @@ ul.directory-list.active {
 .tag-scroll-wrapper .tag-chip.tag-chip-warning:hover i {
     color: rgb(231, 176, 11);
 }
+
 .tag-scroll-wrapper .tag-chip.tag-chip-secondary {
-      background-color: rgba(33, 37, 41, 0.04);
+    background-color: rgba(33, 37, 41, 0.04);
     border-color: rgba(33, 37, 41, 0.2);
 }
 
@@ -4505,4 +4507,106 @@ ul.directory-list.active {
 
 .user-scroll-wrapper .scroll-btn.right {
     right: 5px;
+}
+
+.doc-form-template {
+    padding: 10px;
+    border: 1px solid var(--bs-gray-400);
+    border-radius: 10px;
+
+}
+
+.doc-form-template .template-image-area {
+    padding: 5px;
+    border: 1px solid var(--bs-gray-300);
+    border-radius: 10px;
+
+}
+
+.doc-form-template .template-image-area img {
+    width: 100%;
+}
+
+.doc-form-template .data-area .paid-type i {
+    font-size: 20px;
+    color: var(--bs-success);
+}
+
+.doc-form-template .data-area .paid-type h5 {
+    font-size: 16px;
+}
+
+.modal-template-cards .template-card {
+    position: relative;
+}
+
+
+.modal-template-cards .template-card img {
+    border-radius: 10px !important;
+    aspect-ratio: 16 / 10;
+    border: 1px solid #d1d1d199;
+}
+
+.modal-template-cards .template-card .template-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.modal-template-cards .template-card .template-meta .proflie-image {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #e6e6e61c;
+}
+
+.modal-template-cards .template-card .user-title {
+    display: flex;
+    align-items: center;
+}
+
+.modal-template-cards .template-card .template-meta h2 {
+    font-size: 14px;
+    margin-left: 5px;
+    text-wrap: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 220px;
+}
+
+.modal-template-cards .template-card .template-meta .rating {
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.modal-template-cards .template-card .template-meta .price-badge {
+    background-color: rgba(216, 216, 216, 0.62);
+    color: var(--bs-dark);
+    border-radius: 10px;
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+.modal-template-cards .selected-marker {
+    display: none;
+}
+
+.modal-template-cards .selectable-template.template-selected .selected-marker {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: var(--bs-success);
+    display: block;
+    font-size: 24px;
+}
+
+.modal-template-cards .selectable-template.template-selected img {
+    outline: 1px solid #44c046a8;
+}
+
+.modal-template-cards .selectable-template.template-selected {
+    color: var(--bs-success);
 }

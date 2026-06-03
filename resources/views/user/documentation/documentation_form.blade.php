@@ -153,6 +153,55 @@
                                             </div>
                                         </div>
 
+                                        <div class="col col-12 col-md-12 mb-3  ">
+                                            <label for="" class="mb-2">Select Template</label>
+                                            <input type="hidden" name="template_id" id="templateIdInput"
+                                                value="{{ $documentation?->documentation_template_id }}">
+                                            <div class="doc-form-template">
+                                                <div class="row g-3">
+                                                    <div class="col-md-5">
+                                                        <div class="template-image-area">
+                                                            <img src="{{ $documentation?->template?->preview_image_url ?? asset('assets/images/defaults/doc-template.png') }}"
+                                                                alt="">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-7">
+                                                        <div class="data-area mt-2 ">
+                                                            <div class="d-flex align-items-center gap-1  paid-type">
+                                                                <i class="bx bx-cube"></i>
+                                                                <h5 class="mb-0 paid-type-val">
+                                                                    {{ empty($documentation?->template?->price) ? 'Free' : 'Premium' }}
+                                                                </h5>
+                                                            </div>
+
+                                                            <h4 class="mt-3 fw-semibold " id="template-title">
+                                                                {{ $documentation?->template?->title ?? 'Default Template' }}
+                                                            </h4>
+
+                                                            <p id="template-description">
+                                                                @if ($documentation?->template?->description)
+                                                                    {{ $documentation->template->description }}
+                                                                @else
+                                                                    Lorem ipsum, dolor sit amet consectetur adipisicing
+                                                                    elit. Consequatur animi rerum hic architecto quibusdam
+                                                                    obcaecati repudiandae similique, nisi incidunt maxime
+                                                                    quasi. Doloremque ut delectus, esse ipsum consectetur
+                                                                    non quibusdam quae?
+                                                                @endif
+                                                            </p>
+
+                                                            <button class="btn btn-outline-dark" type="button">Show
+                                                                Info</button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @include('user.documentation.partials.select-template-button')
+                                        </div>
+
                                         <div class="col-12 mt-2">
                                             <button class="btn btn-primary" type="submit">
                                                 {{ !empty($documentation) ? 'Update' : 'Save' }}

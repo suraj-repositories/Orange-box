@@ -183,4 +183,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(DocumentationPage::class);
     }
+
+    public function templatePurchases()
+    {
+        return $this->hasMany(TemplatePurchase::class);
+    }
 }

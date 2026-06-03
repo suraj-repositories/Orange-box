@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Documentation;
 use App\Models\DocumentationDocument;
 use App\Models\DocumentationRelease;
+use App\Models\DocumentationTemplate;
+use App\Models\TemplatePurchase;
 use App\Models\User;
 use App\Services\FileService;
 use Dom\Document;
@@ -53,11 +55,28 @@ class DocumentationController extends Controller
             'logo_sm_light'  => 'nullable|image|max:2048',
             'logo_dark'      => 'nullable|image|max:2048',
             'logo_sm_dark'   => 'nullable|image|max:2048',
+            'template_id'    => 'nullable|numeric|exists:documentation_templates,id'
         ]);
 
         try {
 
             $slugUrl = Str::slug($validated['url']);
+
+            $templateId = null;
+            if ($validated['template_id']) {
+                $template = DocumentationTemplate::where('id', $validated['template_id'])->where('is_active', true)->first();
+
+                $isPurchased = TemplatePurchase::where('documentation_template_id', $validated['template_id'])
+                    ->where('user_id', $user->id)
+                    ->where('payment_status', 'paid')
+                    ->exists();
+
+                if (($template->price ?? 0) > 0 && !$isPurchased) {
+                    return redirect()->back()->with('error', 'Unpurchased template selected!');
+                }
+
+                $templateId = $template->id;
+            }
 
             $originalSlug = $slugUrl;
             $counter = 1;
@@ -94,6 +113,7 @@ class DocumentationController extends Controller
                 'logo_sm_light' => $logoSmLight,
                 'logo_dark'     => $logoDark,
                 'logo_sm_dark'  => $logoSmDark,
+                'documentation_template_id' => $templateId
             ]);
 
             DocumentationRelease::create([
@@ -151,6 +171,7 @@ class DocumentationController extends Controller
 
     public function update(User $user, Documentation $documentation, Request $request)
     {
+        // dd($request->all());
         if ($documentation->user_id !== $user->id) {
             return back()->with('error', 'Unauthorized access');
         }
@@ -162,6 +183,7 @@ class DocumentationController extends Controller
             'logo_sm_light'  => 'nullable|image|max:2048',
             'logo_dark'      => 'nullable|image|max:2048',
             'logo_sm_dark'   => 'nullable|image|max:2048',
+            'template_id'    => 'nullable|numeric|exists:documentation_templates,id'
         ]);
 
         try {
@@ -170,6 +192,23 @@ class DocumentationController extends Controller
 
             $originalSlug = $slugUrl;
             $counter = 1;
+
+            $templateId = null;
+            if ($validated['template_id']) {
+                $template = DocumentationTemplate::where('id', $validated['template_id'])->where('is_active', true)->first();
+
+                $isPurchased = TemplatePurchase::where('documentation_template_id', $validated['template_id'])
+                    ->where('user_id', $user->id)
+                    ->where('payment_status', 'paid')
+                    ->exists();
+
+                if (($template->price ?? 0) > 0 && !$isPurchased) {
+                    return redirect()->back()->with('error', 'Unpurchased template selected!');
+                }
+
+                $templateId = $template->id;
+            }
+
 
             while (
                 Documentation::where('user_id', $user->id)
@@ -182,6 +221,8 @@ class DocumentationController extends Controller
 
             $documentation->title = $validated['title'];
             $documentation->url   = $slugUrl;
+            $documentation->documentation_template_id = $templateId;
+
 
             $logoFields = [
                 'logo_light',

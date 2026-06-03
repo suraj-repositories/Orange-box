@@ -84,4 +84,9 @@ class Documentation extends Model
     {
         return $this->hasMany(DocumentationSocialLink::class);
     }
+
+    public function template()
+    {
+        return $this->belongsTo(DocumentationTemplate::class, 'documentation_template_id');
+    }
 }

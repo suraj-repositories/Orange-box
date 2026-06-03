@@ -15,6 +15,7 @@ use App\Http\Controllers\User\Documentation\DocumentationDocumentController;
 use App\Http\Controllers\User\Documentation\DocumentationPagesController;
 use App\Http\Controllers\User\Documentation\DocumentationReleaseController;
 use App\Http\Controllers\User\Documentation\DocumentationSponsorController;
+use App\Http\Controllers\User\Documentation\DocumentationTemplateController;
 use App\Http\Controllers\User\Documentation\FaqController as DocumentationFaqController;
 use App\Http\Controllers\User\FaqController;
 use App\Http\Controllers\User\Documentation\PartnersController as DocumentationPartnersController;
@@ -231,6 +232,9 @@ Route::controller(DocumentationController::class)->group(function () {
     Route::get('documentation/{documentation}/edit', 'edit')->name('documentation.edit');
     Route::post('documentation/{documentation}', 'update')->name('documentation.update');
     Route::delete('documentation/{documentation}', 'delete')->name('documentation.delete');
+});
+Route::controller(DocumentationTemplateController::class)->group(function () {
+    Route::get('templates', 'get')->name('templates.get');
 });
 
 Route::controller(PrivacyPolicyController::class)->group(function () {
