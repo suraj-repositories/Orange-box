@@ -95,6 +95,18 @@ composer dump-autoload
 <div style="display: flex;flex-direction: column; grid-gap: 10px;">
      <div style="display: flex; grid-gap: 10px;">
         <img src="screenshots/7.png" alt="screenshots" width="49%" style="border: 2px solid lightgreen"/>
+        <img src="screenshots/8.png" alt="screenshots" width="49%" style="border: 2px solid lightgreen"/>
+    </div>
+</div>
+<div style="display: flex;flex-direction: column; grid-gap: 10px;">
+     <div style="display: flex; grid-gap: 10px;">
+        <img src="screenshots/9.png" alt="screenshots" width="49%" style="border: 2px solid lightgreen"/>
+        <img src="screenshots/10.png" alt="screenshots" width="49%" style="border: 2px solid lightgreen"/>
+    </div>
+</div>
+<div style="display: flex;flex-direction: column; grid-gap: 10px;">
+     <div style="display: flex; grid-gap: 10px;">
+        <img src="screenshots/11.png" alt="screenshots" width="49%" style="border: 2px solid lightgreen"/>
         <!-- <img src="screenshots/8.png" alt="screenshots" width="49%" style="border: 2px solid lightgreen"/> -->
     </div>
 </div>
