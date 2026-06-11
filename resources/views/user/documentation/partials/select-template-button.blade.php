@@ -43,7 +43,7 @@
                     </li>
 
                 </ul>
-                <div class="tab-content modal-template-cards" id="myTabContent">
+                <div class="tab-content modal-template-cards" id="myTabContent" style="min-height: 200px">
                     <div class="tab-pane fade show active" id="free-templates" role="tabpanel"
                         aria-labelledby="home-tab" tabindex="0">
 
