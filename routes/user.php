@@ -235,6 +235,7 @@ Route::controller(DocumentationController::class)->group(function () {
 });
 Route::controller(DocumentationTemplateController::class)->group(function () {
     Route::get('templates', 'get')->name('templates.get');
+    Route::get('templates/{template}', 'show')->name('template.show');
 });
 
 Route::controller(PrivacyPolicyController::class)->group(function () {

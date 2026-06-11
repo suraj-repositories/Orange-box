@@ -37,7 +37,7 @@ class DocumentationTemplate extends Model
 
     public function getPreviewImageUrlAttribute()
     {
-        return Storage::url($this->preview_image);
+        return asset(Storage::url($this->preview_image));
     }
 
     public function purchases()
@@ -46,5 +46,10 @@ class DocumentationTemplate extends Model
             TemplatePurchase::class,
             'documentation_template_id'
         );
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(TemplateReview::class, 'documentation_template_id');
     }
 }

@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     enableLogoPicker();
     enableTemplateLoading();
     enableDoneSelectionButton();
+    enableLoadMoreReviewsButton();
 
 });
 
@@ -117,6 +118,19 @@ function enableTemplateLoading() {
 
         state[type].loading = true;
 
+        const loadElement = document.createElement('div');
+        loadElement.classList.add('col');
+        loadElement.classList.add('w-100');
+        loadElement.classList.add('p-2');
+        loadElement.innerHTML = `
+                <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            </div>`;
+
+        containers[type].insertAdjacentElement('beforeend', loadElement);
+
         try {
 
             const response = await fetch(authRoute('user.templates.get', { type: type, page: state[type].page }));
@@ -132,9 +146,10 @@ function enableTemplateLoading() {
 
                 const image = template.preview_image_url
                     ? template.preview_image_url
-                    : 'https://placehold.co/600x300';
+                    : '/assets/images/defaults/placeholder-600x400.svg';
 
                 let price = type != 'free' ? parseFloat(template.price || 0).toFixed(2) : 'Free';
+                const route = authRoute('user.template.show', { template: template.uuid });
 
 
                 containers[type].insertAdjacentHTML(
@@ -145,6 +160,7 @@ function enableTemplateLoading() {
                         <div class="template-card d-flex flex-column h-100 ${template.is_selectable ? 'selectable-template' : ''}"
                             data-template-id="${template.id}"
                             data-preview-image="${image}"
+                            data-redirect-url="${route}"
                             data-title="${template.title}"
                             data-type="${template.price == 0 || !template.price ? 'Free' : 'Premium'}"
                             data-description="${template.description}"
@@ -166,7 +182,7 @@ function enableTemplateLoading() {
                                         >
 
                                         <h2 class="mb-0">
-                                            ${template.title}
+                                            <a href="${route}" target="_blank">${template.title}</a>
                                         </h2>
                                     </div>
 
@@ -196,6 +212,7 @@ function enableTemplateLoading() {
             console.error('Failed to load templates:', error);
         } finally {
             state[type].loading = false;
+            loadElement.remove();
         }
     }
 
@@ -311,6 +328,13 @@ function enableDoneSelectionButton() {
         docFormTemplate.querySelector('#template-description').textContent =
             selectedBtn.dataset.description;
 
+        const anchor = docFormTemplate.querySelector('#showTemplateInfoButton');
+        anchor.classList.remove('d-none');
+        anchor.href =
+            selectedBtn.dataset.redirectUrl;
+
         $("#selectTemplateModal").modal('hide');
     });
 }
+
+

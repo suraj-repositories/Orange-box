@@ -162,7 +162,8 @@
                                                     <div class="col-md-5">
                                                         <div class="template-image-area">
                                                             <img src="{{ $documentation?->template?->preview_image_url ?? asset('assets/images/defaults/doc-template.png') }}"
-                                                                alt="">
+                                                                alt=""
+                                                                onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';" />
                                                         </div>
                                                     </div>
 
@@ -191,8 +192,14 @@
                                                                 @endif
                                                             </p>
 
-                                                            <button class="btn btn-outline-dark" type="button">Show
-                                                                Info</button>
+
+                                                            <a class="btn btn-outline-dark {{ $documentation?->template ? '' : 'd-none' }}"
+                                                                id="showTemplateInfoButton"
+                                                                href="{{ $documentation?->template ? authRoute('user.template.show', ['template' => $documentation?->template?->uuid]) : '' }}"
+                                                                target="_blank">
+                                                                Show
+                                                                Info</a>
+
                                                         </div>
 
                                                     </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Common\DocumentationTemplateController;
 use App\Http\Controllers\Common\FileController;
 use App\Http\Controllers\Common\NotificationController;
 use App\Http\Controllers\Common\PasswordLockerAuthController;
@@ -68,5 +69,11 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
         Route::post('settings/notifications/toggle', 'toggleNotificationSettings')->name('settings.security.notification.toggle');
 
         Route::post('settings/theme/{theme}', 'changeAppTheme')->name('settings.theme.update');
+    });
+
+    Route::controller(DocumentationTemplateController::class)->group(function () {
+        Route::post('/doc-templates/{template}/add-review', 'addReview')->name('doc-template.add-review');
+        Route::post('/doc-templates/{template}/load-more-reviews', 'loadMore')->name('doc-template.load-more-reviews');
+        Route::delete('/doc-templates-review/{review}/load-more-reviews', 'deleteTemplateReview')->name('doc-template=review.delete-reviews');
     });
 });

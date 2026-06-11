@@ -12,6 +12,16 @@ class DocumentationTemplateController extends Controller
 {
     //
 
+    public function show(User $user, DocumentationTemplate $template,  Request $request)
+    {
+        $title = $template->title;
+        $template->loadCount('reviews');
+        $template->loadAvg('reviews', 'rating');
+
+
+        return view('user.documentation.template.show-template', compact('template', 'title'));
+    }
+
     public function get(User $user, Request $request)
     {
         $type = $request->type ?? 'free';

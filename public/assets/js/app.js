@@ -468,6 +468,7 @@ class App {
                     ?.getAttribute('content');
 
                 const formData = new FormData(form);
+                formData.append('is_ajax', true);
 
                 toggleSubmitText(form, 'loading');
                 toggleForm(form, 'disable');
