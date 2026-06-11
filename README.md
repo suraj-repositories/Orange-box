@@ -66,8 +66,8 @@ composer dump-autoload
     5. SOCIAL MEDIA LINKS - x
     6. setup sponser 
     7. VERSION SETUP - x
-    8. releases page
-    9. team
+    8. releases page - x
+    9. team - x
     10. customize - x
  
 
