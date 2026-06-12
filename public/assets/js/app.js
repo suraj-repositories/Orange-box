@@ -95,6 +95,7 @@ class App {
         this.enableCopyBtns();
         this.enableAjaxFormSubmittion();
         this.enableDeletionConfirmationForm();
+        this.enablePrinting();
     }
 
     initComponents() {
@@ -512,6 +513,21 @@ class App {
             });
 
             ajaxFormInitalized(form);
+        });
+    }
+
+    enablePrinting() {
+        document.querySelectorAll('[data-printable]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const el = document.querySelector(btn.dataset.printable);
+                if (!el) return;
+
+                const w = window.open('', '_blank');
+                w.document.write(el.innerHTML);
+                w.document.close();
+                w.print();
+                w.close();
+            });
         });
     }
 

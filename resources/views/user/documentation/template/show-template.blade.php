@@ -148,8 +148,8 @@
                                                 class='bx bx-cart'></i></button>
                                     </form>
                                 @else
-                                    <button class="btn btn-outline-primary w-100 mb-3">View Licence <i
-                                            class='bx bx-link-external'></i></button>
+                                    <a href="{{ authRoute('user.template.licence', ['template'=> $template]) }}" class="btn btn-outline-primary w-100 mb-3">View Licence <i
+                                            class='bx bx-link-external'></i></a>
                                 @endif
                                 <a href="{{ $template->preview_url ?? 'javascript:void(0)' }}" target="_blank"
                                     class="btn btn-light text-primary border w-100 ">Live Preview <i

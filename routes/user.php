@@ -236,11 +236,10 @@ Route::controller(DocumentationController::class)->group(function () {
 Route::controller(DocumentationTemplateController::class)->group(function () {
     Route::get('get-templates', 'get')->name('templates.get');
     Route::get('templates/{template}', 'show')->name('template.show');
+    Route::get('templates-licence/{template}', 'viewTemplateLicence')->name('template.licence');
     Route::get('templates-checkout', 'templateCheckoutPage')->name('template.checkout');
     Route::post('templates-checkout/{template}/cart', 'addToCart')->name('template.add-to-cart');
     Route::delete('templates-checkout-cart/{cart}', 'removeFromCart')->name('template.cart.remove');
-
-
 });
 
 Route::controller(PrivacyPolicyController::class)->group(function () {

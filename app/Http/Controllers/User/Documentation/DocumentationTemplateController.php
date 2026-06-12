@@ -81,7 +81,7 @@ class DocumentationTemplateController extends Controller
         return response()->json($templates);
     }
 
-    public function viewTemplateLicence(DocumentationTemplate $template, Request $request)
+    public function viewTemplateLicence(User $user, DocumentationTemplate $template, Request $request)
     {
         $user = Auth::user();
 
