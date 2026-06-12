@@ -188,4 +188,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(TemplatePurchase::class);
     }
+
+    public function templateCartItems()
+    {
+        return $this->hasMany(TemplateCart::class);
+    }
 }

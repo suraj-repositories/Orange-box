@@ -327,7 +327,9 @@ input[type=number].hide-btns::-webkit-outer-spin-button {
     border: 0;
     padding: 0;
 }
-
+.fst-underline{
+    text-decoration: underline;
+}
 /*  --------------------- actions tab ------------------- */
 
 .ob-actions-tab .action {
@@ -4520,11 +4522,14 @@ ul.directory-list.active {
     padding: 5px;
     border: 1px solid var(--bs-gray-300);
     border-radius: 10px;
+    min-height: 250px;
 
 }
 
 .doc-form-template .template-image-area img {
     width: 100%;
+    border-radius: 10px;
+    /* aspect-ratio: 16 / 10; */
 }
 
 .doc-form-template .data-area .paid-type i {

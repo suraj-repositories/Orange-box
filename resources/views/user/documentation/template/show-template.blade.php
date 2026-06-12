@@ -63,7 +63,7 @@
 
                             </div>
 
-                            <img src="{{ $template->preivew_image_url }}" class="img-fluid rounded shadow-sm mb-4 w-100"
+                            <img src="{{ $template->preview_image_url }}" class="img-fluid rounded shadow-sm mb-4 w-100"
                                 onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';" />
 
                             <!-- Description Card -->
@@ -126,9 +126,58 @@
 
                             <div class="card-body">
 
+                                @if (($template->price ?? 0) > 0)
+                                    <h4 class="text-center mb-3">
+                                        <del class="text-muted">${{ number_format($template->original_price, 2) }}</del>
+                                        ${{ number_format($template->price, 2) }}
+
+                                        @if ($template->original_price > 0 && $template->original_price > $template->price)
+                                            <small class="text-success">
+                                                ({{ round((($template->original_price - $template->price) / $template->original_price) * 100) }}%
+                                                Off)
+                                            </small>
+                                        @endif
+                                    </h4>
+                                @endif
+
+                                @if ($template->price ?? 0 > 0 && !$isPurchased)
+                                    <form action="{{ authRoute('user.template.add-to-cart', ['template'=> $template]) }}"
+                                        method="POST">
+                                        @csrf
+                                        <button class="btn btn-outline-primary w-100 mb-3">Add to Cart <i
+                                                class='bx bx-cart'></i></button>
+                                    </form>
+                                @else
+                                    <button class="btn btn-outline-primary w-100 mb-3">View Licence <i
+                                            class='bx bx-link-external'></i></button>
+                                @endif
+                                <a href="{{ $template->preview_url ?? 'javascript:void(0)' }}" target="_blank"
+                                    class="btn btn-light text-primary border w-100 ">Live Preview <i
+                                        class='bx bx-link-external'></i></a>
+
+                                <ul class="mt-4 mb-0">
+                                    <li>Open Source</li>
+                                    <li>Use in commercial project</li>
+                                    <li>Free Lifetime Updates</li>
+                                </ul>
+                            </div>
+
+                            <div class="card-footer border-top py-2">
+                                50+ Users
                             </div>
 
                         </div>
+
+                        <div class="card border">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <strong>Questions?</strong>
+                                    <a href="javascript:void()" class="btn btn-dark btn-sm">Contact Author</a>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
 
 

@@ -19,7 +19,9 @@ class DocumentationTemplate extends Model
         'components',
         'config',
         'preview_image',
+        'preview_url',
         'is_active',
+        'original_price',
         'price',
         'sort_order',
         'documentation_template_id',
@@ -51,5 +53,10 @@ class DocumentationTemplate extends Model
     public function reviews()
     {
         return $this->hasMany(TemplateReview::class, 'documentation_template_id');
+    }
+
+    public function cartItems()
+    {
+        return $this->hasMany(TemplateCart::class);
     }
 }

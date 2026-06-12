@@ -40,14 +40,19 @@ class TemplateController extends Controller
                 \Illuminate\Validation\Rule::unique('documentation_templates', 'key'),
             ],
 
+            'preview_url' => 'nullable|url:http,https',
             'description' => 'nullable|string',
 
-            'price' => 'nullable|numeric|min:0',
+            'original_price' => 'nullable|numeric|min:0|gt:price',
+            'price' => 'nullable|numeric|min:0|lt:original_price',
 
             'preview_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+        ], [
+            'original_price.gt' => 'Original price must be greater than the discounted price.',
+            'price.lt' => 'Discounted price must be less than the original price.',
         ]);
 
         $validated['key'] = $validated['key'] ?? Str::slug($validated['title']);
@@ -61,7 +66,9 @@ class TemplateController extends Controller
         $template = DocumentationTemplate::create([
             'title' => $validated['title'],
             'key' => $validated['key'],
+            'preview_url' => $validated['preview_url'],
             'description' => $validated['description'],
+            'original_price' => $validated['original_price'],
             'price' => $validated['price'],
             'preview_image' => $previewImage,
         ]);
@@ -100,15 +107,20 @@ class TemplateController extends Controller
                 \Illuminate\Validation\Rule::unique('documentation_templates', 'key')
                     ->ignore($template->id),
             ],
-
+            'preview_url' => 'nullable|url:http,https',
             'description' => 'nullable|string',
 
-            'price' => 'nullable|numeric|min:0',
+            'original_price' => 'nullable|numeric|min:0|gt:price',
+            'price' => 'nullable|numeric|min:0|lt:original_price',
+
 
             'preview_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpg,jpeg,png,webp|max:2048',
+        ],  [
+            'original_price.gt' => 'Original price must be greater than the discounted price.',
+            'price.lt' => 'Discounted price must be less than the original price.',
         ]);
 
         $validated['key'] = strtolower($validated['key'] ?? Str::slug($validated['title']));
@@ -126,7 +138,9 @@ class TemplateController extends Controller
         $template->update([
             'title' => $validated['title'],
             'key' => $validated['key'],
+            'preview_url' => $validated['preview_url'],
             'description' => $validated['description'] ?? null,
+            'original_price' => $validated['original_price'] ?? null,
             'price' => $validated['price'] ?? null,
             'preview_image' => $validated['preview_image'] ?? $template->preview_image,
         ]);

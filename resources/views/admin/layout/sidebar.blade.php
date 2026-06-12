@@ -45,7 +45,7 @@
 
                 <li>
                     <a href="#sidebarTemplates" data-bs-toggle="collapse">
-                        <i data-feather="home"></i>
+                        <i class="bi bi-file-richtext fs-5"></i>
                         <span> Docs </span>
                         <span class="menu-arrow"></span>
                     </a>

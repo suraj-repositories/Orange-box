@@ -79,6 +79,21 @@
                                             @enderror
                                         </div>
 
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Preview Url</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-link"></i>
+                                                </span>
+                                                <input type="text" name="preview_url" class="form-control"
+                                                    placeholder="https://example.com"
+                                                    value="{{ old('preview_url', $template->preview_url ?? '') }}">
+                                            </div>
+                                            @error('preview_url')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+
                                         <!-- Description -->
                                         <div class="col-12 mb-3">
                                             <label class="form-label">Description</label>
@@ -90,8 +105,20 @@
                                         </div>
 
                                         <!-- Price -->
-                                        <div class="col-12 mb-3">
-                                            <label class="form-label">Price</label>
+                                        <div class="col-6 mb-3">
+                                            <label class="form-label">Original Price</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">$</span>
+                                                <input type="number" step="0.01" name="original_price" class="form-control"
+                                                    placeholder="Enter price"
+                                                    value="{{ old('original_price', $template->original_price ?? '') }}">
+                                            </div>
+                                            @error('original_price')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                        <div class="col-6 mb-3">
+                                            <label class="form-label">Discount Price</label>
                                             <div class="input-group">
                                                 <span class="input-group-text">$</span>
                                                 <input type="number" step="0.01" name="price" class="form-control"
