@@ -140,15 +140,16 @@
                                     </h4>
                                 @endif
 
-                                @if ($template->price ?? 0 > 0 && !$isPurchased)
-                                    <form action="{{ authRoute('user.template.add-to-cart', ['template'=> $template]) }}"
+                                @if (($template->price ?? 0) > 0 && !$isPurchased)
+                                    <form action="{{ authRoute('user.template.add-to-cart', ['template' => $template]) }}"
                                         method="POST">
                                         @csrf
                                         <button class="btn btn-outline-primary w-100 mb-3">Add to Cart <i
                                                 class='bx bx-cart'></i></button>
                                     </form>
                                 @else
-                                    <a href="{{ authRoute('user.template.licence', ['template'=> $template]) }}" class="btn btn-outline-primary w-100 mb-3">View Licence <i
+                                    <a href="{{ authRoute('user.template.licence', ['template' => $template]) }}"
+                                        class="btn btn-outline-primary w-100 mb-3">View Licence <i
                                             class='bx bx-link-external'></i></a>
                                 @endif
                                 <a href="{{ $template->preview_url ?? 'javascript:void(0)' }}" target="_blank"
@@ -177,11 +178,7 @@
                             </div>
                         </div>
 
-
                     </div>
-
-
-
                 </div>
 
             </div>

@@ -234,10 +234,12 @@ Route::controller(DocumentationController::class)->group(function () {
     Route::delete('documentation/{documentation}', 'delete')->name('documentation.delete');
 });
 Route::controller(DocumentationTemplateController::class)->group(function () {
+    Route::get('templates', 'index')->name('templates.index');
     Route::get('get-templates', 'get')->name('templates.get');
     Route::get('templates/{template}', 'show')->name('template.show');
     Route::get('templates-licence/{template}', 'viewTemplateLicence')->name('template.licence');
-    Route::get('templates-checkout', 'templateCheckoutPage')->name('template.checkout');
+    Route::get('templates-checkout', 'templateCheckoutPage')->name('template.checkout.page');
+    Route::post('templates-checkout', 'checkout')->name('template.checkout');
     Route::post('templates-checkout/{template}/cart', 'addToCart')->name('template.add-to-cart');
     Route::delete('templates-checkout-cart/{cart}', 'removeFromCart')->name('template.cart.remove');
 });

@@ -35,16 +35,21 @@
 
 
                 @if (!$featuredTemplates->isEmpty())
-                    <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mb-2">
+                    <div class="d-flex align-items-center gap-3 flex-wrap justify-content-between mt-3 mb-2">
                         <h3 class="mb-0 fs-6 text-muted"> <i class="bi bi-gem me-1"></i> Featured Templates</h3>
+
+                        <a href="{{ authRoute('user.templates.index', ['type' => 'purchased']) }}" class="btn btn-light btn-sm border">Show All <i
+                                class="bi bi-arrow-right"></i></a>
                     </div>
 
                     <x-user.docs.template-list :templates="$featuredTemplates" />
                 @endif
 
                 @if (!$topTemplates->isEmpty())
-                    <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mb-2">
+                    <div class="d-flex align-items-center gap-3 flex-wrap mt-3 mb-2 justify-content-between">
                         <h3 class="mb-0 fs-6 text-muted"> <i class="bi bi-journal-richtext me-1"></i> Top Templates</h3>
+                        <a href="{{ authRoute('user.templates.index', ['type' => 'popular']) }}"
+                            class="btn btn-light btn-sm border">Show All <i class="bi bi-arrow-right"></i></a>
                     </div>
 
                     <x-user.docs.template-list :templates="$topTemplates" />

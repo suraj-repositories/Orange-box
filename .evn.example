@@ -79,3 +79,9 @@ GITHUB_REDIRECT_URI=http://localhost:8000/auth/github/callback
 FACEBOOK_CLIENT_ID=xxxxxxxxxxxxxxxxxx
 FACEBOOK_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxx
 FACEBOOK_REDIRECT_URI=http://localhost:8000/auth/facebook/callback
+
+SCOUT_DRIVER=database
+
+STRIPE_PUBLIC_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+STRIPE_SECRET_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+

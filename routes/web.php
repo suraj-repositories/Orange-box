@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Common\DocumentationTemplateController;
+use App\Http\Controllers\User\Documentation\DocumentationTemplateController as TemplateController;
 use App\Http\Controllers\Common\FileController;
 use App\Http\Controllers\Common\NotificationController;
 use App\Http\Controllers\Common\PasswordLockerAuthController;
@@ -76,4 +77,18 @@ Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
         Route::post('/doc-templates/{template}/load-more-reviews', 'loadMore')->name('doc-template.load-more-reviews');
         Route::delete('/doc-templates-review/{review}/load-more-reviews', 'deleteTemplateReview')->name('doc-template=review.delete-reviews');
     });
+});
+
+
+Route::middleware('auth')->group(function () {
+
+    Route::get(
+        '/users-t/{user}/template-checkout/success',
+        [TemplateController::class, 'success']
+    )->name('template.checkout.success');
+
+    Route::get(
+        '/users-t/{user}/template-checkout/cancel',
+        [TemplateController::class, 'cancel']
+    )->name('template.checkout.cancel');
 });

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DailyDigest;
 use App\Models\DocumentationPageStat;
 use App\Models\DocumentationPageView;
+use App\Models\DocumentationTemplate;
 use App\Models\PageView;
 use App\Models\QuickLink;
 use App\Models\SyntaxStore;
@@ -30,8 +31,32 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
-        $topTemplates = collect();
-        $featuredTemplates = collect();
+        $topTemplates = DocumentationTemplate::query()
+            ->withCount('reviews')
+            ->withCount([
+                'purchases as purchases_count' => function ($query) {
+                    $query->where('payment_status', 'paid');
+                }
+            ])
+            ->withAvg('reviews', 'rating')
+            ->where('is_active', true)
+            ->orderByDesc('reviews_count')
+            ->take(3)
+            ->get();
+
+        $featuredTemplates =  DocumentationTemplate::query()
+            ->withCount('reviews')
+            ->withAvg('reviews', 'rating')
+            ->withCount([
+                'purchases as purchases_count' => function ($query) {
+                    $query->where('payment_status', 'paid');
+                }
+            ])
+            ->where('is_active', true)
+
+            ->orderByDesc('purchases_count')
+            ->take(3)
+            ->get();
 
         return view('user.dashboard.dashboard', [
             'title' => $title,

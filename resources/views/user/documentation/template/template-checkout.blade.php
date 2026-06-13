@@ -150,9 +150,11 @@
                                         </table>
 
                                         <div class="wc-proceed-to-checkout">
-                                            <a href="#" class="btn btn-success d-block w-100">
-                                                Proceed to checkout</a>
-
+                                            <form action="{{ authRoute('user.template.checkout') }}" method="post">
+                                                @csrf
+                                                <button class="btn btn-success d-block w-100">
+                                                    Proceed to checkout</button>
+                                            </form>
                                         </div>
 
 

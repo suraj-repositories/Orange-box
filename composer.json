@@ -16,6 +16,7 @@
         "phpseclib/phpseclib": "^3.0.50",
         "spatie/laravel-permission": "^6.10",
         "staudenmeir/eloquent-has-many-deep": "^1.20",
+        "stripe/stripe-php": "^20.2",
         "sweetalert2/laravel": "^1.0",
         "tightenco/ziggy": "^2.5"
     },
