@@ -97,6 +97,7 @@ Route::controller(CommentController::class)->group(function () {
 });
 
 Route::controller(FolderFactoryController::class)->group(function () {
+    Route::get('file', 'fileManager')->name('file-manager');
     Route::get('folder-factory', 'index')->name('folder-factory');
     Route::post('folder-factory', 'store')->name('folder-factory.save');
     Route::post('folder-factory/{folderFactory}', 'update')->name('folder-factory.update');

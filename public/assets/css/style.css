@@ -327,9 +327,11 @@ input[type=number].hide-btns::-webkit-outer-spin-button {
     border: 0;
     padding: 0;
 }
-.fst-underline{
+
+.fst-underline {
     text-decoration: underline;
 }
+
 /*  --------------------- actions tab ------------------- */
 
 .ob-actions-tab .action {
@@ -4370,6 +4372,8 @@ ul.directory-list.active {
     border: 1px solid #d1d1d199;
 }
 
+
+
 .dashboard-template-cards .template-card .template-meta {
     display: flex;
     align-items: center;
@@ -4614,4 +4618,79 @@ ul.directory-list.active {
 
 .modal-template-cards .selectable-template.template-selected {
     color: var(--bs-success);
+}
+
+
+
+.file-manager-files .file-card {
+    position: relative;
+}
+
+.file-manager-files .file-card img {
+    aspect-ratio: 16 / 10;
+    border-radius: 10px !important;
+}
+
+.file-manager-files .file-card .file-img-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+    border: 1px solid #d1d1d199;
+    border-radius: 10px !important;
+    /* overflow: hidden; */
+    position: relative;
+}
+
+.file-manager-files .file-card .file-img-box .select-checkbox {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.file-manager-files .file-card .file-img-box .dropdown {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.file-manager-files .file-card .file-img-box .file-icon {
+    font-size: 60px;
+    color: #b1b1b1;
+}
+
+
+.file-manager-files .file-card .file-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.file-manager-files .file-card .file-meta .proflie-image {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid #e6e6e61c;
+}
+
+.file-manager-files .file-card .user-title {
+    display: flex;
+    /* align-items: center; */
+}
+
+.file-manager-files .file-card .file-meta h2 {
+    font-size: 14px;
+    margin-left: 5px;
+    text-wrap: wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 220px;
+}
+
+.file-manager-files .file-card .file-meta .file-size {
+    font-size: 12px;
+    margin-left: 5px;
 }

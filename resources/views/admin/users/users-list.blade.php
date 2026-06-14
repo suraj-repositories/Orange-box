@@ -25,7 +25,9 @@
                                     <h5 class="card-title mb-0">{{ $title }}</h5>
 
                                     <div class="ms-auto fw-semibold d-flex gap-1">
-                                        <a href="#" class="btn btn-light btn-sm border center-content gap-1">
+                                        <a data-bs-toggle="collapse" href="#filterCollapse" role="button"
+                                            aria-expanded="false" aria-controls="filterCollapse"
+                                            class="btn btn-light btn-sm border center-content gap-1">
                                             <i class="bx bx-filter fs-5"></i>
                                             <div>Filters</div>
                                         </a>
@@ -35,6 +37,46 @@
                             </div>
 
                             <div class="card-body p-0">
+
+                                <div class="collapse {{ $hasFilter ? 'show' : '' }}" id="filterCollapse">
+                                    <form method="GET" action="" class="p-3">
+                                        <div class="row g-3">
+
+                                            <div class="col-md-4">
+                                                <label class="form-label">Search</label>
+                                                <input type="text" name="search" class="form-control"
+                                                    value="{{ request('search') }}" placeholder="Search">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label class="form-label">Created From</label>
+                                                <input type="date" name="from_date" class="form-control"
+                                                    value="{{ request('from_date') }}">
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <label class="form-label">Created To</label>
+                                                <input type="date" name="to_date" class="form-control"
+                                                    value="{{ request('to_date') }}">
+                                            </div>
+
+                                            <div class="col-md-2 d-flex align-items-end">
+                                                <button type="submit" class="btn btn-dark w-100">
+                                                    Filter
+                                                </button>
+
+                                                @if ($hasFilter)
+                                                    <a href="{{ route('admin.users.index') }}"
+                                                        class="btn border ms-1 w-100">
+                                                        Reset
+                                                    </a>
+                                                @endif
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+
                                 <div class="table-responsive">
                                     <table class="table table-traffic mb-0">
 

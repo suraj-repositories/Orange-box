@@ -26,6 +26,14 @@ class FolderFactoryController extends Controller
         $this->fileService = $fileService;
     }
 
+    public function fileManager(User $user)
+    {
+        $title = "File Manager";
+        $files = File::where('user_id', $user->id)->latest()->paginate(8);
+        $recentFiles = File::where('user_id', $user->id)->orderBy('updated_at', 'desc')->paginate(8);
+        return view('user.orbit_zone.folder_factory.file-manager', compact('title', 'files', 'recentFiles'));
+    }
+
     public function index(User $user)
     {
         $icons = Icon::where('category', 'folder')->where('status', 'active')->orderBy('order', 'asc')->get();
@@ -119,8 +127,8 @@ class FolderFactoryController extends Controller
                 Rule::unique('folder_factories')
                     ->ignore($folderFactory->id)
                     ->where(function ($query) use ($user) {
-                    return $query->where('user_id', $user->id);
-                }),
+                        return $query->where('user_id', $user->id);
+                    }),
             ],
             'icon' => 'nullable|integer|exists:icons,id',
         ]);

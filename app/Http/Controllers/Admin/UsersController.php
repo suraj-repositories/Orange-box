@@ -11,14 +11,42 @@ use Illuminate\Support\Facades\Validator;
 class UsersController extends Controller
 {
     //
-    public function index()
+    public function index(Request $request)
     {
+        $hasFilter = collect(['search', 'from_date', 'to_date'])
+            ->some(fn($field) => $request->filled($field));
+
         $users = User::role('user')
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->search;
+
+                $query->where(function ($q) use ($search) {
+                    $q->where('username', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhereHas('details', function ($details) use ($search) {
+                            $details->whereRaw(
+                                "CONCAT(first_name, ' ', last_name) LIKE ?",
+                                ["%{$search}%"]
+                            )
+                                ->orWhere('first_name', 'like', "%{$search}%")
+                                ->orWhere('last_name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%")
+                                ->orWhere('contact', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->when($request->filled('from_date'), function ($query) use ($request) {
+                $query->whereDate('created_at', '>=', $request->from_date);
+            })
+            ->when($request->filled('to_date'), function ($query) use ($request) {
+                $query->whereDate('created_at', '<=', $request->to_date);
+            })
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();;
 
         $title = 'Users';
-        return view('admin.users.users-list', compact('users', 'title'));
+        return view('admin.users.users-list', compact('users', 'title', 'hasFilter'));
     }
 
     public function updateStatus(Request $request, User $user)

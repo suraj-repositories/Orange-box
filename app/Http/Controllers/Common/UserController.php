@@ -175,6 +175,6 @@ class UserController extends Controller
 
         Auth::loginUsingId($adminId);
 
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('admin.users.index');
     }
 }
