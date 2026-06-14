@@ -15,10 +15,12 @@
                             </div>
 
 
-                            <a href="#" class="d-flex align-items-center my-5 edit-on-github">
-                                <i class='bx bx-edit'></i>
-                                <span>Edit this page on GitHub</span>
-                            </a>
+                            @if (!empty($currentPage->git_link))
+                                <a href="{{ $currentPage->git_link }}" target="_blank" class="d-flex align-items-center my-5 edit-on-github">
+                                    <i class='bx bx-edit'></i>
+                                    <span>Edit this page on GitHub</span>
+                                </a>
+                            @endif
 
                             <hr>
                             @if ($previousPage || $nextPage)

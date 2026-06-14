@@ -196,7 +196,7 @@ function enableScrollSpy(contentSelector) {
 
     const sc = new ScrollSpyControl();
     sc.generateScrollSpy(contentSelector);
-    sc.smoothScrollBehaviour();
+
     sc.enableScrollpsyIndicator();
 
 }

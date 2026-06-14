@@ -159,7 +159,7 @@ function enableEditorJs() {
     if (previewToggleCheckbox) {
 
         previewToggleCheckbox.addEventListener('change', async function () {
-            console.log(132456);
+
 
             let outputElement = document.querySelector('#ob-editorjs-output');
             if (!outputElement) {

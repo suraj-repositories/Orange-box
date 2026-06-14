@@ -162,4 +162,19 @@ class UserController extends Controller
             'educations' => Education::where('user_id', $user->id)->orderBy('id', 'desc')->get()
         ]);
     }
+
+    public function stopImpersonation()
+    {
+        $adminId = session('impersonator_admin_id');
+
+        if (!$adminId) {
+            abort(403);
+        }
+
+        session()->forget('impersonator_admin_id');
+
+        Auth::loginUsingId($adminId);
+
+        return redirect()->route('admin.dashboard');
+    }
 }

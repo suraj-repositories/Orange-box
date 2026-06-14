@@ -59,6 +59,13 @@
                     </div>
                 </li>
 
+                <li>
+                    <a class="tp-link" href="{{ route('admin.users.index') }}">
+                        <i class="bi bi-people fs-5"></i>
+                        <span> Users</span>
+                    </a>
+                </li>
+
             </ul>
 
         </div>

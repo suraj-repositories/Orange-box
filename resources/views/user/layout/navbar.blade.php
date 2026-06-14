@@ -7,6 +7,15 @@
                         <i data-feather="menu" class="noti-icon"></i>
                     </button>
                 </li>
+                @if (session()->has('impersonator_admin_id'))
+                    <li>
+                        <div class=" nav-link ps-0">
+                            <a href="{{ route('stop-impersonation') }}" class="btn border btn-sm">
+                                Back to Admin Dashboard
+                            </a>
+                        </div>
+                    </li>
+                @endif
                 <li class="d-none d-lg-block">
                     <div class="position-relative topbar-search">
                         <input type="text" class="form-control bg-light bg-opacity-75 border-light ps-4"
@@ -26,7 +35,7 @@
                 </li>
 
                 <li>
-                   <x-notification.notification-component />
+                    <x-notification.notification-component />
                 </li>
 
                 <li class="dropdown notification-list topbar-dropdown">
@@ -49,7 +58,7 @@
                             <span>My Profile</span>
                         </a>
 
-                        <button class='dropdown-item notify-item lock_screen_btn'  >
+                        <button class='dropdown-item notify-item lock_screen_btn'>
                             <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
                             <span>Lock Screen</span>
                         </button>

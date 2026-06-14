@@ -33,6 +33,8 @@ Route::controller(UserController::class)->middleware('auth')->group(function () 
     Route::get('/users-list/{type}', 'pageableUsersList')->name('users.list');
     Route::get('/users-profile/{user}', 'showProfile')->name('users.profile.index');
     Route::post('/search/username', 'searchUsers')->name('search.username');
+
+    Route::get('/stop-impersonation',  'stopImpersonation')->name('stop-impersonation');
 });
 
 Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
