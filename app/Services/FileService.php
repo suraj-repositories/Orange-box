@@ -38,4 +38,8 @@ interface FileService
 
     function deleteDirectoryIfExists($dir);
 
+    function getFullFileUrl($fileId, $filePath);
+
+    function getFileStats($user);
+
 }

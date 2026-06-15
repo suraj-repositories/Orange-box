@@ -14,6 +14,7 @@ class FolderFactory extends Model
         'user_id',
         'icon_id',
         'slug',
+        'parent_id',
         'name'
     ];
 

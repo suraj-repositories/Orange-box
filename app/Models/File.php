@@ -20,6 +20,7 @@ class File extends Model
         'file_name',
         'file_size',
         'is_temp',
+        'is_favourite',
         'mime_type',
         'fileable_type',
         'fileable_id',

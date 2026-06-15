@@ -2,9 +2,11 @@
 
 namespace App\Services\Impl;
 
+use App\Models\File;
 use App\Services\FileService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
 class FileServiceImpl implements FileService
@@ -37,9 +39,10 @@ class FileServiceImpl implements FileService
         return 0;
     }
 
-    function deleteAllIfExists(array $filePaths): int{
+    function deleteAllIfExists(array $filePaths): int
+    {
         $deleted = 0;
-        foreach($filePaths as $filePath){
+        foreach ($filePaths as $filePath) {
             $deleted += $this->deleteIfExists($filePath);
         }
         return $deleted;
@@ -157,5 +160,74 @@ class FileServiceImpl implements FileService
             return rmdir($dir);
         }
         return false;
+    }
+
+    public function getFullFileUrl($fileId, $filePath)
+    {
+        if ($filePath && Storage::disk('public')->exists($filePath)) {
+            return asset('storage/' . $filePath);
+        }
+
+        if ($filePath && Storage::disk('private')->exists($filePath)) {
+            return URL::temporarySignedRoute(
+                'secure.file.show',
+                now()->addMinutes(10),
+                ['file' => $fileId]
+            );
+        }
+
+        return 'https://placehold.co/50x90';
+    }
+
+    function getFileStats($user)
+    {
+
+        $photos = File::where('user_id', $user->id)
+            ->where('mime_type', 'like', 'image/%');
+
+        $videos = File::where('user_id', $user->id)
+            ->where('mime_type', 'like', 'video/%');
+
+        $documents = File::where('user_id', $user->id)
+            ->where(function ($q) {
+                $q->where('mime_type', 'like', 'application/%')
+                    ->orWhere('mime_type', 'like', 'text/%');
+            });
+
+        $others = File::where('user_id', $user->id)
+            ->whereNot(function ($q) {
+                $q->where('mime_type', 'like', 'image/%')
+                    ->orWhere('mime_type', 'like', 'video/%')
+                    ->orWhere('mime_type', 'like', 'application/%')
+                    ->orWhere('mime_type', 'like', 'text/%');
+            });
+
+        $photoByteSize = (clone $photos)->sum('file_size');
+        $videoByteSize = (clone $videos)->sum('file_size');
+        $documentByteSize = (clone $documents)->sum('file_size');
+        $otherByteSize = (clone $others)->sum('file_size');
+
+        return [
+            'photos' => [
+                'count' => (clone $photos)->count(),
+                'size' => $this->getFormattedSize($photoByteSize),
+                'size_in_bytes' => $photoByteSize
+            ],
+            'videos' => [
+                'count' => (clone $videos)->count(),
+                'size' => $this->getFormattedSize($videoByteSize),
+                'size_in_bytes' => $videoByteSize
+            ],
+            'documents' => [
+                'count' => (clone $documents)->count(),
+                'size' => $this->getFormattedSize($documentByteSize),
+                'size_in_bytes' => $documentByteSize
+            ],
+            'others' => [
+                'count' => (clone $others)->count(),
+                'size' => $this->getFormattedSize($otherByteSize),
+                'size_in_bytes' => $otherByteSize
+            ],
+        ];
     }
 }

@@ -2,11 +2,6 @@
 
 @section('title', $title ?? '🟢🟢🟢')
 
-@section('css')
-    <style>
-
-    </style>
-@endsection
 
 @section('content')
     <div class="content-page">
@@ -55,28 +50,42 @@
 
                                                 <div class="pm-sidebar-section">
                                                     <p class="mb-1 fw-bold px-3 fs-6">My Files</p>
-                                                    <button class="pm-nav-item active" data-view="all">
+                                                    <a href=""
+                                                        class="pm-nav-item {{ request('filter') == 'all' ? 'active' : '' }}"
+                                                        data-view="all">
                                                         <i class="bx bx-file"></i>
                                                         My Drive
 
-                                                    </button>
-                                                    <button class="pm-nav-item" data-view="privacy">
+                                                    </a>
+                                                    {{-- <button class="pm-nav-item" data-view="privacy">
                                                         <i class="bx bx-share"></i>
                                                         Shared
-                                                    </button>
-                                                    <button class="pm-nav-item" data-view="privacy">
+                                                    </button> --}}
+                                                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'recent']) }}"
+                                                        class="pm-nav-item {{ request('filter') == 'recent' ? 'active' : '' }}"
+                                                        data-view="privacy">
                                                         <i class="bx bx-user"></i>
                                                         Recent
-                                                    </button>
-                                                    <button class="pm-nav-item" data-view="privacy">
+                                                    </a>
+                                                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'folder']) }}"
+                                                        class="pm-nav-item {{ request('filter') == 'folder' ? 'active' : '' }}"
+                                                        data-view="privacy">
+                                                        <i class="bx bx-folder"></i>
+                                                        Folder
+                                                    </a>
+                                                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'favourite']) }}"
+                                                        class="pm-nav-item {{ request('filter') == 'favourite' ? 'active' : '' }}"
+                                                        data-view="privacy">
                                                         <i class="bx bx-star"></i>
                                                         Favourite
-                                                    </button>
+                                                    </a>
 
-                                                    <button class="pm-nav-item" data-view="privacy">
+                                                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'trash']) }}"
+                                                        class="pm-nav-item {{ request('filter') == 'trash' ? 'active' : '' }}"
+                                                        data-view="privacy">
                                                         <i class="bx bx-trash"></i>
                                                         Trash
-                                                    </button>
+                                                    </a>
 
                                                 </div>
 
@@ -84,26 +93,37 @@
                                                 <div class="pm-sidebar-section px-2">
                                                     <p class="mb-1 fw-bold px-1 fs-6">Your Storage</p>
 
-                                                    <strong>48% Full</strong>
+                                                    <strong>{{ $storageStats['percentage'] }}% Full</strong>
+
                                                     <div class="progress-stacked storage-progress">
-                                                        <div class="progress storage-photos" style="width:15%">
+
+                                                        <div class="progress storage-photos"
+                                                            style="width: {{ $photoPercent }}%">
                                                             <div class="progress-bar"></div>
                                                         </div>
 
-                                                        <div class="progress storage-videos" style="width:30%">
+                                                        <div class="progress storage-videos"
+                                                            style="width: {{ $videoPercent }}%">
                                                             <div class="progress-bar"></div>
                                                         </div>
 
-                                                        <div class="progress storage-documents" style="width:20%">
+                                                        <div class="progress storage-documents"
+                                                            style="width: {{ $documentPercent }}%">
                                                             <div class="progress-bar"></div>
                                                         </div>
 
-                                                        <div class="progress storage-others" style="width:35%">
+                                                        <div class="progress storage-others"
+                                                            style="width: {{ $otherPercent }}%">
                                                             <div class="progress-bar"></div>
                                                         </div>
+
                                                     </div>
 
-                                                    <p class="text-muted fs-7 mt-1">Used: 17.9 GB of 20 GB</p>
+                                                    <p class="text-muted fs-7 mt-1">
+                                                        Used: {{ $storageStats['used'] }}
+                                                        of
+                                                        {{ $storageStats['limit'] }}
+                                                    </p>
 
                                                     <ul class="storage-list">
 
@@ -114,10 +134,13 @@
 
                                                             <div class="storage-content">
                                                                 <h6 class="storage-title">Photos</h6>
-                                                                <span class="storage-count">580 files</span>
+                                                                <span
+                                                                    class="storage-count">{{ $fileStats['photos']['count'] }}
+                                                                    files</span>
                                                             </div>
 
-                                                            <div class="storage-size">6.6 GB</div>
+                                                            <div class="storage-size">{{ $fileStats['photos']['size'] }}
+                                                            </div>
                                                         </li>
 
                                                         <li class="storage-item">
@@ -127,10 +150,13 @@
 
                                                             <div class="storage-content">
                                                                 <h6 class="storage-title">Videos</h6>
-                                                                <span class="storage-count">32 files</span>
+                                                                <span
+                                                                    class="storage-count">{{ $fileStats['videos']['count'] }}
+                                                                    files</span>
                                                             </div>
 
-                                                            <div class="storage-size">3.2 GB</div>
+                                                            <div class="storage-size">{{ $fileStats['videos']['size'] }}
+                                                            </div>
                                                         </li>
 
                                                         <li class="storage-item">
@@ -140,10 +166,13 @@
 
                                                             <div class="storage-content">
                                                                 <h6 class="storage-title">Documents</h6>
-                                                                <span class="storage-count">312 files</span>
+                                                                <span
+                                                                    class="storage-count">{{ $fileStats['documents']['count'] }}
+                                                                    files</span>
                                                             </div>
 
-                                                            <div class="storage-size">3.7 GB</div>
+                                                            <div class="storage-size">{{ $fileStats['documents']['size'] }}
+                                                            </div>
                                                         </li>
 
 
@@ -154,10 +183,13 @@
 
                                                             <div class="storage-content">
                                                                 <h6 class="storage-title">Others</h6>
-                                                                <span class="storage-count">948 files</span>
+                                                                <span
+                                                                    class="storage-count">{{ $fileStats['others']['count'] }}
+                                                                    files</span>
                                                             </div>
 
-                                                            <div class="storage-size">2.1 GB</div>
+                                                            <div class="storage-size">{{ $fileStats['others']['size'] }}
+                                                            </div>
                                                         </li>
 
                                                     </ul>
@@ -187,9 +219,98 @@
                                         <main class="fm-main">
                                             <div
                                                 class="w-100 p-2 d-flex align-items-center justify-content-between flex-wrap gap-1">
-                                                <button class="btn border">
-                                                    <i class="bx bx-upload"></i> Upload
-                                                </button>
+                                                <div class="d-flex gap-2">
+                                                    <button class="btn border d-flex gap-1 align-items-center"
+                                                        id="create-folder-factory">
+                                                        <i class="bx bx-folder"></i> New Folder
+                                                    </button>
+
+                                                    <div class="modal fade folder-factory" id="folder-factory-form-modal"
+                                                        tabindex="-1" aria-labelledby="folder-factory-form-title"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <form id="folder-factory-form" action="#"
+                                                                    method="post">
+                                                                    @csrf
+                                                                    <div class="modal-header">
+                                                                        <h1 class="modal-title fs-5"
+                                                                            id="folder-factory-form-title">Create Folder
+                                                                        </h1>
+                                                                        <button type="button" class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        <div class="row">
+                                                                            <div class="col col-12 mb-3">
+                                                                                <label for="name-input"
+                                                                                    class="form-label">Folder Name</label>
+
+                                                                                <div class="input-group">
+                                                                                    <span class="input-group-text"
+                                                                                        id="basic-addon1">
+                                                                                        <i class="bi bi-folder-plus"></i>
+                                                                                    </span>
+                                                                                    <input type="text"
+                                                                                        class="form-control"
+                                                                                        placeholder="Enter folder name"
+                                                                                        id="name-input" name="name"
+                                                                                        value="">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col col-12 mb-3">
+                                                                                <p class="d-inline-flex gap-1">
+                                                                                    <a class="link center-content"
+                                                                                        data-bs-toggle="collapse"
+                                                                                        href="#advance-options"
+                                                                                        role="button"
+                                                                                        aria-expanded="false"
+                                                                                        aria-controls="advance-options">
+                                                                                        <span>Advance options</span><i
+                                                                                            class='bx bx-right-arrow-alt pt-1'></i>
+                                                                                    </a>
+                                                                                </p>
+                                                                                <div class="collapse"
+                                                                                    id="advance-options">
+                                                                                    <label for="folder-icon"
+                                                                                        class="form-label">Folder
+                                                                                        Icon</label>
+
+                                                                                    <div class="svg-grid">
+
+                                                                                        @foreach ($icons as $icon)
+                                                                                            <input type="radio"
+                                                                                                name="icon"
+                                                                                                value="{{ $icon->id }}"
+                                                                                                id="folder-icon-{{ $icon->id }}">
+                                                                                            <label class="svg-card"
+                                                                                                for="folder-icon-{{ $icon->id }}">
+                                                                                                <img src="{{ $icon->getUrl() }}"
+                                                                                                    alt="{{ $icon->name }}">
+                                                                                            </label>
+                                                                                        @endforeach
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-light"
+                                                                            data-bs-dismiss="modal">Cancel</button>
+                                                                        <button type="submit" class="btn btn-primary"
+                                                                            id="save-btn">Create</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <a class="btn border"
+                                                        href="{{ authRoute('user.folder-factory.files.create') }}">
+                                                        <i class="bx bx-upload"></i> Upload
+                                                    </a>
+                                                </div>
 
 
                                                 <div class="d-flex gap-1 flex-wrap align-items-center">
@@ -224,9 +345,9 @@
                                                         class="d-flex justify-content-between gap-2 flex-wrap align-items-center p-2">
                                                         <h4 class="mb-0 fw-semibold">Recent Files</h4>
 
-                                                        @if ($recentFiles->count() > 4)
-                                                            <button class="btn btn-light btn-sm show-more-btn" type="button"
-                                                                data-bs-toggle="collapse"
+                                                        @if ($recentItems->count() > 4)
+                                                            <button class="btn btn-light btn-sm show-more-btn"
+                                                                type="button" data-bs-toggle="collapse"
                                                                 data-bs-target="#moreRecentFiles" aria-expanded="false"
                                                                 aria-controls="moreRecentFiles">
 
@@ -240,12 +361,12 @@
                                                     </div>
 
                                                     {{-- First 4 files --}}
-                                                    <x-files.file-list-component :files="$recentFiles->take(4)" />
+                                                    <x-files.file-list-component :items="$recentItems->take(4)" />
 
                                                     {{-- Extra files --}}
-                                                    @if ($recentFiles->count() > 4)
+                                                    @if ($recentItems->count() > 4)
                                                         <div class="collapse mt-3" id="moreRecentFiles">
-                                                            <x-files.file-list-component :files="$recentFiles->skip(4)" />
+                                                            <x-files.file-list-component :items="$recentItems->skip(4)" />
                                                         </div>
                                                     @endif
                                                 </div>
@@ -259,33 +380,65 @@
                                                         class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
                                                         <ul class="nav nav-underline">
                                                             <li class="nav-item">
-                                                                <a class="nav-link active" aria-current="page"
-                                                                    href="#">All Files</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" href="#">Recent</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" href="#">Folder</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" href="#">Favourite</a>
-                                                            </li>
-                                                            <li class="nav-item">
-                                                                <a class="nav-link" href="#">Shared</a>
+                                                                <a class="nav-link {{ request('filter', 'all') == 'all' ? 'active' : '' }}"
+                                                                    href="{{ request()->fullUrlWithQuery(['filter' => 'all']) }}">
+                                                                    All Files
+                                                                </a>
                                                             </li>
 
+                                                            <li class="nav-item">
+                                                                <a class="nav-link {{ request('filter') == 'recent' ? 'active' : '' }}"
+                                                                    href="{{ request()->fullUrlWithQuery(['filter' => 'recent']) }}">
+                                                                    Recent
+                                                                </a>
+                                                            </li>
+
+                                                            <li class="nav-item">
+                                                                <a class="nav-link {{ request('filter') == 'folder' ? 'active' : '' }}"
+                                                                    href="{{ request()->fullUrlWithQuery(['filter' => 'folder']) }}">
+                                                                    Folder
+                                                                </a>
+                                                            </li>
+
+                                                            <li class="nav-item">
+                                                                <a class="nav-link {{ request('filter') == 'favourite' ? 'active' : '' }}"
+                                                                    href="{{ request()->fullUrlWithQuery(['filter' => 'favourite']) }}">
+                                                                    Favourite
+                                                                </a>
+                                                            </li>
                                                         </ul>
 
                                                         <div class="d-flex align-items-center gap-2 my-2 mb-3">
-                                                            <select class="form-select"
-                                                                aria-label="Default select example">
-                                                                <option selected>Sort By none</option>
-                                                                <option value="1">Sort By name</option>
-                                                                <option value="2">Sort By size</option>
-                                                                <option value="3">Sort By modified</option>
-                                                                <option value="3">Sort By created</option>
-                                                            </select>
+                                                            <form method="GET">
+                                                                @foreach (request()->except('sort') as $key => $value)
+                                                                    <input type="hidden" name="{{ $key }}"
+                                                                        value="{{ $value }}">
+                                                                @endforeach
+
+                                                                <select class="form-select" name="sort"
+                                                                    onchange="this.form.submit()" aria-label="Sort files">
+
+                                                                    <option value=""
+                                                                        {{ request('sort') == '' ? 'selected' : '' }}>
+                                                                        Sort By none
+                                                                    </option>
+
+                                                                    <option value="name"
+                                                                        {{ request('sort') == 'name' ? 'selected' : '' }}>
+                                                                        Sort By name
+                                                                    </option>
+
+                                                                    <option value="updated_at"
+                                                                        {{ request('sort') == 'updated_at' ? 'selected' : '' }}>
+                                                                        Sort By modified
+                                                                    </option>
+
+                                                                    <option value="created_at"
+                                                                        {{ request('sort') == 'created_at' ? 'selected' : '' }}>
+                                                                        Sort By created
+                                                                    </option>
+                                                                </select>
+                                                            </form>
 
                                                             <button class="btn btn-light d-flex align-items-center px-2">
                                                                 <i class="bx bx-grid-alt fs-4"></i>
@@ -299,7 +452,7 @@
 
 
 
-                                                    <x-files.file-list-component :files="$files" />
+                                                    <x-files.file-list-component :items="$items" />
 
 
                                                 </div>
@@ -324,5 +477,5 @@
 @endsection
 
 @section('js')
-
+    <script src="{{ asset('assets/js/pages/folder-factory-list.js') }}"></script>
 @endsection

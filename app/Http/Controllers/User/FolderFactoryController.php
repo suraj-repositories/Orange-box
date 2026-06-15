@@ -26,12 +26,163 @@ class FolderFactoryController extends Controller
         $this->fileService = $fileService;
     }
 
-    public function fileManager(User $user)
+    public function fileManager(User $user, Request $request)
     {
         $title = "File Manager";
-        $files = File::where('user_id', $user->id)->latest()->paginate(8);
-        $recentFiles = File::where('user_id', $user->id)->orderBy('updated_at', 'desc')->paginate(8);
-        return view('user.orbit_zone.folder_factory.file-manager', compact('title', 'files', 'recentFiles'));
+
+        $sort =  $request->sort;
+        $filter =  $request->filter;
+
+        $myDrive = FolderFactory::firstOrCreate([
+            'user_id' => $user->id,
+            'name' => 'My Drive',
+            'slug' => 'my-drive'
+        ]);
+
+        $foldersQuery = FolderFactory::query()
+            ->select([
+                'id',
+                'name as item_name',
+                DB::raw("'folder' as item_type"),
+                DB::raw('NULL as mime_type'),
+                DB::raw('NULL as file_size'),
+                DB::raw('NULL as file_path'),
+                DB::raw('NULL as file_name'),
+                'is_favourite',
+                'created_at',
+                'updated_at',
+            ])
+            ->where('user_id', $user->id)
+            ->where('parent_id', $myDrive->id);
+
+        $filesQuery = File::query()
+            ->select([
+                'id',
+                'file_name as item_name',
+                DB::raw("'file' as item_type"),
+                'mime_type',
+                'file_size',
+                'file_path',
+                'file_name',
+                'is_favourite',
+                'created_at',
+                'updated_at',
+            ])
+            ->where('user_id', $user->id);
+
+        $query = DB::query()
+            ->fromSub(
+                $foldersQuery->clone()->unionAll($filesQuery->clone()),
+                'items'
+            );
+
+        switch ($filter) {
+            case 'recent':
+                $query->orderByDesc('updated_at');
+                break;
+
+            case 'folder':
+                $query->where('item_type', 'folder');
+                break;
+            case 'favourite':
+                $query->where('item_type', 'file')
+                    ->where('is_favourite', 1);
+                break;
+
+            case 'all':
+            default:
+                break;
+        }
+
+        switch ($sort) {
+            case 'created_at':
+                $query->orderByDesc('created_at');
+                break;
+
+            case 'updated_at':
+                $query->orderByDesc('updated_at');
+                break;
+
+            case 'name':
+            default:
+                $query->orderBy('item_name');
+                break;
+        }
+
+
+
+        $items = $query->paginate(8, ['*'], 'items_page')
+            ->withQueryString();
+
+        $recentItems = DB::query()
+            ->fromSub(
+                $foldersQuery->clone()->unionAll($filesQuery->clone()),
+                'items'
+            )
+            ->orderByDesc('updated_at')
+            ->take(8)
+            ->get();
+
+        $items->getCollection()->transform(function ($item) {
+            return $this->bindFileData($item);
+        });
+        $recentItems->transform(function ($item) {
+            return $this->bindFileData($item);
+        });
+
+        $icons = Icon::where('category', 'folder')->where('status', 'active')->orderBy('order', 'asc')->get();
+
+        $totalLimit = config('app.per_user_storage');
+
+        $totalUsed = File::where('user_id', $user->id)->sum('file_size');
+
+        $storageStats = [
+            'used' => $this->fileService->getFormattedSize($totalUsed),
+            'used_in_bytes' => $totalUsed,
+            'limit' => $this->fileService->getFormattedSize($totalLimit),
+            'percentage' => ($totalLimit > 0) ? round(($totalUsed / $totalLimit) * 100, 1) : 0,
+        ];
+
+        $fileStats = $this->fileService->getFileStats($user);
+
+        $usedBytes = max($storageStats['used_in_bytes'], 1);
+
+        $photoPercent = round(($fileStats['photos']['size_in_bytes'] / $usedBytes) * 100, 1);
+        $videoPercent = round(($fileStats['videos']['size_in_bytes'] / $usedBytes) * 100, 1);
+        $documentPercent = round(($fileStats['documents']['size_in_bytes'] / $usedBytes) * 100, 1);
+        $otherPercent = round(($fileStats['others']['size_in_bytes'] / $usedBytes) * 100, 1);
+
+        return view(
+            'user.orbit_zone.folder_factory.file-manager',
+            compact(
+                'title',
+                'items',
+                'recentItems',
+                'icons',
+                'user',
+                'fileStats',
+                'photoPercent',
+                'videoPercent',
+                'documentPercent',
+                'otherPercent',
+                'storageStats',
+            )
+        );
+    }
+
+
+    public function bindFileData($item)
+    {
+
+        if ($item->item_type === 'file') {
+
+            $item->file_url = $this->fileService->getFullFileUrl($item->id, $item->file_path);
+            $extension =  $this->fileService->getExtensionByPath($item->file_path);
+            $item->extension =  $extension;
+            $item->extension_icon = $this->fileService->getIconFromExtension($extension);
+        }
+
+        return $item;
     }
 
     public function index(User $user)
@@ -103,10 +254,22 @@ class FolderFactoryController extends Controller
             ], 422);
         }
 
+        $parentId = FolderFactory::where('user_id', $user->id)->whereNull('parent_id')->value('id');
+
+        if (!$parentId) {
+            $folderFactory = FolderFactory::firstOrCreate([
+                'user_id' => $user->id,
+                'name' => 'My Drive',
+                'slug' => 'my-drive'
+            ]);
+            $parentId = $folderFactory->id;
+        }
+
         $folderFactory = FolderFactory::create([
             'name' => $request->name,
             'user_id' => $user->id,
             'icon_id' => $request->icon ?? null,
+            'parent_id' => $parentId,
             'slug' => Str::slug($request->name)
         ]);
 

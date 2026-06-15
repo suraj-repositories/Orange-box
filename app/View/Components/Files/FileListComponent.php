@@ -11,7 +11,7 @@ class FileListComponent extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public $files)
+    public function __construct(public $items)
     {
         //
     }
