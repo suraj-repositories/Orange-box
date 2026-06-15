@@ -25,8 +25,38 @@
                           <ul class="dropdown-menu dropdown-menu-lg-end" style="">
                               <li><a class="dropdown-item"
                                       href="http://localhost:8000/u/user@123/folder-factory/testing/files">
+                                      <i class="bx bx-info-circle me-1"></i>
+                                      File info
+                                  </a>
+                              </li>
+                              <li><a class="dropdown-item"
+                                      href="http://localhost:8000/u/user@123/folder-factory/testing/files">
+                                      <i class="bx bx-share me-1"></i>
+                                      Share
+                                  </a>
+                              </li>
+                              <li><a class="dropdown-item"
+                                      href="http://localhost:8000/u/user@123/folder-factory/testing/files">
                                       <i class="bx bx-show-alt me-1"></i>
-                                      Visit
+                                      View Source
+                                  </a>
+                              </li>
+                              <li><a class="dropdown-item"
+                                      href="http://localhost:8000/u/user@123/folder-factory/testing/files">
+                                      <i class="bx bx-copy me-1"></i>
+                                      Copy File
+                                  </a>
+                              </li>
+                              <li><a class="dropdown-item"
+                                      href="http://localhost:8000/u/user@123/folder-factory/testing/files">
+                                     <i class='bx bx-log-in me-1' ></i>
+                                      Move File
+                                  </a>
+                              </li>
+                              <li><a class="dropdown-item"
+                                      href="http://localhost:8000/u/user@123/folder-factory/testing/files">
+                                     <i class='bx bxs-star me-1' ></i>
+                                     Make Favourite
                                   </a>
                               </li>
                               <li><button class="dropdown-item edit-form-factory-btn" data-ob-folder-factory-id="2"
@@ -38,7 +68,8 @@
                               <li>
                                   <button class="dropdown-item text-danger bg-light-danger delete-folder-button"
                                       data-folder-factory-id="2"><i class="bx bx-trash me-1"></i>
-                                      Delete</button>
+                                      Delete
+                                    </button>
                               </li>
 
                           </ul>

@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Http\UploadedFile;
-use Ramsey\Uuid\Type\Integer;
 
 interface FileService
 {

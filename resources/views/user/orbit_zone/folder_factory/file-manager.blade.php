@@ -2,6 +2,12 @@
 
 @section('title', $title ?? '🟢🟢🟢')
 
+@section('css')
+    <style>
+
+    </style>
+@endsection
+
 @section('content')
     <div class="content-page">
         <div class="content">
@@ -48,10 +54,10 @@
                                                 </div>
 
                                                 <div class="pm-sidebar-section">
-                                                    <p class="pm-sidebar-label">Pages</p>
+                                                    <p class="mb-1 fw-bold px-3 fs-6">My Files</p>
                                                     <button class="pm-nav-item active" data-view="all">
                                                         <i class="bx bx-file"></i>
-                                                        My Files
+                                                        My Drive
 
                                                     </button>
                                                     <button class="pm-nav-item" data-view="privacy">
@@ -66,20 +72,98 @@
                                                         <i class="bx bx-star"></i>
                                                         Favourite
                                                     </button>
-                                                    <button class="pm-nav-item" data-view="privacy">
-                                                        <i class="bx bx-info-circle"></i>
-                                                        Spam
-                                                    </button>
-                                                    <button class="pm-nav-item" data-view="privacy">
-                                                        <i class="bx bx-user"></i>
-                                                        History
-                                                    </button>
+
                                                     <button class="pm-nav-item" data-view="privacy">
                                                         <i class="bx bx-trash"></i>
                                                         Trash
                                                     </button>
 
                                                 </div>
+
+
+                                                <div class="pm-sidebar-section px-2">
+                                                    <p class="mb-1 fw-bold px-1 fs-6">Your Storage</p>
+
+                                                    <strong>48% Full</strong>
+                                                    <div class="progress-stacked storage-progress">
+                                                        <div class="progress storage-photos" style="width:15%">
+                                                            <div class="progress-bar"></div>
+                                                        </div>
+
+                                                        <div class="progress storage-videos" style="width:30%">
+                                                            <div class="progress-bar"></div>
+                                                        </div>
+
+                                                        <div class="progress storage-documents" style="width:20%">
+                                                            <div class="progress-bar"></div>
+                                                        </div>
+
+                                                        <div class="progress storage-others" style="width:35%">
+                                                            <div class="progress-bar"></div>
+                                                        </div>
+                                                    </div>
+
+                                                    <p class="text-muted fs-7 mt-1">Used: 17.9 GB of 20 GB</p>
+
+                                                    <ul class="storage-list">
+
+                                                        <li class="storage-item">
+                                                            <div class="storage-icon photos">
+                                                                <i class='bx bx-image'></i>
+                                                            </div>
+
+                                                            <div class="storage-content">
+                                                                <h6 class="storage-title">Photos</h6>
+                                                                <span class="storage-count">580 files</span>
+                                                            </div>
+
+                                                            <div class="storage-size">6.6 GB</div>
+                                                        </li>
+
+                                                        <li class="storage-item">
+                                                            <div class="storage-icon videos">
+                                                                <i class='bx bx-video'></i>
+                                                            </div>
+
+                                                            <div class="storage-content">
+                                                                <h6 class="storage-title">Videos</h6>
+                                                                <span class="storage-count">32 files</span>
+                                                            </div>
+
+                                                            <div class="storage-size">3.2 GB</div>
+                                                        </li>
+
+                                                        <li class="storage-item">
+                                                            <div class="storage-icon documents">
+                                                                <i class='bx bx-file'></i>
+                                                            </div>
+
+                                                            <div class="storage-content">
+                                                                <h6 class="storage-title">Documents</h6>
+                                                                <span class="storage-count">312 files</span>
+                                                            </div>
+
+                                                            <div class="storage-size">3.7 GB</div>
+                                                        </li>
+
+
+                                                        <li class="storage-item">
+                                                            <div class="storage-icon others">
+                                                                <i class='bx bx-folder'></i>
+                                                            </div>
+
+                                                            <div class="storage-content">
+                                                                <h6 class="storage-title">Others</h6>
+                                                                <span class="storage-count">948 files</span>
+                                                            </div>
+
+                                                            <div class="storage-size">2.1 GB</div>
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+
+
 
 
                                             </div>
@@ -139,25 +223,81 @@
                                                     <div
                                                         class="d-flex justify-content-between gap-2 flex-wrap align-items-center p-2">
                                                         <h4 class="mb-0 fw-semibold">Recent Files</h4>
-                                                        <button class="btn btn-light btn-sm">Show More <i
-                                                                class="bx bx-down"></i></button>
+
+                                                        @if ($recentFiles->count() > 4)
+                                                            <button class="btn btn-light btn-sm show-more-btn" type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#moreRecentFiles" aria-expanded="false"
+                                                                aria-controls="moreRecentFiles">
+
+                                                                <span class="show-more-text">Show More</span>
+                                                                <span class="show-less-text d-none">Show Less</span>
+
+                                                                <i class='bx bx-chevron-down down-icon'></i>
+                                                                <i class='bx bx-chevron-up up-icon d-none'></i>
+                                                            </button>
+                                                        @endif
                                                     </div>
 
-                                                    <x-files.file-list-component :files="$recentFiles" />
+                                                    {{-- First 4 files --}}
+                                                    <x-files.file-list-component :files="$recentFiles->take(4)" />
 
-
+                                                    {{-- Extra files --}}
+                                                    @if ($recentFiles->count() > 4)
+                                                        <div class="collapse mt-3" id="moreRecentFiles">
+                                                            <x-files.file-list-component :files="$recentFiles->skip(4)" />
+                                                        </div>
+                                                    @endif
                                                 </div>
                                             </div>
 
                                             <div class="row p-3">
                                                 <div class="col-12">
-                                                    <div
-                                                        class="d-flex justify-content-between gap-2 flex-wrap align-items-center p-2">
-                                                        <h4 class="mb-0 fw-semibold">My Files</h4>
-                                                       <div class="d-flex align-items-center gap-2">
+                                                    <h4 class="mb-0 fw-semibold">All Files</h4>
 
-                                                       </div>
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
+                                                        <ul class="nav nav-underline">
+                                                            <li class="nav-item">
+                                                                <a class="nav-link active" aria-current="page"
+                                                                    href="#">All Files</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#">Recent</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#">Folder</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#">Favourite</a>
+                                                            </li>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" href="#">Shared</a>
+                                                            </li>
+
+                                                        </ul>
+
+                                                        <div class="d-flex align-items-center gap-2 my-2 mb-3">
+                                                            <select class="form-select"
+                                                                aria-label="Default select example">
+                                                                <option selected>Sort By none</option>
+                                                                <option value="1">Sort By name</option>
+                                                                <option value="2">Sort By size</option>
+                                                                <option value="3">Sort By modified</option>
+                                                                <option value="3">Sort By created</option>
+                                                            </select>
+
+                                                            <button class="btn btn-light d-flex align-items-center px-2">
+                                                                <i class="bx bx-grid-alt fs-4"></i>
+                                                            </button>
+
+                                                            <button class="btn btn-light d-flex align-items-center px-2">
+                                                                <i class="bx bx-list-ul fs-4"></i>
+                                                            </button>
+                                                        </div>
                                                     </div>
+
+
 
                                                     <x-files.file-list-component :files="$files" />
 
