@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Services\FileService;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -110,7 +111,6 @@ class FolderFactoryController extends Controller
         }
 
 
-
         $items = $query->paginate(8, ['*'], 'items_page')
             ->withQueryString();
 
@@ -152,6 +152,10 @@ class FolderFactoryController extends Controller
         $documentPercent = round(($fileStats['documents']['size_in_bytes'] / $usedBytes) * 100, 1);
         $otherPercent = round(($fileStats['others']['size_in_bytes'] / $usedBytes) * 100, 1);
 
+        $totalFiles = File::where('user_id', $user->id)->count();
+        $totalFolders = FolderFactory::where('user_id', $user->id)->count();
+        $totalItems = $totalFolders + $totalFiles - 1;
+
         return view(
             'user.orbit_zone.folder_factory.file-manager',
             compact(
@@ -166,9 +170,11 @@ class FolderFactoryController extends Controller
                 'documentPercent',
                 'otherPercent',
                 'storageStats',
+                'totalItems'
             )
         );
     }
+
 
 
     public function bindFileData($item)
@@ -180,9 +186,53 @@ class FolderFactoryController extends Controller
             $extension =  $this->fileService->getExtensionByPath($item->file_path);
             $item->extension =  $extension;
             $item->extension_icon = $this->fileService->getIconFromExtension($extension);
+            $item->formatted_file_size = $this->fileService->getFormattedSize($item->file_size ?? 0);
+        } elseif ($item->item_type === 'folder') {
+            $item->item_count = File::where('fileable_type', FolderFactory::class)->where('user_id', Auth::id())->where('fileable_id', $item->id)->count()
+                + FolderFactory::where('parent_id', $item->id)->where('user_id', Auth::id())->count();
         }
 
         return $item;
+    }
+    public function toggleFavourite(User $user, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'item_type'    => 'required|in:folder,file',
+            'item_id'      => 'required|integer',
+            'is_favourite' => 'required|boolean',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+
+        $isFavourite = $request->boolean('is_favourite');
+
+        $model = $request->item_type === 'file'
+            ? File::class
+            : FolderFactory::class;
+
+        $updated = $model::where('id', $request->item_id)
+            ->where('user_id', $user->id)
+            ->update([
+                'is_favourite' => $isFavourite,
+            ]);
+
+        if (! $updated) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Item not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'success'       => true,
+            'message'       => 'Updated successfully!',
+            'is_favourite'  => $isFavourite,
+        ]);
     }
 
     public function index(User $user)

@@ -36,184 +36,7 @@
 
                                     <div class="pm-shell">
 
-                                        <aside class="pm-sidebar">
-                                            <div class="pm-sidebar-inner">
-                                                <div class="pm-brand">
-                                                    <span class="pm-brand-icon">
-                                                        <svg width="16" height="16" viewBox="0 0 16 16"
-                                                            fill="none" stroke="currentColor" stroke-width="2">
-                                                            <path d="M8 2L3 4v4c0 3 2.5 5 5 6 2.5-1 5-3 5-6V4L8 2z" />
-                                                        </svg>
-                                                    </span>
-                                                    File Manager
-                                                </div>
-
-                                                <div class="pm-sidebar-section">
-                                                    <p class="mb-1 fw-bold px-3 fs-6">My Files</p>
-                                                    <a href=""
-                                                        class="pm-nav-item {{ request('filter') == 'all' ? 'active' : '' }}"
-                                                        data-view="all">
-                                                        <i class="bx bx-file"></i>
-                                                        My Drive
-
-                                                    </a>
-                                                    {{-- <button class="pm-nav-item" data-view="privacy">
-                                                        <i class="bx bx-share"></i>
-                                                        Shared
-                                                    </button> --}}
-                                                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'recent']) }}"
-                                                        class="pm-nav-item {{ request('filter') == 'recent' ? 'active' : '' }}"
-                                                        data-view="privacy">
-                                                        <i class="bx bx-user"></i>
-                                                        Recent
-                                                    </a>
-                                                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'folder']) }}"
-                                                        class="pm-nav-item {{ request('filter') == 'folder' ? 'active' : '' }}"
-                                                        data-view="privacy">
-                                                        <i class="bx bx-folder"></i>
-                                                        Folder
-                                                    </a>
-                                                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'favourite']) }}"
-                                                        class="pm-nav-item {{ request('filter') == 'favourite' ? 'active' : '' }}"
-                                                        data-view="privacy">
-                                                        <i class="bx bx-star"></i>
-                                                        Favourite
-                                                    </a>
-
-                                                    <a href="{{ request()->fullUrlWithQuery(['filter' => 'trash']) }}"
-                                                        class="pm-nav-item {{ request('filter') == 'trash' ? 'active' : '' }}"
-                                                        data-view="privacy">
-                                                        <i class="bx bx-trash"></i>
-                                                        Trash
-                                                    </a>
-
-                                                </div>
-
-
-                                                <div class="pm-sidebar-section px-2">
-                                                    <p class="mb-1 fw-bold px-1 fs-6">Your Storage</p>
-
-                                                    <strong>{{ $storageStats['percentage'] }}% Full</strong>
-
-                                                    <div class="progress-stacked storage-progress">
-
-                                                        <div class="progress storage-photos"
-                                                            style="width: {{ $photoPercent }}%">
-                                                            <div class="progress-bar"></div>
-                                                        </div>
-
-                                                        <div class="progress storage-videos"
-                                                            style="width: {{ $videoPercent }}%">
-                                                            <div class="progress-bar"></div>
-                                                        </div>
-
-                                                        <div class="progress storage-documents"
-                                                            style="width: {{ $documentPercent }}%">
-                                                            <div class="progress-bar"></div>
-                                                        </div>
-
-                                                        <div class="progress storage-others"
-                                                            style="width: {{ $otherPercent }}%">
-                                                            <div class="progress-bar"></div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <p class="text-muted fs-7 mt-1">
-                                                        Used: {{ $storageStats['used'] }}
-                                                        of
-                                                        {{ $storageStats['limit'] }}
-                                                    </p>
-
-                                                    <ul class="storage-list">
-
-                                                        <li class="storage-item">
-                                                            <div class="storage-icon photos">
-                                                                <i class='bx bx-image'></i>
-                                                            </div>
-
-                                                            <div class="storage-content">
-                                                                <h6 class="storage-title">Photos</h6>
-                                                                <span
-                                                                    class="storage-count">{{ $fileStats['photos']['count'] }}
-                                                                    files</span>
-                                                            </div>
-
-                                                            <div class="storage-size">{{ $fileStats['photos']['size'] }}
-                                                            </div>
-                                                        </li>
-
-                                                        <li class="storage-item">
-                                                            <div class="storage-icon videos">
-                                                                <i class='bx bx-video'></i>
-                                                            </div>
-
-                                                            <div class="storage-content">
-                                                                <h6 class="storage-title">Videos</h6>
-                                                                <span
-                                                                    class="storage-count">{{ $fileStats['videos']['count'] }}
-                                                                    files</span>
-                                                            </div>
-
-                                                            <div class="storage-size">{{ $fileStats['videos']['size'] }}
-                                                            </div>
-                                                        </li>
-
-                                                        <li class="storage-item">
-                                                            <div class="storage-icon documents">
-                                                                <i class='bx bx-file'></i>
-                                                            </div>
-
-                                                            <div class="storage-content">
-                                                                <h6 class="storage-title">Documents</h6>
-                                                                <span
-                                                                    class="storage-count">{{ $fileStats['documents']['count'] }}
-                                                                    files</span>
-                                                            </div>
-
-                                                            <div class="storage-size">{{ $fileStats['documents']['size'] }}
-                                                            </div>
-                                                        </li>
-
-
-                                                        <li class="storage-item">
-                                                            <div class="storage-icon others">
-                                                                <i class='bx bx-folder'></i>
-                                                            </div>
-
-                                                            <div class="storage-content">
-                                                                <h6 class="storage-title">Others</h6>
-                                                                <span
-                                                                    class="storage-count">{{ $fileStats['others']['count'] }}
-                                                                    files</span>
-                                                            </div>
-
-                                                            <div class="storage-size">{{ $fileStats['others']['size'] }}
-                                                            </div>
-                                                        </li>
-
-                                                    </ul>
-                                                </div>
-
-
-
-
-                                            </div>
-
-                                            <div class="pm-sidebar-footer">
-                                                <div
-                                                    class="d-flex w-100 align-items-center justify-content-center flex-column">
-                                                    <img class="img-fluid"
-                                                        src="{{ asset('assets/images/defaults/storage.webp') }}"
-                                                        style="height: 100px">
-                                                    <p class="text-center mb-1">
-                                                        Want to Increase Storage Capacity?
-                                                    </p>
-                                                    <button class="btn btn-outline-primary btn-sm w-100" tabindex="0"
-                                                        type="button">Upgrade</button>
-                                                </div>
-                                            </div>
-                                        </aside>
+                                        @include('user.orbit_zone.folder_factory.partials.file-manager-sidebar')
 
                                         <!-- MAIN CONTENT -->
                                         <main class="fm-main">
@@ -264,15 +87,13 @@
                                                                                     <a class="link center-content"
                                                                                         data-bs-toggle="collapse"
                                                                                         href="#advance-options"
-                                                                                        role="button"
-                                                                                        aria-expanded="false"
+                                                                                        role="button" aria-expanded="false"
                                                                                         aria-controls="advance-options">
                                                                                         <span>Advance options</span><i
                                                                                             class='bx bx-right-arrow-alt pt-1'></i>
                                                                                     </a>
                                                                                 </p>
-                                                                                <div class="collapse"
-                                                                                    id="advance-options">
+                                                                                <div class="collapse" id="advance-options">
                                                                                     <label for="folder-icon"
                                                                                         class="form-label">Folder
                                                                                         Icon</label>
@@ -315,27 +136,218 @@
 
                                                 <div class="d-flex gap-1 flex-wrap align-items-center">
                                                     <div class="position-relative topbar-search ">
-                                                        <input type="text"
+                                                        <input type="text" name="search"
                                                             class="form-control bg-light bg-opacity-75 border ps-4"
                                                             placeholder="Search by name">
                                                         <i
                                                             class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
                                                     </div>
-                                                    <button class="border btn d-flex align-items-center px-2">
+                                                    <button class="border btn d-flex align-items-center px-2"
+                                                        data-bs-toggle="modal" data-bs-target="#filterModal">
                                                         <i class="bx bx-filter fs-4"></i>
                                                     </button>
+
+                                                    <div class="modal fade" id="filterModal" tabindex="-1"
+                                                        aria-labelledby="filterModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog  modal-dialog-centered">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                                                        Filter</h1>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal"
+                                                                        aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p>Filter files by type, modified date, or location.</p>
+
+                                                                    <div class="mb-3">
+                                                                        <label for="type" class="form-label">File
+                                                                            Type</label>
+                                                                        <select class="form-select" id="type"
+                                                                            name="type">
+                                                                            <option value="">All Types</option>
+                                                                            <option value="document">Documents</option>
+                                                                            <option value="image">Images</option>
+                                                                            <option value="video">Videos</option>
+                                                                            <option value="audio">Audio</option>
+                                                                            <option value="archive">Archives</option>
+                                                                            <option value="other">Other</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="mb-3">
+                                                                        <label for="modified"
+                                                                            class="form-label">Modified</label>
+                                                                        <select class="form-select" id="modified"
+                                                                            name="modified">
+                                                                            <option value="">Any Time</option>
+                                                                            <option value="today">Today</option>
+                                                                            <option value="7_days">Last 7 Days</option>
+                                                                            <option value="30_days">Last 30 Days</option>
+                                                                            <option value="90_days">Last 90 Days</option>
+                                                                            <option value="year">This Year</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="mb-3">
+                                                                        <label for="location"
+                                                                            class="form-label">Location</label>
+                                                                        <select class="form-select" id="location"
+                                                                            name="location">
+                                                                            <option value="">All Locations</option>
+                                                                            <option value="my-drive">My Drive</option>
+                                                                            <option value="shared">Shared</option>
+                                                                            <option value="favorites">Favorites</option>
+                                                                            <option value="trash">Trash</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <div class="mb-0">
+                                                                        <label for="sort" class="form-label">Sort
+                                                                            By</label>
+                                                                        <select class="form-select" id="sort"
+                                                                            name="sort">
+                                                                            <option value="">None</option>
+                                                                            <option value="name">Name</option>
+                                                                            <option value="updated_at">Modified</option>
+                                                                            <option value="created_at">Created</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-dark"
+                                                                        data-bs-dismiss="modal">Reset</button>
+                                                                    <button type="button"
+                                                                        class="btn btn-primary">Apply</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
 
                                             </div>
                                             <div
                                                 class="border-top border-bottom w-100 p-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-1">
 
-                                                <strong class="total-items">23 Items</strong>
+                                                <strong class="total-items">{{ $totalItems }} Items</strong>
+
+                                                <div class="items-selected d-flex gap-2 align-items-center d-none">
+                                                    <button
+                                                        class="btn border rounded-circle square-30 btn-sm d-flex align-items-center justify-content-center fs-5">
+                                                        <i class="bi bi-x"></i>
+                                                    </button>
+                                                    <strong>0 Items Selected</strong>
+                                                    <button
+                                                        class="btn border btn-sm d-flex align-items-center justify-content-center">
+                                                        <i class="bi bi-download"></i>
+                                                    </button>
+                                                    <button
+                                                        class="btn border btn-sm d-flex align-items-center justify-content-center">
+                                                        <i class="bi bi-share"></i>
+                                                    </button>
+                                                    <button
+                                                        class="btn border btn-sm d-flex align-items-center justify-content-center">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                    <button
+                                                        class="btn border btn-sm d-flex align-items-center justify-content-center">
+                                                        <i class="bi bi-three-dots"></i>
+                                                    </button>
+                                                </div>
 
 
-                                                <button class="btn border d-flex align-items-center px-2">
-                                                    <i class="bx bx-info-circle fs-4"></i>
+                                                <button id="openDetailsButton"
+                                                    class="btn border btn-sm d-flex align-items-center justify-content-center">
+                                                    <i class="bi bi-info-circle"></i>
                                                 </button>
+
+
+                                                <div class="offcanvas offcanvas-end file-details-offcanvas" tabindex="-1"
+                                                    id="fileDetailsOffcanvas" aria-labelledby="fileDetailsOffcanvasLabel">
+                                                    <div class="offcanvas-header border-bottom">
+                                                        <h5 class="offcanvas-title" id="fileDetailsOffcanvasLabel">File
+                                                            info</h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="offcanvas-body">
+
+                                                        <!-- No selection -->
+                                                        <div class="details-none">
+                                                            <x-no-data message="Select an item to view more information" />
+                                                        </div>
+
+                                                        <!-- Multiple selected -->
+                                                        <div class="details-multiple d-none text-center py-4">
+                                                            <h4 class="selected-count mb-1">0</h4>
+                                                            <p class="text-muted mb-0">Items Selected</p>
+                                                        </div>
+
+                                                        <!-- Single selected -->
+                                                        <div class="details-single d-none" id="propElement">
+
+                                                            <div class="preview-container text-center mb-4">
+                                                                <img class="detail-image img-fluid rounded d-none"
+                                                                    alt="">
+                                                                <i class="detail-icon bx bx-file display-3"></i>
+                                                            </div>
+
+                                                            <h5 class="fw-bold">Properties</h5>
+
+                                                            <ul class="file-properties">
+
+                                                                <li class="d-flex gap-3 align-items-center">
+                                                                    <p class="property-name">Name</p>
+                                                                    :
+                                                                    <p class="detail-name">-</p>
+                                                                </li>
+
+                                                                <li class="d-flex gap-3 align-items-center">
+                                                                    <p class="property-name">Type</p>
+                                                                    :
+                                                                    <p class="detail-type">-</p>
+                                                                </li>
+                                                                <li class="for-file">
+                                                                    <div class="d-flex gap-3 align-items-center">
+                                                                        <p class="property-name">Size</p>
+                                                                        :
+                                                                        <p class="detail-size">-</p>
+                                                                    </div>
+                                                                </li>
+
+                                                                <li class="for-file">
+                                                                    <div class="d-flex gap-3 align-items-center">
+                                                                        <p class="property-name">Mime Type</p>
+                                                                        :
+                                                                        <p class="detail-mime-type">-</p>
+                                                                    </div>
+                                                                </li>
+
+                                                                <li class="for-folder">
+                                                                    <div class="d-flex gap-3 align-items-center">
+                                                                        <p class="property-name">Item Count</p>
+                                                                        :
+                                                                        <p class="detail-item-count">-</p>
+                                                                    </div>
+                                                                </li>
+
+                                                                <li class="d-flex gap-3 align-items-center">
+                                                                    <p class="property-name">Modified</p>
+                                                                    :
+                                                                    <p class="detail-modified">-</p>
+                                                                </li>
+                                                                <li class="d-flex gap-3 align-items-center">
+                                                                    <p class="property-name">Created At</p>
+                                                                    :
+                                                                    <p class="detail-created">-</p>
+                                                                </li>
+                                                            </ul>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
 
                                             </div>
 
@@ -440,13 +452,13 @@
                                                                 </select>
                                                             </form>
 
-                                                            <button class="btn btn-light d-flex align-items-center px-2">
+                                                            {{-- <button class="btn btn-light d-flex align-items-center px-2">
                                                                 <i class="bx bx-grid-alt fs-4"></i>
                                                             </button>
 
                                                             <button class="btn btn-light d-flex align-items-center px-2">
                                                                 <i class="bx bx-list-ul fs-4"></i>
-                                                            </button>
+                                                            </button> --}}
                                                         </div>
                                                     </div>
 
@@ -472,6 +484,42 @@
         </div>
 
         @include('layout.components.copyright')
+    </div>
+
+    <div class="modal fade file-name-editor" id="file-rename-modal" tabindex="-1"
+        aria-labelledby="folder-factory-form-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="file-rename-form" action="#" method="post">
+                    @csrf
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Rename File
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col col-12 mb-3">
+                                <label for="name-input" class="form-label">File Name</label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1">
+                                        <i class="bi bi-file"></i>
+                                    </span>
+                                    <input type="text" class="form-control file-name-input" placeholder="Enter file name"
+                                        name="name" value="">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Discard</button>
+                        <button type="submit" class="btn btn-primary" id="save-btn">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
 @endsection

@@ -107,6 +107,7 @@ Route::controller(FolderFactoryController::class)->group(function () {
     Route::get('/ff-files/upload/status', 'uploadStatus')->name('folder-factory.file.upload.status');
     Route::post('/ff-files/upload', 'uploadChunk')->name('folder-factory.files.upload.chunk');
     Route::post('/ff-files/upload/cancel', 'cancelUpload')->name('folder-factory.files.upload.cancel');
+    Route::patch('folder-factory-items/toggle-favourite', 'toggleFavourite')->name('folder-factory.files.favourite.toggle');
 });
 
 Route::controller(ProjectBoardController::class)->group(function () {

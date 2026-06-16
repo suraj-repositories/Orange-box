@@ -4654,6 +4654,7 @@ ul.directory-list.active {
     right: 10px;
     display: none;
 }
+
 .file-manager-files .file-card .file-img-box:hover .dropdown {
 
     display: block;
@@ -4808,19 +4809,23 @@ ul.directory-list.active {
 }
 
 .storage-progress .progress:nth-child(1) .progress-bar {
-    background: #3b82f6; /* Photos */
+    background: #3b82f6;
+    /* Photos */
 }
 
 .storage-progress .progress:nth-child(2) .progress-bar {
-    background: #ec4899; /* Videos */
+    background: #ec4899;
+    /* Videos */
 }
 
 .storage-progress .progress:nth-child(3) .progress-bar {
-    background: #f97316; /* Documents */
+    background: #f97316;
+    /* Documents */
 }
 
 .storage-progress .progress:nth-child(4) .progress-bar {
-    background: #6b7280; /* Others */
+    background: #6b7280;
+    /* Others */
 }
 
 
@@ -4832,4 +4837,31 @@ button.show-more-btn[aria-expanded="true"] .down-icon {
 button.show-more-btn[aria-expanded="true"] .show-less-text,
 button.show-more-btn[aria-expanded="true"] .up-icon {
     display: inline-block !important;
+}
+
+.file-properties {
+    margin: 0;
+    padding: 0;
+}
+
+.file-properties li {
+    margin-bottom: 15px;
+    list-style-type: none;
+}
+
+.file-properties p {
+    margin-bottom: 0;
+}
+
+.file-properties .property-name {
+    min-width: 110px;
+    font-weight: bold;
+}
+
+.file-details-offcanvas .type-file .for-folder {
+    display: none;
+}
+
+ .file-details-offcanvas .type-folder .for-file {
+    display: none;
 }

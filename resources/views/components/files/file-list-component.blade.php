@@ -5,12 +5,19 @@
             <div class="file-card d-flex flex-column h-100">
 
                 <div class="file-img-box">
-                    <input type="checkbox" class="form-check-input select-checkbox">
+                    <input type="checkbox" class="form-check-input select-checkbox" data-name="{{ $item->item_name }}"
+                        data-type="{{ $item->item_type }}"
+                        data-file-url="{{ $item->item_type === 'file' ? $item->file_url : '' }}"
+                        data-mime-type="{{ $item->mime_type }}"
+                        data-modified="{{ date('d M Y', strtotime($item->updated_at)) }}"
+                        data-created="{{ date('d M Y', strtotime($item->created_at)) }}"
+                        data-item-count="{{ $item->item_count ?? '' }}"
+                        data-size="{{ $item?->formatted_file_size ?? '' }}">
 
                     @if ($item->item_type === 'file')
                         @if ($item->mime_type && str_starts_with($item->mime_type, 'image/'))
-                            <img class="card-img-top rounded-top object-fit-contain"
-                                src="{{ $item->file_url }}" alt="{{ $item->item_name }}"
+                            <img class="card-img-top rounded-top object-fit-contain" src="{{ $item->file_url }}"
+                                alt="{{ $item->item_name }}"
                                 onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';">
                         @else
                             <i class="bx bx-file file-icon"></i>
@@ -30,7 +37,7 @@
                             @if ($item->item_type === 'folder')
                                 <li>
                                     <a class="dropdown-item"
-                                        href="#">
+                                        href="{{ authRoute('user.folder-factory.files.index', ['slug' => 'G']) }}">
                                         <i class="bx bx-folder-open me-1"></i>
                                         Open Folder
                                     </a>
@@ -38,37 +45,51 @@
 
                                 <li>
                                     <button class="dropdown-item edit-form-factory-btn"
-                                        data-ob-folder-factory-id="{{ $item->id }}">
+                                        data-ob-folder-factory-id="{{ $item->id }}"
+                                        data-ob-folder-factory-name="{{ $item->item_name }}"
+                                        data-ob-folder-factory-icon="">
                                         <i class="bx bx-edit me-1"></i>
-                                        Edit
+                                        Rename
                                     </button>
                                 </li>
 
                                 <li>
-                                    <button class="dropdown-item text-danger bg-light-danger delete-folder-button"
-                                        data-folder-factory-id="{{ $item->id }}">
-                                        <i class="bx bx-trash me-1"></i>
-                                        Delete
-                                    </button>
+                                    <form
+                                        action="{{ authRoute('user.folder-factory.delete', ['folderFactory' => $item->id]) }}"
+                                        method="post">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button class="dropdown-item text-danger bg-light-danger">
+                                            <i class="bx bx-trash me-1"></i>
+                                            Delete
+                                        </button>
+
+                                    </form>
                                 </li>
                             @else
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <button class="dropdown-item file-info-button" data-name="{{ $item->item_name }}"
+                                        data-type="{{ $item->item_type }}"
+                                        data-file-url="{{ $item->item_type === 'file' ? $item->file_url : '' }}"
+                                        data-mime-type="{{ $item->mime_type }}"
+                                        data-modified="{{ date('d M Y', strtotime($item->updated_at)) }}"
+                                        data-created="{{ date('d M Y', strtotime($item->created_at)) }}"
+                                        data-item-count="{{ $item->item_count ?? '' }}"
+                                        data-size="{{ $item?->formatted_file_size ?? '' }}">
                                         <i class="bx bx-info-circle me-1"></i>
                                         File Info
-                                    </a>
+                                    </button>
                                 </li>
 
-                                <li>
+                                {{-- <li>
                                     <a class="dropdown-item" href="#">
                                         <i class="bx bx-share me-1"></i>
                                         Share
                                     </a>
-                                </li>
+                                </li> --}}
 
                                 <li>
-                                    <a class="dropdown-item" href="{{ Storage::url($item->file_path) }}"
-                                        target="_blank">
+                                    <a class="dropdown-item" href="{{ $item->file_url }}" target="_blank">
                                         <i class="bx bx-show-alt me-1"></i>
                                         View File
                                     </a>
@@ -89,24 +110,33 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bxs-star me-1"></i>
-                                        Make Favourite
-                                    </a>
+                                    <button class="dropdown-item favourite_toggle"
+                                        data-is-favourite="{{ $item->is_favourite }}"
+                                        data-item-type="{{ $item->item_type }}" data-item-id="{{ $item->id }}">
+                                        <i class="bx {{ $item->is_favourite ? 'bxs-star' : 'bx-star' }} me-1"></i>
+                                        <span class="text">
+                                            Make Favourite
+                                        </span>
+                                    </button>
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <button class="dropdown-item" data-ob-file-id="{{ $item->id }}"
+                                        data-ob-file-name="{{ $item->item_name }}">
                                         <i class="bx bx-rename me-1"></i>
                                         Rename
-                                    </a>
+                                    </button>
                                 </li>
 
                                 <li>
-                                    <button class="dropdown-item text-danger">
-                                        <i class="bx bx-trash me-1"></i>
-                                        Delete
-                                    </button>
+                                    <form action="{{ route('file.delete', $item->id) }}" method="post">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button class="dropdown-item text-danger">
+                                            <i class="bx bx-trash me-1"></i>
+                                            Delete
+                                        </button>
+                                    </form>
                                 </li>
                             @endif
 
@@ -116,7 +146,10 @@
 
                 <div class="file-meta">
                     <div class="user-title">
-                        <i class="bx bx-star fs-4"></i>
+                        <button class="btn-no-style favourite_toggle" data-is-favourite="{{ $item->is_favourite }}"
+                            data-item-type="{{ $item->item_type }}" data-item-id="{{ $item->id }}">
+                            <i class="bx {{ $item->is_favourite ? 'bxs-star' : 'bx-star' }} fs-4"></i>
+                        </button>
 
                         <div>
                             <h2 class="mb-0">
@@ -125,7 +158,7 @@
 
                             <small class="file-size text-muted">
                                 @if ($item->item_type === 'file')
-                                    {{ number_format(($item->file_size ?? 0) / 1024, 2) }} KB
+                                    {{ $item->formatted_file_size }}
                                 @else
                                     Folder
                                 @endif
@@ -139,5 +172,3 @@
     @endforeach
 
 </div>
-
-
