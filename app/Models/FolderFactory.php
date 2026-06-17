@@ -33,25 +33,37 @@ class FolderFactory extends Model
         });
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(FolderFactory::class, 'parent_id', 'id');
+    }
+
     public function files()
     {
         return $this->morphMany(File::class, 'fileable');
     }
 
-    public function icon(){
+    public function directChildFolders()
+    {
+        return $this->hasMany(FolderFactory::class, 'parent_id', 'id');
+    }
+
+    public function icon()
+    {
         return $this->belongsTo(Icon::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function getIconUrl(){
-        if(!empty($this->icon)){
+    public function getIconUrl()
+    {
+        if (!empty($this->icon)) {
             return $this->icon->getUrl();
-        }else{
+        } else {
             return asset(config('constants.DEFAULT_FOLDER_ICON'));
         }
     }
-
 }

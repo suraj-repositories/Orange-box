@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
     enableSelectedFileDetails("#openDetailsButton");
     enableFileInfoButton(".file-info-button");
     enableFileRename();
+    enableFileReallocation();
+    enableOpenFolderButton("#OpenSelectedFolderBtn");
 });
 
 function enableFolderFactoryDelete(selector) {
@@ -570,3 +572,58 @@ function enableFileRename() {
         });
     }
 }
+
+function enableFileReallocation(title) {
+    const modal = document.querySelector('#file-realocation-modal');
+
+    if (!modal) return;
+
+    const modalTitle = modal.querySelector('.modal-title');
+    const modalSubmitBtn = modal.querySelector('.submit-btn');
+    const form = modal.querySelector('#file-realocation-form');
+    const btns = document.querySelectorAll('.file-reallocation');
+
+    if (btns.length <= 0) return;
+
+    btns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const title = this.dataset.actionTitle;
+
+            modalTitle.textContent = title;
+            modalSubmitBtn.textContent = title;
+            form.action = btn.dataset.submitUrl;
+
+            $(modal).modal('show');
+        });
+    });
+}
+
+
+function enableOpenFolderButton(selector) {
+    const btn = document.querySelector(selector);
+    const parent = btn.parentElement;
+    const select = parent.querySelector('select');
+    const redirectLink = parent.querySelector('#redirect-link');
+
+    if (select) {
+        btn.addEventListener('click', () => {
+            const selectedOption = select.options[select.selectedIndex];
+
+            if (selectedOption) {
+                const slug = selectedOption.dataset.slug;
+
+                if (slug) {
+                    redirectLink.href = authRoute('user.folder-factory.files.index', { slug: slug });
+                    redirectLink.target = "_blank";
+                    redirectLink.click();
+                } else {
+                    console.warn('No slug found for selected option');
+                }
+            } else {
+                console.warn('No option selected');
+            }
+        });
+    }
+
+}
+

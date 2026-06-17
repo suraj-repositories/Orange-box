@@ -20,14 +20,16 @@
                                 alt="{{ $item->item_name }}"
                                 onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';">
                         @else
-                            <i class="bx bx-file file-icon"></i>
+                            <i class="bx {{ $item->extension_icon }} file-icon"></i>
                         @endif
                     @else
-                        <i class="bx bx-folder file-icon"></i>
+                         <img class="card-img-top object-fit-contain" src="{{ $item->icon_url }}" style="max-width: 100px"
+                                alt="{{ $item->item_name }}"
+                                onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';">
                     @endif
 
                     <div class="dropdown">
-                        <a class="dropdown-toggle center-content text-dark btn border btn-sm px-1"
+                        <a class="dropdown-toggle center-content text-dark btn border btn-sm px-1 bg-light"
                             data-bs-toggle="dropdown">
                             <i class="bx bx-dots-vertical-rounded fs-5"></i>
                         </a>
@@ -50,6 +52,22 @@
                                         data-ob-folder-factory-icon="">
                                         <i class="bx bx-edit me-1"></i>
                                         Rename
+                                    </button>
+                                </li>
+
+                                   <li>
+                                    <button class="dropdown-item file-reallocation" data-action-title="Copy Folder"
+                                        data-submit-url="{{ authRoute('user.folders.copy', ['folder' => $item->id]) }}">
+                                        <i class="bx bx-copy me-1"></i>
+                                        Copy Folder
+                                    </button>
+                                </li>
+
+                                <li>
+                                    <button class="dropdown-item file-reallocation" data-action-title="Move Folder"
+                                        data-submit-url="{{ authRoute('user.folders.move', ['folder' => $item->id]) }}">
+                                        <i class="bx bx-log-in me-1"></i>
+                                        Move Folder
                                     </button>
                                 </li>
 
@@ -96,17 +114,19 @@
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <button class="dropdown-item file-reallocation" data-action-title="Copy File"
+                                        data-submit-url="{{ authRoute('user.files.copy', ['file' => $item->id]) }}">
                                         <i class="bx bx-copy me-1"></i>
                                         Copy File
-                                    </a>
+                                    </button>
                                 </li>
 
                                 <li>
-                                    <a class="dropdown-item" href="#">
+                                    <button class="dropdown-item file-reallocation" data-action-title="Move File"
+                                        data-submit-url="{{ authRoute('user.files.move', ['file' => $item->id]) }}">
                                         <i class="bx bx-log-in me-1"></i>
                                         Move File
-                                    </a>
+                                    </button>
                                 </li>
 
                                 <li>
@@ -160,7 +180,7 @@
                                 @if ($item->item_type === 'file')
                                     {{ $item->formatted_file_size }}
                                 @else
-                                    Folder
+                                  {{ $item->item_count }} Items | Folder
                                 @endif
                             </small>
                         </div>

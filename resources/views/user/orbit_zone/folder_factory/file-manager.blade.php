@@ -1,7 +1,20 @@
 @extends('user.layout.layout')
 
 @section('title', $title ?? '🟢🟢🟢')
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/css/file-upload-style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2-bootstrap-theme.min.css') }}">
+    <style>
+        .select2-container {
+            z-index: 9999;
+        }
 
+        .select2-dropdown {
+            z-index: 9999;
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="content-page">
@@ -242,10 +255,10 @@
                                                         class="btn border btn-sm d-flex align-items-center justify-content-center">
                                                         <i class="bi bi-download"></i>
                                                     </button>
-                                                    <button
+                                                    {{-- <button
                                                         class="btn border btn-sm d-flex align-items-center justify-content-center">
                                                         <i class="bi bi-share"></i>
-                                                    </button>
+                                                    </button> --}}
                                                     <button
                                                         class="btn border btn-sm d-flex align-items-center justify-content-center">
                                                         <i class="bi bi-trash"></i>
@@ -506,8 +519,8 @@
                                     <span class="input-group-text" id="basic-addon1">
                                         <i class="bi bi-file"></i>
                                     </span>
-                                    <input type="text" class="form-control file-name-input" placeholder="Enter file name"
-                                        name="name" value="">
+                                    <input type="text" class="form-control file-name-input"
+                                        placeholder="Enter file name" name="name" value="">
                                 </div>
                             </div>
 
@@ -522,8 +535,56 @@
         </div>
     </div>
 
+    <div class="modal fade file-realocation-modal" id="file-realocation-modal" tabindex="-1"
+        aria-labelledby="folder-factory-form-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="file-realocation-form" action="#" method="post" data-submit-type="ajax">
+                    @csrf
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5"></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col col-12 mb-3">
+
+                                <label for="pick-folder" class="form-label">Select Folder</label>
+
+                                <div class="d-flex">
+                                    <select class="select2-with-image" name="folder_id" id="folder-picker">
+                                        @foreach ($folderFactories as $folder)
+                                            <option value="{{ $folder->id }}" data-image="{{ $folder->getIconUrl() }}"
+                                                data-image-class="rounded-0" data-slug="{{ $folder->slug }}"
+                                                {{ request()->get('folder') == $folder->slug ? 'selected' : '' }}>
+                                                {{ $folder->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <a href="#" id="redirect-link" class="d-none"></a>
+                                    <button id="OpenSelectedFolderBtn" type="button"
+                                        class="btn bg-light border ms-1 p-0 center-content px-2 text-primary "
+                                        title="Open Folder"><i class='bx bx-folder-open fs-4'></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Discard</button>
+                        <button type="submit" class="btn btn-primary submit-btn"
+                            data-loading-text="Proceeding...">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('js')
+    <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
+    <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/js/lib-config/select2.init.js') }}"></script>
     <script src="{{ asset('assets/js/pages/folder-factory-list.js') }}"></script>
+
 @endsection

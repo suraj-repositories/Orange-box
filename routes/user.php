@@ -98,6 +98,12 @@ Route::controller(CommentController::class)->group(function () {
 
 Route::controller(FolderFactoryController::class)->group(function () {
     Route::get('file', 'fileManager')->name('file-manager');
+
+    Route::post('files/{file}/copy', [FolderFactoryController::class, 'copyFile'])->name('files.copy');
+    Route::post('folders/{folder}/copy', [FolderFactoryController::class, 'copyFolder'])->name('folders.copy');
+    Route::post('files/{file}/move', [FolderFactoryController::class, 'moveFile'])->name('files.move');
+    Route::post('folders/{folder}/move', [FolderFactoryController::class, 'moveFolder'])->name('folders.move');
+
     Route::get('folder-factory', 'index')->name('folder-factory');
     Route::post('folder-factory', 'store')->name('folder-factory.save');
     Route::post('folder-factory/{folderFactory}', 'update')->name('folder-factory.update');

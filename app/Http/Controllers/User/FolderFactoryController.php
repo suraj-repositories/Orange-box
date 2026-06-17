@@ -69,11 +69,12 @@ class FolderFactoryController extends Controller
                 'created_at',
                 'updated_at',
             ])
-            ->where('user_id', $user->id);
+            ->where('user_id', $user->id)
+            ->where('fileable_type', FolderFactory::class);
 
         $query = DB::query()
             ->fromSub(
-                $foldersQuery->clone()->unionAll($filesQuery->clone()),
+                $foldersQuery->clone()->unionAll($filesQuery->clone()->where('fileable_id', $myDrive->id)),
                 'items'
             );
 
@@ -111,7 +112,7 @@ class FolderFactoryController extends Controller
         }
 
 
-        $items = $query->paginate(8, ['*'], 'items_page')
+        $items = $query->paginate(16, ['*'], 'items_page')
             ->withQueryString();
 
         $recentItems = DB::query()
@@ -134,7 +135,7 @@ class FolderFactoryController extends Controller
 
         $totalLimit = config('app.per_user_storage');
 
-        $totalUsed = File::where('user_id', $user->id)->sum('file_size');
+        $totalUsed = File::where('user_id', $user->id)->where('fileable_type', FolderFactory::class)->sum('file_size');
 
         $storageStats = [
             'used' => $this->fileService->getFormattedSize($totalUsed),
@@ -152,9 +153,11 @@ class FolderFactoryController extends Controller
         $documentPercent = round(($fileStats['documents']['size_in_bytes'] / $usedBytes) * 100, 1);
         $otherPercent = round(($fileStats['others']['size_in_bytes'] / $usedBytes) * 100, 1);
 
-        $totalFiles = File::where('user_id', $user->id)->count();
+        $totalFiles = File::where('user_id', $user->id)->where('fileable_type', FolderFactory::class)->count();
         $totalFolders = FolderFactory::where('user_id', $user->id)->count();
         $totalItems = $totalFolders + $totalFiles - 1;
+
+        $folderFactories = FolderFactory::get();
 
         return view(
             'user.orbit_zone.folder_factory.file-manager',
@@ -170,12 +173,11 @@ class FolderFactoryController extends Controller
                 'documentPercent',
                 'otherPercent',
                 'storageStats',
-                'totalItems'
+                'totalItems',
+                'folderFactories'
             )
         );
     }
-
-
 
     public function bindFileData($item)
     {
@@ -188,8 +190,18 @@ class FolderFactoryController extends Controller
             $item->extension_icon = $this->fileService->getIconFromExtension($extension);
             $item->formatted_file_size = $this->fileService->getFormattedSize($item->file_size ?? 0);
         } elseif ($item->item_type === 'folder') {
+
+
+            $item->icon_url = asset(config('constants.DEFAULT_FOLDER_ICON'));
+            if (!empty($item->icon_id)) {
+                $icon = Icon::where('id', $item->icon_id)->first();
+                if ($icon) {
+                    $item->icon_url = $icon->getUrl();
+                }
+            }
             $item->item_count = File::where('fileable_type', FolderFactory::class)->where('user_id', Auth::id())->where('fileable_id', $item->id)->count()
                 + FolderFactory::where('parent_id', $item->id)->where('user_id', Auth::id())->count();
+
         }
 
         return $item;
@@ -233,6 +245,266 @@ class FolderFactoryController extends Controller
             'message'       => 'Updated successfully!',
             'is_favourite'  => $isFavourite,
         ]);
+    }
+
+    public function copyFile(User $user, File $file, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'folder_id' => 'required|exists:folder_factories,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $folder = FolderFactory::where('id', $request->folder_id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$folder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Folder not found.',
+            ], 404);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $extension = pathinfo($file->file_path, PATHINFO_EXTENSION);
+            $newPath = 'uploads/' . $user->id . '/' . Str::uuid() . '.' . $extension;
+
+            Storage::copy($file->file_path, $newPath);
+            $copiedFile = File::create([
+                'user_id'       => $user->id,
+                'file_path'     =>   $newPath,
+                'file_name'     => $file->file_name,
+                'mime_type'     => $file->mime_type,
+                'file_size'     => $file->file_size,
+                'is_temp'       => 0,
+                'fileable_type' => FolderFactory::class,
+                'fileable_id'   => $folder->id,
+                'is_favourite'  => 0,
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'File copied successfully.',
+                'file'    => $copiedFile,
+            ]);
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function moveFile(User $user, File $file, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'folder_id' => 'required|exists:folder_factories,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        if ((int) $file->user_id !== (int) $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Access denied.',
+            ], 403);
+        }
+
+        $folder = FolderFactory::where('id', $request->folder_id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$folder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Folder not found.',
+            ], 404);
+        }
+
+        if (
+            $file->fileable_type === FolderFactory::class &&
+            $file->fileable_id == $folder->id
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'File is already in this folder.',
+            ], 422);
+        }
+
+        $file->update([
+            'fileable_type' => FolderFactory::class,
+            'fileable_id'   => $folder->id,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'File moved successfully!',
+        ]);
+    }
+
+    public function moveFolder(User $user, FolderFactory $folder, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'folder_id' => 'required|exists:folder_factories,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        if ((int) $folder->user_id !== (int) $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Access denied.',
+            ], 403);
+        }
+
+        $destinationFolder = FolderFactory::where('id', $request->folder_id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$destinationFolder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Destination folder not found.',
+            ], 404);
+        }
+
+        if ($folder->id === $destinationFolder->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot move a folder into itself.',
+            ], 422);
+        }
+
+        $folder->update([
+            'parent_id' => $destinationFolder->id,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Folder moved successfully!',
+        ]);
+    }
+
+    public function copyFolder(User $user, FolderFactory $folder, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'folder_id' => 'required|exists:folder_factories,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        if ((int) $folder->user_id !== (int) $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Access denied.',
+            ], 403);
+        }
+
+        $destinationFolder = FolderFactory::where('id', $request->folder_id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$destinationFolder) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Destination folder not found.',
+            ], 404);
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            $this->duplicateFolder($folder, $destinationFolder->id, $user->id);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Folder copied successfully!',
+            ]);
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    protected function duplicateFolder(FolderFactory $sourceFolder, int $parentId, int $userId)
+    {
+        $newFolder = FolderFactory::create([
+            'parent_id' => $parentId,
+            'icon_id' => $sourceFolder->icon_id,
+            'user_id' => $userId,
+            'name' => $sourceFolder->name . ' Copy',
+            'slug' => Str::slug($sourceFolder->name . '-copy-' . Str::random(5)),
+            'is_favourite' => 0,
+        ]);
+
+        $files = File::where('fileable_type', FolderFactory::class)
+            ->where('fileable_id', $sourceFolder->id)
+            ->get();
+
+        foreach ($files as $file) {
+
+            $extension = pathinfo($file->file_path, PATHINFO_EXTENSION);
+
+            $newPath = 'uploads/' . $userId . '/' . Str::uuid() . '.' . $extension;
+
+            Storage::copy($file->file_path, $newPath);
+
+            File::create([
+                'user_id'       => $userId,
+                'file_path'     => $newPath,
+                'file_name'     => $file->file_name,
+                'mime_type'     => $file->mime_type,
+                'file_size'     => $file->file_size,
+                'is_temp'       => 0,
+                'fileable_type' => FolderFactory::class,
+                'fileable_id'   => $newFolder->id,
+                'is_favourite'  => 0,
+            ]);
+        }
+
+        $children = FolderFactory::where('parent_id', $sourceFolder->id)->get();
+
+        foreach ($children as $child) {
+            $this->duplicateFolder($child, $newFolder->id, $userId);
+        }
+
+        return $newFolder;
     }
 
     public function index(User $user)
