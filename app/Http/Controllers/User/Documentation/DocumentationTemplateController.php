@@ -81,6 +81,8 @@ class DocumentationTemplateController extends Controller
                 ->exists();
         }
 
+        $template->loadCount('purchases');
+        $template->loadCount('documentations');
 
         return view('user.documentation.template.show-template', compact('template', 'title', 'isPurchased'));
     }

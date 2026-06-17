@@ -164,7 +164,15 @@
                             </div>
 
                             <div class="card-footer border-top py-2">
-                                50+ Users
+                               <div class="d-flex flex-wrap gap-2">
+                                 @if (($template->price ?? 0) > 0)
+                                   <span class="badge border"> {{ $template->purchases_count }} {{ $template->purchases_count > 1 ? 'Purchases' : 'Purchase' }}</span>
+                                @endif
+
+                                  @if (($template->price ?? 0) > 0)
+                                    <span class="badge border">{{ $template->documentations_count }} Running Documentation</span>
+                                @endif
+                               </div>
                             </div>
 
                         </div>

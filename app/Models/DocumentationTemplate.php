@@ -24,7 +24,6 @@ class DocumentationTemplate extends Model
         'original_price',
         'price',
         'sort_order',
-        'documentation_template_id',
     ];
     protected $casts = [
         'components' => 'array',
@@ -58,5 +57,13 @@ class DocumentationTemplate extends Model
     public function cartItems()
     {
         return $this->hasMany(TemplateCart::class);
+    }
+
+    public function documentations()
+    {
+        return $this->hasMany(
+            Documentation::class,
+            'documentation_template_id'
+        );
     }
 }
