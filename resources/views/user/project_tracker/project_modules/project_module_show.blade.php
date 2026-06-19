@@ -145,7 +145,7 @@
                                         </div>
                                         <div class="col-12 col-md-4">
 
-                                            <div class="image-3-gallery" data-image-preview="true"
+                                            <div class="image-3-gallery" data-media-preview="true"
                                                 data-image-downloadable="true">
                                                 @foreach ($imageFiles as $file)
                                                     <div class="img-wrapper">

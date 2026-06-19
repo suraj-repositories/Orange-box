@@ -116,7 +116,7 @@
 
                                         </div>
                                         <div class="col-12 col-md-4">
-                                            <div class="text-center" data-image-preview="true"
+                                            <div class="text-center" data-media-preview="true"
                                                 data-image-downloadable="true">
                                                 <img src="{{ $projectBoard->thumbnail_url }}"
                                                     class="img-fluid rounded shadow-sm" alt="Thumbnail"

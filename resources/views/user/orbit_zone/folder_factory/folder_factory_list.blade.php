@@ -85,7 +85,7 @@
                                                     </div>
                                                     <div class="title-area">
                                                         <a
-                                                            href="{{ authRoute('user.folder-factory.files.index', ['slug' => $folderFactory->slug]) }}">
+                                                            href="{{ authRoute('user.folder-factory.files.index', ['folderId' => $folderFactory->id]) }}">
                                                             <div class="title text-dark"> {{ $folderFactory->name }}</div>
                                                         </a>
                                                         <div class="sub-title">
@@ -108,7 +108,7 @@
 
                                                                     <ul class="dropdown-menu dropdown-menu-lg-end">
                                                                         <li><a class="dropdown-item"
-                                                                                href="{{ authRoute('user.folder-factory.files.index', ['slug' => $folderFactory->slug]) }}">
+                                                                                href="{{ authRoute('user.folder-factory.files.index', ['folderId' => $folderFactory->id]) }}">
                                                                                 <i class='bx bx-show-alt me-1'></i> Visit
                                                                             </a>
                                                                         </li>

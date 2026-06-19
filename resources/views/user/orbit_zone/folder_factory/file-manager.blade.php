@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/file-upload-style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/select2/select2-bootstrap-theme.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.css') }}">
+
     <style>
         .select2-container {
             z-index: 9999;
@@ -364,76 +366,51 @@
 
                                             </div>
 
-                                            <div class="row p-3">
-                                                <div class="col-12">
-                                                    <div
-                                                        class="d-flex justify-content-between gap-2 flex-wrap align-items-center p-2">
-                                                        <h4 class="mb-0 fw-semibold">Recent Files</h4>
+                                            @if (!request()->has('search'))
+                                                <div class="row p-3">
+                                                    <div class="col-12">
+                                                        <div
+                                                            class="d-flex justify-content-between gap-2 flex-wrap align-items-center p-2">
+                                                            <h4 class="mb-0 fw-semibold">Recent Files</h4>
 
+                                                            @if ($recentItems->count() > 4)
+                                                                <button class="btn btn-light btn-sm show-more-btn"
+                                                                    type="button" data-bs-toggle="collapse"
+                                                                    data-bs-target="#moreRecentFiles"
+                                                                    aria-expanded="false" aria-controls="moreRecentFiles">
+
+                                                                    <span class="show-more-text">Show More</span>
+                                                                    <span class="show-less-text d-none">Show Less</span>
+
+                                                                    <i class='bx bx-chevron-down down-icon'></i>
+                                                                    <i class='bx bx-chevron-up up-icon d-none'></i>
+                                                                </button>
+                                                            @endif
+                                                        </div>
+
+                                                        {{-- First 4 files --}}
+                                                        <x-files.file-list-component :items="$recentItems->take(4)" />
+
+                                                        {{-- Extra files --}}
                                                         @if ($recentItems->count() > 4)
-                                                            <button class="btn btn-light btn-sm show-more-btn"
-                                                                type="button" data-bs-toggle="collapse"
-                                                                data-bs-target="#moreRecentFiles" aria-expanded="false"
-                                                                aria-controls="moreRecentFiles">
-
-                                                                <span class="show-more-text">Show More</span>
-                                                                <span class="show-less-text d-none">Show Less</span>
-
-                                                                <i class='bx bx-chevron-down down-icon'></i>
-                                                                <i class='bx bx-chevron-up up-icon d-none'></i>
-                                                            </button>
+                                                            <div class="collapse mt-3" id="moreRecentFiles">
+                                                                <x-files.file-list-component :items="$recentItems->skip(4)" />
+                                                            </div>
                                                         @endif
                                                     </div>
-
-                                                    {{-- First 4 files --}}
-                                                    <x-files.file-list-component :items="$recentItems->take(4)" />
-
-                                                    {{-- Extra files --}}
-                                                    @if ($recentItems->count() > 4)
-                                                        <div class="collapse mt-3" id="moreRecentFiles">
-                                                            <x-files.file-list-component :items="$recentItems->skip(4)" />
-                                                        </div>
-                                                    @endif
                                                 </div>
-                                            </div>
+                                            @endif
 
                                             <div class="row p-3">
                                                 <div class="col-12">
-                                                    <h4 class="mb-0 fw-semibold">All Files</h4>
+                                                    @if ($isSearch)
+                                                        {{-- Search Layout --}}
+                                                        <div
+                                                            class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                                            <h4 class="mb-0 fw-semibold">
+                                                                Search Result
+                                                            </h4>
 
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
-                                                        <ul class="nav nav-underline">
-                                                            <li class="nav-item">
-                                                                <a class="nav-link {{ request('filter', 'all') == 'all' ? 'active' : '' }}"
-                                                                    href="{{ request()->fullUrlWithQuery(['filter' => 'all']) }}">
-                                                                    All Files
-                                                                </a>
-                                                            </li>
-
-                                                            <li class="nav-item">
-                                                                <a class="nav-link {{ request('filter') == 'recent' ? 'active' : '' }}"
-                                                                    href="{{ request()->fullUrlWithQuery(['filter' => 'recent']) }}">
-                                                                    Recent
-                                                                </a>
-                                                            </li>
-
-                                                            <li class="nav-item">
-                                                                <a class="nav-link {{ request('filter') == 'folder' ? 'active' : '' }}"
-                                                                    href="{{ request()->fullUrlWithQuery(['filter' => 'folder']) }}">
-                                                                    Folder
-                                                                </a>
-                                                            </li>
-
-                                                            <li class="nav-item">
-                                                                <a class="nav-link {{ request('filter') == 'favourite' ? 'active' : '' }}"
-                                                                    href="{{ request()->fullUrlWithQuery(['filter' => 'favourite']) }}">
-                                                                    Favourite
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-
-                                                        <div class="d-flex align-items-center gap-2 my-2 mb-3">
                                                             <form method="GET">
                                                                 @foreach (request()->except('sort') as $key => $value)
                                                                     <input type="hidden" name="{{ $key }}"
@@ -441,8 +418,8 @@
                                                                 @endforeach
 
                                                                 <select class="form-select" name="sort"
-                                                                    onchange="this.form.submit()" aria-label="Sort files">
-
+                                                                    onchange="this.form.submit()" aria-label="Sort files"
+                                                                    style="min-width: 220px;">
                                                                     <option value=""
                                                                         {{ request('sort') == '' ? 'selected' : '' }}>
                                                                         Sort By none
@@ -464,17 +441,77 @@
                                                                     </option>
                                                                 </select>
                                                             </form>
-
-                                                            {{-- <button class="btn btn-light d-flex align-items-center px-2">
-                                                                <i class="bx bx-grid-alt fs-4"></i>
-                                                            </button>
-
-                                                            <button class="btn btn-light d-flex align-items-center px-2">
-                                                                <i class="bx bx-list-ul fs-4"></i>
-                                                            </button> --}}
                                                         </div>
-                                                    </div>
+                                                    @else
+                                                        {{-- Normal Layout --}}
+                                                        <h4 class="mb-3 fw-semibold">
+                                                            All Files
+                                                        </h4>
 
+                                                        <div
+                                                            class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+                                                            <ul class="nav nav-underline">
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link {{ request('filter', 'all') == 'all' ? 'active' : '' }}"
+                                                                        href="{{ request()->fullUrlWithQuery(['filter' => 'all']) }}">
+                                                                        All Files
+                                                                    </a>
+                                                                </li>
+
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link {{ request('filter') == 'recent' ? 'active' : '' }}"
+                                                                        href="{{ request()->fullUrlWithQuery(['filter' => 'recent']) }}">
+                                                                        Recent
+                                                                    </a>
+                                                                </li>
+
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link {{ request('filter') == 'folder' ? 'active' : '' }}"
+                                                                        href="{{ request()->fullUrlWithQuery(['filter' => 'folder']) }}">
+                                                                        Folder
+                                                                    </a>
+                                                                </li>
+
+                                                                <li class="nav-item">
+                                                                    <a class="nav-link {{ request('filter') == 'favourite' ? 'active' : '' }}"
+                                                                        href="{{ request()->fullUrlWithQuery(['filter' => 'favourite']) }}">
+                                                                        Favourite
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+
+                                                            <form method="GET">
+                                                                @foreach (request()->except('sort') as $key => $value)
+                                                                    <input type="hidden" name="{{ $key }}"
+                                                                        value="{{ $value }}">
+                                                                @endforeach
+
+                                                                <select class="form-select" name="sort"
+                                                                    onchange="this.form.submit()" aria-label="Sort files"
+                                                                    style="min-width: 220px;">
+                                                                    <option value=""
+                                                                        {{ request('sort') == '' ? 'selected' : '' }}>
+                                                                        Sort By none
+                                                                    </option>
+
+                                                                    <option value="name"
+                                                                        {{ request('sort') == 'name' ? 'selected' : '' }}>
+                                                                        Sort By name
+                                                                    </option>
+
+                                                                    <option value="updated_at"
+                                                                        {{ request('sort') == 'updated_at' ? 'selected' : '' }}>
+                                                                        Sort By modified
+                                                                    </option>
+
+                                                                    <option value="created_at"
+                                                                        {{ request('sort') == 'created_at' ? 'selected' : '' }}>
+                                                                        Sort By created
+                                                                    </option>
+                                                                </select>
+                                                            </form>
+                                                        </div>
+                                                    @endif
 
 
                                                     <x-files.file-list-component :items="$items" />
@@ -586,5 +623,6 @@
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/lib-config/select2.init.js') }}"></script>
     <script src="{{ asset('assets/js/pages/folder-factory-list.js') }}"></script>
+    <script src="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.js') }}"></script>
 
 @endsection

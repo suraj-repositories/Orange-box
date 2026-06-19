@@ -49,6 +49,7 @@ class FolderFactoryController extends Controller
                 DB::raw('NULL as file_size'),
                 DB::raw('NULL as file_path'),
                 DB::raw('NULL as file_name'),
+                'icon_id',
                 'is_favourite',
                 'created_at',
                 'updated_at',
@@ -65,6 +66,7 @@ class FolderFactoryController extends Controller
                 'file_size',
                 'file_path',
                 'file_name',
+                DB::raw('NULL as icon_id'),
                 'is_favourite',
                 'created_at',
                 'updated_at',
@@ -157,7 +159,13 @@ class FolderFactoryController extends Controller
         $totalFolders = FolderFactory::where('user_id', $user->id)->count();
         $totalItems = $totalFolders + $totalFiles - 1;
 
-        $folderFactories = FolderFactory::get();
+        $folderFactories = FolderFactory::where('user_id', $user->id)->get();
+
+
+        $isSearch = false;
+        if ($request->has('search')) {
+            $isSearch = true;
+        }
 
         return view(
             'user.orbit_zone.folder_factory.file-manager',
@@ -174,7 +182,8 @@ class FolderFactoryController extends Controller
                 'otherPercent',
                 'storageStats',
                 'totalItems',
-                'folderFactories'
+                'folderFactories',
+                'isSearch'
             )
         );
     }
@@ -201,7 +210,6 @@ class FolderFactoryController extends Controller
             }
             $item->item_count = File::where('fileable_type', FolderFactory::class)->where('user_id', Auth::id())->where('fileable_id', $item->id)->count()
                 + FolderFactory::where('parent_id', $item->id)->where('user_id', Auth::id())->count();
-
         }
 
         return $item;
@@ -538,13 +546,64 @@ class FolderFactoryController extends Controller
         return view('user.orbit_zone.folder_factory.folder_factory_list', compact('icons', 'folderFactories', 'totalFiles', 'totalSize'));
     }
 
-    public function showFiles(User $user, $slug, Request $request)
+    public function showFiles(User $user, $folderId, Request $request)
     {
-        $folderFactory = FolderFactory::where('slug', $slug)->where('user_id', $user->id)->first();
+        $folderFactory = FolderFactory::where('id', $folderId)->where('user_id', $user->id)->first();
         if (!$folderFactory) {
             abort(404, 'Folder not exists!');
         }
-        return view('user.orbit_zone.folder_factory.folder_factory_files_list', compact('folderFactory'));
+
+        $foldersQuery = FolderFactory::query()
+            ->select([
+                'id',
+                'name as item_name',
+                DB::raw("'folder' as item_type"),
+                DB::raw('NULL as mime_type'),
+                DB::raw('NULL as file_size'),
+                DB::raw('NULL as file_path'),
+                DB::raw('NULL as file_name'),
+                'icon_id',
+                'is_favourite',
+                'created_at',
+                'updated_at',
+            ])
+            ->where('user_id', $user->id)
+            ->where('parent_id', $folderFactory->id);
+
+        $filesQuery = File::query()
+            ->select([
+                'id',
+                'file_name as item_name',
+                DB::raw("'file' as item_type"),
+                'mime_type',
+                'file_size',
+                'file_path',
+                'file_name',
+                DB::raw('NULL as icon_id'),
+                'is_favourite',
+                'created_at',
+                'updated_at',
+            ])
+            ->where('user_id', $user->id)
+            ->where('fileable_type', FolderFactory::class)
+            ->where('fileable_id', $folderId);
+
+        $query = DB::query()
+            ->fromSub(
+                $foldersQuery->clone()->unionAll($filesQuery->clone()),
+                'items'
+            );
+        $items = $query->paginate(50, ['*'], 'items_page')
+            ->withQueryString();
+
+        $items->getCollection()->transform(function ($item) {
+            return $this->bindFileData($item);
+        });
+
+        $icons = Icon::where('category', 'folder')->where('status', 'active')->orderBy('order', 'asc')->get();
+        $folderFactories = FolderFactory::where('user_id', $user->id)->get();
+
+        return view('user.orbit_zone.folder_factory.folder_factory_files_list', compact('folderFactory', 'items', 'icons', 'folderFactories'));
     }
 
     public function create(User $user)
@@ -566,6 +625,7 @@ class FolderFactoryController extends Controller
                 }),
             ],
             'icon' => 'nullable|integer|exists:icons,id',
+            'folder_id' => 'nullable|exists:folder_factories,id'
         ]);
 
         if ($validator->fails()) {
@@ -576,7 +636,19 @@ class FolderFactoryController extends Controller
             ], 422);
         }
 
-        $parentId = FolderFactory::where('user_id', $user->id)->whereNull('parent_id')->value('id');
+        if ($request->has('folder_id')) {
+
+            if (FolderFactory::where('user_id', $user->id)->where('id', $request->folder_id)->exists()) {
+                $parentId = $request->folder_id;
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => "Unauthorised access!"
+                ], 403);
+            }
+        } else {
+            $parentId = FolderFactory::where('user_id', $user->id)->whereNull('parent_id')->value('id');
+        }
 
         if (!$parentId) {
             $folderFactory = FolderFactory::firstOrCreate([
@@ -616,6 +688,7 @@ class FolderFactoryController extends Controller
                     }),
             ],
             'icon' => 'nullable|integer|exists:icons,id',
+            'folder_id' => 'nullable|exists:folder_factories,id'
         ]);
 
         if ($validator->fails()) {

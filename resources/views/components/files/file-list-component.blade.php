@@ -1,4 +1,5 @@
-<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 g-3 file-manager-files">
+<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 g-3 file-manager-files"
+    data-media-preview="true">
 
     @foreach ($items as $item)
         <div class="col">
@@ -16,16 +17,16 @@
 
                     @if ($item->item_type === 'file')
                         @if ($item->mime_type && str_starts_with($item->mime_type, 'image/'))
-                            <img class="card-img-top rounded-top object-fit-contain" src="{{ $item->file_url }}"
+                            <img class="card-img-top rounded-top object-fit-contain" src="{{ $item->file_url }}" data-media-downloadable="true"
                                 alt="{{ $item->item_name }}"
                                 onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';">
                         @else
                             <i class="bx {{ $item->extension_icon }} file-icon"></i>
                         @endif
                     @else
-                         <img class="card-img-top object-fit-contain" src="{{ $item->icon_url }}" style="max-width: 100px"
-                                alt="{{ $item->item_name }}"
-                                onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';">
+                        <img class="card-img-top object-fit-contain" src="{{ $item->icon_url }}"
+                            style="max-width: 100px" alt="{{ $item->item_name }}" data-previewable="false"
+                            onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';">
                     @endif
 
                     <div class="dropdown">
@@ -39,7 +40,7 @@
                             @if ($item->item_type === 'folder')
                                 <li>
                                     <a class="dropdown-item"
-                                        href="{{ authRoute('user.folder-factory.files.index', ['slug' => 'G']) }}">
+                                        href="{{ authRoute('user.folder-factory.files.index', ['folderId' => $item->id]) }}">
                                         <i class="bx bx-folder-open me-1"></i>
                                         Open Folder
                                     </a>
@@ -55,7 +56,7 @@
                                     </button>
                                 </li>
 
-                                   <li>
+                                <li>
                                     <button class="dropdown-item file-reallocation" data-action-title="Copy Folder"
                                         data-submit-url="{{ authRoute('user.folders.copy', ['folder' => $item->id]) }}">
                                         <i class="bx bx-copy me-1"></i>
@@ -180,7 +181,7 @@
                                 @if ($item->item_type === 'file')
                                     {{ $item->formatted_file_size }}
                                 @else
-                                  {{ $item->item_count }} Items | Folder
+                                    {{ $item->item_count }} Items | Folder
                                 @endif
                             </small>
                         </div>

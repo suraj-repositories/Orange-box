@@ -6,8 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
     enableCheckboxes('.select-checkbox');
     enableSelectedFileDetails("#openDetailsButton");
     enableFileInfoButton(".file-info-button");
-    enableFileRename();
     enableFileReallocation();
+    enableFileRename();
     enableOpenFolderButton("#OpenSelectedFolderBtn");
 });
 
@@ -519,7 +519,11 @@ function enableFileRename() {
     {
         const renameModal = document.getElementById('file-rename-modal');
         const form = document.getElementById('file-rename-form');
+
+        if (!form) { return; }
         const nameInput = form.querySelector('input[name="name"]');
+
+
 
         let fileId = null;
 

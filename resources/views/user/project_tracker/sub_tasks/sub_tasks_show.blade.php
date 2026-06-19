@@ -163,7 +163,7 @@
                              <div class="row">
                                  @if ($images && $images->isNotEmpty())
                                      <div class="col-12 col-sm-6 col-md-3">
-                                         <div class="image-3-gallery" data-image-preview="true"
+                                         <div class="image-3-gallery" data-media-preview="true"
                                              data-image-downloadable="true">
                                              @foreach ($images as $file)
                                                  <div class="img-wrapper">
