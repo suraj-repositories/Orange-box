@@ -31,8 +31,16 @@ class FolderFactoryController extends Controller
     {
         $title = "File Manager";
 
-        $sort =  $request->sort;
-        $filter =  $request->filter;
+        $sort = $request->sort;
+        $filter = $request->filter;
+
+        $search = trim($request->search ?? '');
+        $type = $request->type;
+        $modified = $request->modified;
+        $location = $request->location;
+
+        $isSearching = filled($search);
+
 
         $myDrive = FolderFactory::firstOrCreate([
             'user_id' => $user->id,
@@ -54,8 +62,7 @@ class FolderFactoryController extends Controller
                 'created_at',
                 'updated_at',
             ])
-            ->where('user_id', $user->id)
-            ->where('parent_id', $myDrive->id);
+            ->where('user_id', $user->id);
 
         $filesQuery = File::query()
             ->select([
@@ -74,13 +81,23 @@ class FolderFactoryController extends Controller
             ->where('user_id', $user->id)
             ->where('fileable_type', FolderFactory::class);
 
-        $query = DB::query()
-            ->fromSub(
-                $foldersQuery->clone()->unionAll($filesQuery->clone()->where('fileable_id', $myDrive->id)),
-                'items'
-            );
+        if (!$isSearching) {
+            $foldersQuery->where('parent_id', $myDrive->id);
+            $filesQuery->where('fileable_id', $myDrive->id);
+        }
+
+        $query = DB::query()->fromSub(
+            $foldersQuery->unionAll($filesQuery),
+            'items'
+        );
+
+
+        if (!empty($search)) {
+            $query->where('item_name', 'like', '%' . $search . '%');
+        }
 
         switch ($filter) {
+
             case 'recent':
                 $query->orderByDesc('updated_at');
                 break;
@@ -88,17 +105,110 @@ class FolderFactoryController extends Controller
             case 'folder':
                 $query->where('item_type', 'folder');
                 break;
-            case 'favourite':
-                $query->where('item_type', 'file')
-                    ->where('is_favourite', 1);
-                break;
 
-            case 'all':
-            default:
+            case 'favourite':
+                $query->where('is_favourite', 1);
                 break;
         }
 
+        if (!empty($type)) {
+
+            switch ($type) {
+
+                case 'image':
+                    $query->where(function ($q) {
+                        $q->where('item_type', 'folder')
+                            ->orWhere('mime_type', 'like', 'image/%');
+                    });
+                    break;
+
+                case 'video':
+                    $query->where(function ($q) {
+                        $q->where('item_type', 'folder')
+                            ->orWhere('mime_type', 'like', 'video/%');
+                    });
+                    break;
+
+                case 'audio':
+                    $query->where(function ($q) {
+                        $q->where('item_type', 'folder')
+                            ->orWhere('mime_type', 'like', 'audio/%');
+                    });
+                    break;
+
+                case 'document':
+                    $query->where(function ($q) {
+                        $q->where('item_type', 'folder')
+                            ->orWhere('mime_type', 'like', 'application/pdf%')
+                            ->orWhere('mime_type', 'like', 'application/msword%')
+                            ->orWhere('mime_type', 'like', 'application/vnd%')
+                            ->orWhere('mime_type', 'like', 'text/%');
+                    });
+                    break;
+
+                case 'archive':
+                    $query->where(function ($q) {
+                        $q->where('item_type', 'folder')
+                            ->orWhere('mime_type', 'like', '%zip%')
+                            ->orWhere('mime_type', 'like', '%rar%')
+                            ->orWhere('mime_type', 'like', '%7z%');
+                    });
+                    break;
+
+                case 'other':
+                    $query->where(function ($q) {
+                        $q->where('item_type', 'folder')
+                            ->orWhere(function ($file) {
+                                $file->where('mime_type', 'not like', 'image/%')
+                                    ->where('mime_type', 'not like', 'video/%')
+                                    ->where('mime_type', 'not like', 'audio/%');
+                            });
+                    });
+                    break;
+            }
+        }
+
+
+        if (!empty($modified)) {
+
+            switch ($modified) {
+
+                case 'today':
+                    $query->whereDate('updated_at', today());
+                    break;
+
+                case '7_days':
+                    $query->where('updated_at', '>=', now()->subDays(7));
+                    break;
+
+                case '30_days':
+                    $query->where('updated_at', '>=', now()->subDays(30));
+                    break;
+
+                case '90_days':
+                    $query->where('updated_at', '>=', now()->subDays(90));
+                    break;
+
+                case 'year':
+                    $query->whereYear('updated_at', now()->year);
+                    break;
+            }
+        }
+
+        /*
+    |--------------------------------------------------------------------------
+    | Location Filter
+    |--------------------------------------------------------------------------
+    */
+
+        if ($location === 'favorites') {
+            $query->where('is_favourite', 1);
+        }
+
+
+
         switch ($sort) {
+
             case 'created_at':
                 $query->orderByDesc('created_at');
                 break;
@@ -113,13 +223,29 @@ class FolderFactoryController extends Controller
                 break;
         }
 
-
         $items = $query->paginate(16, ['*'], 'items_page')
             ->withQueryString();
 
         $recentItems = DB::query()
             ->fromSub(
-                $foldersQuery->clone()->unionAll($filesQuery->clone()),
+                $foldersQuery->clone()->unionAll(
+                    File::query()
+                        ->select([
+                            'id',
+                            'file_name as item_name',
+                            DB::raw("'file' as item_type"),
+                            'mime_type',
+                            'file_size',
+                            'file_path',
+                            'file_name',
+                            DB::raw('NULL as icon_id'),
+                            'is_favourite',
+                            'created_at',
+                            'updated_at',
+                        ])
+                        ->where('user_id', $user->id)
+                        ->where('fileable_type', FolderFactory::class)
+                ),
                 'items'
             )
             ->orderByDesc('updated_at')
@@ -129,21 +255,29 @@ class FolderFactoryController extends Controller
         $items->getCollection()->transform(function ($item) {
             return $this->bindFileData($item);
         });
+
         $recentItems->transform(function ($item) {
             return $this->bindFileData($item);
         });
 
-        $icons = Icon::where('category', 'folder')->where('status', 'active')->orderBy('order', 'asc')->get();
+        $icons = Icon::where('category', 'folder')
+            ->where('status', 'active')
+            ->orderBy('order', 'asc')
+            ->get();
 
         $totalLimit = config('app.per_user_storage');
 
-        $totalUsed = File::where('user_id', $user->id)->where('fileable_type', FolderFactory::class)->sum('file_size');
+        $totalUsed = File::where('user_id', $user->id)
+            ->where('fileable_type', FolderFactory::class)
+            ->sum('file_size');
 
         $storageStats = [
             'used' => $this->fileService->getFormattedSize($totalUsed),
             'used_in_bytes' => $totalUsed,
             'limit' => $this->fileService->getFormattedSize($totalLimit),
-            'percentage' => ($totalLimit > 0) ? round(($totalUsed / $totalLimit) * 100, 1) : 0,
+            'percentage' => ($totalLimit > 0)
+                ? round(($totalUsed / $totalLimit) * 100, 1)
+                : 0,
         ];
 
         $fileStats = $this->fileService->getFileStats($user);
@@ -155,17 +289,20 @@ class FolderFactoryController extends Controller
         $documentPercent = round(($fileStats['documents']['size_in_bytes'] / $usedBytes) * 100, 1);
         $otherPercent = round(($fileStats['others']['size_in_bytes'] / $usedBytes) * 100, 1);
 
-        $totalFiles = File::where('user_id', $user->id)->where('fileable_type', FolderFactory::class)->count();
+        $totalFiles = File::where('user_id', $user->id)
+            ->where('fileable_type', FolderFactory::class)
+            ->count();
+
         $totalFolders = FolderFactory::where('user_id', $user->id)->count();
+
         $totalItems = $totalFolders + $totalFiles - 1;
 
         $folderFactories = FolderFactory::where('user_id', $user->id)->get();
 
-
-        $isSearch = false;
-        if ($request->has('search')) {
-            $isSearch = true;
-        }
+        $isSearch = $request->filled('search')
+            || $request->filled('type')
+            || $request->filled('modified')
+            || $request->filled('location');
 
         return view(
             'user.orbit_zone.folder_factory.file-manager',

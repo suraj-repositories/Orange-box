@@ -152,10 +152,10 @@
     <div class="pm-sidebar-footer">
         <div class="d-flex w-100 align-items-center justify-content-center flex-column">
             <img class="img-fluid" src="{{ asset('assets/images/defaults/storage.webp') }}" style="height: 100px">
-            <p class="text-center mb-1">
-                Want to Increase Storage Capacity?
+            <p class="text-center mb-1 fs-7 text-muted">
+                Find files faster with folders and favourites.
             </p>
-            <button class="btn btn-outline-primary btn-sm w-100" tabindex="0" type="button">Upgrade</button>
+            {{-- <button class="btn btn-outline-primary btn-sm w-100" tabindex="0" type="button">Upgrade</button> --}}
         </div>
     </div>
 </aside>

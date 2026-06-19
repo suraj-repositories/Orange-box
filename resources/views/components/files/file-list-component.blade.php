@@ -17,8 +17,8 @@
 
                     @if ($item->item_type === 'file')
                         @if ($item->mime_type && str_starts_with($item->mime_type, 'image/'))
-                            <img class="card-img-top rounded-top object-fit-contain" src="{{ $item->file_url }}" data-media-downloadable="true"
-                                alt="{{ $item->item_name }}"
+                            <img class="card-img-top rounded-top object-fit-contain" src="{{ $item->file_url }}"
+                                data-media-downloadable="true" alt="{{ $item->item_name }}"
                                 onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';">
                         @else
                             <i class="bx {{ $item->extension_icon }} file-icon"></i>
@@ -39,12 +39,26 @@
 
                             @if ($item->item_type === 'folder')
                                 <li>
+                                    <button class="dropdown-item file-info-button" data-name="{{ $item->item_name }}"
+                                        data-type="{{ $item->item_type }}"
+                                        data-file-url="{{ $item->item_type === 'file' ? $item->file_url : '' }}"
+                                        data-mime-type="{{ $item->mime_type }}"
+                                        data-modified="{{ date('d M Y', strtotime($item->updated_at)) }}"
+                                        data-created="{{ date('d M Y', strtotime($item->created_at)) }}"
+                                        data-item-count="{{ $item->item_count ?? '' }}"
+                                        data-size="{{ $item?->formatted_file_size ?? '' }}">
+                                        <i class="bx bx-info-circle me-1"></i>
+                                        File Info
+                                    </button>
+                                </li>
+                                <li>
                                     <a class="dropdown-item"
                                         href="{{ authRoute('user.folder-factory.files.index', ['folderId' => $item->id]) }}">
                                         <i class="bx bx-folder-open me-1"></i>
                                         Open Folder
                                     </a>
                                 </li>
+
 
                                 <li>
                                     <button class="dropdown-item edit-form-factory-btn"

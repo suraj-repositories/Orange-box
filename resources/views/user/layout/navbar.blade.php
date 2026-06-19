@@ -71,6 +71,10 @@
                             <i class="mdi mdi-help-circle-outline fs-16 align-middle"></i>
                             <span>Help</span>
                         </a>
+                        <a class='dropdown-item notify-item' href='{{ authRoute('user.faq.index') }}'>
+                            <i class="mdi mdi-chat-outline fs-16 align-middle"></i>
+                            <span>Contact Us</span>
+                        </a>
 
                         <div class="dropdown-divider"></div>
 

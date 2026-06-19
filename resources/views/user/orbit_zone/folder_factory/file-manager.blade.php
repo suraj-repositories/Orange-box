@@ -150,95 +150,145 @@
 
 
                                                 <div class="d-flex gap-1 flex-wrap align-items-center">
-                                                    <div class="position-relative topbar-search ">
-                                                        <input type="text" name="search"
-                                                            class="form-control bg-light bg-opacity-75 border ps-4"
-                                                            placeholder="Search by name">
-                                                        <i
-                                                            class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
-                                                    </div>
-                                                    <button class="border btn d-flex align-items-center px-2"
-                                                        data-bs-toggle="modal" data-bs-target="#filterModal">
-                                                        <i class="bx bx-filter fs-4"></i>
-                                                    </button>
+                                                    <form method="GET" action="{{ authRoute('user.file-manager') }}">
+                                                        <div class="d-flex gap-1 flex-wrap align-items-center">
 
-                                                    <div class="modal fade" id="filterModal" tabindex="-1"
-                                                        aria-labelledby="filterModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog  modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                                                        Filter</h1>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <p>Filter files by type, modified date, or location.</p>
+                                                            <div class="position-relative topbar-search">
+                                                                <input type="text" name="search"
+                                                                    value="{{ request('search') }}"
+                                                                    class="form-control bg-light bg-opacity-75 border ps-4"
+                                                                    placeholder="Search by name">
+                                                                <i
+                                                                    class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
+                                                            </div>
 
-                                                                    <div class="mb-3">
-                                                                        <label for="type" class="form-label">File
-                                                                            Type</label>
-                                                                        <select class="form-select" id="type"
-                                                                            name="type">
-                                                                            <option value="">All Types</option>
-                                                                            <option value="document">Documents</option>
-                                                                            <option value="image">Images</option>
-                                                                            <option value="video">Videos</option>
-                                                                            <option value="audio">Audio</option>
-                                                                            <option value="archive">Archives</option>
-                                                                            <option value="other">Other</option>
-                                                                        </select>
+                                                            <button type="button"
+                                                                class="border btn d-flex align-items-center px-2"
+                                                                data-bs-toggle="modal" data-bs-target="#filterModal">
+                                                                <i class="bx bx-filter fs-4"></i>
+                                                            </button>
+
+                                                            @if (request()->hasAny(['search', 'type', 'modified', 'location', 'sort']))
+                                                                <a href="{{ authRoute('user.file-manager') }}"
+                                                                    class="btn btn-dark">
+                                                                    Reset
+                                                                </a>
+                                                            @endif
+
+                                                            <div class="modal fade" id="filterModal" tabindex="-1">
+                                                                <div class="modal-dialog modal-dialog-centered">
+                                                                    <div class="modal-content">
+
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title">Filter</h5>
+                                                                            <button type="button" class="btn-close"
+                                                                                data-bs-dismiss="modal"></button>
+                                                                        </div>
+
+                                                                        <div class="modal-body">
+
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label">File Type</label>
+                                                                                <select class="form-select"
+                                                                                    name="type">
+                                                                                    <option value="">All Types
+                                                                                    </option>
+                                                                                    <option value="document"
+                                                                                        @selected(request('type') == 'document')>
+                                                                                        Documents</option>
+                                                                                    <option value="image"
+                                                                                        @selected(request('type') == 'image')>Images
+                                                                                    </option>
+                                                                                    <option value="video"
+                                                                                        @selected(request('type') == 'video')>Videos
+                                                                                    </option>
+                                                                                    <option value="audio"
+                                                                                        @selected(request('type') == 'audio')>Audio
+                                                                                    </option>
+                                                                                    <option value="archive"
+                                                                                        @selected(request('type') == 'archive')>
+                                                                                        Archives</option>
+                                                                                    <option value="other"
+                                                                                        @selected(request('type') == 'other')>Other
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label">Modified</label>
+                                                                                <select class="form-select"
+                                                                                    name="modified">
+                                                                                    <option value="">Any Time
+                                                                                    </option>
+                                                                                    <option value="today"
+                                                                                        @selected(request('modified') == 'today')>Today
+                                                                                    </option>
+                                                                                    <option value="7_days"
+                                                                                        @selected(request('modified') == '7_days')>Last 7
+                                                                                        Days</option>
+                                                                                    <option value="30_days"
+                                                                                        @selected(request('modified') == '30_days')>Last 30
+                                                                                        Days</option>
+                                                                                    <option value="90_days"
+                                                                                        @selected(request('modified') == '90_days')>Last
+                                                                                        90 Days</option>
+                                                                                    <option value="year"
+                                                                                        @selected(request('modified') == 'year')>This
+                                                                                        Year</option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div class="mb-3">
+                                                                                <label class="form-label">Location</label>
+                                                                                <select class="form-select"
+                                                                                    name="location">
+                                                                                    <option value="">All Locations
+                                                                                    </option>
+                                                                                    <option value="my-drive"
+                                                                                        @selected(request('location') == 'my-drive')>My
+                                                                                        Drive</option>
+                                                                                    <option value="favorites"
+                                                                                        @selected(request('location') == 'favorites')>
+                                                                                        Favorites</option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                            <div class="mb-0">
+                                                                                <label class="form-label">Sort By</label>
+                                                                                <select class="form-select"
+                                                                                    name="sort">
+                                                                                    <option value="name"
+                                                                                        @selected(request('sort') == 'name')>Name
+                                                                                    </option>
+                                                                                    <option value="updated_at"
+                                                                                        @selected(request('sort') == 'updated_at')>
+                                                                                        Modified</option>
+                                                                                    <option value="created_at"
+                                                                                        @selected(request('sort') == 'created_at')>
+                                                                                        Created</option>
+                                                                                </select>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                        <div class="modal-footer">
+                                                                            <a href="{{ authRoute('user.file-manager') }}"
+                                                                                class="btn btn-dark">
+                                                                                Reset
+                                                                            </a>
+
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary">
+                                                                                Apply
+                                                                            </button>
+                                                                        </div>
+
                                                                     </div>
-
-                                                                    <div class="mb-3">
-                                                                        <label for="modified"
-                                                                            class="form-label">Modified</label>
-                                                                        <select class="form-select" id="modified"
-                                                                            name="modified">
-                                                                            <option value="">Any Time</option>
-                                                                            <option value="today">Today</option>
-                                                                            <option value="7_days">Last 7 Days</option>
-                                                                            <option value="30_days">Last 30 Days</option>
-                                                                            <option value="90_days">Last 90 Days</option>
-                                                                            <option value="year">This Year</option>
-                                                                        </select>
-                                                                    </div>
-
-                                                                    <div class="mb-3">
-                                                                        <label for="location"
-                                                                            class="form-label">Location</label>
-                                                                        <select class="form-select" id="location"
-                                                                            name="location">
-                                                                            <option value="">All Locations</option>
-                                                                            <option value="my-drive">My Drive</option>
-                                                                            <option value="shared">Shared</option>
-                                                                            <option value="favorites">Favorites</option>
-                                                                            <option value="trash">Trash</option>
-                                                                        </select>
-                                                                    </div>
-
-                                                                    <div class="mb-0">
-                                                                        <label for="sort" class="form-label">Sort
-                                                                            By</label>
-                                                                        <select class="form-select" id="sort"
-                                                                            name="sort">
-                                                                            <option value="">None</option>
-                                                                            <option value="name">Name</option>
-                                                                            <option value="updated_at">Modified</option>
-                                                                            <option value="created_at">Created</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-dark"
-                                                                        data-bs-dismiss="modal">Reset</button>
-                                                                    <button type="button"
-                                                                        class="btn btn-primary">Apply</button>
                                                                 </div>
                                                             </div>
+
                                                         </div>
-                                                    </div>
+                                                    </form>
                                                 </div>
 
                                             </div>

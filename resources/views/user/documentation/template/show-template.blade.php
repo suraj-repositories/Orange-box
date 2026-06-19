@@ -181,7 +181,7 @@
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                                     <strong>Questions?</strong>
-                                    <a href="javascript:void()" class="btn btn-dark btn-sm">Contact Author</a>
+                                    <a href="{{ authRoute('user.contact-us') }}" class="btn btn-dark btn-sm">Contact Author</a>
                                 </div>
                             </div>
                         </div>

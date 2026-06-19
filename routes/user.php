@@ -4,6 +4,7 @@ use App\Http\Controllers\User\Collaboration\ProjectBoardController as Collaborat
 use App\Http\Controllers\User\Collaboration\ProjectModuleController as CollaborationProjectModuleController;
 use App\Http\Controllers\User\Collaboration\TaskController as CollaborationTaskController;
 use App\Http\Controllers\User\CommentController;
+use App\Http\Controllers\User\ContactUsController;
 use App\Http\Controllers\User\DailyDigestController;
 use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\User\Documentation\CodeOfConductController;
@@ -355,3 +356,8 @@ Route::get('faqs', [FaqController::class, 'index'])->name('faq.index');
 
 Route::post('follow/{id}', [FollowController::class, 'follow'])->name('follow');
 Route::post('unfollow/{id}', [FollowController::class, 'unfollow'])->name('unfollow');
+
+Route::controller(ContactUsController::class)->group(function () {
+    Route::get('contact-us', 'index')->name('contact-us');
+    Route::post('contact-us', 'store')->name('contact-us.store');
+});
