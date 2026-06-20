@@ -109,6 +109,10 @@ Route::controller(FolderFactoryController::class)->group(function () {
     Route::post('folder-factory', 'store')->name('folder-factory.save');
     Route::post('folder-factory/{folderFactory}', 'update')->name('folder-factory.update');
     Route::delete('folder-factory/{folderFactory}', 'destroy')->name('folder-factory.delete');
+
+    Route::delete('folder-factory-deletion/delete-all-files', 'destroyAll')->name('folder-factory.delete.all');
+    Route::delete('folder-factory-deletion/permanent-delete-all-files', 'destroyAllPermanent')->name('folder-factory.delete.all.permanent');
+
     Route::get('folder-factory/files/create', 'create')->name('folder-factory.files.create');
     Route::get('folder-factory/{folderId}/files', 'showFiles')->name('folder-factory.files.index');
     Route::get('/ff-files/upload/status', 'uploadStatus')->name('folder-factory.file.upload.status');

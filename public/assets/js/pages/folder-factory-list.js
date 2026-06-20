@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
     enableFileReallocation();
     enableFileRename();
     enableOpenFolderButton("#OpenSelectedFolderBtn");
+    enableDeleteFile(".delete-file-button");
+    enableDeleteAllSelected("#deleteAllSelectedBtn");
 });
 
 function enableFolderFactoryDelete(selector) {
@@ -514,7 +516,6 @@ function enableFileInfoButton(selector) {
     });
 }
 
-
 function enableFileRename() {
     {
         const renameModal = document.getElementById('file-rename-modal');
@@ -602,7 +603,6 @@ function enableFileReallocation(title) {
     });
 }
 
-
 function enableOpenFolderButton(selector) {
     const btn = document.querySelector(selector);
     const parent = btn.parentElement;
@@ -631,3 +631,212 @@ function enableOpenFolderButton(selector) {
 
 }
 
+function enableDeleteFile(selector) {
+    const btns = document.querySelectorAll(selector);
+    const trashTabButton = document.querySelector('#trashTabButton');
+
+    if (!btns.length) return;
+
+    if (!trashTabButton) {
+        console.error('trash tab not available on view!');
+        return;
+    }
+
+    btns.forEach(btn => {
+        btn.addEventListener('click', async function () {
+
+
+            const folders = [];
+            const files = [];
+
+            const isPermanentDelete = trashTabButton.classList.contains('active');
+
+            if (btn.dataset.type == 'file') {
+                files.push(btn.dataset.id);
+            } else if (btn.dataset.type == 'folder') {
+                folders.push(btn.dataset.id);
+            }
+
+            const itemType = btn.dataset.type === 'folder' ? 'folder' : 'file';
+
+            const confirmed = await Swal.fire({
+                title: isPermanentDelete
+                    ? `Permanently delete this ${itemType}?`
+                    : `Delete this ${itemType}?`,
+                text: isPermanentDelete
+                    ? `This ${itemType} will be permanently deleted and cannot be recovered.`
+                    : `This ${itemType} will be moved to the trash.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: isPermanentDelete
+                    ? 'Permanent Delete'
+                    : 'Delete',
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    confirmButton: 'btn btn-danger',
+                    cancelButton: 'btn btn-dark'
+                },
+                reverseButtons: true
+            });
+
+            if (!confirmed.isConfirmed) {
+                return;
+            }
+
+            const csrfToken = document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute('content');
+
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(
+                    !isPermanentDelete ?
+                        authRoute('user.folder-factory.delete.all') : authRoute('user.folder-factory.delete.all.permanent'),
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({
+                            file_ids: files,
+                            folder_ids: folders
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || 'Failed to delete selected items.'
+                    );
+                }
+
+                Toastify.success(
+                    data.message || 'Selected items deleted successfully.'
+                );
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+
+            } catch (error) {
+                console.error(error);
+
+                Toastify.error(
+                    error.message || 'Something went wrong. Please try again.'
+                );
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    });
+}
+
+function enableDeleteAllSelected(selector) {
+    const btn = document.querySelector(selector);
+    const trashTabButton = document.querySelector('#trashTabButton');
+
+    if (!btn) return;
+
+    if (!trashTabButton) {
+        console.error('trash tab not available on view!');
+    }
+
+
+    btn.addEventListener('click', async function () {
+        const checks = document.querySelectorAll('.select-checkbox:checked');
+
+        if (!checks.length) {
+            Toastify.warning('Please select at least one file or folder.');
+            return;
+        }
+
+        const folders = [];
+        const files = [];
+
+        const isPermanentDelete = trashTabButton.classList.contains('active');
+
+
+        checks.forEach(check => {
+            const { type, id } = check.dataset;
+
+            if (type === 'file') {
+                files.push(id);
+            } else if (type === 'folder') {
+                folders.push(id);
+            }
+        });
+
+        const confirmed = await Swal.fire({
+            title: isPermanentDelete ? 'Permanent delete selected items?' : 'Delete selected items?',
+            text: `You are about to delete ${files.length + folders.length} item(s). This action cannot be undone.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: isPermanentDelete ? 'Permanent Delete' : 'Delete',
+            cancelButtonText: 'Cancel',
+            customClass: {
+                confirmButton: 'btn btn-danger',
+                cancelButton: 'btn btn-dark'
+            },
+            reverseButtons: true
+        });
+
+        if (!confirmed.isConfirmed) {
+            return;
+        }
+
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute('content');
+
+        btn.disabled = true;
+
+        try {
+            const response = await fetch(
+                !isPermanentDelete ?
+                    authRoute('user.folder-factory.delete.all') : authRoute('user.folder-factory.delete.all.permanent'),
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        file_ids: files,
+                        folder_ids: folders
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || 'Failed to delete selected items.'
+                );
+            }
+
+            Toastify.success(
+                data.message || 'Selected items deleted successfully.'
+            );
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+
+        } catch (error) {
+            console.error(error);
+
+            Toastify.error(
+                error.message || 'Something went wrong. Please try again.'
+            );
+        } finally {
+            btn.disabled = false;
+        }
+    });
+}

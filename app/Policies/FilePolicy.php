@@ -18,16 +18,17 @@ class FilePolicy
 
     public function view(User $user, File $file)
     {
-         if($user->hasRole('admin')){
+        if ($user->hasRole('admin')) {
             return true;
         }
+
         return $file->user_id === $user->id;
     }
 
 
     public function delete(User $user, File $file)
     {
-        if($user->hasRole('admin')){
+        if ($user->hasRole('admin')) {
             return true;
         }
 
@@ -35,10 +36,18 @@ class FilePolicy
             return $file->fileable->user_id === $user->id;
         }
 
-         return $file->user_id === $user->id;
+        return $file->user_id === $user->id;
     }
 
-      public function update(User $user, File $file): bool
+    public function update(User $user, File $file): bool
+    {
+        if ($user->hasRole('admin')) {
+            return true;
+        }
+        return $file->user_id === $user->id;
+    }
+
+    public function forceDelete(User $user, File $file): bool
     {
         if ($user->hasRole('admin')) {
             return true;

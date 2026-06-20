@@ -11,35 +11,35 @@
 
         <div class="pm-sidebar-section">
             <p class="mb-1 fw-bold px-3 fs-6">My Files</p>
-            <a href=""
+            <a href="{{ authRoute('user.file-manager') }}"
                 class="pm-nav-item {{ request('filter') == 'all' || empty(request('filter')) ? 'active' : '' }}"
                 data-view="all">
                 <i class="bx bx-file"></i>
                 My Drive
 
             </a>
-            {{-- <button class="pm-nav-item" data-view="privacy">
+            {{-- <button class="pm-nav-item">
                                                         <i class="bx bx-share"></i>
                                                         Shared
                                                     </button> --}}
             <a href="{{ request()->fullUrlWithQuery(['filter' => 'recent']) }}"
-                class="pm-nav-item {{ request('filter') == 'recent' ? 'active' : '' }}" data-view="privacy">
+                class="pm-nav-item {{ request('filter') == 'recent' ? 'active' : '' }}">
                 <i class="bx bx-user"></i>
                 Recent
             </a>
             <a href="{{ request()->fullUrlWithQuery(['filter' => 'folder']) }}"
-                class="pm-nav-item {{ request('filter') == 'folder' ? 'active' : '' }}" data-view="privacy">
+                class="pm-nav-item {{ request('filter') == 'folder' ? 'active' : '' }}">
                 <i class="bx bx-folder"></i>
                 Folder
             </a>
             <a href="{{ request()->fullUrlWithQuery(['filter' => 'favourite']) }}"
-                class="pm-nav-item {{ request('filter') == 'favourite' ? 'active' : '' }}" data-view="privacy">
+                class="pm-nav-item {{ request('filter') == 'favourite' ? 'active' : '' }}">
                 <i class="bx bx-star"></i>
                 Favourite
             </a>
 
-            <a href="{{ request()->fullUrlWithQuery(['filter' => 'trash']) }}"
-                class="pm-nav-item {{ request('filter') == 'trash' ? 'active' : '' }}" data-view="privacy">
+            <a href="{{ request()->fullUrlWithQuery(['filter' => 'trash']) }}" id="trashTabButton"
+                class="pm-nav-item {{ request('filter') == 'trash' ? 'active' : '' }}">
                 <i class="bx bx-trash"></i>
                 Trash
             </a>

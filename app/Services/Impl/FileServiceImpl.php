@@ -3,6 +3,7 @@
 namespace App\Services\Impl;
 
 use App\Models\File;
+use App\Models\FolderFactory;
 use App\Services\FileService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -34,6 +35,15 @@ class FileServiceImpl implements FileService
     {
         if ($filePath && Storage::disk('public')->exists($filePath)) {
             Storage::disk('public')->delete($filePath);
+            return 1;
+        }
+        return 0;
+    }
+
+     function deleteIfExistsOnDrive($filePath, $drive = 'private')
+    {
+        if ($filePath && Storage::disk($drive)->exists($filePath)) {
+            Storage::disk($drive)->delete($filePath);
             return 1;
         }
         return 0;
@@ -181,20 +191,23 @@ class FileServiceImpl implements FileService
 
     function getFileStats($user)
     {
-
         $photos = File::where('user_id', $user->id)
+            ->where('fileable_type', FolderFactory::class)
             ->where('mime_type', 'like', 'image/%');
 
         $videos = File::where('user_id', $user->id)
+            ->where('fileable_type', FolderFactory::class)
             ->where('mime_type', 'like', 'video/%');
 
         $documents = File::where('user_id', $user->id)
+            ->where('fileable_type', FolderFactory::class)
             ->where(function ($q) {
                 $q->where('mime_type', 'like', 'application/%')
                     ->orWhere('mime_type', 'like', 'text/%');
             });
 
         $others = File::where('user_id', $user->id)
+            ->where('fileable_type', FolderFactory::class)
             ->whereNot(function ($q) {
                 $q->where('mime_type', 'like', 'image/%')
                     ->orWhere('mime_type', 'like', 'video/%')

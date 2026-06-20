@@ -4862,6 +4862,34 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
     display: none;
 }
 
- .file-details-offcanvas .type-folder .for-file {
+.file-details-offcanvas .type-folder .for-file {
     display: none;
+}
+
+.details-multiple {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.details-multiple .multiple-card-view {
+    color: var(--pm-primary);
+    background: var(--pm-primary-soft);
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 160px;
+    max-height: 160px;
+    aspect-ratio: 1 / 1;
+    font-size: 14px;
+    border-radius: 10px;
+    border: 1px solid var(--pm-primary-border);
+}
+
+.details-multiple .selected-count {
+    font-size: 40px;
 }

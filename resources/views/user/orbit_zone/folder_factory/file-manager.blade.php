@@ -176,7 +176,7 @@
                                                             @endif
 
                                                             <div class="modal fade" id="filterModal" tabindex="-1">
-                                                                <div class="modal-dialog modal-dialog-centered">
+                                                                <div class="modal-dialog modal-sm modal-dialog-centered">
                                                                     <div class="modal-content">
 
                                                                         <div class="modal-header">
@@ -238,21 +238,6 @@
                                                                                 </select>
                                                                             </div>
 
-                                                                            <div class="mb-3">
-                                                                                <label class="form-label">Location</label>
-                                                                                <select class="form-select"
-                                                                                    name="location">
-                                                                                    <option value="">All Locations
-                                                                                    </option>
-                                                                                    <option value="my-drive"
-                                                                                        @selected(request('location') == 'my-drive')>My
-                                                                                        Drive</option>
-                                                                                    <option value="favorites"
-                                                                                        @selected(request('location') == 'favorites')>
-                                                                                        Favorites</option>
-                                                                                </select>
-                                                                            </div>
-
                                                                             <div class="mb-0">
                                                                                 <label class="form-label">Sort By</label>
                                                                                 <select class="form-select"
@@ -303,22 +288,22 @@
                                                         <i class="bi bi-x"></i>
                                                     </button>
                                                     <strong>0 Items Selected</strong>
-                                                    <button
+                                                    {{-- <button
                                                         class="btn border btn-sm d-flex align-items-center justify-content-center">
                                                         <i class="bi bi-download"></i>
-                                                    </button>
+                                                    </button> --}}
                                                     {{-- <button
                                                         class="btn border btn-sm d-flex align-items-center justify-content-center">
                                                         <i class="bi bi-share"></i>
                                                     </button> --}}
-                                                    <button
+                                                    <button id="deleteAllSelectedBtn"
                                                         class="btn border btn-sm d-flex align-items-center justify-content-center">
                                                         <i class="bi bi-trash"></i>
                                                     </button>
-                                                    <button
+                                                    {{-- <button
                                                         class="btn border btn-sm d-flex align-items-center justify-content-center">
                                                         <i class="bi bi-three-dots"></i>
-                                                    </button>
+                                                    </button> --}}
                                                 </div>
 
 
@@ -345,8 +330,10 @@
 
                                                         <!-- Multiple selected -->
                                                         <div class="details-multiple d-none text-center py-4">
-                                                            <h4 class="selected-count mb-1">0</h4>
-                                                            <p class="text-muted mb-0">Items Selected</p>
+                                                            <div class="multiple-card-view">
+                                                                <h4 class="selected-count mb-1">0</h4>
+                                                                <p class="mb-0">Items Selected</p>
+                                                            </div>
                                                         </div>
 
                                                         <!-- Single selected -->
@@ -416,11 +403,11 @@
 
                                             </div>
 
-                                            @if (!request()->has('search'))
+                                            @if (!(request()->has('search') || request()->filter == 'trash' || $recentItems->isEmpty()))
                                                 <div class="row p-3">
                                                     <div class="col-12">
                                                         <div
-                                                            class="d-flex justify-content-between gap-2 flex-wrap align-items-center p-2">
+                                                            class="d-flex justify-content-between gap-2 flex-wrap align-items-center py-2">
                                                             <h4 class="mb-0 fw-semibold">Recent Files</h4>
 
                                                             @if ($recentItems->count() > 4)
@@ -453,12 +440,12 @@
 
                                             <div class="row p-3">
                                                 <div class="col-12">
-                                                    @if ($isSearch)
-                                                        {{-- Search Layout --}}
+                                                    @if ($isSearch || request()->filter == 'trash')
+
                                                         <div
                                                             class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
                                                             <h4 class="mb-0 fw-semibold">
-                                                                Search Result
+                                                                {{ request()->filter == 'trash' ? 'Deleted Files' : 'Search Result' }}
                                                             </h4>
 
                                                             <form method="GET">
@@ -493,7 +480,6 @@
                                                             </form>
                                                         </div>
                                                     @else
-                                                        {{-- Normal Layout --}}
                                                         <h4 class="mb-3 fw-semibold">
                                                             All Files
                                                         </h4>

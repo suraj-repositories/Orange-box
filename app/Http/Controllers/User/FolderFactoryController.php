@@ -79,18 +79,28 @@ class FolderFactoryController extends Controller
                 'updated_at',
             ])
             ->where('user_id', $user->id)
-            ->where('fileable_type', FolderFactory::class);
+            ->where('fileable_type', FolderFactory::class)
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('folder_factories')
+                    ->whereColumn('folder_factories.id', 'files.fileable_id')
+                    ->whereNotNull('folder_factories.deleted_at');
+            });
 
-        if (!$isSearching) {
-            $foldersQuery->where('parent_id', $myDrive->id);
-            $filesQuery->where('fileable_id', $myDrive->id);
+        if ($filter === 'trash') {
+            $foldersQuery->onlyTrashed();
+            $filesQuery->onlyTrashed();
+        } else {
+            if (!$isSearching) {
+                $foldersQuery->where('parent_id', $myDrive->id);
+                $filesQuery->where('fileable_id', $myDrive->id);
+            }
         }
 
         $query = DB::query()->fromSub(
             $foldersQuery->unionAll($filesQuery),
             'items'
         );
-
 
         if (!empty($search)) {
             $query->where('item_name', 'like', '%' . $search . '%');
@@ -168,7 +178,6 @@ class FolderFactoryController extends Controller
             }
         }
 
-
         if (!empty($modified)) {
 
             switch ($modified) {
@@ -196,16 +205,14 @@ class FolderFactoryController extends Controller
         }
 
         /*
-    |--------------------------------------------------------------------------
-    | Location Filter
-    |--------------------------------------------------------------------------
-    */
+        |--------------------------------------------------------------------------
+        | Location Filter
+        |--------------------------------------------------------------------------
+        */
 
         if ($location === 'favorites') {
             $query->where('is_favourite', 1);
         }
-
-
 
         switch ($sort) {
 
@@ -223,12 +230,14 @@ class FolderFactoryController extends Controller
                 break;
         }
 
+        $totalItems = $query->clone()->count();
+
         $items = $query->paginate(16, ['*'], 'items_page')
             ->withQueryString();
 
         $recentItems = DB::query()
             ->fromSub(
-                $foldersQuery->clone()->unionAll(
+                $foldersQuery->clone()->union(
                     File::query()
                         ->select([
                             'id',
@@ -252,8 +261,8 @@ class FolderFactoryController extends Controller
             ->take(8)
             ->get();
 
-        $items->getCollection()->transform(function ($item) {
-            return $this->bindFileData($item);
+        $items->getCollection()->transform(function ($item) use ($request) {
+            return $this->bindFileData($item, $request->filter == 'trash');
         });
 
         $recentItems->transform(function ($item) {
@@ -289,14 +298,6 @@ class FolderFactoryController extends Controller
         $documentPercent = round(($fileStats['documents']['size_in_bytes'] / $usedBytes) * 100, 1);
         $otherPercent = round(($fileStats['others']['size_in_bytes'] / $usedBytes) * 100, 1);
 
-        $totalFiles = File::where('user_id', $user->id)
-            ->where('fileable_type', FolderFactory::class)
-            ->count();
-
-        $totalFolders = FolderFactory::where('user_id', $user->id)->count();
-
-        $totalItems = $totalFolders + $totalFiles - 1;
-
         $folderFactories = FolderFactory::where('user_id', $user->id)->get();
 
         $isSearch = $request->filled('search')
@@ -325,7 +326,7 @@ class FolderFactoryController extends Controller
         );
     }
 
-    public function bindFileData($item)
+    public function bindFileData($item, $withTrashed = false)
     {
 
         if ($item->item_type === 'file') {
@@ -345,12 +346,24 @@ class FolderFactoryController extends Controller
                     $item->icon_url = $icon->getUrl();
                 }
             }
-            $item->item_count = File::where('fileable_type', FolderFactory::class)->where('user_id', Auth::id())->where('fileable_id', $item->id)->count()
-                + FolderFactory::where('parent_id', $item->id)->where('user_id', Auth::id())->count();
+
+            $fileCount = File::where('fileable_type', FolderFactory::class)
+                ->where('user_id', Auth::id())->where('fileable_id', $item->id)
+                ->when($withTrashed, function ($query) {
+                    $query->withTrashed();
+                })
+                ->count();
+
+            $folderCount = FolderFactory::where('parent_id', $item->id)->where('user_id', Auth::id())->when($withTrashed, function ($query) {
+                $query->withTrashed();
+            })->count();
+
+            $item->item_count = $fileCount + $folderCount;
         }
 
         return $item;
     }
+
     public function toggleFavourite(User $user, Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -866,6 +879,147 @@ class FolderFactoryController extends Controller
         return redirect()->back()->with('success', 'Folder factory destroyed successfully!');
     }
 
+    public function destroyAll(User $user, Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'folder_ids'   => 'nullable|array',
+            'folder_ids.*' => 'exists:folder_factories,id',
+            'file_ids'     => 'nullable|array',
+            'file_ids.*'   => 'exists:files,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        DB::transaction(function () use ($request) {
+
+            if (!empty($request->folder_ids)) {
+                $folders = FolderFactory::whereIn('id', $request->folder_ids)->get();
+
+                foreach ($folders as $folder) {
+                    Gate::authorize('delete', $folder);
+                    $folder->delete();
+                }
+            }
+
+            if (!empty($request->file_ids)) {
+                $files = File::whereIn('id', $request->file_ids)->get();
+
+                foreach ($files as $file) {
+                    Gate::authorize('delete', $file);
+                    $file->delete();
+                }
+            }
+        });
+
+        if ($request->isJson() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Selected items deleted successfully!',
+            ]);
+        }
+
+        return redirect()->back()->with(
+            'success',
+            'Selected items deleted successfully!'
+        );
+    }
+
+    public function destroyAllPermanent(User $user, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'folder_ids'   => 'nullable|array',
+            'folder_ids.*' => 'exists:folder_factories,id',
+            'file_ids'     => 'nullable|array',
+            'file_ids.*'   => 'exists:files,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        DB::transaction(function () use ($request) {
+
+            // Permanently delete folders
+            if (!empty($request->folder_ids)) {
+                $folders = FolderFactory::onlyTrashed()
+                    ->whereIn('id', $request->folder_ids)
+                    ->get();
+
+                foreach ($folders as $folder) {
+                    Gate::authorize('forceDelete', $folder);
+
+                    $this->permanentlyDeleteFolder($folder);
+                }
+            }
+
+            // Permanently delete individual files
+            if (!empty($request->file_ids)) {
+                $files = File::onlyTrashed()
+                    ->whereIn('id', $request->file_ids)
+                    ->get();
+
+                foreach ($files as $file) {
+                    Gate::authorize('forceDelete', $file);
+
+                    $this->fileService->deleteIfExists($file->file_path);
+
+                    $file->forceDelete();
+                }
+            }
+        });
+
+        if ($request->isJson() || $request->wantsJson()) {
+            return response()->json([
+                'status'  => 200,
+                'message' => 'Selected items permanently deleted successfully!',
+            ]);
+        }
+
+        return redirect()->back()->with(
+            'success',
+            'Selected items permanently deleted successfully!'
+        );
+    }
+
+    /**
+     * Recursively permanently delete a folder and its contents.
+     */
+    private function permanentlyDeleteFolder(FolderFactory $folder): void
+    {
+        // Delete child folders first
+        $childFolders = FolderFactory::withTrashed()
+            ->where('parent_id', $folder->id)
+            ->get();
+
+        foreach ($childFolders as $childFolder) {
+            $this->permanentlyDeleteFolder($childFolder);
+        }
+
+        // Delete files in folder
+        $files = File::withTrashed()
+            ->where('fileable_type', FolderFactory::class)
+            ->where('fileable_id', $folder->id)
+            ->get();
+
+        foreach ($files as $file) {
+            $this->fileService->deleteIfExistsOnDrive($file->file_path, 'private');
+
+            $file->forceDelete();
+        }
+
+        // Delete folder itself
+        $folder->forceDelete();
+    }
+
     /* ================================ BEGIN - CHUNK UPLOAD ================================*/
 
 
@@ -1026,5 +1180,5 @@ class FolderFactoryController extends Controller
     }
 
 
-    /* ================================ CHUNK UPLOAD ================================ */
+    /* ================================ END - CHUNK UPLOAD ================================ */
 }

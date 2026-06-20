@@ -113,4 +113,5 @@ class File extends Model
     public function getFormattedFileSizeAttribute(){
         return $this->size();
     }
+
 }

@@ -1,17 +1,18 @@
 <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-4 g-3 file-manager-files"
     data-media-preview="true">
 
-    @foreach ($items as $item)
+    @php $isEmpty = false; @endphp
+    @forelse ($items as $item)
         <div class="col">
             <div class="file-card d-flex flex-column h-100">
 
                 <div class="file-img-box">
                     <input type="checkbox" class="form-check-input select-checkbox" data-name="{{ $item->item_name }}"
-                        data-type="{{ $item->item_type }}"
+                        data-type="{{ $item->item_type }}" data-id="{{ $item->id }}"
                         data-file-url="{{ $item->item_type === 'file' ? $item->file_url : '' }}"
                         data-mime-type="{{ $item->mime_type }}"
-                        data-modified="{{ date('d M Y', strtotime($item->updated_at)) }}"
-                        data-created="{{ date('d M Y', strtotime($item->created_at)) }}"
+                        data-modified="{{ date('d M Y h:i a', strtotime($item->updated_at)) }}"
+                        data-created="{{ date('d M Y h:i a', strtotime($item->created_at)) }}"
                         data-item-count="{{ $item->item_count ?? '' }}"
                         data-size="{{ $item?->formatted_file_size ?? '' }}">
 
@@ -43,61 +44,65 @@
                                         data-type="{{ $item->item_type }}"
                                         data-file-url="{{ $item->item_type === 'file' ? $item->file_url : '' }}"
                                         data-mime-type="{{ $item->mime_type }}"
-                                        data-modified="{{ date('d M Y', strtotime($item->updated_at)) }}"
-                                        data-created="{{ date('d M Y', strtotime($item->created_at)) }}"
+                                        data-modified="{{ date('d M Y h:i a', strtotime($item->updated_at)) }}"
+                                        data-created="{{ date('d M Y h:i a', strtotime($item->created_at)) }}"
                                         data-item-count="{{ $item->item_count ?? '' }}"
                                         data-size="{{ $item?->formatted_file_size ?? '' }}">
                                         <i class="bx bx-info-circle me-1"></i>
                                         File Info
                                     </button>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item"
-                                        href="{{ authRoute('user.folder-factory.files.index', ['folderId' => $item->id]) }}">
-                                        <i class="bx bx-folder-open me-1"></i>
-                                        Open Folder
-                                    </a>
-                                </li>
 
+                                @if (request()->filter == 'trash')
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="bx bx-refresh me-1"></i>
+                                            Restore
+                                        </a>
+                                    </li>
+                                @else
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="{{ authRoute('user.folder-factory.files.index', ['folderId' => $item->id]) }}">
+                                            <i class="bx bx-folder-open me-1"></i>
+                                            Open Folder
+                                        </a>
+                                    </li>
 
-                                <li>
-                                    <button class="dropdown-item edit-form-factory-btn"
-                                        data-ob-folder-factory-id="{{ $item->id }}"
-                                        data-ob-folder-factory-name="{{ $item->item_name }}"
-                                        data-ob-folder-factory-icon="">
-                                        <i class="bx bx-edit me-1"></i>
-                                        Rename
-                                    </button>
-                                </li>
-
-                                <li>
-                                    <button class="dropdown-item file-reallocation" data-action-title="Copy Folder"
-                                        data-submit-url="{{ authRoute('user.folders.copy', ['folder' => $item->id]) }}">
-                                        <i class="bx bx-copy me-1"></i>
-                                        Copy Folder
-                                    </button>
-                                </li>
-
-                                <li>
-                                    <button class="dropdown-item file-reallocation" data-action-title="Move Folder"
-                                        data-submit-url="{{ authRoute('user.folders.move', ['folder' => $item->id]) }}">
-                                        <i class="bx bx-log-in me-1"></i>
-                                        Move Folder
-                                    </button>
-                                </li>
-
-                                <li>
-                                    <form
-                                        action="{{ authRoute('user.folder-factory.delete', ['folderFactory' => $item->id]) }}"
-                                        method="post">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button class="dropdown-item text-danger bg-light-danger">
-                                            <i class="bx bx-trash me-1"></i>
-                                            Delete
+                                    <li>
+                                        <button class="dropdown-item edit-form-factory-btn"
+                                            data-ob-folder-factory-id="{{ $item->id }}"
+                                            data-ob-folder-factory-name="{{ $item->item_name }}"
+                                            data-ob-folder-factory-icon="">
+                                            <i class="bx bx-edit me-1"></i>
+                                            Rename
                                         </button>
+                                    </li>
 
-                                    </form>
+                                    <li>
+                                        <button class="dropdown-item file-reallocation" data-action-title="Copy Folder"
+                                            data-submit-url="{{ authRoute('user.folders.copy', ['folder' => $item->id]) }}">
+                                            <i class="bx bx-copy me-1"></i>
+                                            Copy Folder
+                                        </button>
+                                    </li>
+
+                                    <li>
+                                        <button class="dropdown-item file-reallocation" data-action-title="Move Folder"
+                                            data-submit-url="{{ authRoute('user.folders.move', ['folder' => $item->id]) }}">
+                                            <i class="bx bx-log-in me-1"></i>
+                                            Move Folder
+                                        </button>
+                                    </li>
+                                @endif
+
+                                <li>
+                                    <button class="dropdown-item text-danger bg-light-danger delete-file-button"
+                                        data-type="file" data-id="{{ $item->id }}">
+                                        <i class="bx bx-trash me-1"></i>
+                                        Delete
+                                    </button>
+
                                 </li>
                             @else
                                 <li>
@@ -121,57 +126,66 @@
                                     </a>
                                 </li> --}}
 
-                                <li>
-                                    <a class="dropdown-item" href="{{ $item->file_url }}" target="_blank">
-                                        <i class="bx bx-show-alt me-1"></i>
-                                        View File
-                                    </a>
-                                </li>
+                                @if (request()->filter == 'trash')
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="bx bx-refresh me-1"></i>
+                                            Restore
+                                        </a>
+                                    </li>
+                                @else
+                                    <li>
+                                        <a class="dropdown-item" href="{{ $item->file_url }}" target="_blank">
+                                            <i class="bx bx-show-alt me-1"></i>
+                                            View File
+                                        </a>
+                                    </li>
 
-                                <li>
-                                    <button class="dropdown-item file-reallocation" data-action-title="Copy File"
-                                        data-submit-url="{{ authRoute('user.files.copy', ['file' => $item->id]) }}">
-                                        <i class="bx bx-copy me-1"></i>
-                                        Copy File
-                                    </button>
-                                </li>
-
-                                <li>
-                                    <button class="dropdown-item file-reallocation" data-action-title="Move File"
-                                        data-submit-url="{{ authRoute('user.files.move', ['file' => $item->id]) }}">
-                                        <i class="bx bx-log-in me-1"></i>
-                                        Move File
-                                    </button>
-                                </li>
-
-                                <li>
-                                    <button class="dropdown-item favourite_toggle"
-                                        data-is-favourite="{{ $item->is_favourite }}"
-                                        data-item-type="{{ $item->item_type }}" data-item-id="{{ $item->id }}">
-                                        <i class="bx {{ $item->is_favourite ? 'bxs-star' : 'bx-star' }} me-1"></i>
-                                        <span class="text">
-                                            Make Favourite
-                                        </span>
-                                    </button>
-                                </li>
-
-                                <li>
-                                    <button class="dropdown-item" data-ob-file-id="{{ $item->id }}"
-                                        data-ob-file-name="{{ $item->item_name }}">
-                                        <i class="bx bx-rename me-1"></i>
-                                        Rename
-                                    </button>
-                                </li>
-
-                                <li>
-                                    <form action="{{ route('file.delete', $item->id) }}" method="post">
-                                        @method('DELETE')
-                                        @csrf
-                                        <button class="dropdown-item text-danger">
-                                            <i class="bx bx-trash me-1"></i>
-                                            Delete
+                                    <li>
+                                        <button class="dropdown-item file-reallocation" data-action-title="Copy File"
+                                            data-submit-url="{{ authRoute('user.files.copy', ['file' => $item->id]) }}">
+                                            <i class="bx bx-copy me-1"></i>
+                                            Copy File
                                         </button>
-                                    </form>
+                                    </li>
+
+                                    <li>
+                                        <button class="dropdown-item file-reallocation" data-action-title="Move File"
+                                            data-submit-url="{{ authRoute('user.files.move', ['file' => $item->id]) }}">
+                                            <i class="bx bx-log-in me-1"></i>
+                                            Move File
+                                        </button>
+                                    </li>
+
+                                    <li>
+                                        <button class="dropdown-item favourite_toggle"
+                                            data-is-favourite="{{ $item->is_favourite }}"
+                                            data-item-type="{{ $item->item_type }}"
+                                            data-item-id="{{ $item->id }}">
+                                            <i class="bx {{ $item->is_favourite ? 'bxs-star' : 'bx-star' }} me-1"></i>
+                                            <span class="text">
+                                                Make Favourite
+                                            </span>
+                                        </button>
+                                    </li>
+
+                                    <li>
+                                        <button class="dropdown-item" data-ob-file-id="{{ $item->id }}"
+                                            data-ob-file-name="{{ $item->item_name }}">
+                                            <i class="bx bx-rename me-1"></i>
+                                            Rename
+                                        </button>
+                                    </li>
+                                @endif
+
+                                <li>
+
+                                    <button class="dropdown-item text-danger delete-file-button" data-type="file"
+                                        data-id="{{ $item->id }}">
+                                        <i class="bx bx-trash me-1"></i>
+                                        Delete
+                                    </button>
+
                                 </li>
                             @endif
 
@@ -193,7 +207,7 @@
 
                             <small class="file-size text-muted">
                                 @if ($item->item_type === 'file')
-                                    {{ $item->formatted_file_size }}
+                                    {{ $item->formatted_file_size }} | {{ strtoupper($item->extension ?? '') }}
                                 @else
                                     {{ $item->item_count }} Items | Folder
                                 @endif
@@ -204,6 +218,15 @@
 
             </div>
         </div>
-    @endforeach
+
+    @empty
+        @php $isEmpty = true; @endphp
+    @endforelse
 
 </div>
+
+@if ($isEmpty)
+    <div class="mt-2">
+        <x-no-data message="No Files yet." />
+    </div>
+@endif

@@ -70,6 +70,9 @@ class FolderFactoryPolicy
      */
     public function forceDelete(User $user, FolderFactory $folderFactory): bool
     {
-        return false;
+          if ($user->hasRole('admin')) {
+            return true;
+        }
+        return $folderFactory->user_id === $user->id;
     }
 }

@@ -12,6 +12,8 @@ interface FileService
 
     function deleteIfExists($filePath);
 
+    function deleteIfExistsOnDrive($filePath, $drive = 'private');
+
     function deleteAllIfExists(array $filePaths): int;
 
     function getFileName(UploadedFile $file): string;
