@@ -152,7 +152,7 @@
                                     File</a>
                             </li>
                             <li>
-                                <a class='tp-link' href='{{ authRoute('user.folder-factory') }}'>Folder List</a>
+                                <a class='tp-link' href='{{ authRoute('user.file-manager') }}'>File Manager</a>
                             </li>
 
                         </ul>
