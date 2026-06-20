@@ -2,9 +2,7 @@
     <div class="pm-sidebar-inner">
         <div class="pm-brand">
             <span class="pm-brand-icon">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M8 2L3 4v4c0 3 2.5 5 5 6 2.5-1 5-3 5-6V4L8 2z" />
-                </svg>
+              <i class="bi bi-hdd-stack"></i>
             </span>
             File Manager
         </div>
@@ -14,7 +12,7 @@
             <a href="{{ authRoute('user.file-manager') }}"
                 class="pm-nav-item {{ request('filter') == 'all' || empty(request('filter')) ? 'active' : '' }}"
                 data-view="all">
-                <i class="bx bx-file"></i>
+                <i class="bx bx-hdd"></i>
                 My Drive
 
             </a>

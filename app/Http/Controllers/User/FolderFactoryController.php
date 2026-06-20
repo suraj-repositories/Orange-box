@@ -930,6 +930,47 @@ class FolderFactoryController extends Controller
         );
     }
 
+    public function restoreAll(User $user, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'folder_ids'   => 'nullable|array',
+            'folder_ids.*' => 'exists:folder_factories,id',
+            'file_ids'     => 'nullable|array',
+            'file_ids.*'   => 'exists:files,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 422,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        DB::transaction(function () use ($request) {
+
+            FolderFactory::onlyTrashed()
+                ->whereIn('id', $request->folder_ids ?? [])
+                ->get()
+                ->each(function ($folder) {
+                    Gate::authorize('restore', $folder);
+                    $folder->restore();
+                });
+
+            File::onlyTrashed()
+                ->whereIn('id', $request->file_ids ?? [])
+                ->get()
+                ->each(function ($file) {
+                    Gate::authorize('restore', $file);
+                    $file->restore();
+                });
+        });
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Selected items restored successfully!',
+        ]);
+    }
+
     public function destroyAllPermanent(User $user, Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -989,6 +1030,7 @@ class FolderFactoryController extends Controller
             'Selected items permanently deleted successfully!'
         );
     }
+
 
     /**
      * Recursively permanently delete a folder and its contents.

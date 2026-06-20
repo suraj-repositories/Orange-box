@@ -31,8 +31,6 @@
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
                             <li class="breadcrumb-item"><a href="{{ authRoute('user.profile.index') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a
-                                    href="{{ authRoute('user.documentation.index') }}">Documentations</a></li>
 
                             <li class="breadcrumb-item active">{{ $title }}</li>
                         </ol>
@@ -163,9 +161,9 @@
                                                             </div>
 
                                                             <button type="button"
-                                                                class="border btn d-flex align-items-center px-2"
+                                                                class="border btn d-flex align-items-center p-1 px-2"
                                                                 data-bs-toggle="modal" data-bs-target="#filterModal">
-                                                                <i class="bx bx-filter fs-4"></i>
+                                                                <i class="bi bi-funnel fs-5"></i>
                                                             </button>
 
                                                             @if (request()->hasAny(['search', 'type', 'modified', 'location', 'sort']))

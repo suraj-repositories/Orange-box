@@ -98,7 +98,7 @@ Route::controller(CommentController::class)->group(function () {
 });
 
 Route::controller(FolderFactoryController::class)->group(function () {
-    Route::get('file', 'fileManager')->name('file-manager');
+    Route::get('file-manager', 'fileManager')->name('file-manager');
 
     Route::post('files/{file}/copy', [FolderFactoryController::class, 'copyFile'])->name('files.copy');
     Route::post('folders/{folder}/copy', [FolderFactoryController::class, 'copyFolder'])->name('folders.copy');
@@ -112,6 +112,7 @@ Route::controller(FolderFactoryController::class)->group(function () {
 
     Route::delete('folder-factory-deletion/delete-all-files', 'destroyAll')->name('folder-factory.delete.all');
     Route::delete('folder-factory-deletion/permanent-delete-all-files', 'destroyAllPermanent')->name('folder-factory.delete.all.permanent');
+    Route::delete('folder-factory-deletion/restore-all-files', 'restoreAll')->name('folder-factory.restore');
 
     Route::get('folder-factory/files/create', 'create')->name('folder-factory.files.create');
     Route::get('folder-factory/{folderId}/files', 'showFiles')->name('folder-factory.files.index');

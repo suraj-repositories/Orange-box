@@ -20,7 +20,7 @@
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.folder-factory') }}">Folder Factory</a>
+                            <li class="breadcrumb-item"><a href="{{ authRoute('user.file-manager') }}">File Manager</a>
                             </li>
                             <li class="breadcrumb-item active">{{ $folderFactory->name }}</li>
 
@@ -281,18 +281,12 @@
                                                                 Move Folder
                                                             </button>
 
-                                                            <form
-                                                                action="{{ authRoute('user.folder-factory.delete', ['folderFactory' => $item->id]) }}"
-                                                                method="POST" class="d-inline">
-                                                                @csrf
-                                                                @method('DELETE')
-
-                                                                <button type="submit"
-                                                                    class="btn btn-outline-danger btn-sm">
-                                                                    <i class="bx bx-trash"></i>
-                                                                    Delete
-                                                                </button>
-                                                            </form>
+                                                            <button type="button"
+                                                                class="btn btn-outline-danger btn-sm delete-file-button"
+                                                                data-type="folder" data-id="{{ $item->id }}">
+                                                                <i class="bx bx-trash"></i>
+                                                                Delete
+                                                            </button>
                                                         @else
                                                             <a class="btn btn-outline-primary btn-sm d-flex align-items-center"
                                                                 href="{{ $item->file_url }}" target="_blank">
@@ -336,17 +330,12 @@
                                                                 Favourite
                                                             </button>
 
-                                                            <form action="{{ route('file.delete', $item->id) }}"
-                                                                method="POST" class="d-inline">
-                                                                @csrf
-                                                                @method('DELETE')
-
-                                                                <button type="submit"
-                                                                    class="btn btn-outline-danger btn-sm">
-                                                                    <i class="bx bx-trash"></i>
-                                                                    Delete
-                                                                </button>
-                                                            </form>
+                                                              <button type="button"
+                                                                class="btn btn-outline-danger btn-sm delete-file-button"
+                                                                data-type="file" data-id="{{ $item->id }}">
+                                                                <i class="bx bx-trash"></i>
+                                                                Delete
+                                                            </button>
                                                         @endif
 
                                                     </div>

@@ -55,10 +55,13 @@
 
                                 @if (request()->filter == 'trash')
                                     <li>
-                                        <a class="dropdown-item" href="#">
+
+                                        <button type="button" class="restore-file-btn dropdown-item" data-type="folder"
+                                            data-id="{{ $item->id }}">
+
                                             <i class="bx bx-refresh me-1"></i>
                                             Restore
-                                        </a>
+                                        </button>
                                     </li>
                                 @else
                                     <li>
@@ -128,10 +131,12 @@
 
                                 @if (request()->filter == 'trash')
                                     <li>
-                                        <a class="dropdown-item" href="#">
+                                        <button type="button" class="restore-file-btn dropdown-item" data-type="file"
+                                            data-id="{{ $item->id }}">
+
                                             <i class="bx bx-refresh me-1"></i>
                                             Restore
-                                        </a>
+                                        </button>
                                     </li>
                                 @else
                                     <li>

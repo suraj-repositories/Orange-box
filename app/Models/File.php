@@ -38,6 +38,8 @@ class File extends Model
         static::deleted(function ($file) {
             event(new FileDeleted($file));
         });
+
+
     }
 
     public function fileable()

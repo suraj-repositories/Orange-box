@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     enableOpenFolderButton("#OpenSelectedFolderBtn");
     enableDeleteFile(".delete-file-button");
     enableDeleteAllSelected("#deleteAllSelectedBtn");
+    enableRestoreFile('.restore-file-btn');
 });
 
 function enableFolderFactoryDelete(selector) {
@@ -639,7 +640,7 @@ function enableDeleteFile(selector) {
 
     if (!trashTabButton) {
         console.error('trash tab not available on view!');
-        return;
+        // return;
     }
 
     btns.forEach(btn => {
@@ -649,7 +650,7 @@ function enableDeleteFile(selector) {
             const folders = [];
             const files = [];
 
-            const isPermanentDelete = trashTabButton.classList.contains('active');
+            const isPermanentDelete = (!trashTabButton) ? false : trashTabButton.classList.contains('active');
 
             if (btn.dataset.type == 'file') {
                 files.push(btn.dataset.id);
@@ -838,5 +839,96 @@ function enableDeleteAllSelected(selector) {
         } finally {
             btn.disabled = false;
         }
+    });
+}
+
+function enableRestoreFile(selector) {
+    const btns = document.querySelectorAll(selector);
+
+    if (!btns.length) return;
+
+    btns.forEach(btn => {
+        btn.addEventListener('click', async function () {
+
+            const folders = [];
+            const files = [];
+
+            if (btn.dataset.type === 'file') {
+                files.push(btn.dataset.id);
+            } else if (btn.dataset.type === 'folder') {
+                folders.push(btn.dataset.id);
+            }
+
+            const itemType = btn.dataset.type === 'folder'
+                ? 'folder'
+                : 'file';
+
+            const confirmed = await Swal.fire({
+                title: `Restore this ${itemType}?`,
+                text: `This ${itemType} will be restored from the trash.`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Restore',
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-dark'
+                },
+                reverseButtons: true
+            });
+
+            if (!confirmed.isConfirmed) {
+                return;
+            }
+
+            const csrfToken = document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute('content');
+
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(
+                    authRoute('user.folder-factory.restore'),
+                    {
+                        method: 'DELETE', // or POST/PATCH if you prefer
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({
+                            file_ids: files,
+                            folder_ids: folders
+                        })
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(
+                        data.message || 'Failed to restore selected items.'
+                    );
+                }
+
+                Toastify.success(
+                    data.message || 'Selected items restored successfully.'
+                );
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
+
+            } catch (error) {
+                console.error(error);
+
+                Toastify.error(
+                    error.message || 'Something went wrong. Please try again.'
+                );
+            } finally {
+                btn.disabled = false;
+            }
+        });
     });
 }

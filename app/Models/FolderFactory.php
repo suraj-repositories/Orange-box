@@ -20,6 +20,20 @@ class FolderFactory extends Model
 
     protected static function booted()
     {
+
+        static::restored(function (FolderFactory $folder) {
+
+            $folder->directChildFolders()
+                ->onlyTrashed()
+                ->get()
+                ->each
+                ->restore();
+
+            $folder->files()
+                ->onlyTrashed()
+                ->restore();
+        });
+
         static::deleting(function ($digest) {
             if ($digest->isForceDeleting()) {
                 $digest->files()->withTrashed()->forceDelete();
@@ -52,6 +66,8 @@ class FolderFactory extends Model
     {
         return $this->belongsTo(Icon::class);
     }
+
+
 
     public function user()
     {
