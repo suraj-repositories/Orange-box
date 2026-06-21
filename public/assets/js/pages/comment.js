@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
     enableCommentFeature();
     loadComments("#ob-comment-list");
     enableCancelComment("#canelComment", '#comment-message-box');
+
+    enableCommentSorting('.sort-comment-btn');
 });
 
 function enableCommentFeature() {
@@ -145,12 +147,15 @@ function setTotalCommentCount(count) {
     }
 }
 
-function loadComments(selector, args = { page: 1, order: 'desc' }) {
+function loadComments(selector, args = { page: 1, order: 'desc', order_by: 'latest' }) {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const commentBox = document.querySelector(selector);
     const loader = commentBox.querySelector('.loader');
     const loadMoreBtn = document.getElementById("ob-load-more-comments");
 
+    if(!loader){
+        console.log('lsdjfslkdf');
+    }
     if (!commentBox) return;
 
     const commentableType = commentBox.getAttribute("data-ob-commentable-type");
@@ -177,7 +182,8 @@ function loadComments(selector, args = { page: 1, order: 'desc' }) {
                     commentable_type: commentableType,
                     commentable_id: commentableId,
                     page: page,
-                    order: args.order
+                    order: args.order,
+                    order_by: args.order_by
                 })
             });
 
@@ -230,11 +236,15 @@ function loadComments(selector, args = { page: 1, order: 'desc' }) {
 
 
     if (loadMoreBtn) {
-        loadMoreBtn.addEventListener("click", () => {
-            loadMoreBtn.classList.add('loading');
-            loadMoreBtn.querySelector('.btn-text').textContent = 'Loading...';
-            fetchComments();
-        });
+        if (!loadMoreBtn.getAttribute('data-listener-added')) {
+            loadMoreBtn.addEventListener("click", () => {
+                loadMoreBtn.classList.add('loading');
+                loadMoreBtn.querySelector('.btn-text').textContent = 'Loading...';
+                fetchComments();
+            });
+            loadMoreBtn.setAttribute('data-listener-added', true);
+        }
+
     }
 }
 
@@ -573,4 +583,17 @@ function toggleCommentReaction(btn, commentId, action) {
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function enableCommentSorting(selector) {
+    const btns = document.querySelectorAll(selector);
+    if (btns.length === 0) return;
+
+    btns.forEach(btn => {
+        btn.addEventListener('click', function () {
+
+            const sort = btn.getAttribute('data-sort');
+            loadComments("#ob-comment-list", args = { page: 1, order: 'desc', order_by: sort });
+        });
+    });
 }

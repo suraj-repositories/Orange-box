@@ -89,6 +89,9 @@ class CommentController extends Controller
         $size = 5;
         $modelClass = $request->commentable_type;
         $commentable = $modelClass::find($request->commentable_id);
+        $order = $request->order ?? 'desc';
+        $orderBy = $request->order_by ?? 'latest';
+
 
         if (!$commentable) {
             return response()->json([
@@ -98,9 +101,20 @@ class CommentController extends Controller
             ]);
         }
 
-        $comments = $commentable->topLevelComments()->with(['user'])
-        ->orderBy('id', $request->order ?? 'desc')
-        ->paginate($size, ['*'], 'page', $request->page ?? 1);
+        $comments = $commentable->topLevelComments()
+            ->with(['user'])
+            ->when(!empty($orderBy), function ($q) use ($orderBy, $order) {
+                $order = strtolower($order ?? 'desc');
+
+                if ($orderBy === 'latest') {
+                    $q->orderBy('id', $order);
+                } elseif ($orderBy === 'top') {
+                    $q->withCount('likes')
+                        ->orderBy('likes_count', $order)
+                        ->orderBy('id', 'desc');
+                }
+            })
+            ->paginate($size, ['*'], 'page', $request->page ?? 1);
 
 
         if ($comments->isEmpty()) {

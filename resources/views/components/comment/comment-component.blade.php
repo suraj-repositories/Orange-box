@@ -42,8 +42,12 @@
                             <span>Sort by</span>
                         </button>
                         <div class="dropdown-menu mt-1">
-                            <div><a class="dropdown-item" href="#">Top comments</a></div>
-                            <div><a class="dropdown-item" href="#">Newest first</a></div>
+                            <div>
+                                <button class="dropdown-item sort-comment-btn" data-sort="top">Top comments</button>
+                            </div>
+                            <div>
+                                <button class="dropdown-item sort-comment-btn" data-sort="latest">Newest first</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -57,11 +61,12 @@
                             <div class="flex-grow-1 ms-3">
                                 <div class="form-floating comment-compose mb-2">
                                     <textarea class="form-control w-100" resizeable='true' rows="1" placeholder="Leave a comment here"
-                                        id="comment-message-box" ></textarea>
+                                        id="comment-message-box"></textarea>
                                     <label for="comment-message-box">Leave a comment here</label>
                                 </div>
                                 <div class="hstack justify-content-end gap-1">
-                                    <button class="btn btn-sm btn-secondary rounded-pill" id="canelComment">Cancel</button>
+                                    <button class="btn btn-sm btn-secondary rounded-pill"
+                                        id="canelComment">Cancel</button>
                                     <button class="btn btn-sm btn-primary rounded-pill"
                                         data-ob-commentable-type="{{ $commentable::class }}"
                                         data-ob-commentable-id="{{ $commentable->id }}" data-ob-parent-id=""
@@ -82,7 +87,8 @@
                     </div>
                 </div>
 
-                <button class="btn btn-primary loading-btn rounded-pill px-3 mt-3" type="button" id="ob-load-more-comments">
+                <button class="btn btn-primary loading-btn rounded-pill px-3 mt-3" type="button"
+                    id="ob-load-more-comments">
                     <span class="spinner-border spinner-border-sm " aria-hidden="true"></span>
                     <span class="btn-text" role="status">Load More</span>
                 </button>
