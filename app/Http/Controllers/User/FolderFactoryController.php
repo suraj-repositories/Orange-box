@@ -753,12 +753,29 @@ class FolderFactoryController extends Controller
         $icons = Icon::where('category', 'folder')->where('status', 'active')->orderBy('order', 'asc')->get();
         $folderFactories = FolderFactory::where('user_id', $user->id)->get();
 
-        return view('user.orbit_zone.folder_factory.folder_factory_files_list', compact('folderFactory', 'items', 'icons', 'folderFactories'));
+        $breadcrumbs = collect();
+
+        $current = $folderFactory;
+
+        while ($current) {
+            $breadcrumbs->prepend($current);
+            $current = $current->parent;
+        }
+
+        return view('user.orbit_zone.folder_factory.folder_factory_files_list', compact('folderFactory', 'items', 'breadcrumbs', 'icons', 'folderFactories'));
     }
 
     public function create(User $user)
     {
-        $folderFactories = FolderFactory::where('user_id', $user->id)->orderBy('name', 'asc')->get();
+        $folderFactories = FolderFactory::where('user_id', $user->id)
+            ->orderByRaw("
+                CASE
+                    WHEN slug = ? AND parent_id IS NULL THEN 0
+                    ELSE 1
+                END
+            ", ['my-drive'])
+            ->orderBy('name', 'asc')
+            ->get();
 
         return view('user.orbit_zone.folder_factory.file_upload_form', compact('folderFactories'));
     }

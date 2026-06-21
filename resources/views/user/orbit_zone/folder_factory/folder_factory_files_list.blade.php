@@ -20,10 +20,25 @@
 
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.file-manager') }}">File Manager</a>
-                            </li>
-                            <li class="breadcrumb-item active">{{ $folderFactory->name }}</li>
-
+                            @foreach ($breadcrumbs as $index => $folder)
+                                @if ($index === 0)
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ authRoute('user.file-manager') }}">
+                                            {{ $folder->name }}
+                                        </a>
+                                    </li>
+                                @elseif($loop->last)
+                                    <li class="breadcrumb-item active">
+                                        {{ $folder->name }}
+                                    </li>
+                                @else
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ authRoute('user.folder-factory.files.index', ['folderId' => $folder->id]) }}">
+                                            {{ $folder->name }}
+                                        </a>
+                                    </li>
+                                @endif
+                            @endforeach
                         </ol>
                     </div>
                 </div>
@@ -330,7 +345,7 @@
                                                                 Favourite
                                                             </button>
 
-                                                              <button type="button"
+                                                            <button type="button"
                                                                 class="btn btn-outline-danger btn-sm delete-file-button"
                                                                 data-type="file" data-id="{{ $item->id }}">
                                                                 <i class="bx bx-trash"></i>
