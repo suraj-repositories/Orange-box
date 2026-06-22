@@ -14829,7 +14829,7 @@ li.menuitem-active>a:not(.collapsed)>span.menu-arrow {
 @media (max-width:991.98px) {
     body {
         overflow-x: hidden;
-        padding-bottom: 80px
+
     }
 
     .app-sidebar-menu {

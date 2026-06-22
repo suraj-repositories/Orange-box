@@ -52,9 +52,10 @@
     </script>
 </head>
 
-<body data-app-theme="{{ auth()?->user()?->theme?->theme_key ?? 'orange_box' }}" data-menu-color="light"
-    >
+<body data-app-theme="{{ auth()?->user()?->theme?->theme_key ?? 'orange_box' }}" data-menu-color="light">
 
-    <div id="preloader">
-        <div class="spinner"></div>
-    </div>
+    @if (config('app.preloader'))
+        <div id="preloader">
+            <div class="spinner"></div>
+        </div>
+    @endif

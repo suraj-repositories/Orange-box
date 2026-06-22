@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Common\DocumentationTemplateController;
+use App\Http\Controllers\Common\EmojiController;
 use App\Http\Controllers\User\Documentation\DocumentationTemplateController as TemplateController;
 use App\Http\Controllers\Common\FileController;
 use App\Http\Controllers\Common\NotificationController;
@@ -36,6 +37,8 @@ Route::controller(UserController::class)->middleware('auth')->group(function () 
 
     Route::get('/stop-impersonation',  'stopImpersonation')->name('stop-impersonation');
 });
+
+Route::get('/emojis', [EmojiController::class, 'getEmojis'])->name('emojis');
 
 Route::middleware('auth')->prefix('ajax')->name('ajax.')->group(function () {
     Route::get('project-board/{projectBoard}/modules', [ProjectBoardController::class, 'getModules'])->name('project-board.modules');

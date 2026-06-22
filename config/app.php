@@ -15,6 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
     'per_user_storage' => env('APP_PER_USER_STORAGE', 5368709120),
+    'preloader' => env('APP_PRELOADER', false),
 
     /*
     |--------------------------------------------------------------------------

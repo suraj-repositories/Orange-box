@@ -355,7 +355,9 @@ class App {
     enablePreloader() {
         window.addEventListener("load", function () {
             const preloader = document.getElementById("preloader");
-            preloader.classList.add("hide");
+            if (preloader) {
+                preloader.classList.add("hide");
+            }
         });
     }
 
