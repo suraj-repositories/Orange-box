@@ -48,7 +48,6 @@
             border: 1px solid #e9ecef;
             box-shadow: 0 15px 40px rgba(0, 0, 0, .15);
 
-            padding: 12px;
             z-index: 1000;
             display: none;
 
@@ -61,6 +60,9 @@
 
         .emoji-search {
             margin-bottom: 12px;
+            padding: 12px;
+            padding-bottom: 0px;
+
         }
 
         .emoji-search input {
@@ -79,6 +81,7 @@
             margin-bottom: 12px;
             padding-bottom: 4px;
             scrollbar-width: thin;
+            padding: 0 12px;
         }
 
         .emoji-tabs::-webkit-scrollbar {
@@ -216,49 +219,51 @@
         }
 
         .emoji-tabs {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    gap: 4px;
-    margin-bottom: 10px;
-}
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
 
-.emoji-tabs::-webkit-scrollbar {
-    display: none;
-}
+        .emoji-tabs::-webkit-scrollbar {
+            display: none;
+        }
 
-.emoji-grid-container {
-    max-height: 320px;
-    overflow-y: auto;
-}
+        .emoji-grid-container {
+            max-height: 320px;
+            overflow-y: auto;
+            padding: 12px;
+            padding-top: 0;
+        }
 
-.emoji-category-title {
-    position: sticky;
-    top: 0;
-    background: #fff;
-    z-index: 2;
-    padding: 6px 0;
-    font-weight: 600;
-    font-size: 13px;
-}
+        .emoji-category-title {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 2;
+            padding: 6px 0;
+            font-weight: 600;
+            font-size: 13px;
+        }
 
-.emoji-category-grid {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 4px;
-}
+        .emoji-category-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 4px;
+        }
 
-.emoji-item {
-    border: 0;
-    background: transparent;
-    font-size: 24px;
-    border-radius: 6px;
-    padding: 6px;
-    cursor: pointer;
-}
+        .emoji-item {
+            border: 0;
+            background: transparent;
+            font-size: 24px;
+            border-radius: 6px;
+            padding: 6px;
+            cursor: pointer;
+        }
 
-.emoji-item:hover {
-    background: #f5f5f5;
-}
+        .emoji-item:hover {
+            background: #f5f5f5;
+        }
     </style>
 @endsection
 
