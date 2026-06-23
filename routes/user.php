@@ -91,6 +91,7 @@ Route::controller(SyntaxStoreController::class)->group(function () {
     Route::post('syntax-store/{syntaxStore}/like', 'like')->name('syntax-store.like');
     Route::post('syntax-store/{syntaxStore}/dislike', 'dislike')->name('syntax-store.dislike');
     Route::post('syntax-store/{syntaxStore}/emoji', 'updateEmoji')->name('syntax-store.emoji.update');
+    Route::post('syntax-store/{syntaxStore}/file', 'updateFile')->name('syntax-store.file.update');
 });
 
 Route::controller(CommentController::class)->group(function () {

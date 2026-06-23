@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
 use SweetAlert2\Laravel\Swal;
 use Throwable;
 
@@ -91,7 +92,7 @@ class SyntaxStoreController extends Controller
             });
             return redirect()->to(authRoute('user.syntax-store.show', ['syntaxStore' => $store]));
         } catch (Throwable $ex) {
-             Swal::error([
+            Swal::error([
                 'title' => 'Error!',
                 'text' => $ex->getMessage()
             ]);
@@ -360,5 +361,99 @@ class SyntaxStoreController extends Controller
             'is_liked' => $syntaxStore->likedBy($user->id),
             'is_disliked' => $syntaxStore->dislikedBy($user->id)
         ]);
+    }
+
+    public function updateEmoji(User $user, SyntaxStore $syntaxStore, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'emoji_id' => 'required|exists:emojis,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        Gate::authorize('update', $syntaxStore);
+        $syntaxStore->emoji_id = $request->emoji_id;
+        if ($syntaxStore->file) {
+            $oldFile = $syntaxStore->file;
+
+            $this->fileService->deleteIfExists($oldFile->file_path);
+
+            $oldFile->delete();
+        }
+        $syntaxStore->file_id = null;
+        $syntaxStore->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Updated successfully!'
+        ]);
+    }
+
+    public function updateFile(User $user, SyntaxStore $syntaxStore, Request $request)
+    {
+        Gate::authorize('update', $syntaxStore);
+
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|file|max:' . config('validation_rules.max_file_size')
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            if ($syntaxStore->file) {
+                $oldFile = $syntaxStore->file;
+
+                $this->fileService->deleteIfExists($oldFile->file_path);
+
+                $oldFile->delete();
+            }
+
+            $file = $request->file('image');
+            $uploadedFile = File::create([
+                'file_path' => $this->fileService->uploadFile($file, 'syntax-store'),
+                'file_name' => $this->fileService->getFileName($file),
+                'mime_type' => $this->fileService->getMimeType($file),
+                'file_size' => $file->getSize() ?? null,
+                'fileable_type' => SyntaxStore::class,
+                'fileable_id' => $syntaxStore->id,
+                'user_id' => $user->id
+            ]);
+
+            $syntaxStore->update([
+                'file_id' => $uploadedFile->id,
+                'emoji_id' => null
+            ]);
+
+            DB::commit();
+
+            $syntaxStore->load('file');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Image updated successfully.',
+                'file_id' => $uploadedFile->id,
+                'url' => $syntaxStore->file_url
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            report($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update image.'
+            ], 500);
+        }
     }
 }

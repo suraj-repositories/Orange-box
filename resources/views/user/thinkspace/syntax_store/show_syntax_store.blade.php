@@ -37,14 +37,42 @@
                             <div class="align-items-center">
                                 <div class="d-flex flex-column flex-md-row align-items-center">
 
-                                    <svg class="rounded-circle avatar-xxl img-thumbnail float-start"
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24">
-                                        <path fill="none" stroke="currentColor" stroke-linecap="round"
-                                            stroke-linejoin="round" stroke-width="2"
-                                            d="m7 8l-4 4l4 4m10-8l4 4l-4 4M14 4l-4 16" />
-                                    </svg>
 
+
+                                    <div class="position-relative ">
+
+                                        <div class="post-avatar-container">
+                                            @if ($syntaxStore->emoji)
+                                                <div
+                                                    class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center justify-content-center">
+                                                    <div class="emoji selected-emoji">{{ $syntaxStore->emoji->emoji }}</div>
+                                                </div>
+                                            @elseif($syntaxStore->file)
+                                                <img src="{{ $syntaxStore->file_url }}"
+                                                    class="rounded-circle avatar-xxl img-thumbnail float-start digest-image"
+                                                    alt="image profile">
+                                            @else
+                                                <img src="{{ asset('assets/images/svg/syntax-store.svg') }}"
+                                                    class="rounded-circle avatar-xxl img-thumbnail float-start digest-image"
+                                                    alt="image profile">
+                                            @endif
+                                        </div>
+
+
+                                        @if ($syntaxStore->user_id == auth()->id())
+                                            <div class="emoji-image-picker">
+                                                <button type="button" class="btn btn-light emoji-picker-btn"
+                                                    data-emoji-submit-url="{{ authRoute('user.syntax-store.emoji.update', ['syntaxStore' => $syntaxStore]) }}"
+                                                    data-file-submit-url="{{ authRoute('user.syntax-store.file.update', ['syntaxStore' => $syntaxStore]) }}">
+                                                    <span class="spinner-border spinner-border-sm"
+                                                        aria-hidden="true"></span>
+                                                    <span class="visually-hidden" role="status">Loading...</span>
+                                                </button>
+
+                                                <div class="emoji-picker-container"></div>
+                                            </div>
+                                        @endif
+                                    </div>
 
                                     <div class="overflow-hidden mt-3 mt-md-0 ms-md-4">
                                         <h4 class="m-0 text-dark fs-20">{{ $syntaxStore->title }}</h4>
@@ -171,4 +199,5 @@
 @section('js')
     <script src="{{ asset('assets/js/pages/syntax-store.js') }}"></script>
     <script src="{{ asset('assets/js/pages/comment.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/emoji-chooser.js') }}"></script>
 @endsection

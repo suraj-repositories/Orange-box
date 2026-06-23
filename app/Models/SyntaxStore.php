@@ -21,6 +21,8 @@ class SyntaxStore extends Model
         'content',
         'status',
         'uuid',
+        'file_id',
+        'emoji_id'
     ];
 
     protected $appends = [
@@ -31,6 +33,8 @@ class SyntaxStore extends Model
     {
         return 'uuid';
     }
+
+
 
     protected static function booted()
     {
@@ -60,8 +64,26 @@ class SyntaxStore extends Model
         return $this->morphMany(File::class, 'fileable');
     }
 
+    public function emoji()
+    {
+        return $this->belongsTo(Emoji::class);
+    }
+
+    public function file()
+    {
+        return $this->belongsTo(File::class);
+    }
+
+    public function getFileUrlAttribute()
+    {
+        if ($this->file) {
+            return $this->file->getFileUrl();
+        }
+        return null;
+    }
+
     public function getVisitUrlAttribute()
     {
-       return authRoute('user.syntax-store.show', ['syntaxStore' => $this]);
+        return authRoute('user.syntax-store.show', ['syntaxStore' => $this]);
     }
 }
