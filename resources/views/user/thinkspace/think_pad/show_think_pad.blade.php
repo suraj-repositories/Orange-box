@@ -31,28 +31,49 @@
                         <div class="card-body position-relative">
 
                             <div class="visibility-badge">
-                                <span class="icon"><img src="{{ $thinkPad->visibility_icon }}" class="icon-20" alt="" title="{{ ucfirst( $thinkPad->visibility ??"") }}"></span>
-                                <span class="text">{{ ucfirst( $thinkPad->visibility ??"") }}</span>
+                                <span class="icon"><img src="{{ $thinkPad->visibility_icon }}" class="icon-20"
+                                        alt="" title="{{ ucfirst($thinkPad->visibility ?? '') }}"></span>
+                                <span class="text">{{ ucfirst($thinkPad->visibility ?? '') }}</span>
                             </div>
 
                             <div class="align-items-center">
                                 <div class="d-flex flex-column flex-md-row align-items-center">
-                                    @if ($thinkPad->emoji())
-                                        <div
-                                            class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center">
-                                            <div class="emoji">{{ $thinkPad->emoji->emoji }}</div>
-                                        </div>
-                                    @elseif($thinkPad->picture())
-                                        <img src="http://ideas.free.nf/storage/profile/qbZVED4EfOwqn5vMAu92GszM8VmSrXmhGV3EBS92.png"
-                                            class="rounded-circle avatar-xxl img-thumbnail float-start" alt="image profile">
-                                    @else
-                                        <div
-                                            class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center">
-                                            <div class="emoji">{{ config('constants')['DEFAULT_DIGEST_EMOJI'] }}</div>
-                                        </div>
-                                    @endif
 
+                                    <div class="position-relative">
+                                        <div class="post-avatar-container">
+                                            @if ($thinkPad->emoji)
+                                                <div
+                                                    class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center">
+                                                    <div class="emoji">{{ $thinkPad->emoji->emoji }}</div>
+                                                </div>
+                                            @elseif($thinkPad->file)
+                                                <img src="{{  $thinkPad->file_url }}"
+                                                    class="rounded-circle avatar-xxl img-thumbnail float-start"
+                                                    alt="image profile">
+                                            @else
+                                                <div
+                                                    class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center">
+                                                    <div class="emoji">{{ config('constants')['DEFAULT_DIGEST_EMOJI'] }}
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
 
+                                        @if ($thinkPad->user_id == auth()->id())
+                                            <div class="emoji-image-picker">
+                                                <button type="button" class="btn btn-light emoji-picker-btn"
+                                                    data-emoji-submit-url="{{ authRoute('user.think-pad.emoji.update', ['thinkPad' => $thinkPad]) }}"
+                                                    data-file-submit-url="{{ authRoute('user.think-pad.file.update', ['thinkPad' => $thinkPad]) }}">
+                                                    <span class="spinner-border spinner-border-sm"
+                                                        aria-hidden="true"></span>
+                                                    <span class="visually-hidden" role="status">Loading...</span>
+                                                </button>
+
+                                                <div class="emoji-picker-container"></div>
+                                            </div>
+                                        @endif
+
+                                    </div>
 
                                     <div class="overflow-hidden mt-3 mt-md-0 ms-md-4">
                                         <h4 class="m-0 text-dark fs-20">{{ $thinkPad->title }}</h4>
@@ -272,4 +293,9 @@
     <script src="{{ asset('assets/js/services/file-service.js') }}"></script>
     <script src="{{ asset('assets/js/pages/think-pad.js') }}"></script>
     <script src="{{ asset('assets/js/pages/comment.js') }}"></script>
+@endsection
+
+
+@section('js')
+    <script src="{{ asset('assets/js/pages/emoji-chooser.js') }}"></script>
 @endsection

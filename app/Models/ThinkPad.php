@@ -67,27 +67,31 @@ class ThinkPad extends Model
 
     public function emoji()
     {
-        if (!isset($this->emoji_id)) {
-            return null;
-        }
+
         return $this->belongsTo(Emoji::class);
     }
 
-    public function picture()
+    public function file()
     {
-        if (!isset($this->file_id)) {
-            return null;
-        }
+
         return $this->belongsTo(File::class);
     }
 
+    public function getFileUrlAttribute()
+    {
+        if ($this->file) {
+            return $this->file->getFileUrl();
+        }
+        return null;
+    }
 
     public function getVisibilityIconAttribute()
     {
         return config('icons.visibility')[$this->visibility] ?? config('icons.visibility.private');
     }
 
-     public function getVisitUrlAttribute(){
+    public function getVisitUrlAttribute()
+    {
         return authRoute('user.think-pad.show', ['thinkPad' => $this]);
     }
 }

@@ -56,6 +56,8 @@ Route::controller(DailyDigestController::class)->group(function () {
     Route::delete('daily-digest/{dailyDigest}', 'destroy')->name('daily-digest.delete');
     Route::post('daily-digest/{dailyDigest}/like', 'like')->name('daily-digest.like');
     Route::post('daily-digest/{dailyDigest}/dislike', 'dislike')->name('daily-digest.dislike');
+    Route::post('daily-digest/{dailyDigest}/emoji', 'updateEmoji')->name('daily-digest.emoji.update');
+    Route::post('daily-digest/{dailyDigest}/file', 'updateFile')->name('daily-digest.file.update');
 });
 
 Route::controller(ThinkPadController::class)->group(function () {
@@ -70,6 +72,8 @@ Route::controller(ThinkPadController::class)->group(function () {
     Route::delete('think-pad/{thinkPad}', 'destroy')->name('think-pad.delete');
     Route::post('think-pad/{thinkPad}/like', 'like')->name('think-pad.like');
     Route::post('think-pad/{thinkPad}/dislike', 'dislike')->name('think-pad.dislike');
+    Route::post('think-pad/{thinkPad}/emoji', 'updateEmoji')->name('think-pad.emoji.update');
+    Route::post('think-pad/{thinkPad}/file', 'updateFile')->name('think-pad.file.update');
 });
 
 Route::controller(SyntaxStoreController::class)->group(function () {
@@ -86,6 +90,7 @@ Route::controller(SyntaxStoreController::class)->group(function () {
     Route::delete('syntax-store/{syntaxStore}', 'destroy')->name('syntax-store.delete');
     Route::post('syntax-store/{syntaxStore}/like', 'like')->name('syntax-store.like');
     Route::post('syntax-store/{syntaxStore}/dislike', 'dislike')->name('syntax-store.dislike');
+    Route::post('syntax-store/{syntaxStore}/emoji', 'updateEmoji')->name('syntax-store.emoji.update');
 });
 
 Route::controller(CommentController::class)->group(function () {

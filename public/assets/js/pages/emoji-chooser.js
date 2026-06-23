@@ -9,88 +9,80 @@ class EmojiChooser {
         this.bindEvents();
     }
 
-    slugify(text) {
-        return text
-            .toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/[^\w-]/g, '');
-    }
-
     async createPicker() {
         try {
             const response = await fetch(route('emojis'));
             const result = await response.json();
 
-            this.emojis = result.data || {};
+            this.emojis = result.data || [];
         } catch (error) {
             console.error('Failed to load emojis:', error);
             return;
         }
 
-        const categories = Object.entries(this.emojis);
-
         const picker = document.createElement('div');
         picker.className = 'emoji-image-box';
 
         picker.innerHTML = `
-            <div class="emoji-search">
-                <input
-                    type="text"
-                    class="form-control emoji-search-input"
-                    placeholder="Search emoji...">
-            </div>
+        <div class="emoji-search">
+            <input
+                type="text"
+                class="form-control emoji-search-input"
+                placeholder="Search emoji...">
+        </div>
 
-            <ul class="nav nav-pills emoji-tabs flex-nowrap">
-                ${categories.map(([category, items], index) => {
-                    const icon = Object.keys(items)[0] || '😀';
+        <ul class="nav nav-pills emoji-tabs flex-nowrap">
+            ${this.emojis.map((category, index) => {
+            const icon = category.emojis?.[0]?.emoji || '😀';
 
-                    return `
-                        <li class="nav-item">
+            return `
+                    <li class="nav-item">
+                        <button
+                            type="button"
+                            class="nav-link ${index === 0 ? 'active' : ''}"
+                            data-target="category-${category.id}"
+                            title="${category.name}">
+                            ${icon}
+                        </button>
+                    </li>
+                `;
+        }).join('')}
+
+            <li class="nav-item">
+                <button
+                    type="button"
+                    class="nav-link"
+                    data-target="image-upload"
+                    title="Upload Image">
+                    <span class="rotate-270">➜]</span>
+                </button>
+            </li>
+        </ul>
+
+        <div class="emoji-grid-container">
+            ${this.emojis.map(category => `
+                <section
+                    class="emoji-category"
+                    id="category-${category.id}">
+
+                    <div class="emoji-category-title">
+                        ${category.name}
+                    </div>
+
+                    <div class="emoji-category-grid">
+                        ${(category.emojis || []).map(emoji => `
                             <button
                                 type="button"
-                                class="nav-link ${index === 0 ? 'active' : ''}"
-                                data-target="${this.slugify(category)}"
-                                title="${category}">
-                                ${icon}
+                                class="emoji-item"
+                                data-emoji-id="${emoji.id}"
+                                data-name="${emoji.name.toLowerCase()}"
+                                title="${emoji.name}">
+                                ${emoji.emoji}
                             </button>
-                        </li>
-                    `;
-                }).join('')}
-
-                <li class="nav-item">
-                    <button
-                        type="button"
-                        class="nav-link"
-                        data-target="image-upload"
-                        title="Upload Image">
-                        🖼️
-                    </button>
-                </li>
-            </ul>
-
-            <div class="emoji-grid-container">
-                ${categories.map(([category, items]) => `
-                    <section
-                        class="emoji-category"
-                        id="${this.slugify(category)}">
-
-                        <div class="emoji-category-title">
-                            ${category}
-                        </div>
-
-                        <div class="emoji-category-grid">
-                            ${Object.entries(items).map(([emoji, name]) => `
-                                <button
-                                    type="button"
-                                    class="emoji-item"
-                                    data-name="${name.toLowerCase()}"
-                                    title="${name}">
-                                    ${emoji}
-                                </button>
-                            `).join('')}
-                        </div>
-                    </section>
-                `).join('')}
+                        `).join('')}
+                    </div>
+                </section>
+            `).join('')}
 
                 <section
                     class="emoji-category"
@@ -101,9 +93,12 @@ class EmojiChooser {
                     </div>
 
                     <label class="upload-box">
-                        <input type="file" hidden accept="image/*">
+                        <input
+                            type="file"
+                            hidden
+                            accept=".png,.jpeg,.jpg,.ico,.webp,.avif,image/png,image/jpeg,image/x-icon,image/webp,image/avif">
 
-                        <i class="ri-upload-cloud-line"></i>
+                        <i class="bi bi-upload"></i>
 
                         <span>Upload Image</span>
                     </label>
@@ -143,6 +138,8 @@ class EmojiChooser {
         const wrapper = this.container.closest('.emoji-image-picker');
         const button = wrapper?.querySelector('.emoji-picker-btn');
 
+        button.innerHTML = "😊";
+
         button?.addEventListener('click', e => {
             e.stopPropagation();
 
@@ -154,12 +151,14 @@ class EmojiChooser {
                     }
                 });
 
+
             wrapper.classList.toggle('open');
 
             if (wrapper.classList.contains('open')) {
                 this.positionPicker(wrapper);
             }
         });
+
 
         window.addEventListener('resize', () => {
             if (wrapper?.classList.contains('open')) {
@@ -199,11 +198,13 @@ class EmojiChooser {
                 return;
             }
 
-            const emoji = emojiBtn.textContent.trim();
-
             wrapper.dispatchEvent(
                 new CustomEvent('emoji:selected', {
-                    detail: { emoji }
+                    detail: {
+                        id: emojiBtn.dataset.emojiId,
+                        emoji: emojiBtn.textContent.trim(),
+                        name: emojiBtn.dataset.name
+                    }
                 })
             );
 
@@ -247,47 +248,236 @@ class EmojiChooser {
                 });
         });
 
-        const grid = this.container.querySelector(
-            '.emoji-grid-container'
-        );
+        const grid = this.container.querySelector('.emoji-grid-container');
 
-        if (grid) {
-            const observer = new IntersectionObserver(
-                entries => {
-                    entries.forEach(entry => {
+        grid.addEventListener('scroll', () => {
+            const sections = [
+                ...grid.querySelectorAll('.emoji-category')
+            ];
 
-                        if (!entry.isIntersecting) {
-                            return;
-                        }
+            let activeSection = sections[0];
 
-                        this.container
-                            .querySelectorAll('.nav-link')
-                            .forEach(btn =>
-                                btn.classList.remove('active')
-                            );
-
-                        this.container
-                            .querySelector(
-                                `[data-target="${entry.target.id}"]`
-                            )
-                            ?.classList.add('active');
-                    });
-                },
-                {
-                    root: grid,
-                    threshold: 0.3
+            sections.forEach(section => {
+                if (grid.scrollTop >= section.offsetTop - 20) {
+                    activeSection = section;
                 }
-            );
+            });
 
-            grid.querySelectorAll('.emoji-category')
-                .forEach(section => observer.observe(section));
-        }
+            this.container
+                .querySelectorAll('.nav-link')
+                .forEach(btn => btn.classList.remove('active'));
+
+            this.container
+                .querySelector(
+                    `[data-target="${activeSection.id}"]`
+                )
+                ?.classList.add('active');
+        });
     }
+
 }
 
-document
-    .querySelectorAll('.emoji-picker-container')
-    .forEach(async el => {
+document.addEventListener('DOMContentLoaded', function () {
+    enableEmojiPicker();
+    handleEmojiPick();
+});
+
+function enableEmojiPicker() {
+    const pickerContainers = document
+        .querySelectorAll('.emoji-picker-container');
+
+    if (pickerContainers.length === 0) return;
+    pickerContainers.forEach(async el => {
         const picker = new EmojiChooser(el);
         await picker.init();
+        handleImageUpload();
     });
+}
+
+function handleEmojiPick() {
+    const pickerWrapper = document.querySelector('.emoji-image-picker');
+    const emojiPickerButton = document.querySelector('.emoji-picker-btn');
+
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute('content');
+
+    if (!pickerWrapper || !emojiPickerButton) {
+        return;
+    }
+
+    const url = emojiPickerButton.dataset.emojiSubmitUrl;
+
+    pickerWrapper.addEventListener('emoji:selected', async e => {
+        const selectedEmoji = e.detail.emoji;
+
+        const avatarContainer = document.querySelector('.post-avatar-container');
+        const previousHtml = avatarContainer.innerHTML;
+
+        renderEmojiAvatar(selectedEmoji);
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    emoji_id: e.detail.id
+                })
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                avatarContainer.innerHTML = previousHtml;
+                Toastify.error(data.message);
+                return;
+            }
+
+            Toastify.success(data.message);
+
+        } catch (error) {
+            avatarContainer.innerHTML = previousHtml;
+            Toastify.error('Something went wrong!');
+        }
+    });
+}
+
+function handleImageUpload() {
+    const uploadInput = document.querySelector('.upload-box input[type="file"]');
+    const uploadBox = document.querySelector('.upload-box');
+    const emojiPickerButton = document.querySelector('.emoji-picker-btn');
+
+
+    if (!uploadInput || !uploadBox || !emojiPickerButton) {
+        return;
+    }
+
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute('content');
+
+
+    const url = emojiPickerButton.dataset.fileSubmitUrl;
+
+    uploadInput.addEventListener('change', async function () {
+        const file = this.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        const originalContent = uploadBox.innerHTML;
+
+        uploadBox.classList.add('uploading');
+        uploadBox.innerHTML = `
+            <i class="spinner-border spinner-border-sm"></i>
+            <span>Uploading...</span>
+        `;
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    Accept: 'application/json'
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.message);
+            }
+
+            renderImageAvatar(data.url);
+
+            uploadBox.classList.remove('uploading');
+            uploadBox.classList.add('success');
+
+            uploadBox.innerHTML = `
+                <i class="bi bi-check-circle-fill"></i>
+                <span>Uploaded</span>
+            `;
+
+            Toastify.success(data.message);
+
+        } catch (error) {
+            uploadBox.classList.remove('uploading');
+            uploadBox.classList.add('error');
+
+            uploadBox.innerHTML = `
+                <i class="bi bi-x-circle-fill"></i>
+                <span>Upload Failed</span>
+            `;
+
+            Toastify.error(error.message || 'Upload failed');
+        }
+
+        setTimeout(() => {
+            uploadBox.classList.remove(
+                'uploading',
+                'success',
+                'error'
+            );
+
+            uploadBox.innerHTML = originalContent;
+
+            handleImageUpload();
+        }, 2000);
+
+        this.value = '';
+    });
+}
+
+function resetUploadBox(uploadBox) {
+    uploadBox.classList.remove('uploading', 'success', 'error');
+
+    uploadBox.innerHTML = `
+        <input
+            type="file"
+            hidden
+            accept=".png,.jpeg,.jpg,.ico,.webp,.avif,image/png,image/jpeg,image/x-icon,image/webp,image/avif">
+        <i class="bi bi-upload"></i>
+        <span>Upload Image</span>
+    `;
+
+    handleImageUpload();
+}
+
+
+function renderEmojiAvatar(emoji) {
+    const container = document.querySelector('.post-avatar-container');
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = `
+        <div
+            class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center justify-content-center">
+            <div class="emoji selected-emoji">${emoji}</div>
+        </div>
+    `;
+}
+
+function renderImageAvatar(imageUrl) {
+    const container = document.querySelector('.post-avatar-container');
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = `
+        <img
+            src="${imageUrl}"
+            class="rounded-circle avatar-xxl img-thumbnail float-start digest-image"
+            alt="image profile">
+    `;
+}

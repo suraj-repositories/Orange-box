@@ -14639,7 +14639,7 @@ body {
     margin-left: 260px;
     overflow: hidden;
     padding: 0 12px 65px 12px;
-    min-height: 80vh;
+    min-height: 90vh;
     margin-top: 70px;
     transition: all .1s ease-out
 }

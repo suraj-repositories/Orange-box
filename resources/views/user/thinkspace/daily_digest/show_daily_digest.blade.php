@@ -4,266 +4,7 @@
 
 @section('css')
     <style>
-        .emoji-image-picker {
-            position: absolute;
-            display: inline-block;
-            bottom: 3px;
-            right: 3px;
-        }
 
-        .emoji-picker-btn {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 35px;
-            height: 35px;
-            border: none;
-            border-radius: 50%;
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
-            font-size: 18px;
-            cursor: pointer;
-            z-index: 10;
-            transition: .2s;
-            display: flex;
-            filter: grayscale(1);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .emoji-picker-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .emoji-image-box {
-            position: absolute;
-            top: calc(100% + 5px);
-            left: calc(100% - 20px);
-
-            width: 360px;
-            max-width: min(360px, calc(100vw - 20px));
-
-            background: #fff;
-            border-radius: 16px;
-            border: 1px solid #e9ecef;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, .15);
-
-            z-index: 1000;
-            display: none;
-
-            overflow: hidden;
-        }
-
-        .emoji-image-picker.open .emoji-image-box {
-            display: block;
-        }
-
-        .emoji-search {
-            margin-bottom: 12px;
-            padding: 12px;
-            padding-bottom: 0px;
-
-        }
-
-        .emoji-search input {
-            width: 100%;
-            border-radius: 10px;
-            padding: 0.47rem 0.665rem;
-            border: 1px solid var(--bs-gray-400);
-            font-size: .875rem;
-        }
-
-        .emoji-tabs {
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            overflow-y: hidden;
-            gap: 4px;
-            margin-bottom: 12px;
-            padding-bottom: 4px;
-            scrollbar-width: thin;
-            padding: 0 12px;
-        }
-
-        .emoji-tabs::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .emoji-tabs .nav-link {
-            width: 32px;
-            min-width: 32px;
-            height: 32px;
-            padding: 0;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .emoji-tabs .nav-link.active {
-            background: #e8e8e8;
-            color: #111827;
-        }
-
-        .emoji-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 2px;
-            max-height: 280px;
-            overflow-y: auto;
-        }
-
-        .emoji-item {
-            width: 100%;
-            aspect-ratio: 1;
-            border: none;
-            background: transparent;
-            border-radius: 10px;
-            font-size: 22px;
-            transition: .2s;
-        }
-
-        .emoji-item:hover {
-            background: #f3f4f6;
-            transform: scale(1.1);
-        }
-
-        .upload-box {
-            width: 100%;
-            height: 180px;
-            border: 2px dashed #d1d5db;
-            border-radius: 12px;
-
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-
-            cursor: pointer;
-        }
-
-        .upload-box i {
-            font-size: 32px;
-        }
-
-        .upload-box:hover {
-            background: #f9fafb;
-        }
-
-        .avatar-xxl .emoji {
-            font-size: 70px;
-            line-height: 1;
-        }
-
-        /* Tablet */
-        @media (max-width: 768px) {
-
-            .emoji-image-box {
-                width: 320px;
-                max-width: calc(100vw - 20px);
-            }
-
-            .emoji-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-        }
-
-        /* Mobile */
-        @media (max-width: 576px) {
-
-            .emoji-image-box {
-                position: fixed;
-
-                top: auto;
-                right: 10px;
-                left: 10px;
-
-                width: auto;
-                max-width: none;
-
-                max-height: 70vh;
-
-                border-radius: 16px;
-            }
-
-            .emoji-grid {
-                grid-template-columns: repeat(5, 1fr);
-                max-height: 45vh;
-            }
-
-            .emoji-item {
-                font-size: 22px;
-            }
-
-            .upload-box {
-                height: 140px;
-            }
-        }
-
-        /* Very small phones */
-        @media (max-width: 380px) {
-
-            .emoji-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .emoji-tabs .nav-link {
-                width: 34px;
-                min-width: 34px;
-                height: 34px;
-                font-size: 16px;
-            }
-        }
-
-        .emoji-tabs {
-            overflow-x: auto;
-            flex-wrap: nowrap;
-            gap: 4px;
-            margin-bottom: 10px;
-        }
-
-        .emoji-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .emoji-grid-container {
-            max-height: 320px;
-            overflow-y: auto;
-            padding: 12px;
-            padding-top: 0;
-        }
-
-        .emoji-category-title {
-            position: sticky;
-            top: 0;
-            background: #fff;
-            z-index: 2;
-            padding: 6px 0;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .emoji-category-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 4px;
-        }
-
-        .emoji-item {
-            border: 0;
-            background: transparent;
-            font-size: 24px;
-            border-radius: 6px;
-            padding: 6px;
-            cursor: pointer;
-        }
-
-        .emoji-item:hover {
-            background: #f5f5f5;
-        }
     </style>
 @endsection
 
@@ -302,30 +43,40 @@
                                 <div class="d-flex flex-column flex-md-row align-items-center">
                                     <div class="position-relative ">
 
-                                        @if ($dailyDigest->emoji())
-                                            <div
-                                                class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center justify-content-center">
-                                                <div class="emoji">{{ $dailyDigest->emoji->emoji }}</div>
-                                            </div>
-                                        @elseif($dailyDigest->picture())
-                                            <img src="{{ $dailyDigest->picture() }}"
-                                                class="rounded-circle avatar-xxl img-thumbnail float-start"
-                                                alt="image profile">
-                                        @else
-                                            <div
-                                                class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center justify-content-center">
-                                                <div class="emoji">{{ config('constants.DEFAULT_DIGEST_EMOJI') }}</div>
+                                        <div class="post-avatar-container">
+                                            @if ($dailyDigest->emoji)
+                                                <div
+                                                    class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center justify-content-center">
+                                                    <div class="emoji selected-emoji">{{ $dailyDigest->emoji->emoji }}</div>
+                                                </div>
+                                            @elseif($dailyDigest->file)
+                                                <img src="{{ $dailyDigest->file_url }}"
+                                                    class="rounded-circle avatar-xxl img-thumbnail float-start digest-image"
+                                                    alt="image profile">
+                                            @else
+                                                <div
+                                                    class="rounded-circle avatar-xxl img-thumbnail float-start d-flex align-items-center justify-content-center">
+                                                    <div class="emoji selected-emoji">
+                                                        {{ config('constants.DEFAULT_DIGEST_EMOJI') }}
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+
+
+                                        @if ($dailyDigest->user_id == auth()->id())
+                                            <div class="emoji-image-picker">
+                                                <button type="button" class="btn btn-light emoji-picker-btn"
+                                                    data-emoji-submit-url="{{ authRoute('user.daily-digest.emoji.update', ['dailyDigest' => $dailyDigest]) }}"
+                                                    data-file-submit-url="{{ authRoute('user.daily-digest.file.update', ['dailyDigest' => $dailyDigest]) }}">
+                                                    <span class="spinner-border spinner-border-sm"
+                                                        aria-hidden="true"></span>
+                                                    <span class="visually-hidden" role="status">Loading...</span>
+                                                </button>
+
+                                                <div class="emoji-picker-container"></div>
                                             </div>
                                         @endif
-
-
-                                        <div class="emoji-image-picker">
-                                            <button type="button" class="btn btn-light emoji-picker-btn">
-                                                😊
-                                            </button>
-
-                                            <div class="emoji-picker-container"></div>
-                                        </div>
 
 
 

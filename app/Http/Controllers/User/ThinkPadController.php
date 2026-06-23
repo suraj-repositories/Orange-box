@@ -10,7 +10,9 @@ use App\Models\User;
 use App\Rules\DescriptionLength;
 use App\Services\FileService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
 use SweetAlert2\Laravel\Swal;
 
 class ThinkPadController extends Controller
@@ -265,5 +267,99 @@ class ThinkPadController extends Controller
             'is_liked' => $thinkPad->likedBy($user->id),
             'is_disliked' => $thinkPad->dislikedBy($user->id)
         ]);
+    }
+
+    public function updateEmoji(User $user, ThinkPad $thinkPad, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'emoji_id' => 'required|exists:emojis,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        Gate::authorize('update', $thinkPad);
+        $thinkPad->emoji_id = $request->emoji_id;
+        if ($thinkPad->file) {
+            $oldFile = $thinkPad->file;
+
+            $this->fileService->deleteIfExists($oldFile->file_path);
+
+            $oldFile->delete();
+        }
+        $thinkPad->file_id = null;
+        $thinkPad->save();
+        return response()->json([
+            'success' => true,
+            'message' => 'Updated successfully!'
+        ]);
+    }
+
+    public function updateFile(User $user, ThinkPad $thinkPad, Request $request)
+    {
+        Gate::authorize('update', $thinkPad);
+
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|file|max:' . config('validation_rules.max_file_size')
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        DB::beginTransaction();
+
+        try {
+            if ($thinkPad->file) {
+                $oldFile = $thinkPad->file;
+
+                $this->fileService->deleteIfExists($oldFile->file_path);
+
+                $oldFile->delete();
+            }
+
+            $file = $request->file('image');
+            $uploadedFile = File::create([
+                'file_path' => $this->fileService->uploadFile($file, 'think-pad'),
+                'file_name' => $this->fileService->getFileName($file),
+                'mime_type' => $this->fileService->getMimeType($file),
+                'file_size' => $file->getSize() ?? null,
+                'fileable_type' => ThinkPad::class,
+                'fileable_id' => $thinkPad->id,
+                'user_id' => $user->id
+            ]);
+
+            $thinkPad->update([
+                'file_id' => $uploadedFile->id,
+                'emoji_id' => null
+            ]);
+
+            DB::commit();
+
+            $thinkPad->load('file');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Image updated successfully.',
+                'file_id' => $uploadedFile->id,
+                'url' => $thinkPad->file_url
+            ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            report($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update image.'
+            ], 500);
+        }
     }
 }
