@@ -105,6 +105,16 @@ class FileController extends Controller
         ]);
 
         if ($file->file_name != $validated['new_name']) {
+
+            if (auth()->id() !== $file->user_id) {
+                Swal::error([
+                    'title' => 'Oops!',
+                    'text'  => 'Unauthorized!',
+                ]);
+
+                return back()->with('error', 'Unauthorized action.');
+            }
+
             $new_name = $validated['new_name'];
             $new_extension = $this->fileService->getExtensionByPath($new_name);
             $old_extension = $this->fileService->getExtensionByPath($file->file_path);

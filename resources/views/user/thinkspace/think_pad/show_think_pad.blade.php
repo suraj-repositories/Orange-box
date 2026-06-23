@@ -47,7 +47,7 @@
                                                     <div class="emoji">{{ $thinkPad->emoji->emoji }}</div>
                                                 </div>
                                             @elseif($thinkPad->file)
-                                                <img src="{{  $thinkPad->file_url }}"
+                                                <img src="{{ $thinkPad->file_url }}"
                                                     class="rounded-circle avatar-xxl img-thumbnail float-start"
                                                     alt="image profile">
                                             @else
@@ -165,21 +165,24 @@
                                                                     data-bs-title="View">
                                                                     <i class="bx bx-show-alt"></i>
                                                                 </a>
-                                                                <a href="javascript::void(0)" class="rename"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#{{ $file['file_id'] }}"
-                                                                    title="Rename">
-                                                                    <i class="bx bx-rename"></i>
-                                                                </a>
-                                                                <form class="delete"
-                                                                    action="{{ route('file.delete', $file['file_id']) }}"
-                                                                    data-bs-toggle="tooltip" data-bs-title="Delete"
-                                                                    data-ob-dismiss="delete-card" method="POST">
-                                                                    @csrf
-                                                                    @method('delete')
-                                                                    <button class="delete"> <i
-                                                                            class="bx bx-trash-alt"></i></button>
-                                                                </form>
+
+                                                                @if ($thinkPad->user_id == (auth()->id() ?? ''))
+                                                                    <a href="javascript::void(0)" class="rename"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#{{ $file['file_id'] }}"
+                                                                        title="Rename">
+                                                                        <i class="bx bx-rename"></i>
+                                                                    </a>
+                                                                    <form class="delete"
+                                                                        action="{{ route('file.delete', $file['file_id']) }}"
+                                                                        data-bs-toggle="tooltip" data-bs-title="Delete"
+                                                                        data-ob-dismiss="delete-card" method="POST">
+                                                                        @csrf
+                                                                        @method('delete')
+                                                                        <button class="delete"> <i
+                                                                                class="bx bx-trash-alt"></i></button>
+                                                                    </form>
+                                                                @endif
                                                             </div>
                                                         </div>
 
@@ -207,23 +210,26 @@
                                                                     data-bs-title="View">
                                                                     <i class="bx bx-show-alt"></i>
                                                                 </a>
-                                                                <a href="javascript::void(0)" class="rename"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#{{ $file['file_id'] }}"
-                                                                    title="Rename">
-                                                                    <i class="bx bx-rename"></i>
 
-                                                                </a>
+                                                                @if ($thinkPad->user_id == (auth()->id() ?? ''))
+                                                                    <a href="javascript::void(0)" class="rename"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#{{ $file['file_id'] }}"
+                                                                        title="Rename">
+                                                                        <i class="bx bx-rename"></i>
 
-                                                                <form class="delete"
-                                                                    action="{{ route('file.delete', $file['file_id']) }}"
-                                                                    data-bs-toggle="tooltip" data-bs-title="Delete"
-                                                                    data-ob-dismiss="delete-card" method="POST">
-                                                                    @csrf
-                                                                    @method('delete')
-                                                                    <button class="delete"> <i
-                                                                            class="bx bx-trash-alt"></i></button>
-                                                                </form>
+                                                                    </a>
+
+                                                                    <form class="delete"
+                                                                        action="{{ route('file.delete', $file['file_id']) }}"
+                                                                        data-bs-toggle="tooltip" data-bs-title="Delete"
+                                                                        data-ob-dismiss="delete-card" method="POST">
+                                                                        @csrf
+                                                                        @method('delete')
+                                                                        <button class="delete"> <i
+                                                                                class="bx bx-trash-alt"></i></button>
+                                                                    </form>
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="card-body">
