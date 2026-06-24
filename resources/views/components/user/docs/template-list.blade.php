@@ -2,14 +2,17 @@
     @foreach ($templates as $template)
         <div class="col">
             <div class="template-card d-flex flex-column h-100">
-                <a href="{{ authRoute('user.template.show',['template' => $template]) }}">
-                    <img class="card-img-top rounded-top" src="{{ $template->preview_image_url }}" alt="Project Thumbnail"  onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';">
+                <a href="{{ authRoute('user.template.show', ['template' => $template]) }}">
+                    <img class="card-img-top rounded-top" src="{{ $template->preview_image_url }}" alt="Project Thumbnail"
+                        onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';">
                 </a>
                 <div class="template-meta">
                     <div>
                         <div class="user-title">
-                            <img class="proflie-image" src="{{ asset('assets/images/logo-sm.png') }}" alt="">
-                            <h2 class="mb-0"><a class="text-dark" href="{{ authRoute('user.template.show',['template' => $template]) }}">{{ $template->title }}</a></h2>
+                            <img class="proflie-image" src="{{ asset($logoSm) }}" alt="">
+                            <h2 class="mb-0"><a class="text-dark"
+                                    href="{{ authRoute('user.template.show', ['template' => $template]) }}">{{ $template->title }}</a>
+                            </h2>
                         </div>
 
                         <div class="rating text-muted"><i class="bi bi-star-fill"></i>
@@ -19,7 +22,7 @@
                         </div>
                     </div>
                     <div class="price-badge">
-                        @if (($template->price ?? 0 )> 0)
+                        @if (($template->price ?? 0) > 0)
                             $ {{ $template->price }}
                         @else
                             Free

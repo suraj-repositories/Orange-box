@@ -28,6 +28,8 @@ use App\Services\Impl\SuggestionServiceImpl;
 use App\Services\SuggestionService;
 use App\Services\GitService;
 use  App\Services\Impl\GitServiceImpl;
+use App\Services\Impl\ThemeServiceImpl;
+use App\Services\ThemeService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
@@ -49,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(MarkdownService::class, MarkdownServiceImpl::class);
         $this->app->singleton(SuggestionService::class, SuggestionServiceImpl::class);
         $this->app->singleton(GitService::class, GitServiceImpl::class);
+        $this->app->singleton(ThemeService::class, ThemeServiceImpl::class);
 
         class_alias(Setting::class, 'Setting');
     }

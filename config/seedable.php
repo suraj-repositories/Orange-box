@@ -145,6 +145,7 @@ return [
                 'key' => 'app_theme',
                 'value_model' => 'App\Models\AppTheme',
                 'value' => 1,
+                'is_enabled' => true,
                 'description' => 'Choose a theme.',
                 'settings_category_id' => 4,
                 'icon' => 'bx bx-palette'
@@ -159,26 +160,34 @@ return [
             'title' => 'Orange Box',
             'theme_key' => 'orange_box',
             'theme_image' => '/assets/images/themes/orange_box.png',
-            'logo_image' => '/assets/images/logo/orange_box.svg'
+            'logo_light' => '/assets/images/themes/orange-box-logo-light.svg',
+            'logo_dark' => '/assets/images/themes/orange-box-logo-dark.svg',
+            'logo_sm' => '/assets/images/themes/orange-box-logo-sm.svg',
         ],
-        // [
-        //     'title' => 'Fresh Fiber',
-        //     'theme_key' => 'fresh_fiber',
-        //     'theme_image' => '/assets/images/themes/fresh_fiber.png',
-        //     'logo_image' => '/assets/images/logo/fresh_fiber.svg'
-        // ],
-        // [
-        //     'title' => 'Bright Red',
-        //     'theme_key' => 'bright_red',
-        //     'theme_image' => '/assets/images/themes/bright_red.png',
-        //     'logo_image' => '/assets/images/logo/bright_red.svg'
-        // ],
-        // [
-        //     'title' => 'Sweet Blue',
-        //     'theme_key' => 'sweet_blue',
-        //     'theme_image' => '/assets/images/themes/sweet_blue.png',
-        //     'logo_image' => '/assets/images/logo/sweet_blue.svg'
-        // ],
+        [
+            'title' => 'Fresh Fiber',
+            'theme_key' => 'fresh_fiber',
+            'theme_image' => '/assets/images/themes/fresh_fiber.png',
+            'logo_light' => '/assets/images/themes/fresh-fiber-logo-light.svg',
+            'logo_dark' => '/assets/images/themes/fresh-fiber-logo-dark.svg',
+            'logo_sm' => '/assets/images/themes/fresh-fiber-logo-sm.svg',
+        ],
+        [
+            'title' => 'Bright Red',
+            'theme_key' => 'bright_red',
+            'theme_image' => '/assets/images/themes/bright_red.png',
+            'logo_light' => '/assets/images/themes/bright-red-logo-light.svg',
+            'logo_dark' => '/assets/images/themes/bright-red-logo-dark.svg',
+            'logo_sm' => '/assets/images/themes/bright-red-logo-sm.svg',
+        ],
+        [
+            'title' => 'Sweet Blue',
+            'theme_key' => 'sweet_blue',
+            'theme_image' => '/assets/images/themes/sweet_blue.png',
+            'logo_light' => '/assets/images/themes/sweet-blue-logo-light.svg',
+            'logo_dark' => '/assets/images/themes/sweet-blue-logo-dark.svg',
+            'logo_sm' => '/assets/images/themes/sweet-blue-logo-sm.svg',
+        ],
     ],
 
     'social_media_platforms' => [
