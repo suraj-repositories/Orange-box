@@ -87,7 +87,7 @@ class User extends Authenticatable
             return $this->avatar;
         }
 
-        return "https://placehold.co/100/FF8600/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
+        return route('profile-placeholder.svg', ['text' => strtoupper(substr($this->username, 0, 1))]);
     }
     public function getAvatarUrlAttribute()
     {
@@ -99,7 +99,8 @@ class User extends Authenticatable
         } else if (preg_match('/^https?:\/\//', $value ?? '')) {
             return $value;
         }
-        return "https://placehold.co/100/FF8600/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
+        // return "https://placehold.co/100/FF8600/ffffff?text=" . strtoupper(substr($this->username, 0, 1));
+          return route('profile-placeholder.svg', ['text' => strtoupper(substr($this->username, 0, 1))]);
     }
 
     public function masterKey()

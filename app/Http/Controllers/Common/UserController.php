@@ -10,8 +10,11 @@ use App\Models\User;
 use App\Models\UserSkill;
 use App\Models\UserSocialMediaLink;
 use App\Models\WorkExperience;
+use App\Services\ThemeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -177,4 +180,43 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index');
     }
+
+    public function profilePicSvg(Request $request, ThemeService $themeService): Response
+    {
+        $theme = $themeService->current();
+
+        $bg = match ($theme?->theme_key) {
+            'orange_box' => '#FF8600',
+            'fresh_fiber' => '#77b255',
+            'bright_red' => '#DC3545',
+            'sweet_blue' => '#0D6EFD',
+            default => '#FF8600',
+        };
+
+        $fg = '#FFFFFF';
+
+        $text = strtoupper(substr($request->get('text', '?'), 0, 2));
+
+        $svg = <<<SVG
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+    <rect width="100" height="100" fill="{$bg}" />
+    <text
+        x="50"
+        y="50"
+        text-anchor="middle"
+        dominant-baseline="central"
+        font-family="Arial, sans-serif"
+        font-size="42"
+        font-weight="700"
+        fill="{$fg}">
+        {$text}
+    </text>
+</svg>
+SVG;
+
+        return response($svg)
+            ->header('Content-Type', 'image/svg+xml');
+    }
+
+
 }

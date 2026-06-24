@@ -4038,21 +4038,21 @@ ul.directory-list.active {
 }
 
 .tag-scroll-wrapper .tag-chip.tag-chip-primary {
-    background-color: #fff5e183;
-    border-color: rgba(255, 166, 0, 0.158);
+    background-color: var(--ob-tag-chip-bg-primary);
+    border-color: var(--ob-tag-chip-border-primary);
 }
 
 .tag-scroll-wrapper .tag-chip.tag-chip-primary:hover {
-    background-color: #fff5e1b9;
-    border-color: rgba(255, 166, 0, 0.322);
+    background-color: var(--ob-tag-chip-bg-primary-hover);
+    border-color: var(--ob-tag-chip-border-primary-hover);
 }
 
 .tag-scroll-wrapper .tag-chip.tag-chip-primary i {
-    color: #ff9a48;
+    color: var(--bs-primary);
 }
 
 .tag-scroll-wrapper .tag-chip.tag-chip-primary:hover i {
-    color: #fd8f35;
+    color: var(--bs-primary-hover);
 }
 
 .tag-scroll-wrapper .tag-chip.tag-chip-success {

@@ -317,7 +317,7 @@ function enableDocumentationVisitors() {
     let categories = [];
     let data = [];
 
-    const color = getComputedStyle(document.documentElement)
+    const color = getComputedStyle(document.body)
         .getPropertyValue('--chart-color')
         .trim();
 
@@ -406,9 +406,9 @@ function enableAudienceDailyChart() {
         series = [];
     }
 
-    const color = getComputedStyle(document.documentElement)
-        .getPropertyValue('--sparkline-color')
-        .trim();
+  const color = getComputedStyle(document.body)
+    .getPropertyValue('--sparkline-color')
+    .trim();
 
     const options = {
         series: series,
@@ -449,15 +449,15 @@ function enableMemoryTracker(selector) {
         memoryUsed = showMemoryUsage.getAttribute('data-memory-used');
     }
 
-    const color1 = getComputedStyle(document.documentElement)
-        .getPropertyValue('--bs-primary')
-        .trim();
-    const color2 = getComputedStyle(document.documentElement)
-        .getPropertyValue('--bs-primary')
-        .trim();
-    const color3 = getComputedStyle(document.documentElement)
+    const styles = getComputedStyle(document.body);
+
+    const color1 = styles.getPropertyValue('--bs-primary').trim();
+    const color2 = styles.getPropertyValue('--bs-primary').trim();
+    const color3 = styles
         .getPropertyValue('--bs-primary-bg-subtle-light')
         .trim();
+
+    console.log(color1, color2, color3);
 
     var options = {
         chart: {

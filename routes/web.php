@@ -36,6 +36,8 @@ Route::controller(UserController::class)->middleware('auth')->group(function () 
     Route::post('/search/username', 'searchUsers')->name('search.username');
 
     Route::get('/stop-impersonation',  'stopImpersonation')->name('stop-impersonation');
+
+    Route::get('/profile-image', 'profilePicSvg')->name('profile-placeholder.svg');
 });
 
 Route::get('/emojis', [EmojiController::class, 'getEmojis'])->name('emojis');

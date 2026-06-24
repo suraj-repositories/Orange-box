@@ -27,7 +27,7 @@
     --bs-gray-700: #4a5a6b;
     --bs-gray-800: #343a40;
     --bs-gray-900: #001b2f;
-    --bs-primary: var(--bs-primary);
+    --bs-primary: #FF8600;
     --bs-secondary: #8c57d1;
     --bs-success: #29aa85;
     --bs-info: #62B7E5;
@@ -132,6 +132,14 @@
     --ob-bg-primary-border-200: #ffdba2;
     --ob-bg-primary-border-300: #ffcf83;
 
+    --ob-tag-chip-bg-primary: #fff5e183;
+    --ob-tag-chip-border-primary: rgba(255, 166, 0, 0.158);
+    --ob-tag-chip-bg-primary-hover: #fff5e1b9;
+    --ob-tag-chip-border-primary-hover: rgba(255, 166, 0, 0.322);
+    --bs-primary-hover: #fd8f35;
+    --sparkline-color: var(--bs-primary);
+    --chart-color: var(--bs-primary-bg-subtle);
+
 
 }
 
@@ -188,7 +196,10 @@
     --bs-form-valid-color: #75b798;
     --bs-form-valid-border-color: #75b798;
     --bs-form-invalid-color: #ea868f;
-    --bs-form-invalid-border-color: #ea868f
+    --bs-form-invalid-border-color: #ea868f;
+
+
+
 }
 
 
@@ -203,6 +214,30 @@ body[data-app-theme="fresh_fiber"] {
     --bs-primary-border-subtle: #5990393b;
 
 
+
+
+
+    --ob-sidebar-active-bg: #77b2552d;
+    --bs-nav-link-hover-color: var(--bs-primary);
+    --ob-btn-hover-bg-color: #548836;
+
+    --ob-bg-primary-200: #98f46333;
+    --ob-bg-primary-300: #98f46354;
+
+    --ob-bg-primary-border-200: #94d270a8;
+    --ob-bg-primary-border-300: #79af5abf;
+
+    --ob-tag-chip-bg-primary: #d9fec4a8;
+    --ob-tag-chip-border-primary: #77b25524;
+    --ob-tag-chip-bg-primary-hover: #cdfeb1d7;
+    --ob-tag-chip-border-primary-hover: #77b25532;
+    --bs-primary-hover: #5d8d41;
+    --sparkline-color: var(--bs-primary);
+    --chart-color: var(--bs-primary-bg-subtle);
+
+}
+
+.btn-outline-primary {
     --bs-btn-color: var(--bs-primary);
     --bs-btn-border-color: var(--bs-primary-bg-subtle);
 
@@ -220,18 +255,6 @@ body[data-app-theme="fresh_fiber"] {
     --bs-btn-disabled-color: var(--bs-primary);
     --bs-btn-disabled-bg: transparent;
     --bs-btn-disabled-border-color: var(--bs-primary);
-
-    --bs-gradient: none;
-
-    --ob-sidebar-active-bg: #77b2552d;
-    --bs-nav-link-hover-color: var(--bs-primary);
-    --ob-btn-hover-bg-color: #548836;
-
-    --ob-bg-primary-200: #98f46333;
-    --ob-bg-primary-300: #98f46354;
-
-    --ob-bg-primary-border-200: #94d270a8;
-    --ob-bg-primary-border-300: #79af5abf;
 }
 
 
