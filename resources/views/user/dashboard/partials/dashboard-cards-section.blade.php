@@ -30,7 +30,7 @@
 
                      <!-- Image -->
                      <div class="col-md-6 image-wrapper d-none d-md-flex align-items-end justify-content-end">
-                         <img src="{{ asset('assets/images/landing/project-creation.png') }}" alt="Projects">
+                         <img src="{{ theme_asset('projects.png') }}" alt="Projects">
                      </div>
 
                  </div>
@@ -68,7 +68,7 @@
                          </div>
 
                          <div class="col-md-6 image-wrapper d-none d-md-flex align-items-end justify-content-end">
-                             <img src="{{ asset('assets/images/landing/dashboard-card-bg-1.png') }}"
+                             <img src="{{ theme_asset('dashboard-card-bg-1.png') }}"
                                  alt="Documentation">
                          </div>
 

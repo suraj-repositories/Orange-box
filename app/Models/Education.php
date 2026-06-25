@@ -38,7 +38,7 @@ class Education extends Model
 
     public function getLogoUrlAttribute(){
         if (empty($this->institution_logo) || !Storage::disk('public')->exists($this->institution_logo)) {
-            return asset('assets/images/defaults/education-50.svg');
+            return theme_asset('education-50.svg');
         }
         return Storage::url($this->institution_logo);
 

@@ -140,7 +140,7 @@
     --sparkline-color: var(--bs-primary);
     --chart-color: var(--bs-primary-bg-subtle);
 
-
+    --bs-primary-bg-subtle-light-50: #ffa73b14;
 }
 
 [data-bs-theme=dark] {
@@ -202,20 +202,16 @@
 
 }
 
-
 body[data-app-theme="fresh_fiber"] {
     --bs-primary: #77b255;
     --bs-primary-rgb: 119, 178, 85;
 
     --bs-primary-bg-subtle: #95ff5791;
+    --bs-primary-bg-subtle-light-50: #7dff3216;
     --bs-primary-bg-subtle-light: #7dff3239;
     --bs-primary-bg-subtle-light-200: #a9ff7730;
 
     --bs-primary-border-subtle: #5990393b;
-
-
-
-
 
     --ob-sidebar-active-bg: #77b2552d;
     --bs-nav-link-hover-color: var(--bs-primary);

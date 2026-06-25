@@ -12,7 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <!-- App favicon -->
-    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/ico" />
+    <link rel="icon" href="{{ theme_asset('logo-sm.svg') }}" type="image/ico" />
 
     @if (Route::is('user.documentation.pages.index'))
         <script src="{{ asset('assets/js/pages/documentation-editor-preload.js') }}"></script>

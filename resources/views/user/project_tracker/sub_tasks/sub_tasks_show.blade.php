@@ -48,8 +48,14 @@
                                          <div class="d-flex align-items-center gap-2  mb-2">
 
                                              <label class="circle-40 cursor-pointer" for="media-input">
-                                                 <img src="{{ asset('assets/images/svg/files-icon-24.svg') }}"
-                                                     alt="upload" title="File Upload">
+                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px"
+                                                     viewBox="0 0 24 24">
+                                                     <path d="M0 0h24v24H0z" fill="none" />
+                                                     <path fill="none" stroke="currentColor" stroke-linecap="round"
+                                                         stroke-linejoin="round" stroke-width="2"
+                                                         d="M6 7.91V16a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V6a4 4 0 0 0-4-4v0a4 4 0 0 0-4 4v9.182a2 2 0 0 0 2 2v0a2 2 0 0 0 2-2V8" />
+                                                 </svg>
+
                                              </label>
 
                                              <div class="status-radios d-flex flex-wrap gap-2 ms-auto ">

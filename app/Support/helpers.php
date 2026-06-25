@@ -1,5 +1,7 @@
 <?php
 
+use App\Services\Impl\ThemeServiceImpl;
+use App\Services\ThemeService;
 use Illuminate\Support\Facades\Auth;
 
 if (! function_exists('authRoute')) {
@@ -21,4 +23,24 @@ if (! function_exists('authRoute')) {
 
         return route($name, $parameters, $absolute);
     }
+}
+
+function current_theme_key()
+{
+    $th = new ThemeServiceImpl();
+
+    return $th->current()->theme_key;
+}
+
+function theme_asset(string $file): string
+{
+    $theme = current_theme_key();
+
+    $path = "assets/images/themes/{$theme}/{$file}";
+
+    if (file_exists(public_path($path))) {
+        return asset($path);
+    }
+
+    return asset("assets/images/defaults/placeholder-600x400.svg");
 }

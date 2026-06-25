@@ -46,7 +46,7 @@
                      <div class="avatar-sm profile-icon p-1">
                          <div class="avatar-title rounded-2 bg-light" style="height: 35px; width: 35px;">
                              <img src="{{ $experience->logo_url }}"
-                                 onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/experience-company-50.svg') }}';"
+                                 onerror="this.onerror=null;this.src='{{ theme_asset('experience-company-50.svg') }}';"
                                  class="max-square-40" alt="company-img">
 
 

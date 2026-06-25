@@ -23,6 +23,6 @@ class ThemeServiceImpl implements ThemeService
 
         return $themeId
             ? AppTheme::find($themeId)
-            : null;
+            : AppTheme::first();
     }
 }

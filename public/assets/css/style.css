@@ -1185,6 +1185,10 @@ p {
     color: var(--bs-danger);
 }
 
+button.swal2-confirm.swal2-styled {
+    background-color: var(--bs-dark);
+}
+
 /* BEGIN - Ribbon style */
 .ribbon-3.top-right {
     inset-inline-end: .625rem;
@@ -1650,7 +1654,7 @@ p {
     position: relative;
 }
 
-.timeline-1::after {
+.timeline-1:has(.timeline-data)::after {
     content: "";
     background: #b9b9b95c;
     width: 2px;
@@ -1732,13 +1736,13 @@ p {
 
 .status-radios .status-btn.status-pending {
     background-color: #ebf1ff94;
-    color: #FF8600;
+    color: var(--bs-dark-blue);
     border-color: #436ff1;
 }
 
 .status-radios .status-btn.status-pending:hover,
 .status-radios input:checked+.status-btn.status-pending {
-    background-color: #FF8600;
+    background-color: var(--bs-dark-blue);
     color: #fff;
 }
 
@@ -2358,7 +2362,7 @@ tr.deleting a {
 }
 
 ul.directory-list.active {
-    border: 1px solid var(--bs-orange);
+    border: 1px solid var(--bs-primary);
 }
 
 .directory-list::-webkit-scrollbar {
@@ -2478,8 +2482,9 @@ ul.directory-list.active {
 }
 
 .ob-li-row-cover.active::before {
-    border: 1px solid var(--bs-orange);
-    background-color: rgba(255, 145, 0, 0.052);
+    border: 1px solid var(--ob-bg-primary-border-300);
+    background-color: var(--bs-primary-bg-subtle-light-200);
+    color: var(--bs-primary);
 }
 
 .ob-li-row-cover.active~.li-item,
@@ -2940,8 +2945,8 @@ ul.directory-list.active {
     position: relative;
     width: 100%;
     height: 120px;
-    border: 2px dashed #d0d5dd;
     border-radius: 10px;
+    border: 2px dashed #d0d5dd;
     background: #fafafa;
     display: flex;
     align-items: center;
@@ -2951,8 +2956,8 @@ ul.directory-list.active {
 }
 
 .doc-logo-picker .picker-box:hover {
-    border-color: var(--bs-primary-bg-subtle);
-    background: #fff9f5;
+    border-color: var(--bs-primary-border-subtle);
+    background: var(--bs-primary-bg-subtle-light-50);
 }
 
 .doc-logo-picker span {
@@ -3056,8 +3061,8 @@ ul.directory-list.active {
 
 .pm-root {
     --pm-primary: var(--bs-primary);
-    --pm-primary-soft: rgba(255, 134, 0, 0.10);
-    --pm-primary-border: rgba(255, 134, 0, 0.30);
+    --pm-primary-soft: var(--bs-primary-bg-subtle-light);
+    --pm-primary-border: var(--ob-bg-primary-border-200);
     --pm-success: var(--bs-success);
     --pm-success-soft: rgba(41, 170, 133, 0.10);
     --pm-success-border: rgba(41, 170, 133, 0.30);
@@ -3670,7 +3675,7 @@ ul.directory-list.active {
 }
 
 .pm-root .pm-btn-primary:hover {
-    background: #e07600;
+    background: var(--bs-primary-hover);
     color: #fff;
 }
 
@@ -4383,9 +4388,10 @@ ul.directory-list.active {
 }
 
 .dashboard-template-cards .template-card .template-meta .proflie-image {
-    width: 24px;
-    height: 24px;
-    object-fit: cover;
+    width: auto;
+    height: 25px;
+    max-width: 36px;
+    object-fit: contain;
     border-radius: 50%;
     border: 1px solid #e6e6e61c;
 }
@@ -4753,8 +4759,8 @@ ul.directory-list.active {
 }
 
 .storage-list .storage-icon.documents {
-    background: rgba(249, 115, 22, .12);
-    color: #f97316;
+    background: var(--bs-primary-bg-subtle-light);
+    color: var(--bs-primary);
 }
 
 .storage-list .storage-icon.emails {
@@ -4820,7 +4826,7 @@ ul.directory-list.active {
 }
 
 .storage-progress .progress:nth-child(3) .progress-bar {
-    background: #f97316;
+    background: var(--bs-primary);
     /* Documents */
 }
 

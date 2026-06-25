@@ -12,26 +12,9 @@ use Illuminate\View\Component;
 
 class LogoComponent extends Component
 {
-    public $logoLight;
-    public $logoDark;
-    public $logoSm;
 
-    public function __construct(ThemeService $themeService)
-    {
-        $this->logoLight = 'assets/images/logo-light.png';
-        $this->logoDark  = 'assets/images/logo-dark.png';
-        $this->logoSm    = 'assets/images/logo-sm.png';
 
-        $theme = $themeService->current();
-
-        if ($theme) {
-            if ($theme->theme_key == 'orange_box') return;
-
-            $this->logoLight = $theme->logo_light ?: $this->logoLight;
-            $this->logoDark  = $theme->logo_dark ?: $this->logoDark;
-            $this->logoSm    = $theme->logo_sm ?: $this->logoSm;
-        }
-    }
+    public function __construct() {}
 
     public function render(): View|Closure|string
     {

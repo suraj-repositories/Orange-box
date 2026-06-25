@@ -51,12 +51,11 @@ class WorkExperience extends Model
         return trim($yearText . $monthText);
     }
 
-    public function getLogoUrlAttribute(){
+    public function getLogoUrlAttribute()
+    {
         if (empty($this->company_logo) || !Storage::disk('public')->exists($this->company_logo)) {
-            return asset('assets/images/defaults/experience-company-50.svg');
+            return theme_asset('experience-company-50.svg');
         }
         return Storage::url($this->company_logo);
-
     }
-
 }

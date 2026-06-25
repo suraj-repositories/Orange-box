@@ -48,8 +48,9 @@
                     <div class="avatar-sm profile-icon p-1">
                         <div class="avatar-title rounded-2 bg-light" style="height: 40px; width: 40px;">
                             <img src="{{ $education->logo_url }}"
-                                onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/education-50.svg') }}';"
+                                onerror="this.onerror=null;this.src='{{ theme_asset('education-50.svg') }}';"
                                 class="max-square-40" alt="company-img">
+
                         </div>
 
                         @if ($editable)

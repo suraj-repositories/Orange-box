@@ -9,7 +9,7 @@
                 <div class="template-meta">
                     <div>
                         <div class="user-title">
-                            <img class="proflie-image" src="{{ asset($logoSm) }}" alt="">
+                            <img class="proflie-image" src="{{ theme_asset('logo-sm.svg') }}" alt="">
                             <h2 class="mb-0"><a class="text-dark"
                                     href="{{ authRoute('user.template.show', ['template' => $template]) }}">{{ $template->title }}</a>
                             </h2>

@@ -30,11 +30,16 @@ function enableSubTaskCreation(selector) {
             const radios = form.querySelectorAll('[name="status"]');
             if (radios) {
                 radios.forEach(radio => {
-                    if (radio.value != "completed") {
+                    if (radio.value == "completed") {
+                        radio.checked = true;
+                    } else {
                         radio.checked = false;
+
                     }
                 });
             }
+
+
         }
 
         $(modal).modal('show');
