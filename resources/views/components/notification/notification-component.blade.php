@@ -63,7 +63,7 @@
                 </a>
             @empty
                 <div class="pb-3">
-                    <x-no-data />
+                    <x-no-data message="No new notifications"/>
                 </div>
             @endforelse
 

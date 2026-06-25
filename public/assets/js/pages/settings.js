@@ -596,14 +596,14 @@ class ThemeSettings {
                 if (data.success) {
                     const body = document.querySelector('body');
                     body.setAttribute('data-app-theme', data.theme);
+                    Toastify.success("App Theme Updated Successfully!");
                 } else {
-                    Swal.fire({
-                        title: "Oops...",
-                        text: data.message,
-                        icon: "error"
-                    });
+                    Toastify.error(data.message);
                 }
 
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
             })
             .catch(() => {
                 Swal.fire({

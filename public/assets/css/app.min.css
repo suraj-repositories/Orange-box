@@ -233,6 +233,70 @@ body[data-app-theme="fresh_fiber"] {
 
 }
 
+body[data-app-theme="sweet_blue"] {
+    --bs-primary: #8b5cf6;
+    --bs-primary-rgb: 139, 92, 246;
+
+    --bs-primary-bg-subtle: #c4b5fd91;
+    --bs-primary-bg-subtle-light-50: #a78bfa16;
+    --bs-primary-bg-subtle-light: #a78bfa39;
+    --bs-primary-bg-subtle-light-200: #c4b5fd30;
+
+    --bs-primary-border-subtle: #6d28d93b;
+
+    --ob-sidebar-active-bg: #8b5cf62d;
+    --bs-nav-link-hover-color: var(--bs-primary);
+    --ob-btn-hover-bg-color: #7c3aed;
+
+    --ob-bg-primary-200: #c4b5fd33;
+    --ob-bg-primary-300: #c4b5fd54;
+
+    --ob-bg-primary-border-200: #a78bfaa8;
+    --ob-bg-primary-border-300: #8b5cf6bf;
+
+    --ob-tag-chip-bg-primary: #ede9fea8;
+    --ob-tag-chip-border-primary: #8b5cf624;
+    --ob-tag-chip-bg-primary-hover: #ddd6fed7;
+    --ob-tag-chip-border-primary-hover: #8b5cf632;
+
+    --bs-primary-hover: #7c3aed;
+
+    --sparkline-color: var(--bs-primary);
+    --chart-color: var(--bs-primary-bg-subtle);
+}
+
+body[data-app-theme="bright_red"] {
+    --bs-primary: #ef4444;
+    --bs-primary-rgb: 239, 68, 68;
+
+    --bs-primary-bg-subtle: #fca5a591;
+    --bs-primary-bg-subtle-light-50: #f8717116;
+    --bs-primary-bg-subtle-light: #f8717139;
+    --bs-primary-bg-subtle-light-200: #fca5a530;
+
+    --bs-primary-border-subtle: #dc26263b;
+
+    --ob-sidebar-active-bg: #ef44442d;
+    --bs-nav-link-hover-color: var(--bs-primary);
+    --ob-btn-hover-bg-color: #dc2626;
+
+    --ob-bg-primary-200: #fca5a533;
+    --ob-bg-primary-300: #fca5a554;
+
+    --ob-bg-primary-border-200: #f87171a8;
+    --ob-bg-primary-border-300: #ef4444bf;
+
+    --ob-tag-chip-bg-primary: #fee2e2a8;
+    --ob-tag-chip-border-primary: #ef444424;
+    --ob-tag-chip-bg-primary-hover: #fecacaD7;
+    --ob-tag-chip-border-primary-hover: #ef444432;
+
+    --bs-primary-hover: #dc2626;
+
+    --sparkline-color: var(--bs-primary);
+    --chart-color: var(--bs-primary-bg-subtle);
+}
+
 .btn-outline-primary {
     --bs-btn-color: var(--bs-primary);
     --bs-btn-border-color: var(--bs-primary-bg-subtle);

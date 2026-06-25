@@ -189,7 +189,7 @@ class UserController extends Controller
             'orange_box' => '#FF8600',
             'fresh_fiber' => '#77b255',
             'bright_red' => '#DC3545',
-            'sweet_blue' => '#0D6EFD',
+            'sweet_blue' => '#8b5cf6',
             default => '#FF8600',
         };
 
