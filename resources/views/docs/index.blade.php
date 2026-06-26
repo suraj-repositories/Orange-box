@@ -1,6 +1,11 @@
 @extends('docs.layout.layout')
 @section('title', $currentPage->title ?? '🟢🟢🟢')
 
+@section('css')
+    <link rel="stylesheet" href="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.css') }}">
+@endsection
+
+
 @section('content')
 
     <div class="content-page">
@@ -10,7 +15,7 @@
                     <div class="col-12 col-xl-9">
                         <div class="container mt-3 px-1 px-sm-4 mb-5">
 
-                            <div id="documentationContent" class="documentation-content">
+                            <div id="documentationContent" class="documentation-content" data-media-preview="true" data-media-downloadable="true">
                                 {!! $currentPage->content_html ?? '' !!}
                             </div>
 
@@ -103,4 +108,5 @@
         window.__page_exit_route = "{{ route('docs.user-activity.page-exit') }}";
     </script>
     <script src="{{ asset('assets/js/pages/docs/docs.js') }}"></script>
+        <script src="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.js') }}"></script>
 @endsection
