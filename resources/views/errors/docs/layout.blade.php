@@ -1,11 +1,10 @@
 @extends('docs.layout.layout')
 
-
 @section('content')
     <div class="content-page">
         <div class="content">
             <div class="container-xxl">
-                <div class="d-flex align-items-center justify-content-center w-100">
+                <div class="d-flex align-items-center justify-content-center w-100 app-error-component">
                     <section class="page_404 w-100">
                         <div class="container">
                             <div class="row">

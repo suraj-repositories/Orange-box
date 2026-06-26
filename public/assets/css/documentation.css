@@ -1607,3 +1607,11 @@ ul.topnav-menu button i.bx {
     -webkit-mask-size: 100% 100%;
     mask-size: 100% 100%;
 }
+
+#app-layout:has(.app-error-component) .app-sidebar-menu {
+    display: none;
+}
+
+#app-layout:has(.app-error-component) .content-page {
+    margin-left: 0;
+}

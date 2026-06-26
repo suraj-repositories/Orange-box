@@ -23,7 +23,7 @@
 
                                             <p>Look like you're lost!</p>
 
-                                            <a href="#" class="go_back_to_home rounded">Go to Home</a>
+                                            <a href="{{ route('home') }}" class="go_back_to_home rounded">Go to Home</a>
                                         </div>
                                     </div>
                                 </div>
