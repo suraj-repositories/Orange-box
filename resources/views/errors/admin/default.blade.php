@@ -1,4 +1,4 @@
-@extends('errors::minimal')
+@extends('errors.admin.layout')
 
 @section('title', __('Error'))
 @section('code', $exception->getStatusCode())
