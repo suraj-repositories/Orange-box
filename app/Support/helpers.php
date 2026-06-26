@@ -19,7 +19,7 @@ if (! function_exists('authRoute')) {
      */
     function authRoute(string $name, array $parameters = [], bool $absolute = true): string
     {
-        $parameters = array_merge(["userid" => Auth::user()->username], $parameters);
+        $parameters = array_merge(["userid" => Auth::user()?->username], $parameters);
 
         return route($name, $parameters, $absolute);
     }

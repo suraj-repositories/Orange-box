@@ -15,12 +15,15 @@ class NotificationComponent extends Component
      * Create a new component instance.
      */
 
-    private $unreadNotificationCount = 0;
-    private $unreadNotifications = [];
+    public $unreadNotificationCount = 0;
+    public $unreadNotifications = [];
 
     public function __construct()
     {
-        $user = User::where('id',  Auth::id())->first();
+        $user = User::where('id', Auth::id())->first();
+
+
+        if(!$user) return;
         $this->unreadNotificationCount = $user->unreadNotifications->where('status', 'new')->count();
         $notifications = $user->unreadNotifications()->where('status', 'new')->latest()->take(10)->get();
 
@@ -49,9 +52,6 @@ class NotificationComponent extends Component
     {
 
 
-        return view('components.notification.notification-component', [
-            'unreadNotificationCount' => $this->unreadNotificationCount,
-            'unreadNotifications' => $this->unreadNotifications
-        ]);
+        return view('components.notification.notification-component');
     }
 }

@@ -1,3 +1,4 @@
+
 <div class="dropdown notification-list topbar-dropdown notification-drawer">
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
         aria-expanded="false">
@@ -24,6 +25,7 @@
                                 class="bx bx-right-arrow-alt"></i>
                         </a>
                     @endif
+
                 </span>Notification
             </h5>
         </div>
@@ -39,7 +41,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <p class="notify-details">
-                          {{ (empty($notification?->from_user?->fullname()) ? null : $notification?->from_user?->fullname()) ?? ($notification?->from_user?->username ?? '') }}
+                            {{ (empty($notification?->from_user?->fullname()) ? null : $notification?->from_user?->fullname()) ?? ($notification?->from_user?->username ?? '') }}
                         </p>
                         <small class="text-muted">{{ $notification?->created_at?->diffForHumans() ?? '' }}</small>
                     </div>
@@ -63,7 +65,7 @@
                 </a>
             @empty
                 <div class="pb-3">
-                    <x-no-data message="No new notifications"/>
+                    <x-no-data message="No new notifications" />
                 </div>
             @endforelse
 

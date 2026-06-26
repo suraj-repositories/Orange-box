@@ -16,12 +16,14 @@ class UserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+
         if (
             Auth::check() &&
             (Auth::user()->hasRole('admin') || Auth::user()->hasRole('user'))
         ) {
             $adminId = session('impersonator_admin_id');
             if (Auth::user()->is_active || !empty($adminId)) {
+
                 $request->route()?->setParameter('userid', Auth::user());
                 return $next($request);
             }

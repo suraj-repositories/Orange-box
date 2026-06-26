@@ -17,9 +17,10 @@ class EditorMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if(Auth::check() &&
-            (Auth::user()->hasRole('admin')
-            || Auth::user()->hasRole('editor'))){
-                $request->route()?->setParameter('userid', Auth::user());
+        (Auth::user()->hasRole('admin')
+        || Auth::user()->hasRole('editor'))){
+            $request->route()?->setParameter('userid', Auth::user());
+
             return $next($request);
         }
         return redirect()->route('login');
