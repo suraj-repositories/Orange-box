@@ -24,6 +24,7 @@
 
                 <x-alert-component />
 
+
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -109,8 +110,8 @@
                                             <label class="form-label">Original Price</label>
                                             <div class="input-group">
                                                 <span class="input-group-text">$</span>
-                                                <input type="number" step="0.01" name="original_price" class="form-control"
-                                                    placeholder="Enter price"
+                                                <input type="number" step="0.01" name="original_price"
+                                                    class="form-control" placeholder="Enter price"
                                                     value="{{ old('original_price', $template->original_price ?? '') }}">
                                             </div>
                                             @error('original_price')
@@ -146,25 +147,34 @@
                                             @enderror
                                         </div>
 
-                                        <!-- Multiple Images -->
+
                                         <div class="col-12 mb-3">
                                             <label class="form-label">Other Images</label>
+
                                             <input type="file" name="images[]" class="form-control" multiple
                                                 accept="image/*">
 
-                                            @if (!empty($template?->images))
-                                                <div class="d-flex flex-wrap gap-2 mt-2">
-                                                    @foreach ($template->images as $img)
-                                                        <img src="{{ Storage::url($img) }}" width="80" class="rounded">
+                                            @error('images')
+                                                <small class="text-danger d-block">{{ $message }}</small>
+                                            @enderror
+
+                                            @foreach ($errors->get('images.*') as $messages)
+                                                @foreach ($messages as $message)
+                                                    <small class="text-danger d-block">{{ $message }}</small>
+                                                @endforeach
+                                            @endforeach
+
+                                            @if (!empty($template?->files))
+                                                <div class="multi-image-container mt-3">
+                                                    @foreach ($template?->files as $file)
+                                                        <div class="image-box">
+                                                            <img src="{{ $file->getFileUrl() }}">
+                                                            <button type="button" class="remove-btn">×</button>
+                                                        </div>
                                                     @endforeach
                                                 </div>
                                             @endif
-
-                                            @error('images')
-                                                <small class="text-danger">{{ $message }}</small>
-                                            @enderror
                                         </div>
-
                                         <!-- Submit -->
                                         <div class="col-12 mt-2">
                                             <button class="btn btn-primary" type="submit">

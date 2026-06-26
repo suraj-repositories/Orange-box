@@ -92,7 +92,14 @@
                                         @csrf
                                         <textarea name="comment" id="" cols="30" rows="3" class="form-control mb-2"></textarea>
 
-                                        <input type="number" name="rating" class="form-control mb-2" id="">
+                                        <input type="hidden" name="rating" class="form-control mb-2" id="">
+                                        <div class="d-flex gap-2 rating-component mb-2">
+                                            <i class="bi bi-star star"></i>
+                                            <i class="bi bi-star star"></i>
+                                            <i class="bi bi-star star"></i>
+                                            <i class="bi bi-star star"></i>
+                                            <i class="bi bi-star star"></i>
+                                        </div>
 
                                         <button class="btn btn-primary btn-sm">Add Review</button>
                                     </form>

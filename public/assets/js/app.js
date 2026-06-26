@@ -96,6 +96,7 @@ class App {
         this.enableAjaxFormSubmittion();
         this.enableDeletionConfirmationForm();
         this.enablePrinting();
+        this.enableRatingUx();
     }
 
     initComponents() {
@@ -583,9 +584,50 @@ class App {
 
     }
 
+    enableRatingUx() {
+        const ratingComponents = document.querySelectorAll('.rating-component');
+
+        if (ratingComponents.length === 0) return;
+
+        ratingComponents.forEach(rating => {
+            const stars = rating.querySelectorAll('.star');
+            const input = rating.nextElementSibling;
+
+            let selectedRating = Number(input.value) || 0;
+
+            const paintStars = (count) => {
+                stars.forEach((star, index) => {
+                    if (index < count) {
+                        star.classList.remove('bi-star');
+                        star.classList.add('bi-star-fill', 'text-warning');
+                    } else {
+                        star.classList.remove('bi-star-fill', 'text-warning');
+                        star.classList.add('bi-star');
+                    }
+                });
+            };
+
+            paintStars(selectedRating);
+
+            stars.forEach((star, index) => {
+                const value = index + 1;
+
+                star.addEventListener('mouseenter', () => {
+                    paintStars(value);
+                });
+
+                star.addEventListener('click', () => {
+                    selectedRating = value;
+                    input.value = value;
+                    paintStars(selectedRating);
+                });
+            });
+
+            rating.addEventListener('mouseleave', () => {
+                paintStars(selectedRating);
+            });
+        });
+    }
 }
-
-
-
 
 new App().init();
