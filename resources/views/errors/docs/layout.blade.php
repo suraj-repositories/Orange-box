@@ -10,7 +10,8 @@
                             <div class="row">
                                 <div class="col-sm-12 ">
                                     <div class="col-sm-12 col-sm-offset-1  text-center">
-                                        <div class="four_zero_four_bg" style="background-image: url({{ asset('assets/images/defaults/error_page.gif') }})">
+                                        <div class="four_zero_four_bg"
+                                            style="background-image: url({{ asset('assets/images/defaults/error_page.gif') }})">
                                             <h1 class="text-center ">@yield('code')
 
                                             </h1>
@@ -23,7 +24,13 @@
 
                                             <p>Look like you're lost!</p>
 
-                                            <a href="#" class="go_back_to_home rounded">Go to Home</a>
+                                            <a href='{{ route('docs.show', [
+                                                'user' => $user->username,
+                                                'slug' => $documentation->url,
+                                                'version' => $release->version,
+                                                'path' => '',
+                                            ]) }}'
+                                                class="go_back_to_home rounded">Go to Home</a>
                                         </div>
                                     </div>
                                 </div>
