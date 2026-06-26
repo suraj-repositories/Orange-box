@@ -155,10 +155,10 @@
 
                                         <div class="col col-12 col-md-12 mb-3  ">
                                             <label for="" class="mb-2">Select Template</label>
-                                            @if (!empty($documentation))
-                                                <input type="hidden" name="template_id" id="templateIdInput"
-                                                    value="{{ $documentation?->documentation_template_id }}">
-                                            @endif
+
+                                            <input type="hidden" name="template_id" id="templateIdInput"
+                                                value="{{ empty($documentation) ? '' : $documentation?->documentation_template_id }}">
+
                                             <div class="doc-form-template">
                                                 <div class="row g-3">
                                                     <div class="col-md-5">
@@ -196,9 +196,9 @@
                                                             </p>
 
 
-                                                            <a class="btn btn-outline-dark {{ ($documentation?->template ?? '') ? '' : 'd-none' }}"
+                                                            <a class="btn btn-outline-dark {{ $documentation?->template ?? '' ? '' : 'd-none' }}"
                                                                 id="showTemplateInfoButton"
-                                                                href="{{ ($documentation?->template ?? '') ? authRoute('user.template.show', ['template' => $documentation?->template?->uuid]) : '' }}"
+                                                                href="{{ $documentation?->template ?? '' ? authRoute('user.template.show', ['template' => $documentation?->template?->uuid]) : '' }}"
                                                                 target="_blank">
                                                                 Show
                                                                 Info</a>

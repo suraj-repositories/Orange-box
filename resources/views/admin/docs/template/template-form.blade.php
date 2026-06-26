@@ -35,7 +35,7 @@
                             </div>
 
                             <div class="card-body">
-                                <form
+                                <form id="templateForm"
                                     action="{{ empty($template)
                                         ? authRoute('admin.docs.templates.store')
                                         : authRoute('admin.docs.templates.update', ['template' => $template]) }}"
@@ -138,8 +138,11 @@
                                                 accept="image/*">
 
                                             @if (!empty($template?->preview_image))
-                                                <img src="{{ Storage::url($template->preview_image) }}"
-                                                    class="mt-2 rounded" width="120">
+                                                <div class="multi-image-container mt-3">
+                                                    <div class="image-box">
+                                                        <img src="{{ Storage::url($template->preview_image) }}">
+                                                    </div>
+                                                </div>
                                             @endif
 
                                             @error('preview_image')
@@ -152,7 +155,7 @@
                                             <label class="form-label">Other Images</label>
 
                                             <input type="file" name="images[]" class="form-control" multiple
-                                                accept="image/*">
+                                                accept="image/*" id="multiImagePicker">
 
                                             @error('images')
                                                 <small class="text-danger d-block">{{ $message }}</small>
@@ -164,16 +167,20 @@
                                                 @endforeach
                                             @endforeach
 
-                                            @if (!empty($template?->files))
-                                                <div class="multi-image-container mt-3">
-                                                    @foreach ($template?->files as $file)
+                                            <div class="multi-image-container mt-3" id="multiImageContainer">
+                                                @if ($template?->files?->isNotEmpty())
+                                                    @foreach ($template->files as $file)
                                                         <div class="image-box">
-                                                            <img src="{{ $file->getFileUrl() }}">
-                                                            <button type="button" class="remove-btn">×</button>
+                                                            <img src="{{ $file->getFileUrl() }}" alt="Image">
+
+                                                            <button type="button" class="remove-btn"
+                                                                data-deletion-url="{{ route('file.delete', $file) }}">
+                                                                &times;
+                                                            </button>
                                                         </div>
                                                     @endforeach
-                                                </div>
-                                            @endif
+                                                @endif
+                                            </div>
                                         </div>
                                         <!-- Submit -->
                                         <div class="col-12 mt-2">
@@ -197,5 +204,5 @@
 @endsection
 
 @section('js')
-
+    <script src="{{ asset('assets/js/pages/admin/docs-templates.js') }}"></script>
 @endsection

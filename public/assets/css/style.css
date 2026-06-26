@@ -5225,6 +5225,8 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
     transition: color 0.15s ease;
 }
 
+
+
 .multi-image-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
