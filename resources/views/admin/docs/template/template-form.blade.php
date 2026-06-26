@@ -98,7 +98,7 @@
                                         <!-- Description -->
                                         <div class="col-12 mb-3">
                                             <label class="form-label">Description</label>
-                                            <textarea name="description" rows="4" class="form-control" placeholder="Enter description">{{ old('description', $template->description ?? '') }}</textarea>
+                                            <textarea name="description" rows="4" class="form-control summernote" placeholder="Enter description">{!! old('description', $template->description ?? '') !!}</textarea>
 
                                             @error('description')
                                                 <small class="text-danger">{{ $message }}</small>

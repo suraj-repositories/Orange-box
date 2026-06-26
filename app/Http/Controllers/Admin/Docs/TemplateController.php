@@ -164,7 +164,21 @@ class TemplateController extends Controller
 
     public function show(DocumentationTemplate $template)
     {
-        return view('admin.docs.template.show-template', $template);
+        $title = $template->title;
+        $template->loadCount('reviews');
+        $template->loadAvg('reviews', 'rating');
+
+
+        $isPurchased = false;
+
+            $totalProfit = $template->purchases()
+        ->where('payment_status', 'paid')
+        ->sum('price');
+
+
+        $template->loadCount('purchases');
+        $template->loadCount('documentations');
+        return view('admin.docs.template.show-template', compact('template', 'title', 'isPurchased', 'totalProfit'));
     }
 
     public function updateStatus(Request $request, DocumentationTemplate $template)

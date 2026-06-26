@@ -31,6 +31,7 @@ class DocumentationTemplate extends Model
         'is_active' => 'boolean',
     ];
 
+
     public function files()
     {
         return $this->morphMany(File::class, 'fileable');

@@ -3,72 +3,6 @@
 @section('title', $title ?? '🟢🟢🟢')
 
 @section('css')
-    <style>
-        .image-scroll-wrapper {
-            position: relative;
-        }
-
-        .multi-image-container-scrollable {
-            display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            scroll-behavior: smooth;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            padding: 4px;
-        }
-
-        .multi-image-container-scrollable::-webkit-scrollbar {
-            display: none;
-        }
-
-        .multi-image-container-scrollable .image-box {
-            flex: 0 0 240px;
-            /* Width of each image */
-            aspect-ratio: 16 / 10;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #fff;
-            border: 1px solid #dee2e6;
-        }
-
-        .multi-image-container-scrollable .image-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .image-scroll-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 38px;
-            height: 38px;
-            border: none;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, .95);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .image-scroll-btn.left {
-            left: -18px;
-        }
-
-        .image-scroll-btn.right {
-            right: -18px;
-        }
-
-        .image-scroll-btn i {
-            font-size: 22px;
-        }
-    </style>
     <link rel="stylesheet" href="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.css') }}">
 @endsection
 @section('content')
@@ -132,7 +66,7 @@
 
                             </div>
 
-                            <div data-media-preview="true" data-media-downloadable="true">
+                            <div class="template-images" data-media-preview="true" data-media-downloadable="true">
                                 <img src="{{ $template->preview_image_url }}" class="img-fluid rounded shadow-sm mb-3 w-100"
                                     onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';" />
 
