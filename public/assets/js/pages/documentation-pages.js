@@ -975,7 +975,7 @@ class DocumentationTabs {
             <div class="ob-rich-editor"> </div>
         `;
         const previewPane = document.createElement('div');
-        previewPane.className = 'col-12 page-preview-zone';
+        previewPane.className = 'col-12 page-preview-zone md-render';
         previewPane.innerHTML = "";
 
         row.appendChild(previewPane);

@@ -15,7 +15,7 @@
                     <div class="col-12 col-xl-9">
                         <div class="container mt-3 px-1 px-sm-4 mb-5">
 
-                            <div id="documentationContent" class="documentation-content" data-media-preview="true" data-media-downloadable="true">
+                            <div id="documentationContent" class="documentation-content md-render" data-media-preview="true" data-media-downloadable="true">
                                 {!! $currentPage->content_html ?? '' !!}
                             </div>
 

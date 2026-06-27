@@ -3,6 +3,8 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/tui-editor/css/tui-editor.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/md-render.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.css') }}">
 @endsection
 
 @section('content')
@@ -88,7 +90,7 @@
                                 <div class="d-flex" id="splitter">
                                     @include('user.documentation.partials.explorer_sidebar')
                                     <div id="separator"> </div>
-                                    <div class="w-100 page-form explorer-contents" id="page-content">
+                                    <div class="w-100 page-form explorer-contents" id="page-content" data-media-preview="true">
 
                                         @include('user.documentation.partials.explorer_content_tabs')
 
@@ -111,4 +113,5 @@
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor/min/vs/loader.js"></script>
     <script src="{{ asset('assets/libs/tui-editor/js/tui-editor.js') }}"></script>
     <script type="module" src="{{ asset('assets/js/pages/documentation-pages.js') }}"></script>
+       <script src="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.js') }}"></script>
 @endsection

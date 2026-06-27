@@ -1,4 +1,168 @@
-.md-render{
+:root {
+    --light: #ffffff;
+    --gray-100: #d8d8d890;
+    --gray-200: #c1c0c0ab;
+    --gray-300: #bfbebec0;
+    --gray-400: #d8d8d8ec;
+    --dark: #2f384f;
+
+    --text-dark: #2f384f;
+    --text-second-dark: #757575;
+
+    --primary: #8cb730;
+    --primary-light: #f2fce8;
+    --primary-dark: #93aa40;
+}
+
+[data-theme="dark"] {
+    --light: #2a2b2c;
+    --gray-100: #494c4eca;
+
+    --text-dark: #ffffff;
+    --text-second-dark: #dbdbdb;
+
+    --primary-light: #c6ff8e33;
+}
+
+.md-render {
     width: 100%;
+    color: var(--text-dark);
     word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Images */
+.md-render img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+}
+
+/* Tables */
+.md-render table {
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.7rem;
+    background: var(--light);
+}
+
+.md-render th,
+.md-render td {
+    padding: 0.5rem 0.8rem;
+    text-align: left;
+    border: 1px solid var(--gray-200);
+    color: var(--text-dark);
+}
+
+.md-render th {
+    font-weight: 600;
+    background: var(--gray-100);
+}
+
+.md-render tbody tr:nth-child(even) {
+    background: var(--primary-light);
+}
+
+.md-render tbody tr:hover {
+    background: var(--gray-100);
+}
+
+/* Blockquotes */
+.md-render blockquote {
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    border-left: 4px solid var(--primary);
+    background: var(--primary-light);
+    /* border-radius: 6px; */
+    color: var(--text-second-dark);
+}
+
+.md-render blockquote p {
+    margin: 0;
+    line-height: 1.7;
+}
+
+.md-render blockquote p + p {
+    margin-top: 0.75rem;
+}
+
+.md-render blockquote p:first-child {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Inline code */
+.md-render code {
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    background: var(--gray-100);
+    color: var(--primary-dark);
+    font-size: 0.9em;
+}
+
+/* Code blocks */
+.md-render pre {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    overflow-x: auto;
+    border-radius: 8px;
+    background: var(--dark);
+}
+
+.md-render pre code {
+    padding: 0;
+    background: transparent;
+    color: #f8fafc;
+    font-size: 0.9rem;
+}
+
+/* Lists */
+.md-render ul,
+.md-render ol {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.md-render li + li {
+    margin-top: 0.4rem;
+}
+
+/* Horizontal rule */
+.md-render hr {
+    margin: 2rem 0;
+    border: 0;
+    border-top: 1px solid var(--gray-200);
+}
+
+/* Links */
+.md-render a {
+    color: var(--primary-dark);
+    text-decoration: none;
+}
+
+.md-render a:hover {
+    text-decoration: underline;
+}
+
+/* Headings */
+.md-render h1,
+.md-render h2,
+.md-render h3,
+.md-render h4,
+.md-render h5,
+.md-render h6 {
+    margin: 1.5rem 0 0.75rem;
+    color: var(--text-dark);
+    line-height: 1.3;
+}
+
+.md-render p {
+    margin: 1rem 0;
+    line-height: 1.8;
+    color: var(--text-second-dark);
 }

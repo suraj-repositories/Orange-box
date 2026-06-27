@@ -18,7 +18,7 @@
                                 @forelse ($faqs as $faq)
                                     <hr class="opacity-15"> <br>
                                     <h3>{{ $faq->question }}</h3>
-                                    <div>
+                                    <div class="md-render">
                                         {!! Str::markdown($faq->answer) !!}
                                     </div>
                                 @empty
