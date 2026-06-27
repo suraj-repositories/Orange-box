@@ -16,7 +16,14 @@ If you're only using the Guides (also known as Documentation) feature, you can j
 
 When you go to the **Landing Page** tab you can customize things such as the header and body content.
 
+## Markdown image
+![Logo](https://files.readme.io/9dfce6b-CleanShot_2022-09-24_at_08.48.532x.png)
+
+## normal image
+
 <Image src="https://files.readme.io/9dfce6b-CleanShot_2022-09-24_at_08.48.532x.png" border={true} />
+
+
 
 > 📘 "First Page" Setting
 >
