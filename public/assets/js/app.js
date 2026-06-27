@@ -591,9 +591,12 @@ class App {
 
         ratingComponents.forEach(rating => {
             const stars = rating.querySelectorAll('.star');
-            const input = rating.nextElementSibling;
+            const input = document.querySelector(rating.getAttribute('data-update-input'));
+            let selectedRating = 0;
 
-            let selectedRating = Number(input.value) || 0;
+            if (input) {
+                selectedRating = Number(input.value) || 0;
+            }
 
             const paintStars = (count) => {
                 stars.forEach((star, index) => {
@@ -618,7 +621,7 @@ class App {
 
                 star.addEventListener('click', () => {
                     selectedRating = value;
-                    input.value = value;
+                    if (input) input.value = value;
                     paintStars(selectedRating);
                 });
             });

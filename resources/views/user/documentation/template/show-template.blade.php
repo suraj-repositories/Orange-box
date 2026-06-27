@@ -119,8 +119,8 @@
                                         @csrf
                                         <textarea name="comment" id="" cols="30" rows="3" class="form-control mb-2"></textarea>
 
-                                        <input type="hidden" name="rating" class="form-control mb-2" id="">
-                                        <div class="d-flex gap-2 rating-component mb-2">
+                                        <input type="hidden" name="rating" class="form-control mb-2" id="ratingInputElement">
+                                        <div class="d-flex gap-2 rating-component mb-2" data-update-input="#ratingInputElement">
                                             <i class="bi bi-star star"></i>
                                             <i class="bi bi-star star"></i>
                                             <i class="bi bi-star star"></i>
