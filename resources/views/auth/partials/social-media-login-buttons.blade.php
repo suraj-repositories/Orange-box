@@ -1,4 +1,4 @@
-  <div class="row">
+  <div class="row mb-2">
       <div class="col-12">
           <a href="{{ route('google.login') }}"
               class="btn text-dark border fw-normal d-flex align-items-center justify-content-center mb-3">

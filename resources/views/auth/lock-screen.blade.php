@@ -49,8 +49,9 @@
                 <div class="col-xl-7">
                     <div class="account-page-bg p-md-5 p-4">
                         <div class="text-center">
-                            <h3 class="text-dark mb-3 pera-title">Quick, Effective, and Productive With Tapeli Admin
-                                Dashboard</h3>
+                            <h3 class="text-dark mb-3 pera-title">
+                                Your session is locked. Enter your password to continue.
+                            </h3>
                             <div class="auth-image">
                                 <img src="assets/images/authentication.svg" class="mx-auto img-fluid" alt="images">
                             </div>
