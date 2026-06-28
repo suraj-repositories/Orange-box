@@ -24,13 +24,15 @@
 
                                             <p>Look like you're lost!</p>
 
-                                            <a href='{{ route('docs.show', [
-                                                'user' => $user->username,
-                                                'slug' => $documentation->url,
-                                                'version' => $release->version,
-                                                'path' => '',
-                                            ]) }}'
-                                                class="go_back_to_home rounded">Go to Home</a>
+                                            @if (!empty($user?->username) && !empty($documentation?->url) && !empty($release?->version))
+                                                <a href='{{ route('docs.show', [
+                                                    'user' => $user->username,
+                                                    'slug' => $documentation->url,
+                                                    'version' => $release->version,
+                                                    'path' => '',
+                                                ]) }}'
+                                                    class="go_back_to_home rounded">Go to Home</a>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

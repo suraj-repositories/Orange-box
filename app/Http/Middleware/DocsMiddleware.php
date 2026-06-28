@@ -20,7 +20,7 @@ class DocsMiddleware
     {
         $user = $request->route('user');
 
-        $documentation = Documentation::where('user_id', $user->id)
+        $documentation = Documentation::where('user_id', $user?->id)
             ->where('url', $request->slug ?? '')
             ->first();
 
@@ -29,13 +29,13 @@ class DocsMiddleware
             ->where('is_published', true)
             ->first();
 
-        $top5Releases = DocumentationRelease::where('documentation_id', $documentation->id)
+        $top5Releases = DocumentationRelease::where('documentation_id', $documentation?->id)
             ->where('is_published', true)
             ->latest()
             ->limit(5)
             ->get();
 
-        $pages = DocumentationPage::where('documentation_id', $documentation->id)
+        $pages = DocumentationPage::where('documentation_id', $documentation?->id)
             ->where('release_id', $release?->id)
             ->whereNull('parent_id')
             ->where('is_published', 1)

@@ -12,3 +12,6 @@
 2. accomplish search on users panel
 
 3. add a quick quick look button
+
+4. fix the error while loading the doc page : the undefined variables issue
+   
