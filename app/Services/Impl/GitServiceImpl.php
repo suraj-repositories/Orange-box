@@ -97,6 +97,10 @@ class GitServiceImpl implements GitService
 
     public function convertToRawUrl(string $githubUrl): string
     {
+        if (str_starts_with($githubUrl, 'https://raw.githubusercontent.com/')) {
+            return $githubUrl;
+        }
+
         $this->validateGithubHost($githubUrl);
 
         $segments = $this->parsePathSegments($githubUrl);
@@ -139,7 +143,8 @@ class GitServiceImpl implements GitService
     {
         $host = parse_url($url, PHP_URL_HOST);
 
-        if ($host !== 'github.com') {
+        if (!($host == 'github.com' || $host == 'raw.githubusercontent.com')) {
+            Log::info($host);
             throw new InvalidArgumentException('Invalid GitHub URL.');
         }
     }
@@ -242,100 +247,6 @@ class GitServiceImpl implements GitService
         return $response->json();
     }
 
-    private function readFolder(
-        string $owner,
-        string $repo,
-        string $branch,
-        string $path
-    ): array {
-
-        $items = $this->getFolderContents(
-            $owner,
-            $repo,
-            $branch,
-            $path
-        );
-
-        $result = [];
-
-        foreach ($items as $item) {
-
-            if ($item['type'] === 'dir') {
-
-                $result[] = [
-                    'type' => 'folder',
-                    'name' => $item['name'],
-                    'children' => $this->readFolder(
-                        $owner,
-                        $repo,
-                        $branch,
-                        $item['path']
-                    )
-                ];
-            } elseif (
-                $item['type'] === 'file' &&
-                str_ends_with($item['name'], '.md')
-            ) {
-
-                $result[] = [
-                    'type' => 'file',
-                    'name' => pathinfo($item['name'], PATHINFO_FILENAME),
-                    'path' => $item['path'],
-                    'download_url' => $item['download_url']
-                ];
-            }
-        }
-
-        return $result;
-    }
-
-    private function createPages(
-        array $tree,
-        ?int $parentId,
-        Documentation $documentation,
-        DocumentationRelease $release,
-        User $user
-    ) {
-        $order = 0;
-
-        foreach ($tree as $item) {
-
-            $page = DocumentationPage::create([
-                'user_id' => $user->id,
-                'documentation_id' => $documentation->id,
-                'release_id' => $release->id,
-                'parent_id' => $parentId,
-                'title' => $item['name'],
-                'slug' => Str::slug($item['name']),
-                'type' => $item['type'],
-                'sort_order' => $order++
-            ]);
-
-            if ($item['type'] == 'folder') {
-
-                $this->createPages(
-                    $item['children'],
-                    $page->id,
-                    $documentation,
-                    $release,
-                    $user
-                );
-            } else {
-
-                $markdown = Http::get(
-                    $item['download_url']
-                )->body();
-
-                $page->update([
-                    'content' => $markdown,
-                    'content_format' => 'markdown'
-                ]);
-
-                // generate sections here
-            }
-        }
-    }
-
     private function getRepositoryTree(
         string $owner,
         string $repo,
@@ -378,8 +289,7 @@ class GitServiceImpl implements GitService
             return $item;
         }, array_filter($tree, function ($item) use ($rootPath) {
 
-            return $item['path'] === $rootPath
-                || str_starts_with($item['path'], $rootPath . '/');
+            return str_starts_with($item['path'], $rootPath . '/');
         })));
     }
 
@@ -401,7 +311,6 @@ class GitServiceImpl implements GitService
     private function buildTree(array $items): array
     {
         $tree = [];
-
         foreach ($items as $item) {
 
             $this->insertNode(
@@ -494,23 +403,14 @@ class GitServiceImpl implements GitService
         foreach ($nodes as $node) {
 
             $page = DocumentationPage::create([
-
                 'user_id' => $user->id,
-
                 'documentation_id' => $documentation->id,
-
                 'release_id' => $release->id,
-
                 'parent_id' => $parentId,
-
                 'title' => $node['name'],
-
                 'slug' => Str::slug($node['name']),
-
                 'type' => $node['type'],
-
                 'sort_order' => $sortOrder++,
-
                 'git_link' => isset($node['path'])
                     ? $this->buildRawFileUrl(
                         $gitContext['owner'],
@@ -519,16 +419,9 @@ class GitServiceImpl implements GitService
                         $node['path']
                     )
                     : null,
-
                 'content_format' => 'markdown',
 
             ]);
-
-            /*
-        |--------------------------------------------------------------------------
-        | Download markdown immediately
-        |--------------------------------------------------------------------------
-        */
 
             if ($node['type'] === 'file') {
 
@@ -553,12 +446,6 @@ class GitServiceImpl implements GitService
 
                 $this->generateSections($page);
             }
-
-            /*
-        |--------------------------------------------------------------------------
-        | Continue recursively
-        |--------------------------------------------------------------------------
-        */
 
             if (!empty($node['children'])) {
 
@@ -604,7 +491,7 @@ class GitServiceImpl implements GitService
             $path
         );
 
-        Log::info($url);
+        // Log::info($url);
         $response = Http::timeout(30)->get($url);
 
         if ($response->failed()) {

@@ -1281,7 +1281,6 @@ class ApiService {
             .then(response => response.json())
             .then(data => {
                 if (!data.success) {
-                    console.error(data);
                     return Promise.reject(data.message || 'Rename failed');
                 }
                 return data;
