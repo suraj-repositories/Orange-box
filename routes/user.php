@@ -252,6 +252,7 @@ Route::controller(DocumentationController::class)->group(function () {
     Route::get('documentation/{documentation}/edit', 'edit')->name('documentation.edit');
     Route::post('documentation/{documentation}', 'update')->name('documentation.update');
     Route::delete('documentation/{documentation}', 'delete')->name('documentation.delete');
+    Route::post('/documentation/{documentation}/{release}/import-github', 'importGithub')->name('documentation.import.github');
 });
 Route::controller(DocumentationTemplateController::class)->group(function () {
     Route::get('templates', 'index')->name('templates.index');

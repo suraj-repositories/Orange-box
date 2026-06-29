@@ -10,15 +10,18 @@ use App\Models\DocumentationTemplate;
 use App\Models\TemplatePurchase;
 use App\Models\User;
 use App\Services\FileService;
+use App\Services\GitService;
 use Dom\Document;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Throwable;
 
 class DocumentationController extends Controller
 {
-    public function __construct(public FileService $fileService) {}
+    public function __construct(public FileService $fileService, public GitService $gitService) {}
 
     //
     public function index()
@@ -253,6 +256,52 @@ class DocumentationController extends Controller
                 ->with('success', 'Documentation Updated Successfully!');
         } catch (Exception $ex) {
             return back()->withInput()->with('error', 'Error: ' . $ex->getMessage());
+        }
+    }
+
+    public function importGithub(
+        User $user,
+        Documentation $documentation,
+        DocumentationRelease $release,
+        Request $request
+    ) {
+
+        $validator = Validator::make($request->all(), [
+
+            'github_url' => [
+                'required',
+                'url'
+            ]
+
+        ]);
+
+        if ($validator->fails()) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first()
+            ]);
+        }
+
+        try {
+
+            $this->gitService->loadEntireDocumentation(
+                $request->github_url,
+                $documentation,
+                $release,
+                $user
+            );
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Documentation creating...'
+            ]);
+        } catch (Throwable $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 }

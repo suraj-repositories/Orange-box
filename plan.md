@@ -3,9 +3,9 @@
 1. markdown fetch problems
 
     - markdown image pic ========================== check
-    - table style ---------------------------------
-    - if link is folder link load the first md file
-    - entire folder pic going through folder structure
+    - table style --------------------------------- check
+    - entire folder pic going through folder structure --
+    - if link is folder link load the first md file --- 
     - alert styles
     - code copy
 

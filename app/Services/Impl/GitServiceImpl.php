@@ -2,9 +2,17 @@
 
 namespace App\Services\Impl;
 
+use App\Models\Documentation;
+use App\Models\DocumentationPage;
+use App\Models\DocumentationRelease;
+use App\Models\User;
 use App\Services\GitService;
 use Illuminate\Support\Facades\Http;
 use InvalidArgumentException;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class GitServiceImpl implements GitService
 {
@@ -12,6 +20,48 @@ class GitServiceImpl implements GitService
     public function loadGitPageContent($link)
     {
         return $this->getRawContent($link);
+    }
+
+    public function loadEntireDocumentation(
+        string $githubUrl,
+        Documentation $documentation,
+        DocumentationRelease $release,
+        User $user
+    ) {
+
+        $context = $this->extractFolderContext($githubUrl);
+
+        $tree = $this->getRepositoryTree(
+            $context['owner'],
+            $context['repo'],
+            $context['branch']
+        );
+
+        $tree = $this->filterTree(
+            $tree,
+            $context['path']
+        );
+
+        $tree = $this->filterMarkdownTree($tree);
+
+        $tree = $this->buildTree($tree);
+
+        DB::transaction(function () use (
+            $tree,
+            $documentation,
+            $release,
+            $user,
+            $context
+        ) {
+
+            $this->createDocumentationTree(
+                $tree,
+                $documentation,
+                $release,
+                $user,
+                $context
+            );
+        });
     }
 
     public function convertImageUrls($content, $owner, $repoName, $branch, $directory)
@@ -152,5 +202,475 @@ class GitServiceImpl implements GitService
         }
 
         return [$owner, $repo, $branch, $directory];
+    }
+
+    private function extractFolderContext(string $url): array
+    {
+        $segments = $this->parsePathSegments($url);
+
+        if (
+            count($segments) < 5 ||
+            $segments[2] !== 'tree'
+        ) {
+            throw new InvalidArgumentException('Invalid GitHub folder URL.');
+        }
+
+        return [
+            'owner'  => $segments[0],
+            'repo'   => $segments[1],
+            'branch' => $segments[3],
+            'path'   => implode('/', array_slice($segments, 4)),
+        ];
+    }
+
+    private function getFolderContents(string $owner, string $repo, string $branch, string $path): array
+    {
+
+        $url = "https://api.github.com/repos/$owner/$repo/contents/$path";
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/vnd.github+json',
+            'User-Agent' => 'Laravel'
+        ])->get($url, [
+            'ref' => $branch
+        ]);
+
+        if ($response->failed()) {
+            throw new Exception('Unable to fetch folder.');
+        }
+
+        return $response->json();
+    }
+
+    private function readFolder(
+        string $owner,
+        string $repo,
+        string $branch,
+        string $path
+    ): array {
+
+        $items = $this->getFolderContents(
+            $owner,
+            $repo,
+            $branch,
+            $path
+        );
+
+        $result = [];
+
+        foreach ($items as $item) {
+
+            if ($item['type'] === 'dir') {
+
+                $result[] = [
+                    'type' => 'folder',
+                    'name' => $item['name'],
+                    'children' => $this->readFolder(
+                        $owner,
+                        $repo,
+                        $branch,
+                        $item['path']
+                    )
+                ];
+            } elseif (
+                $item['type'] === 'file' &&
+                str_ends_with($item['name'], '.md')
+            ) {
+
+                $result[] = [
+                    'type' => 'file',
+                    'name' => pathinfo($item['name'], PATHINFO_FILENAME),
+                    'path' => $item['path'],
+                    'download_url' => $item['download_url']
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    private function createPages(
+        array $tree,
+        ?int $parentId,
+        Documentation $documentation,
+        DocumentationRelease $release,
+        User $user
+    ) {
+        $order = 0;
+
+        foreach ($tree as $item) {
+
+            $page = DocumentationPage::create([
+                'user_id' => $user->id,
+                'documentation_id' => $documentation->id,
+                'release_id' => $release->id,
+                'parent_id' => $parentId,
+                'title' => $item['name'],
+                'slug' => Str::slug($item['name']),
+                'type' => $item['type'],
+                'sort_order' => $order++
+            ]);
+
+            if ($item['type'] == 'folder') {
+
+                $this->createPages(
+                    $item['children'],
+                    $page->id,
+                    $documentation,
+                    $release,
+                    $user
+                );
+            } else {
+
+                $markdown = Http::get(
+                    $item['download_url']
+                )->body();
+
+                $page->update([
+                    'content' => $markdown,
+                    'content_format' => 'markdown'
+                ]);
+
+                // generate sections here
+            }
+        }
+    }
+
+    private function getRepositoryTree(
+        string $owner,
+        string $repo,
+        string $branch
+    ): array {
+
+        $url = "https://api.github.com/repos/{$owner}/{$repo}/git/trees/{$branch}";
+
+        $response = Http::withHeaders([
+            'Accept' => 'application/vnd.github+json',
+            'User-Agent' => 'Laravel',
+        ])->get($url, [
+            'recursive' => 1
+        ]);
+
+        if ($response->failed()) {
+            throw new \Exception('Unable to fetch repository tree.');
+        }
+
+        $tree = $response->json('tree');
+
+        if (!$tree) {
+            throw new \Exception('Repository tree is empty.');
+        }
+
+        return $tree;
+    }
+
+    private function filterTree(array $tree, string $rootPath): array
+    {
+        $rootPath = trim($rootPath, '/');
+
+        return array_values(array_map(function ($item) use ($rootPath) {
+
+            $item['relative_path'] = ltrim(
+                substr($item['path'], strlen($rootPath)),
+                '/'
+            );
+
+            return $item;
+        }, array_filter($tree, function ($item) use ($rootPath) {
+
+            return $item['path'] === $rootPath
+                || str_starts_with($item['path'], $rootPath . '/');
+        })));
+    }
+
+    private function filterMarkdownTree(array $tree): array
+    {
+        return array_values(array_filter($tree, function ($item) {
+
+            if ($item['type'] === 'tree') {
+                return true;
+            }
+
+            return str_ends_with(
+                strtolower($item['path']),
+                '.md'
+            );
+        }));
+    }
+
+    private function buildTree(array $items): array
+    {
+        $tree = [];
+
+        foreach ($items as $item) {
+
+            $this->insertNode(
+                $tree,
+                explode('/', $item['relative_path']),
+                $item
+            );
+        }
+
+        $this->sortTree($tree);
+
+        return array_values($tree);
+    }
+
+    private function insertNode(
+        array &$nodes,
+        array $parts,
+        array $gitItem
+    ): void {
+
+        $current = array_shift($parts);
+
+        if (!isset($nodes[$current])) {
+            $name = empty($parts)
+                ? pathinfo($current, PATHINFO_FILENAME)
+                : $current;
+            $nodes[$current] = [
+                'name' => $name,
+                'type' => empty($parts)
+                    ? ($gitItem['type'] === 'tree'
+                        ? 'folder'
+                        : 'file')
+                    : 'folder',
+                'children' => []
+            ];
+        }
+
+        if (empty($parts)) {
+
+            if ($gitItem['type'] === 'blob') {
+
+                $nodes[$current]['path'] = $gitItem['path'];
+                $nodes[$current]['sha'] = $gitItem['sha'];
+                $nodes[$current]['size'] = $gitItem['size'] ?? null;
+            }
+
+            return;
+        }
+
+        $this->insertNode(
+            $nodes[$current]['children'],
+            $parts,
+            $gitItem
+        );
+    }
+
+    private function sortTree(array &$nodes): void
+    {
+        uasort($nodes, function ($a, $b) {
+
+            if ($a['type'] !== $b['type']) {
+                return $a['type'] === 'folder' ? -1 : 1;
+            }
+
+            return strcasecmp(
+                $a['name'],
+                $b['name']
+            );
+        });
+
+        foreach ($nodes as &$node) {
+
+            if (!empty($node['children'])) {
+                $this->sortTree($node['children']);
+            }
+        }
+    }
+
+    private function createDocumentationTree(
+        array $nodes,
+        Documentation $documentation,
+        DocumentationRelease $release,
+        User $user,
+        array $gitContext,
+        ?int $parentId = null
+    ): void {
+
+        $sortOrder = 0;
+
+        foreach ($nodes as $node) {
+
+            $page = DocumentationPage::create([
+
+                'user_id' => $user->id,
+
+                'documentation_id' => $documentation->id,
+
+                'release_id' => $release->id,
+
+                'parent_id' => $parentId,
+
+                'title' => $node['name'],
+
+                'slug' => Str::slug($node['name']),
+
+                'type' => $node['type'],
+
+                'sort_order' => $sortOrder++,
+
+                'git_link' => isset($node['path'])
+                    ? $this->buildRawFileUrl(
+                        $gitContext['owner'],
+                        $gitContext['repo'],
+                        $gitContext['branch'],
+                        $node['path']
+                    )
+                    : null,
+
+                'content_format' => 'markdown',
+
+            ]);
+
+            /*
+        |--------------------------------------------------------------------------
+        | Download markdown immediately
+        |--------------------------------------------------------------------------
+        */
+
+            if ($node['type'] === 'file') {
+
+                $markdown = $this->downloadMarkdown(
+                    $gitContext['owner'],
+                    $gitContext['repo'],
+                    $gitContext['branch'],
+                    $node['path']
+                );
+
+                $markdown = $this->convertImageUrls(
+                    $markdown,
+                    $gitContext['owner'],
+                    $gitContext['repo'],
+                    $gitContext['branch'],
+                    dirname($node['path'])
+                );
+
+                $page->content = $markdown;
+
+                $page->save();
+
+                $this->generateSections($page);
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Continue recursively
+        |--------------------------------------------------------------------------
+        */
+
+            if (!empty($node['children'])) {
+
+                $this->createDocumentationTree(
+                    array_values($node['children']),
+                    $documentation,
+                    $release,
+                    $user,
+                    $gitContext,
+                    $page->id
+                );
+            }
+        }
+    }
+
+    private function buildRawFileUrl(
+        string $owner,
+        string $repo,
+        string $branch,
+        string $path
+    ): string {
+
+        return sprintf(
+            'https://raw.githubusercontent.com/%s/%s/%s/%s',
+            $owner,
+            $repo,
+            $branch,
+            ltrim($path, '/')
+        );
+    }
+
+    private function downloadMarkdown(
+        string $owner,
+        string $repo,
+        string $branch,
+        string $path
+    ): string {
+
+        $url = $this->buildRawFileUrl(
+            $owner,
+            $repo,
+            $branch,
+            $path
+        );
+
+        Log::info($url);
+        $response = Http::timeout(30)->get($url);
+
+        if ($response->failed()) {
+            throw new Exception("Unable to download {$path}");
+        }
+
+        return $response->body();
+    }
+
+    private function importMarkdownContent(
+        DocumentationPage $page,
+        array $node,
+        array $context
+    ): void {
+
+        if ($page->type === 'file') {
+
+            $markdown = $this->downloadMarkdown(
+                $context['owner'],
+                $context['repo'],
+                $context['branch'],
+                $node['path']
+            );
+
+            $markdown = $this->convertImageUrls(
+                $markdown,
+                $context['owner'],
+                $context['repo'],
+                $context['branch'],
+                dirname($node['path'])
+            );
+
+            $page->update([
+                'content' => $markdown,
+                'content_format' => 'markdown'
+            ]);
+
+            $this->generateSections($page);
+        }
+
+        $children = $page->children()->orderBy('sort_order')->get()->values();
+
+        foreach ($children as $index => $child) {
+
+            $childNode = array_values($node['children'])[$index];
+
+            $this->importMarkdownContent(
+                $child,
+                $childNode,
+                $context
+            );
+        }
+    }
+
+    private function generateSections(
+        DocumentationPage $page
+    ) {
+        $page->sections()->delete();
+
+        $markdown = $page->content;
+
+        preg_match_all(
+            '/^(#{1,6})\s+(.*)$/m',
+            $markdown,
+            $matches,
+            PREG_OFFSET_CAPTURE
+        );
     }
 }
