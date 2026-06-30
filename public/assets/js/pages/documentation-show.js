@@ -97,6 +97,7 @@ function enableRefreshButton(selector) {
     const progressBox = document.querySelector("#reloadActionArea .load-progress");
     const progressText = document.querySelector("#syncCount");
     const modal = document.getElementById("refreshPagesModal");
+    const prevButtonText = button.textContent;
 
     const csrfToken = document
         .querySelector('meta[name="csrf-token"]')
@@ -118,6 +119,7 @@ function enableRefreshButton(selector) {
             reloadActionArea.classList.remove('loading-doc');
             button.disabled = false;
             stopPolling();
+            Toastify.success('Documentation refreshed!');
             return;
         }
 
@@ -167,6 +169,7 @@ function enableRefreshButton(selector) {
     button.addEventListener("click", function () {
 
         button.disabled = true;
+        button.innerHTML = `<div class="shaft-loader loader-light"></div> Loading...`;
 
         fetch(button.dataset.submitUrl, {
             method: "POST",
@@ -180,6 +183,8 @@ function enableRefreshButton(selector) {
 
                 if (!data.success) {
                     button.disabled = false;
+                    button.innerHTML = prevButtonText;
+
                     Toastify.error(data.message);
                     return;
                 }
@@ -196,6 +201,7 @@ function enableRefreshButton(selector) {
                 console.error(error);
 
                 button.disabled = false;
+                button.innerHTML = prevButtonText;
 
                 Toastify.error("Something went wrong.");
 
@@ -203,5 +209,8 @@ function enableRefreshButton(selector) {
 
     });
 
-    startPolling();
+    if(reloadActionArea.getAttribute('data-load-in-progress') == 'true'){
+        startPolling();
+
+    }
 }

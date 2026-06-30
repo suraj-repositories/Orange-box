@@ -1,4 +1,4 @@
-<div id="reloadActionArea"
+<div id="reloadActionArea" data-load-in-progress="{{ empty($release->sync_batch_id) ? 'false' : 'true' }}"
     class="d-flex gap-2 flex-wrap align-items-center reloadActionArea {{ empty($release->sync_batch_id) ? '' : 'loading-doc' }}">
 
     <div class="load-progress d-none">
