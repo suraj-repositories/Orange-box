@@ -5,7 +5,7 @@
     - markdown image pic ========================== check
     - table style --------------------------------- check
     - entire folder pic going through folder structure --
-    - if link is folder link load the first md file --- 
+    - sync pages and sync documentation system creation --- 
     - alert styles
     - code copy
 
