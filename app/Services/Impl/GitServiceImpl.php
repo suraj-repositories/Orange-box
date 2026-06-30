@@ -420,7 +420,6 @@ class GitServiceImpl implements GitService
                     )
                     : null,
                 'content_format' => 'markdown',
-
             ]);
 
             if ($node['type'] === 'file') {

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\User\Documentation;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SyncDocumentationPageJob;
 use App\Models\Documentation;
 use App\Models\DocumentationDocument;
+use App\Models\DocumentationPage;
 use App\Models\DocumentationRelease;
 use App\Models\DocumentationTemplate;
 use App\Models\TemplatePurchase;
@@ -15,6 +17,7 @@ use Dom\Document;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Throwable;
@@ -292,6 +295,9 @@ class DocumentationController extends Controller
                 $user
             );
 
+            $documentation->load_url = $request->github_url;
+            $documentation->save();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Documentation creating...'
@@ -303,5 +309,57 @@ class DocumentationController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    public function syncPages(
+        User $user,
+        Documentation $documentation,
+        DocumentationRelease $release,
+        Request $request
+    ) {
+        $jobs = DocumentationPage::query()
+            ->where('type', 'file')
+            ->whereNotNull('git_link')
+            ->where('user_id', $user->id)
+            ->where('documentation_id', $documentation->id)
+            ->where('release_id', $release->id)
+            ->get()
+            ->map(fn($page) => new SyncDocumentationPageJob($page))
+            ->toArray();
+
+        $batch = Bus::batch($jobs)
+            ->name('Documentation Sync')
+            ->dispatch();
+
+        return response()->json([
+            'batch_id' => $batch->id,
+        ]);
+    }
+
+    public function syncPageProgress(string $batchId)
+    {
+        $batch = Bus::findBatch($batchId);
+
+        if (! $batch) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Batch not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'batch_id' => $batch->id,
+            'name' => $batch->name,
+            'total_jobs' => $batch->totalJobs,
+            'pending_jobs' => $batch->pendingJobs,
+            'processed_jobs' => $batch->processedJobs(),
+            'failed_jobs' => $batch->failedJobs,
+            'progress' => $batch->progress(),
+            'finished' => $batch->finished(),
+            'cancelled' => $batch->cancelled(),
+            'created_at' => $batch->createdAt,
+            'finished_at' => $batch->finishedAt,
+        ]);
     }
 }
