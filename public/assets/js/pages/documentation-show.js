@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     enableHotPagesStatusChange();
+    enableRefreshButton("#refreshPagesButton");
+
 });
 
 function enableHotPagesStatusChange() {
@@ -84,4 +86,122 @@ function enableHotPagesStatusChange() {
 
 }
 
-// documentation pages overview
+
+
+function enableRefreshButton(selector) {
+
+    const button = document.querySelector(selector);
+    if (!button) return;
+
+    const reloadActionArea = document.querySelector("#reloadActionArea");
+    const progressBox = document.querySelector("#reloadActionArea .load-progress");
+    const progressText = document.querySelector("#syncCount");
+    const modal = document.getElementById("refreshPagesModal");
+
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+
+    let polling = null;
+
+    function stopPolling() {
+        if (polling) {
+            clearInterval(polling);
+            polling = null;
+        }
+    }
+
+    function updateProgress(data) {
+
+        if (!data.running) {
+            progressBox.classList.add("d-none");
+            reloadActionArea.classList.remove('loading-doc');
+            button.disabled = false;
+            stopPolling();
+            return;
+        }
+
+        progressBox.classList.remove("d-none");
+        reloadActionArea.classList.add('loading-doc');
+
+        progressText.textContent =
+            `${data.processed} / ${data.total} (${data.progress}%)`;
+
+        button.disabled = true;
+
+        if (data.finished) {
+
+            progressText.textContent =
+                `${data.total} / ${data.total} (100%)`;
+
+            button.disabled = false;
+
+            stopPolling();
+
+            setTimeout(() => {
+                progressBox.classList.add("d-none");
+                reloadActionArea.classList.remove('loading-doc');
+            }, 2000);
+        }
+    }
+
+    function checkProgress() {
+
+        fetch(button.dataset.progressUrl)
+            .then(response => response.json())
+            .then(updateProgress)
+            .catch(console.error);
+
+    }
+
+    function startPolling() {
+
+        stopPolling();
+
+        checkProgress();
+
+        polling = setInterval(checkProgress, 2000);
+
+    }
+
+    button.addEventListener("click", function () {
+
+        button.disabled = true;
+
+        fetch(button.dataset.submitUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+                "Accept": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+
+                if (!data.success) {
+                    button.disabled = false;
+                    Toastify.error(data.message);
+                    return;
+                }
+
+                bootstrap.Modal.getInstance(modal)?.hide();
+
+                startPolling();
+
+                Toastify.info("Page refresh started.");
+
+            })
+            .catch(error => {
+
+                console.error(error);
+
+                button.disabled = false;
+
+                Toastify.error("Something went wrong.");
+
+            });
+
+    });
+
+    startPolling();
+}

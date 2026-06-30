@@ -12,6 +12,8 @@ class DocumentationRelease extends Model
         'version',
         'is_current',
         'is_published',
+        'load_url',
+        'sync_batch_id',
         'released_at',
     ];
 
@@ -34,7 +36,7 @@ class DocumentationRelease extends Model
         return $this->belongsTo(Documentation::class);
     }
 
-     public function pages()
+    public function pages()
     {
         return $this->hasMany(DocumentationPage::class, 'release_id');
     }

@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('documentations', function (Blueprint $table) {
+        Schema::table('documentation_releases', function (Blueprint $table) {
             //
-            $table->string('load_url')->nullable()->after('documentation_template_id');
+            $table->string('sync_batch_id')->nullable()->after('load_url');
         });
     }
 
@@ -22,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('documentations', function (Blueprint $table) {
+        Schema::table('documentation_releases', function (Blueprint $table) {
             //
-            $table->dropColumn('load_url');
+            $table->dropColumn('sync_batch_id');
         });
     }
 };

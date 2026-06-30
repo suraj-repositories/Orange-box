@@ -295,12 +295,12 @@ class DocumentationController extends Controller
                 $user
             );
 
-            $documentation->load_url = $request->github_url;
-            $documentation->save();
+            $release->load_url = $request->github_url;
+            $release->save();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Documentation creating...'
+                'message' => 'Documentation loaded successfully!'
             ]);
         } catch (Throwable $e) {
 
@@ -331,35 +331,53 @@ class DocumentationController extends Controller
             ->name('Documentation Sync')
             ->dispatch();
 
+        $release->update([
+            'sync_batch_id' => $batch->id,
+        ]);
+
         return response()->json([
+            'success' => true,
+            'message' => 'Please wait this may take some time...',
             'batch_id' => $batch->id,
         ]);
     }
 
-    public function syncPageProgress(string $batchId)
-    {
-        $batch = Bus::findBatch($batchId);
-
-        if (! $batch) {
+    public function syncPageProgress(
+        User $user,
+        Documentation $documentation,
+        DocumentationRelease $release
+    ) {
+        if (!$release->sync_batch_id) {
             return response()->json([
-                'success' => false,
-                'message' => 'Batch not found.',
-            ], 404);
+                'success' => true,
+                'running' => false,
+            ]);
+        }
+
+        $batch = Bus::findBatch($release->sync_batch_id);
+
+        if (!$batch) {
+            return response()->json([
+                'success' => true,
+                'running' => false,
+            ]);
+        }
+
+        if ($batch->finished()) {
+            $release->update([
+                'sync_batch_id' => null,
+            ]);
         }
 
         return response()->json([
             'success' => true,
-            'batch_id' => $batch->id,
-            'name' => $batch->name,
-            'total_jobs' => $batch->totalJobs,
-            'pending_jobs' => $batch->pendingJobs,
-            'processed_jobs' => $batch->processedJobs(),
-            'failed_jobs' => $batch->failedJobs,
+            'running' => !$batch->finished(),
             'progress' => $batch->progress(),
+            'processed' => $batch->processedJobs(),
+            'total' => $batch->totalJobs,
+            'pending' => $batch->pendingJobs,
+            'failed' => $batch->failedJobs,
             'finished' => $batch->finished(),
-            'cancelled' => $batch->cancelled(),
-            'created_at' => $batch->createdAt,
-            'finished_at' => $batch->finishedAt,
         ]);
     }
 }

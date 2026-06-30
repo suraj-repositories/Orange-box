@@ -8,9 +8,9 @@
                     <div class="logo-box">
                         <a class='logo logo-light'
                             href='{{ route('docs.show', [
-                                'user' => $user?->username,
-                                'slug' => $documentation?->url,
-                                'version' => $release?->version,
+                                'user' => $user->username,
+                                'slug' => $documentation->url,
+                                'version' => $release->version,
                                 'path' => '',
                             ]) }}'>
                             <span class="logo-sm">
@@ -63,9 +63,9 @@
                 <ul class="list-unstyled topbar-menu topnav-menu right-menu mb-0 d-flex align-items-center">
                     <li>
                         <a href="{{ route('docs.show', [
-                            'user' => $user?->username,
-                            'slug' => $documentation?->url,
-                            'version' => $release?->version,
+                            'user' => $user->username,
+                            'slug' => $documentation->url,
+                            'version' => $release->version,
                             'path' => '',
                         ]) }}"
                             class="nav-link in-full-nav dropdown-toggle nav-user me-0 {{ Route::is('docs.show') ? 'active' : '' }}">

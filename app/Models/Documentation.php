@@ -22,7 +22,6 @@ class Documentation extends Model
         'logo_dark',
         'logo_sm_dark',
         'documentation_template_id',
-        'load_url',
         'status',
     ];
 

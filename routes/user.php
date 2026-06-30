@@ -253,6 +253,10 @@ Route::controller(DocumentationController::class)->group(function () {
     Route::post('documentation/{documentation}', 'update')->name('documentation.update');
     Route::delete('documentation/{documentation}', 'delete')->name('documentation.delete');
     Route::post('/documentation/{documentation}/{release}/import-github', 'importGithub')->name('documentation.import.github');
+
+    Route::post('/documentation/{documentation}/{release}/sync-pages', 'syncPages')->name('documentation.sync.pages');
+    Route::get('/documentation-loading/{documentation}/{release}/progress', 'syncPageProgress')->name('documentation.sync.pages.progress');
+
 });
 Route::controller(DocumentationTemplateController::class)->group(function () {
     Route::get('templates', 'index')->name('templates.index');

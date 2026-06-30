@@ -5373,3 +5373,10 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
 .contant_box_404 {
     margin-top: -50px;
 }
+
+
+.reloadActionArea.loading-doc .refresh-pages-btn,
+.reloadActionArea.loading-doc .load-entire-doc-btn
+{
+    display: none;
+}
