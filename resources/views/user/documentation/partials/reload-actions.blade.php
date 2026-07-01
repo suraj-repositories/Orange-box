@@ -1,5 +1,5 @@
-<div id="reloadActionArea" data-load-in-progress="{{ empty($release->sync_batch_id) ? 'false' : 'true' }}"
-    class="d-flex gap-2 flex-wrap align-items-center reloadActionArea {{ empty($release->sync_batch_id) ? '' : 'loading-doc' }}">
+<div id="reloadActionArea" data-load-in-progress="{{ $release->sync_status == 'syncing' ? 'true' : 'false' }}"
+    class="d-flex gap-2 flex-wrap align-items-center reloadActionArea {{ $release->sync_status == 'syncing' ? 'loading-doc' : '' }}">
 
     <div class="load-progress d-none">
         <span id="syncCount">0 / 0</span>
@@ -93,19 +93,45 @@
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="docsUrl" class="form-label">
                                 Documentation URL
                             </label>
+
                             <input type="url" class="form-control" id="docsUrl" name="github_url"
                                 value="{{ $release?->load_url }}" placeholder="https://example.com/docs" required>
+
                             <div class="form-text">
-                                Paste the root URL of the documentation you
-                                want to import.
+                                Enter the root URL of your documentation repository or documentation folder.
                             </div>
                         </div>
+
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex align-items-start mb-2">
+                                <i class="bi bi-folder2-open text-primary me-2 mt-1"></i>
+                                <span>
+                                    Imports the complete documentation structure, including folders and Markdown
+                                    (<code>.md</code>) pages.
+                                </span>
+                            </li>
+
+                            <li class="d-flex align-items-start mb-2">
+                                <i class="bi bi-arrow-repeat text-success me-2 mt-1"></i>
+                                <span>
+                                    Synchronizes your documentation by creating new pages, updating existing ones, and
+                                    removing pages that no longer exist in the source.
+                                </span>
+                            </li>
+
+                            <li class="d-flex align-items-start">
+                                <i class="bi bi-exclamation-triangle-fill text-warning me-2 mt-1"></i>
+                                <span>
+                                    Existing documentation may be modified during synchronization. This action cannot be
+                                    undone.
+                                </span>
+                            </li>
+                        </ul>
                     </div>
 
                     <div class="modal-footer">

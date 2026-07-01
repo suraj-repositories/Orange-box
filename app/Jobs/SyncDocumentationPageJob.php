@@ -23,25 +23,36 @@ class SyncDocumentationPageJob implements ShouldQueue
     public $tries = 3;
 
     public function __construct(
-        public DocumentationPage $page
+        public int $pageId
     ) {}
 
     public function handle(GitService $gitService): void
     {
+
+        if ($this->batch()?->cancelled()) {
+            return;
+        }
+        $page = DocumentationPage::find($this->pageId);
+
+        if (! $page) {
+            return;
+        }
+
         try {
 
-            $markdown = $gitService->loadGitPageContent($this->page->git_link);
+            $markdown = $gitService->loadGitPageContent($page->git_link);
 
-            $this->page->update([
+            $page->update([
                 'content' => $markdown,
                 'content_format' => 'markdown',
             ]);
 
+            $gitService->generateSections($page);
         } catch (\Throwable $e) {
 
             Log::error('Failed syncing page', [
-                'page_id' => $this->page->id,
-                'url' => $this->page->git_link,
+                'page_id' => $page->id,
+                'url' => $page->git_link,
                 'error' => $e->getMessage(),
             ]);
 

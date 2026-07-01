@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class DocumentationController extends Controller
@@ -177,7 +178,6 @@ class DocumentationController extends Controller
 
     public function update(User $user, Documentation $documentation, Request $request)
     {
-        // dd($request->all());
         if ($documentation->user_id !== $user->id) {
             return back()->with('error', 'Unauthorized access');
         }
@@ -288,7 +288,18 @@ class DocumentationController extends Controller
 
         try {
 
-            $this->gitService->loadEntireDocumentation(
+            if (!empty($release->sync_batch_id)) {
+                $batch = Bus::findBatch($release->sync_batch_id);
+
+                if ($batch && !$batch->finished()) {
+                    throw ValidationException::withMessages([
+                        'sync' => 'Documentation is already syncing.',
+                    ]);
+                }
+            }
+
+
+            $batch = $this->gitService->loadEntireDocumentation(
                 $request->github_url,
                 $documentation,
                 $release,
@@ -296,6 +307,8 @@ class DocumentationController extends Controller
             );
 
             $release->load_url = $request->github_url;
+            $release->sync_batch_id = $batch->id;
+            $release->sync_status = 'syncing';
             $release->save();
 
             return response()->json([
@@ -315,31 +328,66 @@ class DocumentationController extends Controller
         User $user,
         Documentation $documentation,
         DocumentationRelease $release,
-        Request $request
+
     ) {
-        $jobs = DocumentationPage::query()
-            ->where('type', 'file')
-            ->whereNotNull('git_link')
-            ->where('user_id', $user->id)
-            ->where('documentation_id', $documentation->id)
-            ->where('release_id', $release->id)
-            ->get()
-            ->map(fn($page) => new SyncDocumentationPageJob($page))
-            ->toArray();
+        try {
+            if (!empty($release->sync_batch_id)) {
+                $batch = Bus::findBatch($release->sync_batch_id);
 
-        $batch = Bus::batch($jobs)
-            ->name('Documentation Sync')
-            ->dispatch();
+                if ($batch && !$batch->finished()) {
+                    throw ValidationException::withMessages([
+                        'sync' => 'Documentation is already syncing.',
+                    ]);
+                }
+            }
 
-        $release->update([
-            'sync_batch_id' => $batch->id,
-        ]);
+            $jobs = DocumentationPage::query()
+                ->where('type', 'file')
+                ->whereNotNull('git_link')
+                ->where('user_id', $user->id)
+                ->where('documentation_id', $documentation->id)
+                ->where('release_id', $release->id)
+                ->get()
+                ->map(fn($page) => new SyncDocumentationPageJob($page->id))
+                ->toArray();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Please wait this may take some time...',
-            'batch_id' => $batch->id,
-        ]);
+            $batch = Bus::batch($jobs)
+                ->name("Documentation Sync {$documentation->id}")
+                ->allowFailures()
+                ->then(function () use ($release) {
+                    $release->update([
+                        'sync_status' => 'completed',
+                        'batch_id' => null,
+                        'last_synced_at' => now(),
+                        'sync_error' => null,
+                    ]);
+                })
+                ->catch(function ($batch, Throwable $exception) use ($release) {
+                    $release->update([
+                        'sync_status' => 'failed',
+                        'batch_id'    => null,
+                        'sync_error'  => $exception->getMessage(),
+                    ]);
+                })
+                ->finally(function () {})
+                ->dispatch();
+
+            $release->update([
+                'sync_batch_id' => $batch->id,
+                'sync_status' => 'syncing',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Please wait this may take some time...',
+                'batch_id' => $batch->id,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     public function syncPageProgress(
@@ -347,7 +395,7 @@ class DocumentationController extends Controller
         Documentation $documentation,
         DocumentationRelease $release
     ) {
-        if (!$release->sync_batch_id) {
+        if ($release->sync_status != 'syncing' || empty($release->sync_batch_id)) {
             return response()->json([
                 'success' => true,
                 'running' => false,
@@ -365,7 +413,12 @@ class DocumentationController extends Controller
 
         if ($batch->finished()) {
             $release->update([
-                'sync_batch_id' => null,
+                'sync_batch_id'   => null,
+                'sync_status'     => $batch->hasFailures() ? 'failed' : 'completed',
+                'last_synced_at'  => $batch->hasFailures() ? $release->last_synced_at : now(),
+                'sync_error'      => $batch->hasFailures()
+                    ? 'One or more synchronization jobs failed.'
+                    : null,
             ]);
         }
 

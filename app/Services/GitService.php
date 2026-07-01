@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Documentation;
+use App\Models\DocumentationPage;
 use App\Models\DocumentationRelease;
 use App\Models\User;
 
@@ -17,4 +18,8 @@ interface GitService
         DocumentationRelease $release,
         User $user
     );
+
+    function generateSections(DocumentationPage $page);
 }
+
+

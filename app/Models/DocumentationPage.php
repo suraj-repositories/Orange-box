@@ -21,6 +21,8 @@ class DocumentationPage extends Model
         'slug',
         'release_id',
         'git_link',
+        'git_path',
+        'git_sha',
         'content',
         'content_format',
         'parent_id',

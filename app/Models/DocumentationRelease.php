@@ -7,17 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class DocumentationRelease extends Model
 {
     protected $fillable = [
+
         'documentation_id',
+
         'title',
         'version',
         'is_current',
         'is_published',
         'load_url',
         'sync_batch_id',
+        'sync_status',
+        'last_synced_at',
+        'sync_error',
         'released_at',
     ];
 
     protected $casts = [
+        'last_synced_at' => 'datetime',
         'released_at' => 'datetime'
     ];
 

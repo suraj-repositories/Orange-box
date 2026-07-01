@@ -2,6 +2,7 @@
 
 namespace App\Services\Impl;
 
+use App\Jobs\SyncDocumentationPageJob;
 use App\Models\Documentation;
 use App\Models\DocumentationPage;
 use App\Models\DocumentationRelease;
@@ -10,9 +11,11 @@ use App\Services\GitService;
 use Illuminate\Support\Facades\Http;
 use InvalidArgumentException;
 use Exception;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Throwable;
 
 class GitServiceImpl implements GitService
 {
@@ -46,22 +49,76 @@ class GitServiceImpl implements GitService
 
         $tree = $this->buildTree($tree);
 
+
+        $jobs = [];
+        $visitedIds = [];
+        $existingPages = [];
+
+        DocumentationPage::query()
+            ->where('documentation_id', $documentation->id)
+            ->where('release_id', $release->id)
+            ->get()
+            ->each(function (DocumentationPage $page) use (&$existingPages) {
+                $existingPages[$page->parent_id][$page->git_path] = $page;
+            });
+
         DB::transaction(function () use (
             $tree,
             $documentation,
             $release,
             $user,
-            $context
+            $context,
+            &$jobs,
+            $existingPages,
+            &$visitedIds
         ) {
 
-            $this->createDocumentationTree(
+            $this->syncDocumentationTree(
                 $tree,
                 $documentation,
                 $release,
                 $user,
-                $context
+                $context,
+                $jobs,
+                $visitedIds,
+                $existingPages,
             );
         });
+
+        $releaseId = $release->id;
+
+        $batch = Bus::batch($jobs)
+            ->name("Documentation Sync {$documentation->id}")
+            ->allowFailures()
+            ->then(function () use ($releaseId) {
+                DocumentationRelease::whereKey($releaseId)->update([
+                    'sync_status' => 'completed',
+                    'sync_batch_id' => null,
+                    'last_synced_at' => now(),
+                    'sync_error' => null,
+                ]);
+            })
+            ->catch(function ($batch, Throwable $exception) use ($releaseId) {
+                DocumentationRelease::whereKey($releaseId)->update([
+                    'sync_status' => 'failed',
+                    'sync_batch_id' => null,
+                    'sync_error' => $exception->getMessage(),
+                ]);
+            })
+            ->dispatch();
+
+        DocumentationPage::query()
+            ->where('documentation_id', $documentation->id)
+            ->where('release_id', $release->id)
+            ->when(!empty($visitedIds), function ($query) use ($visitedIds) {
+                $query->whereNotIn('id', array_keys($visitedIds));
+            })
+            ->when(empty($visitedIds), function ($query) {
+                $query->whereRaw('1 = 1');
+            })
+            ->delete();
+
+        return $batch;
     }
 
     public function convertImageUrls($content, $owner, $repoName, $branch, $directory)
@@ -93,7 +150,6 @@ class GitServiceImpl implements GitService
             $content
         );
     }
-
 
     public function convertToRawUrl(string $githubUrl): string
     {
@@ -137,7 +193,6 @@ class GitServiceImpl implements GitService
 
         return $this->convertImageUrls($content, $owner, $repo, $branch, $directory);
     }
-
 
     private function validateGithubHost(string $url): void
     {
@@ -226,25 +281,6 @@ class GitServiceImpl implements GitService
             'branch' => $segments[3],
             'path'   => implode('/', array_slice($segments, 4)),
         ];
-    }
-
-    private function getFolderContents(string $owner, string $repo, string $branch, string $path): array
-    {
-
-        $url = "https://api.github.com/repos/$owner/$repo/contents/$path";
-
-        $response = Http::withHeaders([
-            'Accept' => 'application/vnd.github+json',
-            'User-Agent' => 'Laravel'
-        ])->get($url, [
-            'ref' => $branch
-        ]);
-
-        if ($response->failed()) {
-            throw new Exception('Unable to fetch folder.');
-        }
-
-        return $response->json();
     }
 
     private function getRepositoryTree(
@@ -337,22 +373,27 @@ class GitServiceImpl implements GitService
             $name = empty($parts)
                 ? pathinfo($current, PATHINFO_FILENAME)
                 : $current;
+
             $nodes[$current] = [
                 'name' => $name,
                 'type' => empty($parts)
-                    ? ($gitItem['type'] === 'tree'
-                        ? 'folder'
-                        : 'file')
+                    ? ($gitItem['type'] === 'tree' ? 'folder' : 'file')
                     : 'folder',
-                'children' => []
+                'children' => [],
             ];
+
+            if (empty($parts)) {
+                $nodes[$current]['path'] = $gitItem['path'];
+
+                if ($gitItem['type'] === 'tree') {
+                    $nodes[$current]['sha'] = $gitItem['sha'];
+                }
+            }
         }
 
         if (empty($parts)) {
 
             if ($gitItem['type'] === 'blob') {
-
-                $nodes[$current]['path'] = $gitItem['path'];
                 $nodes[$current]['sha'] = $gitItem['sha'];
                 $nodes[$current]['size'] = $gitItem['size'] ?? null;
             }
@@ -389,71 +430,107 @@ class GitServiceImpl implements GitService
         }
     }
 
-    private function createDocumentationTree(
+    private function syncDocumentationTree(
         array $nodes,
         Documentation $documentation,
         DocumentationRelease $release,
         User $user,
         array $gitContext,
+        array &$jobs,
+        array &$visitedIds,
+        array &$existingPages,
         ?int $parentId = null
     ): void {
 
         $sortOrder = 0;
 
+        $pages = $existingPages[$parentId] ?? [];
+
         foreach ($nodes as $node) {
 
-            $page = DocumentationPage::create([
-                'user_id' => $user->id,
-                'documentation_id' => $documentation->id,
-                'release_id' => $release->id,
-                'parent_id' => $parentId,
-                'title' => $node['name'],
-                'slug' => Str::slug($node['name']),
-                'type' => $node['type'],
-                'sort_order' => $sortOrder++,
-                'git_link' => isset($node['path'])
-                    ? $this->buildRawFileUrl(
-                        $gitContext['owner'],
-                        $gitContext['repo'],
-                        $gitContext['branch'],
-                        $node['path']
-                    )
-                    : null,
-                'content_format' => 'markdown',
-            ]);
+            $gitPath = $node['path'] ?? null;
 
-            if ($node['type'] === 'file') {
+            if (!$gitPath) {
+                continue;
+            }
 
-                $markdown = $this->downloadMarkdown(
+            $page = $pages[$gitPath] ?? null;
+
+            $isNew = $page === null;
+
+            $oldSha = $page?->git_sha;
+            $newSha = $node['sha'] ?? null;
+
+            $gitLink = $node['type'] === 'file'
+                ? $this->buildRawFileUrl(
                     $gitContext['owner'],
                     $gitContext['repo'],
                     $gitContext['branch'],
-                    $node['path']
-                );
+                    $gitPath
+                )
+                : null;
 
-                $markdown = $this->convertImageUrls(
-                    $markdown,
-                    $gitContext['owner'],
-                    $gitContext['repo'],
-                    $gitContext['branch'],
-                    dirname($node['path'])
-                );
 
-                $page->content = $markdown;
+            if ($isNew) {
 
-                $page->save();
 
-                $this->generateSections($page);
+                $page = DocumentationPage::create([
+                    'user_id' => $user->id,
+                    'documentation_id' => $documentation->id,
+                    'release_id' => $release->id,
+                    'parent_id' => $parentId,
+                    'title' => $node['name'],
+                    'slug' => Str::slug($node['name']),
+                    'type' => $node['type'],
+                    'sort_order' => $sortOrder++,
+                    'git_path' => $gitPath,
+                    'git_sha' => $newSha,
+                    'git_link' => $gitLink,
+                    'content_format' => 'markdown',
+                ]);
+
+                $existingPages[$parentId][$page->git_path] = $page;
+            } else {
+
+                $page->fill([
+                    'title' => $node['name'],
+                    'slug' => Str::slug($node['name']),
+                    'sort_order' => $sortOrder++,
+                    'git_link' => $gitLink,
+                ]);
+
+                if (
+                    $node['type'] === 'file'
+                    && $oldSha !== $newSha
+                ) {
+                    $page->git_sha = $newSha;
+                }
+
+                if ($page->isDirty()) {
+                    $page->save();
+                }
+            }
+
+            $visitedIds[$page->id] = true;
+
+            if (
+                $node['type'] === 'file'
+                && ($isNew || $oldSha !== $newSha)
+            ) {
+                $jobs[] = new SyncDocumentationPageJob($page->id);
             }
 
             if (!empty($node['children'])) {
 
-                $this->createDocumentationTree(
+                $this->syncDocumentationTree(
                     array_values($node['children']),
                     $documentation,
                     $release,
                     $user,
                     $gitContext,
+                    $jobs,
+                    $visitedIds,
+                    $existingPages,
                     $page->id
                 );
             }
@@ -545,7 +622,7 @@ class GitServiceImpl implements GitService
         }
     }
 
-    private function generateSections(
+    public function generateSections(
         DocumentationPage $page
     ) {
         $page->sections()->delete();

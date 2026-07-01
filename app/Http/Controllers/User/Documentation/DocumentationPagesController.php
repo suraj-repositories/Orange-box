@@ -115,6 +115,7 @@ class DocumentationPagesController extends Controller
             $markdown = $request->markdown;
             $docPage->content = $markdown;
             $docPage->git_link = $request->git_link ?? null;
+            $docPage->git_sha = null;
 
             $docPage->save();
 
@@ -217,6 +218,7 @@ class DocumentationPagesController extends Controller
         }
 
         $docPage->title = $request->new_name;
+        $docPage->git_sha = null;
         $docPage->slug = Str::slug($request->new_name);
         $docPage->save();
         return response()->json([
@@ -290,7 +292,8 @@ class DocumentationPagesController extends Controller
                 DocumentationPage::where('uuid', $item['uuid'])
                     ->update([
                         'parent_id'  => $parentId,
-                        'sort_order' => $item['sort_order']
+                        'sort_order' => $item['sort_order'],
+
                     ]);
             }
         });
