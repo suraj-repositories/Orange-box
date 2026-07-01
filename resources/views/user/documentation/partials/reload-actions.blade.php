@@ -1,16 +1,35 @@
 <div id="reloadActionArea" data-load-in-progress="{{ $release->sync_status == 'syncing' ? 'true' : 'false' }}"
-    class="d-flex gap-2 flex-wrap align-items-center reloadActionArea {{ $release->sync_status == 'syncing' ? 'loading-doc' : '' }}">
+    class="d-flex gap-2 flex-wrap align-items-center reloadActionArea {{ $release->sync_status == 'syncing' ? 'loading-doc' : '' }}"
+    data-progress-url="{{ authRoute('user.documentation.sync.pages.progress', ['documentation' => $documentation, 'release' => $release]) }}">
 
     <div class="load-progress d-none">
-        <span id="syncCount">0 / 0</span>
+
+        <div class="text-muted" id="syncCount">
+            0 / 0
+        </div>
+
+        <div class="sync-progress-circle">
+            <svg width="50" height="50" viewBox="0 0 100 100">
+                <!-- Background -->
+                <circle class="progress-bg" cx="50" cy="50" r="42" />
+
+                <!-- Progress -->
+                <circle class="progress-bar" cx="50" cy="50" r="42" />
+            </svg>
+
+            <div class="progress-percent" id="syncPercent">0%</div>
+        </div>
+
     </div>
 
-    <button class="btn btn-primary rounded-3 refresh-pages-btn" data-bs-toggle="modal" data-bs-target="#refreshPagesModal">
+
+    <button class="btn btn-primary rounded-3 refresh-pages-btn" data-bs-toggle="modal"
+        data-bs-target="#refreshPagesModal">
         Refresh Pages
     </button>
 
-    <div class="modal fade" id="refreshPagesModal" tabindex="-1" aria-labelledby="refreshPagesModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="refreshPagesModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true"
+        tabindex="-1" aria-labelledby="refreshPagesModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
 
@@ -79,12 +98,14 @@
         Load Entire Docs
     </button>
 
-    <div class="modal fade" id="loadDocsModal" tabindex="-1" aria-labelledby="loadDocsModalLabel" aria-hidden="true">
+    <div class="modal fade" id="loadDocsModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false"
+        aria-labelledby="loadDocsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form
+                <form id="refreshEntireDocsForm"
+                    data-progress-url="{{ authRoute('user.documentation.sync.pages.progress', ['documentation' => $documentation, 'release' => $release]) }}"
                     action="{{ authRoute('user.documentation.import.github', ['documentation' => $documentation, 'release' => $release]) }}"
-                    method="POST" data-submit-type="ajax">
+                    method="POST">
                     @csrf
 
                     <div class="modal-header">

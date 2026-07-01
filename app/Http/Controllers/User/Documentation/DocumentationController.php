@@ -336,7 +336,7 @@ class DocumentationController extends Controller
                 ->then(function () use ($release) {
                     $release->update([
                         'sync_status' => 'completed',
-                        'batch_id' => null,
+                        'sync_batch_id' => null,
                         'last_synced_at' => now(),
                         'sync_error' => null,
                     ]);
@@ -344,7 +344,7 @@ class DocumentationController extends Controller
                 ->catch(function ($batch, Throwable $exception) use ($release) {
                     $release->update([
                         'sync_status' => 'failed',
-                        'batch_id'    => null,
+                        'sync_batch_id'    => null,
                         'sync_error'  => $exception->getMessage(),
                     ]);
                 })
@@ -374,10 +374,14 @@ class DocumentationController extends Controller
         Documentation $documentation,
         DocumentationRelease $release
     ) {
+
         if ($release->sync_status != 'syncing' || empty($release->sync_batch_id)) {
+
             return response()->json([
                 'success' => true,
                 'running' => false,
+                'message' => $release->sync_status == 'completed' ? 'Synchronization completed successfully.'
+                    : 'Synchronization completed with errors.',
             ]);
         }
 
@@ -390,26 +394,35 @@ class DocumentationController extends Controller
             ]);
         }
 
+        $completedMessage = '';
+
         if ($batch->finished()) {
             $release->update([
-                'sync_batch_id'   => null,
-                'sync_status'     => $batch->hasFailures() ? 'failed' : 'completed',
-                'last_synced_at'  => $batch->hasFailures() ? $release->last_synced_at : now(),
-                'sync_error'      => $batch->hasFailures()
+                'sync_batch_id'  => null,
+                'sync_status'    => $batch->hasFailures() ? 'failed' : 'completed',
+                'last_synced_at' => $batch->hasFailures() ? $release->last_synced_at : now(),
+                'sync_error'     => $batch->hasFailures()
                     ? 'One or more synchronization jobs failed.'
                     : null,
             ]);
+
+            $completedMessage = $batch->hasFailures()
+                ? 'Synchronization completed with errors.'
+                : 'Synchronization completed successfully.';
         }
 
         return response()->json([
-            'success' => true,
-            'running' => !$batch->finished(),
-            'progress' => $batch->progress(),
+            'success'   => true,
+            'running'   => !$batch->finished(),
+            'progress'  => $batch->progress(),
             'processed' => $batch->processedJobs(),
-            'total' => $batch->totalJobs,
-            'pending' => $batch->pendingJobs,
-            'failed' => $batch->failedJobs,
-            'finished' => $batch->finished(),
+            'total'     => $batch->totalJobs,
+            'pending'   => $batch->pendingJobs,
+            'failed'    => $batch->failedJobs,
+            'finished'  => $batch->finished(),
+            'message'   => $batch->finished()
+                ? $completedMessage
+                : "Synchronization in progress ({$batch->progress()}%).",
         ]);
     }
 }

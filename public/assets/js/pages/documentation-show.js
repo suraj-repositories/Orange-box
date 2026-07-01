@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     enableHotPagesStatusChange();
     enableRefreshButton("#refreshPagesButton");
+    enableLoadEntireDocsForm("#refreshEntireDocsForm");
 
+    initializeSyncPolling();
 });
 
 function enableHotPagesStatusChange() {
@@ -86,131 +88,335 @@ function enableHotPagesStatusChange() {
 
 }
 
-
-
-function enableRefreshButton(selector) {
-
-    const button = document.querySelector(selector);
-    if (!button) return;
+function createSyncProgress() {
 
     const reloadActionArea = document.querySelector("#reloadActionArea");
-    const progressBox = document.querySelector("#reloadActionArea .load-progress");
-    const progressText = document.querySelector("#syncCount");
-    const modal = document.getElementById("refreshPagesModal");
-    const prevButtonText = button.textContent;
+    const progressBox = reloadActionArea.querySelector(".load-progress");
 
-    const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
+    const progressText = progressBox.querySelector("#syncCount");
+    const progressCircle = progressBox.querySelector(".progress-bar");
+    const progressPercent = progressBox.querySelector("#syncPercent");
 
-    let polling = null;
+    const radius = 42;
+    const circumference = 2 * Math.PI * radius;
 
-    function stopPolling() {
-        if (polling) {
-            clearInterval(polling);
-            polling = null;
-        }
+    progressCircle.style.strokeDasharray = circumference;
+    progressCircle.style.strokeDashoffset = circumference;
+
+    function set(percent, processed, total) {
+
+        percent = Math.max(0, Math.min(100, Number(percent)));
+
+        const offset =
+            circumference - (percent / 100) * circumference;
+
+        progressCircle.style.strokeDashoffset = offset;
+        progressPercent.textContent = `${percent}%`;
+        progressText.textContent = `${processed} / ${total}`;
+
     }
 
-    function updateProgress(data) {
-
-        if (!data.running) {
-            progressBox.classList.add("d-none");
-            reloadActionArea.classList.remove('loading-doc');
-            button.disabled = false;
-            stopPolling();
-            Toastify.success('Documentation refreshed!');
-            return;
-        }
-
+    function show() {
         progressBox.classList.remove("d-none");
-        reloadActionArea.classList.add('loading-doc');
-
-        progressText.textContent =
-            `${data.processed} / ${data.total} (${data.progress}%)`;
-
-        button.disabled = true;
-
-        if (data.finished) {
-
-            progressText.textContent =
-                `${data.total} / ${data.total} (100%)`;
-
-            button.disabled = false;
-
-            stopPolling();
-
-            setTimeout(() => {
-                progressBox.classList.add("d-none");
-                reloadActionArea.classList.remove('loading-doc');
-            }, 2000);
-        }
+        reloadActionArea.classList.add("loading-doc");
     }
 
-    function checkProgress() {
+    function hide() {
+        progressBox.classList.add("d-none");
+        reloadActionArea.classList.remove("loading-doc");
+    }
 
-        fetch(button.dataset.progressUrl)
-            .then(response => response.json())
-            .then(updateProgress)
+    return {
+        show,
+        hide,
+        set
+    };
+
+}
+
+const SyncPolling = (() => {
+
+    let timer = null;
+    let progressUrl = null;
+
+    const listeners = [];
+
+    function subscribe(callback) {
+
+        listeners.push(callback);
+
+    }
+
+    function notify(data) {
+
+        listeners.forEach(cb => cb(data));
+
+    }
+
+    function poll() {
+
+        fetch(progressUrl)
+            .then(r => r.json())
+            .then(data => {
+
+                notify(data);
+
+                if (!data.running) {
+                    console.log(data);
+                    Toastify.success(data.message);
+                    stop();
+                }
+
+            })
             .catch(console.error);
 
     }
 
-    function startPolling() {
+    function start(url) {
 
-        stopPolling();
+        progressUrl = url;
 
-        checkProgress();
+        if (timer) {
+            return;
+        }
 
-        polling = setInterval(checkProgress, 2000);
+        poll();
+
+        timer = setInterval(poll, 2000);
 
     }
 
-    button.addEventListener("click", function () {
+    function stop() {
+
+        if (!timer) {
+            return;
+        }
+
+        clearInterval(timer);
+
+        timer = null;
+
+    }
+
+    return {
+        start,
+        stop,
+        subscribe
+    };
+
+})();
+
+
+function createProgressHandler(options) {
+
+    const progress = createSyncProgress();
+
+    return function (data) {
+
+        if (!data.running) {
+
+            progress.hide();
+            options.enable();
+
+            return;
+        }
+
+        progress.show();
+
+        progress.set(
+            data.progress,
+            data.processed,
+            data.total
+        );
+
+        options.disable();
+
+        if (data.finished) {
+
+            progress.set(100, data.total, data.total);
+
+            options.enable();
+
+            setTimeout(progress.hide, 2000);
+
+        }
+
+    };
+
+}
+
+function postJson(url, body = null) {
+
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .content;
+
+    return fetch(url, {
+
+        method: "POST",
+
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+            "Accept": "application/json"
+        },
+
+        body
+
+    }).then(r => r.json());
+
+}
+
+function enableRefreshButton(selector) {
+
+    const button = document.querySelector(selector);
+
+    if (!button) return;
+
+    const modal = document.getElementById("refreshPagesModal");
+
+    const originalHtml = button.innerHTML;
+
+    const handler = createProgressHandler({
+
+        disable() {
+            button.disabled = true;
+        },
+
+        enable() {
+            button.disabled = false;
+            button.innerHTML = originalHtml;
+        }
+
+    });
+
+    SyncPolling.subscribe(handler);
+
+    button.addEventListener("click", () => {
 
         button.disabled = true;
-        button.innerHTML = `<div class="shaft-loader loader-light"></div> Loading...`;
 
-        fetch(button.dataset.submitUrl, {
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": csrfToken,
-                "Accept": "application/json"
-            }
-        })
-            .then(response => response.json())
+        button.innerHTML =
+            `<div class="shaft-loader loader-light"></div> Loading...`;
+
+        postJson(button.dataset.submitUrl)
+
             .then(data => {
 
                 if (!data.success) {
+
                     button.disabled = false;
-                    button.innerHTML = prevButtonText;
+                    button.innerHTML = originalHtml;
 
                     Toastify.error(data.message);
+
                     return;
+
                 }
 
                 bootstrap.Modal.getInstance(modal)?.hide();
 
-                startPolling();
+                SyncPolling.start(button.dataset.progressUrl);
 
                 Toastify.info("Page refresh started.");
 
             })
-            .catch(error => {
 
-                console.error(error);
-
-                button.disabled = false;
-                button.innerHTML = prevButtonText;
-
-                Toastify.error("Something went wrong.");
-
-            });
+            .catch(console.error);
 
     });
 
-    if(reloadActionArea.getAttribute('data-load-in-progress') == 'true'){
-        startPolling();
+}
 
+function enableLoadEntireDocsForm(selector) {
+
+    const form = document.querySelector(selector);
+
+    if (!form) return;
+
+    const submitButton =
+        form.querySelector('button[type="submit"]');
+
+    const modal =
+        document.getElementById("loadDocsModal");
+
+    const originalHtml = submitButton.innerHTML;
+
+    const handler = createProgressHandler({
+
+        disable() {
+            submitButton.disabled = true;
+        },
+
+        enable() {
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalHtml;
+        }
+
+    });
+
+    SyncPolling.subscribe(handler);
+
+    form.addEventListener("submit", e => {
+
+        e.preventDefault();
+
+        submitButton.disabled = true;
+
+        submitButton.innerHTML =
+            `<div class="shaft-loader loader-light"></div> Loading...`;
+
+        postJson(
+            form.action,
+            new FormData(form)
+        )
+
+            .then(data => {
+
+                if (!data.success) {
+
+                    submitButton.disabled = false;
+
+                    submitButton.innerHTML = originalHtml;
+
+                    Toastify.error(data.message);
+
+                    return;
+
+                }
+
+                bootstrap.Modal.getInstance(modal)?.hide();
+
+                SyncPolling.start(form.dataset.progressUrl);
+
+                Toastify.info("Documentation import started.");
+
+            })
+
+            .catch(console.error);
+
+    });
+
+}
+
+
+function initializeSyncPolling() {
+
+    const reloadActionArea = document.querySelector("#reloadActionArea");
+
+    if (!reloadActionArea) {
+        return;
     }
+
+    if (reloadActionArea.dataset.loadInProgress !== "true") {
+        return;
+    }
+
+    const progressUrl = reloadActionArea.dataset.progressUrl;
+
+    if (!progressUrl) {
+        return;
+    }
+
+    SyncPolling.start(progressUrl);
+
 }
