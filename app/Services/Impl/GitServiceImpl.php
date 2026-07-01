@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class GitServiceImpl implements GitService
@@ -31,94 +32,146 @@ class GitServiceImpl implements GitService
         DocumentationRelease $release,
         User $user
     ) {
+        DB::transaction(function () use ($release, $githubUrl) {
 
-        $context = $this->extractFolderContext($githubUrl);
+            $release = DocumentationRelease::query()
+                ->lockForUpdate()
+                ->findOrFail($release->id);
 
-        $tree = $this->getRepositoryTree(
-            $context['owner'],
-            $context['repo'],
-            $context['branch']
-        );
+            if ($release->sync_status === 'syncing') {
+                throw ValidationException::withMessages([
+                    'sync' => 'Documentation is already syncing.',
+                ]);
+            }
 
-        $tree = $this->filterTree(
-            $tree,
-            $context['path']
-        );
+            $release->update([
+                'load_url' => $githubUrl,
+                'sync_status' => 'syncing',
+                'sync_batch_id' => null,
+                'sync_error' => null,
+            ]);
+        });
 
-        $tree = $this->filterMarkdownTree($tree);
+        try {
 
-        $tree = $this->buildTree($tree);
+            $context = $this->extractFolderContext($githubUrl);
 
+            $tree = $this->getRepositoryTree(
+                $context['owner'],
+                $context['repo'],
+                $context['branch']
+            );
 
-        $jobs = [];
-        $visitedIds = [];
-        $existingPages = [];
+            $tree = $this->filterTree($tree, $context['path']);
+            $tree = $this->filterMarkdownTree($tree);
+            $tree = $this->buildTree($tree);
 
-        DocumentationPage::query()
-            ->where('documentation_id', $documentation->id)
-            ->where('release_id', $release->id)
-            ->get()
-            ->each(function (DocumentationPage $page) use (&$existingPages) {
-                $existingPages[$page->parent_id][$page->git_path] = $page;
-            });
+            $jobs = [];
+            $visitedIds = [];
+            $existingPages = [];
 
-        DB::transaction(function () use (
-            $tree,
-            $documentation,
-            $release,
-            $user,
-            $context,
-            &$jobs,
-            $existingPages,
-            &$visitedIds
-        ) {
+            DocumentationPage::query()
+                ->where('documentation_id', $documentation->id)
+                ->where('release_id', $release->id)
+                ->get()
+                ->each(function (DocumentationPage $page) use (&$existingPages) {
+                    $existingPages[$page->parent_id][$page->git_path] = $page;
+                });
 
-            $this->syncDocumentationTree(
+            DB::transaction(function () use (
                 $tree,
                 $documentation,
                 $release,
                 $user,
                 $context,
-                $jobs,
-                $visitedIds,
-                $existingPages,
-            );
-        });
+                &$jobs,
+                &$visitedIds,
+                $existingPages
+            ) {
 
-        $releaseId = $release->id;
+                $this->syncDocumentationTree(
+                    $tree,
+                    $documentation,
+                    $release,
+                    $user,
+                    $context,
+                    $jobs,
+                    $visitedIds,
+                    $existingPages
+                );
+            });
 
-        $batch = Bus::batch($jobs)
-            ->name("Documentation Sync {$documentation->id}")
-            ->allowFailures()
-            ->then(function () use ($releaseId) {
+            $releaseId = $release->id;
+
+            if (empty($jobs)) {
+
+                DocumentationPage::query()
+                    ->where('documentation_id', $documentation->id)
+                    ->where('release_id', $release->id)
+                    ->when(!empty($visitedIds), function ($query) use ($visitedIds) {
+                        $query->whereNotIn('id', array_keys($visitedIds));
+                    })
+                    ->when(empty($visitedIds), function ($query) {
+                        $query->whereRaw('1 = 1');
+                    })
+                    ->delete();
+
                 DocumentationRelease::whereKey($releaseId)->update([
                     'sync_status' => 'completed',
                     'sync_batch_id' => null,
                     'last_synced_at' => now(),
                     'sync_error' => null,
                 ]);
-            })
-            ->catch(function ($batch, Throwable $exception) use ($releaseId) {
-                DocumentationRelease::whereKey($releaseId)->update([
-                    'sync_status' => 'failed',
-                    'sync_batch_id' => null,
-                    'sync_error' => $exception->getMessage(),
-                ]);
-            })
-            ->dispatch();
 
-        DocumentationPage::query()
-            ->where('documentation_id', $documentation->id)
-            ->where('release_id', $release->id)
-            ->when(!empty($visitedIds), function ($query) use ($visitedIds) {
-                $query->whereNotIn('id', array_keys($visitedIds));
-            })
-            ->when(empty($visitedIds), function ($query) {
-                $query->whereRaw('1 = 1');
-            })
-            ->delete();
+                return null;
+            }
 
-        return $batch;
+            $batch = Bus::batch($jobs)
+                ->name("Documentation Sync {$documentation->id}")
+                ->allowFailures()
+                ->then(function () use ($releaseId) {
+                    DocumentationRelease::whereKey($releaseId)->update([
+                        'sync_status' => 'completed',
+                        'sync_batch_id' => null,
+                        'last_synced_at' => now(),
+                        'sync_error' => null,
+                    ]);
+                })
+                ->catch(function ($batch, Throwable $exception) use ($releaseId) {
+                    DocumentationRelease::whereKey($releaseId)->update([
+                        'sync_status' => 'failed',
+                        'sync_batch_id' => null,
+                        'sync_error' => $exception->getMessage(),
+                    ]);
+                })
+                ->dispatch();
+
+            DocumentationRelease::whereKey($releaseId)->update([
+                'sync_batch_id' => $batch->id,
+            ]);
+
+            DocumentationPage::query()
+                ->where('documentation_id', $documentation->id)
+                ->where('release_id', $release->id)
+                ->when(!empty($visitedIds), function ($query) use ($visitedIds) {
+                    $query->whereNotIn('id', array_keys($visitedIds));
+                })
+                ->when(empty($visitedIds), function ($query) {
+                    $query->whereRaw('1 = 1');
+                })
+                ->delete();
+
+            return $batch;
+        } catch (Throwable $e) {
+
+            DocumentationRelease::whereKey($release->id)->update([
+                'sync_status' => 'failed',
+                'sync_batch_id' => null,
+                'sync_error' => $e->getMessage(),
+            ]);
+
+            throw $e;
+        }
     }
 
     public function convertImageUrls($content, $owner, $repoName, $branch, $directory)
@@ -512,10 +565,14 @@ class GitServiceImpl implements GitService
             }
 
             $visitedIds[$page->id] = true;
+            $shouldSync =
+                $isNew
+                || $oldSha !== $newSha
+                || $page->is_modified;
 
             if (
                 $node['type'] === 'file'
-                && ($isNew || $oldSha !== $newSha)
+                && $shouldSync
             ) {
                 $jobs[] = new SyncDocumentationPageJob($page->id);
             }
@@ -629,11 +686,39 @@ class GitServiceImpl implements GitService
 
         $markdown = $page->content;
 
-        preg_match_all(
-            '/^(#{1,6})\s+(.*)$/m',
-            $markdown,
-            $matches,
-            PREG_OFFSET_CAPTURE
-        );
+        preg_match_all('/^(#{1,6})\s+(.*)$/m', $markdown, $matches, PREG_OFFSET_CAPTURE);
+
+        $headings = $matches[2];
+        $levels   = $matches[1];
+
+        for ($i = 0; $i < count($headings); $i++) {
+
+            $headingText = trim($headings[$i][0]);
+            $headingLevel = strlen($levels[$i][0]);
+
+            $startPos = $headings[$i][1];
+
+            $endPos = isset($headings[$i + 1])
+                ? $headings[$i + 1][1]
+                : strlen($markdown);
+
+            $sectionContent = substr($markdown, $startPos, $endPos - $startPos);
+
+            $baseSlug = Str::slug($headingText);
+            $slug = $baseSlug;
+            $counter = 1;
+
+            while ($page->sections()->where('slug', $slug)->exists()) {
+                $slug = $baseSlug . '-' . $counter++;
+            }
+
+            $page->sections()->create([
+                'heading'  => $headingText,
+                'slug'     => $slug,
+                'content'  => $sectionContent,
+                'position' => $i,
+                'level' => $headingLevel,
+            ]);
+        }
     }
 }

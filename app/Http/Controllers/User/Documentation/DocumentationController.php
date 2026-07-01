@@ -268,58 +268,37 @@ class DocumentationController extends Controller
         DocumentationRelease $release,
         Request $request
     ) {
-
         $validator = Validator::make($request->all(), [
-
-            'github_url' => [
-                'required',
-                'url'
-            ]
-
+            'github_url' => ['required', 'url'],
         ]);
 
         if ($validator->fails()) {
-
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors()->first()
+                'message' => $validator->errors()->first(),
             ]);
         }
 
         try {
 
-            if (!empty($release->sync_batch_id)) {
-                $batch = Bus::findBatch($release->sync_batch_id);
-
-                if ($batch && !$batch->finished()) {
-                    throw ValidationException::withMessages([
-                        'sync' => 'Documentation is already syncing.',
-                    ]);
-                }
-            }
-
-
-            $batch = $this->gitService->loadEntireDocumentation(
+            $this->gitService->loadEntireDocumentation(
                 $request->github_url,
                 $documentation,
                 $release,
                 $user
             );
 
-            $release->load_url = $request->github_url;
-            $release->sync_batch_id = $batch->id;
-            $release->sync_status = 'syncing';
-            $release->save();
-
             return response()->json([
                 'success' => true,
-                'message' => 'Documentation loaded successfully!'
+                'message' => 'Documentation synchronization started successfully.',
             ]);
         } catch (Throwable $e) {
 
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e instanceof ValidationException
+                    ? $e->validator->errors()->first()
+                    : $e->getMessage(),
             ]);
         }
     }

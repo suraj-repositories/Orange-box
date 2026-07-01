@@ -23,6 +23,7 @@ class DocumentationPage extends Model
         'git_link',
         'git_path',
         'git_sha',
+        'is_modified',
         'content',
         'content_format',
         'parent_id',

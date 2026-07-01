@@ -45,6 +45,7 @@ class SyncDocumentationPageJob implements ShouldQueue
             $page->update([
                 'content' => $markdown,
                 'content_format' => 'markdown',
+                'is_modified' => false,
             ]);
 
             $gitService->generateSections($page);
