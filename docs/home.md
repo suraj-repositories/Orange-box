@@ -8,6 +8,22 @@
 
 ## 👋 Landing Page
 
+```css
+.ux-app-search-group {
+    padding: 8px 0;
+}
+
+.ux-app-search-group-title {
+    font-size: 12px;
+    color: var(--bs-secondary-color);
+    padding: 6px 16px;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+
+```
+
 A well-designed landing page is a good starting place to welcome users into your developer hub. This is the page we recommend you customize the most.
 
 If you're only using the Guides (also known as Documentation) feature, you can just direct your users to that on the first page in your [site navigation](https://docs.readme.com/main/docs/site-navigation).

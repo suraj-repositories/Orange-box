@@ -31,6 +31,7 @@ use App\Http\Controllers\User\PasswordLockerController;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\User\ProjectBoardController;
 use App\Http\Controllers\User\ProjectModuleController;
+use App\Http\Controllers\User\SearchController;
 use App\Http\Controllers\User\SettingsController;
 use App\Http\Controllers\User\SubTaskController;
 use App\Http\Controllers\User\SyntaxStoreController;
@@ -44,6 +45,8 @@ Route::controller(DashboardController::class)->group(function () {
     Route::get('dashboard', 'index')->name('dashboard');
     Route::get('dashboard/analytics', 'analyticalDashboard')->name('dashboard.analytics');
 });
+
+Route::get('search', [SearchController::class, 'search'])->name('search');
 
 Route::controller(DailyDigestController::class)->group(function () {
     Route::get('daily-digest', 'index')->name('daily-digest');

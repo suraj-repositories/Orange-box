@@ -10,10 +10,35 @@ use Throwable;
 class SearchController extends Controller
 {
     //
-    public function search(User $user, Request $request)
+    public function search(Request $request, User $user)
     {
+
         try {
             $query = trim($request->q ?? "");
+
+
+
+            /*
+                [
+                    'icon' , 'heading' , 'search_para', 'link'
+                ]
+
+                find within
+                - pages
+                - digestion
+                - think pad
+                - syntax store
+                - folder factory
+                - projects - module - task
+
+            */
+
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Result obtained successfully',
+                'html' => "<p>result obtained</p>"
+            ]);
 
             // if ($query === "") {
             //     return response()->json([

@@ -106,8 +106,7 @@
                 <i class="bx bx-search lence-icon"></i>
                 <input type="text" class="ux-app-search-input" id="search-input"
                     placeholder="Search docs, guides, or anything..." autofocus
-                    data-username="{{ request('user')['username'] ?? '' }}" data-slug="{{ request('slug') }}"
-                    data-version="{{ request('version') }}">
+                    data-username="{{ auth()?->user()?->username ?? '' }}">
                 <button type="button" class="ux-app-search-close" data-bs-dismiss="modal">
                     <i class="bx bx-x"></i>
                 </button>

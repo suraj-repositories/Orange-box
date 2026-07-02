@@ -94,15 +94,13 @@ class DocSearch {
             .getAttribute('content');
 
         const username = this.input.getAttribute('data-username');
-        const slug = this.input.getAttribute('data-slug');
-        const version = this.input.getAttribute('data-version');
 
         this.abortRequest();
         this.controller = new AbortController();
 
         this.showLoader();
 
-        fetch(`/${username}/docs-search/${slug}/${version}?q=${encodeURIComponent(value)}`, {
+        fetch(authRoute('user.search', { q: `${encodeURIComponent(value)}` }), {
             method: 'GET',
             headers: {
                 'x-csrf-token': csrfToken
@@ -206,7 +204,7 @@ class DocSearch {
     }
 
     saveSearchHistory(item) {
-        const key = 'doc_search_history';
+        const key = 'ob_app_search_history';
         let history = JSON.parse(localStorage.getItem(key)) || [];
 
         history = history.filter(i => i.url !== item.url);
@@ -221,7 +219,7 @@ class DocSearch {
     }
 
     renderSearchHistory(container) {
-        const key = 'doc_search_history';
+        const key = 'ob_app_search_history';
         let history = JSON.parse(localStorage.getItem(key)) || [];
 
         if (!history.length) {
