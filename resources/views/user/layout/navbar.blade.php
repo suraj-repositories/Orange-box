@@ -17,12 +17,14 @@
                     </li>
                 @endif
                 <li class="d-none d-lg-block">
-                    <div class="position-relative topbar-search">
+                    <div class="position-relative topbar-search" id="search-button">
                         <input type="text" class="form-control bg-light bg-opacity-75 border-light ps-4"
                             placeholder="Search...">
                         <i
                             class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
                     </div>
+
+
                 </li>
             </ul>
 
@@ -94,4 +96,36 @@
 
     </div>
 
+</div>
+
+<div class="modal ux-app-search-modal" id="searchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ux-app-search-dialog">
+        <div class="modal-content ux-app-search-content">
+
+            <div class="ux-app-search-header">
+                <i class="bx bx-search lence-icon"></i>
+                <input type="text" class="ux-app-search-input" id="search-input"
+                    placeholder="Search docs, guides, or anything..." autofocus
+                    data-username="{{ request('user')['username'] ?? '' }}" data-slug="{{ request('slug') }}"
+                    data-version="{{ request('version') }}">
+                <button type="button" class="ux-app-search-close" data-bs-dismiss="modal">
+                    <i class="bx bx-x"></i>
+                </button>
+                <script>
+                    window.searchText = '{{ request('q') }}';
+                </script>
+            </div>
+
+            <div class="ux-app-search-body p-2">
+
+            </div>
+
+            <div class="ux-app-search-footer">
+                <span><span class="shortcut-badge">↑</span> <span class="shortcut-badge">↓</span> to navigate</span>
+                <span><span class="shortcut-badge">Enter</span> to select</span>
+                <span> <span class="shortcut-badge">Esc</span> to close</span>
+            </div>
+
+        </div>
+    </div>
 </div>

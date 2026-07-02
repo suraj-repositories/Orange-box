@@ -6,7 +6,7 @@
     - table style --------------------------------- check
     - entire folder pic going through folder structure -- completed
     - sync pages and sync documentation system creation --- completed
-    - alert styles ---- completed
+    - alert styles ---- working
     - code copy ------- 
 
 2. accomplish search on users panel

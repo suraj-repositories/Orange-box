@@ -5471,3 +5471,200 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
     font-weight: 600;
     color: #212529;
 }
+
+/* Modal container */
+.ux-app-search-modal .modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+    border: none;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+}
+
+/* Dialog width */
+.ux-app-search-dialog {
+    max-width: 600px;
+}
+
+/* Header (input area) */
+.ux-app-search-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--bs-gray-200);
+    background: var(--bs-body-bg);
+}
+
+.ux-app-search-header .lence-icon {
+    font-size: 27px;
+    margin-right: 6px;
+    color: var(--bs-secondary-color);
+    position: relative;
+    top: 2px;
+}
+
+.ux-app-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: var(--bs-body-color);
+    background-color: transparent;
+}
+
+.ux-app-search-input::placeholder {
+    color: var(--bs-secondary-color);
+}
+
+.ux-app-search-close {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    color: var(--bs-body-color);
+    user-select: none;
+    height: 27px;
+    width: 26px;
+    border-radius: 50%;
+}
+
+.ux-app-search-group mark {
+    color: var(--bs-primary);
+    background: transparent;
+    padding: 0;
+    text-decoration: underline;
+}
+
+/* Body */
+.ux-app-search-body {
+    height: 65dvh;
+    max-height: 350px;
+    overflow-y: auto;
+    padding: 10px 0;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--bs-gray-400) transparent;
+}
+
+.ux-app-search-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ux-app-search-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ux-app-search-body::-webkit-scrollbar-thumb {
+    background-color: var(--bs-gray-400);
+    border-radius: 10px;
+    transition: background .2s ease;
+}
+
+.ux-app-search-body::-webkit-scrollbar-thumb:hover {
+    background-color: var(--bs-gray-500);
+}
+
+/* Group */
+.ux-app-search-group {
+    padding: 8px 0;
+}
+
+.ux-app-search-group-title {
+    font-size: 12px;
+    color: var(--bs-secondary-color);
+    padding: 6px 16px;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+/* Item */
+.ux-app-search-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: var(--bs-body-color);
+    transition: background .2s;
+}
+
+.ux-app-search-item:hover {
+    background: var(--bs-gray-200);
+}
+
+.ux-app-search-item.active {
+    background-color: var(--bs-primary-bg-subtle);
+    border-radius: 6px;
+    outline: 1px solid var(--bs-primary);
+}
+
+.ux-app-search-item-link {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 10px;
+    color: inherit;
+}
+
+.ux-app-search-item .left-icon-box,
+.ux-app-search-item .right-icon-box,
+.ux-app-search-item .right-icon-x-box {
+    font-size: 25px;
+    color: var(--bs-secondary-color);
+}
+
+.ux-app-search-item .right-icon-x-box {
+    font-size: 22px;
+    margin-left: auto;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.ux-app-search-item .right-icon-box {
+    margin-left: auto;
+    display: none;
+}
+
+.ux-app-search-item.active .right-icon-box {
+    display: block;
+}
+
+.ux-app-search-item .right-icon-x-box:hover {
+    background: var(--bs-gray-300);
+}
+
+.ux-app-search-title {
+    font-size: 14px;
+}
+
+.ux-app-search-meta {
+    font-size: 12px;
+    color: var(--bs-secondary-color);
+}
+
+.ux-app-search-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+    font-size: 12px;
+    border-top: 1px solid var(--bs-gray-300);
+    background: var(--bs-gray-200);
+    color: var(--bs-body-color);
+}
+
+.ux-app-search-footer .shortcut-badge {
+    background-color: var(--bs-gray-300);
+    padding: 4px 6px;
+    border-radius: 5px;
+}

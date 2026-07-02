@@ -14,6 +14,7 @@
 
 <!-- App js-->
 <script src="{{ asset('assets/js/app.js') }}"></script>
+<script src="{{ asset('assets/js/pages/user-components.js') }}"></script>
 <script src="{{ asset('assets/js/pages/notification.js') }}"></script>
 <script src="{{ asset('assets/js/pages/lock-screen.js') }}"></script>
 <script src="{{ asset('assets/js/pages/admin/common.js') }}"></script>
