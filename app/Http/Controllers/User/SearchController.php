@@ -23,6 +23,14 @@ class SearchController extends Controller
         try {
             $query = trim($request->q ?? "");
 
+             if ($query === "") {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Query too short',
+                    'html' => ''
+                ]);
+            }
+
             $digestions = DailyDigest::query()
                 ->where(function ($q) use ($query) {
                     $q->where('title', 'like', "%{$query}%")
@@ -149,47 +157,6 @@ class SearchController extends Controller
                 'message' => 'Result obtained successfully',
                 'html' => "<p>result obtained</p>"
             ]);
-
-            // if ($query === "") {
-            //     return response()->json([
-            //         'success' => false,
-            //         'message' => 'Query too short',
-            //         'html' => ''
-            //     ]);
-            // }
-
-            // $documentation = Documentation::where('url', $slug)->firstOrFail();
-
-            // $releaseId = null;
-
-            // if ($version) {
-            //     $release = DocumentationRelease::where('version', $version)
-            //         ->where('documentation_id', $documentation->id)
-            //         ->first();
-
-            //     $releaseId = $release?->id;
-            // }
-
-            // $results = DocumentationSection::search($query)
-            //     ->query(function ($q) use ($documentation, $releaseId) {
-            //         $q->whereHas('page', function ($q2) use ($documentation, $releaseId) {
-            //             $q2->where('documentation_id', $documentation->id);
-
-            //             if ($releaseId) {
-            //                 $q2->where('release_id', $releaseId);
-            //             }
-            //         });
-            //     })
-            //     ->take(20)
-            //     ->get()
-            //     ->load('page.parent', 'page.documentation', 'page.documentationRelease', 'page.user');
-
-
-            // $structured = $results->groupBy(function ($section) {
-            //     return optional($section->page->parent)->title
-            //         ?? $section->page->title
-            //         ?? 'General';
-            // });
 
             // return response()->json([
             //     'success' => true,
