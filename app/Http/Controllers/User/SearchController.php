@@ -103,8 +103,7 @@ class SearchController extends Controller
 
             $modules = ProjectModule::query()
                 ->where(function ($q) use ($query) {
-                    $q->where('title', 'like', "%{$query}%")
-                        ->orWhere('preview_text', 'like', "%{$query}%")
+                    $q->where('name', 'like', "%{$query}%")
                         ->orWhere('description', 'like', "%{$query}%");
                 })
                 ->where(function ($q) use ($user) {
