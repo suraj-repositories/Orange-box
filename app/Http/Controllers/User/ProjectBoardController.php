@@ -120,7 +120,6 @@ class ProjectBoardController extends Controller
         return view('user.project_tracker.project_board.project_board_form', compact('projectBoard', 'tagColors'));
     }
 
-
     public function update(User $user, string $slug, Request $request)
     {
         $projectBoard = ProjectBoard::where('user_id', $user->id)

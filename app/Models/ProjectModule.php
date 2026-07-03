@@ -112,6 +112,7 @@ class ProjectModule extends Model
 
         return $slug;
     }
+
     public function files()
     {
         return $this->morphMany(File::class, 'fileable');
