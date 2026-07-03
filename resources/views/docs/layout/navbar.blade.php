@@ -152,7 +152,7 @@
             <div class="ux-search-header">
                 <i class="bx bx-search lence-icon"></i>
                 <input type="text" class="ux-search-input" id="search-input" placeholder="Search docs, guides, or anything..."
-                    autofocus data-username="{{ request('user')['username'] ?? "" }}" data-slug="{{ request('slug') }}"
+                    autocomplete="off" autofocus data-username="{{ request('user')['username'] ?? "" }}" data-slug="{{ request('slug') }}"
                     data-version="{{ request('version') }}">
                 <button type="button" class="ux-search-close" data-bs-dismiss="modal">
                     <i class="bx bx-x"></i>
