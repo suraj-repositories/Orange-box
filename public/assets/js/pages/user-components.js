@@ -178,7 +178,16 @@ class DocSearch {
             url.pathname === current.pathname &&
             url.search === current.search;
 
-        $(this.modal).modal('hide');
+        console.log('closing...', event.target);
+        const isCloseButton =
+            event.target.classList.contains('right-icon-x-box') ||
+            (event.target.parentNode &&
+                event.target.parentNode.classList.contains('right-icon-x-box'));
+
+        if (!isCloseButton) {
+            $(this.modal).modal('hide');
+        }
+
 
         if (isSamePage) {
             event.preventDefault();

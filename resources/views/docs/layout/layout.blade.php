@@ -2,9 +2,11 @@
 
 <div id="app-layout">
 
-    @include('docs.layout.navbar')
+    @if (!empty($user) && !empty($documentation) && !empty($release))
+        @include('docs.layout.navbar')
 
-    @include('docs.layout.vp-local-nav')
+        @include('docs.layout.vp-local-nav')
+    @endif
 
     <div class="container-xxl">
 

@@ -9,7 +9,7 @@
     - alert styles ---- working
     - code copy ------- 
 
-2. accomplish search on users panel
+2. accomplish search on users panel --- done
 
 3. add a quick quick look button
 
