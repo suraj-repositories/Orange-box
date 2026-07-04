@@ -75,8 +75,6 @@ return Application::configure(basePath: dirname(__DIR__))
 
             $middleware = $request->route()?->gatherMiddleware() ?? [];
 
-            Log::error("APP-ERROR- " . $e->getMessage());
-
             $section = match (true) {
                 in_array('admin', $middleware, true) => 'admin',
                 in_array('editor', $middleware, true) => 'editor',

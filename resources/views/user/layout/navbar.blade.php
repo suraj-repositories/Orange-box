@@ -35,6 +35,9 @@
                 </li>
 
                 <li>
+                    <x-user.shortcut.shortcut-nav-button />
+                </li>
+                <li>
                     <x-notification.notification-component />
                 </li>
 
@@ -71,7 +74,7 @@
                             <i class="mdi mdi-help-circle-outline fs-16 align-middle"></i>
                             <span>Help</span>
                         </a>
-                        <a class='dropdown-item notify-item' href='{{ authRoute('user.faq.index') }}'>
+                        <a class='dropdown-item notify-item' href='{{ authRoute('user.contact-us') }}'>
                             <i class="mdi mdi-chat-outline fs-16 align-middle"></i>
                             <span>Contact Us</span>
                         </a>

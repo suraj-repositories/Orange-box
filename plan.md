@@ -8,10 +8,11 @@
     - sync pages and sync documentation system creation --- completed
     - alert styles ---- working
     - code copy ------- 
+    - set few template styles ----- 
 
 2. accomplish search on users panel --- done
 
-3. add a quick quick look button
+3. add a quick quick look button --- done
 
-4. fix the error while loading the doc page : the undefined variables issue
+4. fix the error while loading the doc page : the undefined variables issue -- fixed
    
