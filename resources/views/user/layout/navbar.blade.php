@@ -10,8 +10,8 @@
                 @if (session()->has('impersonator_admin_id'))
                     <li>
                         <div class=" nav-link ps-0">
-                            <a href="{{ route('stop-impersonation') }}" class="btn border btn-sm">
-                                Back to Admin Dashboard
+                            <a href="{{ route('stop-impersonation') }}" class="btn border py-1">
+                                <i class="bi bi-box-arrow-in-left fs-5"></i> Admin Panel
                             </a>
                         </div>
                     </li>
@@ -23,8 +23,6 @@
                         <i
                             class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
                     </div>
-
-
                 </li>
             </ul>
 
