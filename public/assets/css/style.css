@@ -5481,6 +5481,21 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
     color: var(--bs-body-color);
 }
 
+.ux-app-search-modal .bx.bx-recent-clock {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    --svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23000' d='M20.59 22L15 16.41V7h2v8.58l5 5.01z' stroke-width='0.8' stroke='%23000'/%3E%3Cpath fill='%23000' d='M16 2A13.94 13.94 0 0 0 6 6.23V2H4v8h8V8H7.08A12 12 0 1 1 4 16H2A14 14 0 1 0 16 2' stroke-width='0.8' stroke='%23000'/%3E%3C/svg%3E");
+    background-color: currentColor;
+    -webkit-mask-image: var(--svg);
+    mask-image: var(--svg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-size: 100% 100%;
+}
+
+
 /* Dialog width */
 .ux-app-search-dialog {
     max-width: 600px;
@@ -5572,6 +5587,8 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
     padding: 8px 0;
 }
 
+
+
 .ux-app-search-group-title {
     font-size: 12px;
     color: var(--bs-secondary-color);
@@ -5597,7 +5614,7 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
 }
 
 .ux-app-search-item.active {
-    background-color: var(--bs-primary-bg-subtle);
+    background-color: var(--bs-primary-bg-subtle-light-200);
     border-radius: 6px;
     outline: 1px solid var(--bs-primary);
 }

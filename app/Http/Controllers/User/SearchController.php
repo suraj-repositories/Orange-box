@@ -146,22 +146,7 @@ class SearchController extends Controller
                 ->take(10)
                 ->get();
 
-
-            /*
-                [
-                    'icon' , 'heading' , 'search_para', 'link'
-                ]
-
-                find within
-                - pages
-                - digestion --- done
-                - think pad --- done
-                - syntax store --- done
-                - folder factory  --- done
-                - projects - module - task -- done
-
-            */
-
+            $pagesArray = $this->searchPages($this->pagesArray() ?? [], $query);
             $digestionArray = $this->digestionToArray($digestions, $query);
             $thinkPadsArray = $this->thinkPadToArray($thinkPads, $query);
             $syntaxStoreArray = $this->syntaxStoreToArray($syntaxStore, $query);
@@ -172,6 +157,7 @@ class SearchController extends Controller
             $tasksArray = $this->tasksToArray($tasks, $query);
 
             $structured = [
+                'Pages' => $pagesArray,
                 'Digestions' => $digestionArray,
                 'Think Pads' => $thinkPadsArray,
                 'Syntax Store' => $syntaxStoreArray,
@@ -197,6 +183,106 @@ class SearchController extends Controller
             ]);
         }
     }
+
+    public function searchPages(array $pages, string $query): array
+    {
+        $query = strtolower(trim($query));
+
+        if ($query === '') {
+            return $pages;
+        }
+
+        return array_values(array_filter($pages, function ($page) use ($query) {
+            return str_contains(strtolower($page['heading']), $query)
+                || str_contains(strip_tags(strtolower($page['search_para'])), $query);
+        }));
+    }
+
+    public function pagesArray()
+    {
+        return [
+            [
+                'icon' => 'bi bi-house',
+                'heading' => 'Dashboard',
+                'search_para' => '',
+                'link' => authRoute('user.dashboard'),
+            ],
+            [
+                'icon' => 'bi bi-file-earmark-text',
+                'heading' => 'Daily Digest',
+                'search_para' => '',
+                'link' => authRoute('user.daily-digest'),
+            ],
+            [
+                'icon' => 'bi bi-clipboard2',
+                'heading' => 'Think Pad',
+                'search_para' => '',
+                'link' => authRoute('user.think-pad'),
+            ],
+            [
+                'icon' => 'bi bi-code-slash',
+                'heading' => 'Syntax Store',
+                'search_para' => '',
+                'link' => authRoute('user.syntax-store'),
+            ],
+            [
+                'icon' => 'bi bi-file-richtext',
+                'heading' => 'Documentations',
+                'search_para' => '',
+                'link' => authRoute('user.documentation.index'),
+            ],
+            [
+                'icon' => 'bi bi-folder',
+                'heading' => 'Folder Factory',
+                'search_para' => '',
+                'link' => authRoute('user.file-manager'),
+            ],
+            [
+                'icon' => 'bi bi-kanban',
+                'heading' => 'Project Board',
+                'search_para' => '',
+                'link' => authRoute('user.project-board'),
+            ],
+            [
+                'icon' => 'bi bi-box',
+                'heading' => 'Project Module',
+                'search_para' => '',
+                'link' => authRoute('user.modules.index'),
+            ],
+            [
+                'icon' => 'bi bi-check2-square',
+                'heading' => 'Project Tasks',
+                'search_para' => '',
+                'link' => authRoute('user.tasks.index'),
+            ],
+            [
+                'icon' => 'bi bi-people',
+                'heading' => 'Collaboration',
+                'search_para' => '',
+                'link' => authRoute('user.collab.all.project-board.index'),
+            ],
+            [
+                'icon' => 'bi bi-person',
+                'heading' => 'My Profile',
+                'search_para' => '',
+                'link' => authRoute('user.profile.index'),
+            ],
+            [
+                'icon' => 'bi bi-lock',
+                'heading' => 'Password Locker',
+                'search_para' => '',
+                'link' => authRoute('user.password_locker.index'),
+            ],
+            [
+                'icon' => 'bi bi-gear',
+                'heading' => 'Settings',
+                'search_para' => '',
+                'link' => authRoute('user.settings.index'),
+            ],
+        ];
+    }
+
+
 
     public function digestionToArray($digestions, $search)
     {

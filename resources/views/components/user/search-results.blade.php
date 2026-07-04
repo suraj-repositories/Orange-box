@@ -15,7 +15,8 @@
                 </h6>
             @endif
             @foreach ($items as $item)
-                <a href="{{ $item['link'] }}" class="ux-app-search-item px-2 py-2" data-url="{{ $item['link'] }}">
+                <a href="{{ $item['link'] }}?{{ http_build_query(['q' => $query]) }}" class="ux-app-search-item px-2 py-2"
+                    data-url="{{ $item['link'] }}">
 
                     <div class="left-icon-box">
                         <i class="{{ $item['icon'] ?? 'bx bx-file' }}"></i>
