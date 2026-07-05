@@ -6,7 +6,7 @@
     - table style --------------------------------- check
     - entire folder pic going through folder structure -- completed
     - sync pages and sync documentation system creation --- completed
-    - alert styles ---- working
+    - alert styles ---- done
     - code copy ------- 
     - set few template styles ----- 
 

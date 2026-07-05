@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User\Documentation;
 
+use App\Facades\Markdown;
 use App\Http\Controllers\Controller;
 use App\Models\Documentation;
 use App\Models\DocumentationPage;
@@ -232,7 +233,7 @@ class DocumentationPagesController extends Controller
         return response()->json([
             'success' => true,
             'uuid' => $docPage->uuid,
-            'html' => Str::markdown($request->input('markdown') ?? "")
+            'html' => Markdown::render($request->input('markdown') ?? "")
         ]);
     }
 
