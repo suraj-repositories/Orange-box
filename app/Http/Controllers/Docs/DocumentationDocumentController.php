@@ -21,52 +21,39 @@ class DocumentationDocumentController extends Controller
             ->where('url', $slug ?? '')
             ->firstOrFail();
 
-        $release = null;
-        if ($version != 'all') {
-            $release = DocumentationRelease::where('version', $version)
-                ->where('documentation_id', $documentation->id)
-                ->firstOrFail();
-        }
-
-        $uuid = null;
-        if ($type == 'custom') {
-            $uuid = request('u');
-        }
-
-        $document = DocumentationDocument::where('documentation_id', $documentation->id)
-            ->when(!empty($release), function ($query) use ($release) {
-                $query->where('release_id', $release->id);
-            })
-            ->when(!empty($uuid), function ($query) use ($uuid) {
-                $query->where('uuid', $uuid);
-            })
-            ->where('type', $type)
-            ->where('status', 'live')
-            ->latest()
+        $release = DocumentationRelease::where('version', $version)
+            ->where('documentation_id', $documentation->id)
             ->firstOrFail();
 
-        $type = $document->type;
+        $uuid = $type === 'custom' ? request('u') : null;
 
+        $document = DocumentationDocument::where('documentation_id', $documentation->id)
+            ->where('type', $type)
+            ->where('status', 'live')
+            ->when($uuid, function ($query) use ($uuid) {
+                $query->where('uuid', $uuid);
+            })
+            ->where(function ($query) use ($release) {
+                $query->where('release_id', $release->id)
+                    ->orWhereNull('release_id');
+            })
+            ->orderByRaw('CASE WHEN release_id = ? THEN 0 ELSE 1 END', [$release->id])
+            ->orderByDesc('id')
+            ->firstOrFail();
 
-        switch ($type) {
+        switch ($document->type) {
 
             case 'faq':
                 $pageData = $this->faqPageData($user, $documentation, $release, $document);
-                return view('docs.faqs',  $pageData);
-                break;
+                return view('docs.faqs', $pageData);
 
             case 'sponsors':
                 $pageData = $this->sponsorPageData($user, $documentation, $release, $document);
                 return view('docs.sponsors', $pageData);
-                break;
 
             case 'partners':
                 $pageData = $this->partnersPageData($user, $documentation, $release, $document);
                 return view('docs.partner.partners', $pageData);
-                break;
-
-            default:
-                break;
         }
 
         return view('docs.extras.index', compact('documentation', 'release', 'document', 'user'));

@@ -1615,3 +1615,30 @@ ul.topnav-menu button i.bx {
 #app-layout:has(.app-error-component) .content-page {
     margin-left: 0;
 }
+
+
+#documentationDocumentContent pre{
+    margin: 1.5rem 0;
+    padding: 1rem;
+    overflow-x: auto;
+    border-radius: 8px;
+}
+#documentationDocumentContent pre button.copy-button{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: #fff;
+}
+#documentationDocumentContent pre button.code-copy-btn {
+    display: none;
+}

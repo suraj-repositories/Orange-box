@@ -17,18 +17,23 @@ class DocumentationDocumentNavItems extends Component
      */
     public function __construct(public $user, public $documentation, public $release)
     {
-        //
+
 
         $this->documentationDocuments = DocumentationDocument::where('documentation_id', $documentation->id)
-            ->where('release_id', $release->id)
+            ->where(function ($q) use ($release) {
+                $q->where('release_id', $release->id)
+                    ->orWhereNull('release_id');
+            })
             ->whereNotIn('type', ['sponsors', 'partners', 'custom'])
-            ->select('status', 'type', 'id', 'title',  'documentation_id', 'release_id')
+            ->orderByRaw("CASE WHEN release_id = ? THEN 0 ELSE 1 END", [$release->id])
+            ->orderByDesc('id')
             ->get()
+            ->unique('type')
             ->keyBy('type');
 
         $this->customDocumentationDocuments = DocumentationDocument::where('documentation_id', $documentation->id)
             ->where('release_id', $release->id)
-            ->where('type','custom')
+            ->where('type', 'custom')
             ->select('status', 'type', 'id', 'title',  'documentation_id', 'release_id', 'uuid')
             ->get()
             ->keyBy('uuid');

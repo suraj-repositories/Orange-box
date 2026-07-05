@@ -3315,10 +3315,10 @@ ul.directory-list.active {
     transition: border-color 0.15s;
 }
 
-.pm-root .pm-search:focus {
+/* .pm-root .pm-search:focus {
     border-color: var(--pm-primary);
     box-shadow: 0 0 0 3px var(--pm-primary-soft);
-}
+} */
 
 .pm-root .pm-search::placeholder {
     color: var(--pm-dim);
@@ -3721,10 +3721,10 @@ ul.directory-list.active {
     display: block;
 }
 
-.pm-root .pm-input:focus {
+/* .pm-root .pm-input:focus {
     border-color: var(--pm-primary);
     box-shadow: 0 0 0 3px var(--pm-primary-soft);
-}
+} */
 
 .pm-root .pm-textarea {
     resize: vertical;

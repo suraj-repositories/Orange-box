@@ -345,7 +345,7 @@ function editorJsonToHtml(savedData) {
                 copyBtn.classList.add('code-copy-btn');
                 copyBtn.addEventListener('click', () => {
                     navigator.clipboard.writeText(codeEl.textContent);
-                    copyBtn.innerHTML = "<i class='bx bx-check-circle'></i>";
+                    copyBtn.innerHTML = "<i class='bx bx-check2'></i>";
                     setTimeout(() => {
                         copyBtn.innerHTML = "<i class='bx bx-copy'></i>";
                     }, 1500);

@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     new CopyMaster("#documentationContent");
 
+    new CopyMaster("#documentationDocumentContent");
+
     enableSidebarBackdropCloseable();
     enableScrollSpy("#documentationContent");
     enableFeedbackSystem(".feedback-card");
@@ -592,7 +594,8 @@ class CopyMaster {
             : container;
 
         if (!this.container) {
-            throw new Error('CopyMaster: Container not found.');
+            return;
+            // throw new Error('CopyMaster: Container not found.');
         }
 
         this.init();

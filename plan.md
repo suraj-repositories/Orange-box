@@ -7,8 +7,9 @@
     - entire folder pic going through folder structure -- completed
     - sync pages and sync documentation system creation --- completed
     - alert styles ---- done
-    - code copy ------- 
+    - code copy -------  done
     - set few template styles ----- 
+    - fix the pages code
 
 2. accomplish search on users panel --- done
 
