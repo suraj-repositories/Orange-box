@@ -15,36 +15,7 @@
 
 > [!note]
 > This is a standard note.
-
-> [!info]
-> This provides additional information.
-
-> [!todo]
-> This is a checklist or task item.
-
-> [!success] / > [!check]
-> An achievement or completed action.
-
-> [!warning] / > [!attention]
-> A warning callout.
-
-> [!danger] / > [!error]
-> High-risk or error callout.
-
-!!! note "Optional Custom Title"
-    This is the body of the note. It must be indented 
-    with 4 spaces to stay inside the alert box.
-
-!!! info
-    Information block without a custom title.
-
-??? warning "Collapsible Warning (Click to expand)"
-    This alert stays closed by default until clicked.
-
-!!! danger
-    Critical danger message.
-
-
+ 
 
 <div style="padding: 15px; border-left: 5px solid #2196F3; background-color: #e7f3fe; color: #0c5460; margin-bottom: 10px;">
   <strong>NOTE:</strong> This is a universal fallback alert using HTML. It works almost everywhere.

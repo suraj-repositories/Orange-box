@@ -5,7 +5,7 @@
 
     </a>
     <div class="dropdown-menu dropdown-menu-end dropdown-lg">
-        <div class="noti-scroll p-3" data-simplebar style="max-height: 70dvh;">
+        <div class="noti-scroll p-3 pt-4" data-simplebar style="max-height: 70dvh;">
 
             <div class="row row-cols-3 g-2 shortcut-icons">
 

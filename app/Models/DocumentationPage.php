@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Facades\Markdown;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -69,7 +70,8 @@ class DocumentationPage extends Model
         return $this->belongsTo(documentation::class);
     }
 
-    public function release(){
+    public function release()
+    {
         return $this->belongsTo(documentationRelease::class, 'release_id');
     }
 
@@ -96,7 +98,7 @@ class DocumentationPage extends Model
     public function getContentHtmlAttribute()
     {
         if ($this->content_format === 'markdown') {
-            return Str::markdown($this->content ?? '');
+            return Markdown::render($this->content ?? '');
         }
         return $this->content_format == 'html' ? $this->content : '';
     }

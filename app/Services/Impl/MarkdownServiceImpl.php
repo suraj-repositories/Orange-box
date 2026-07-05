@@ -5,6 +5,8 @@ namespace App\Services\Impl;
 use App\Services\MarkdownService;
 use League\CommonMark\CommonMarkConverter;
 
+use Illuminate\Support\Str;
+
 class MarkdownServiceImpl implements MarkdownService
 {
     public function toPlainText(string $markdown): string
@@ -62,5 +64,46 @@ class MarkdownServiceImpl implements MarkdownService
         $text = trim(preg_replace('/\s+/', ' ', $text));
 
         return $text;
+    }
+
+    public function render(?string $content): string
+    {
+        $content = $this->parseAlerts($content ?? '');
+
+        return Str::markdown($content);
+    }
+
+    protected function parseAlerts(string $markdown): string
+    {
+        $icons = [
+            'note'      => 'bi-info-circle',
+            'tip'       => 'bi-lightbulb',
+            'important' => 'bi-exclamation-diamond',
+            'warning'   => 'bi-exclamation-triangle',
+            'caution'   => 'bi-x-octagon',
+        ];
+
+        return preg_replace_callback(
+            '/^>\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\R((?:>.*(?:\R|$))*)/im',
+            function ($matches) use ($icons) {
+                $type = strtolower($matches[1]);
+
+                $content = preg_replace('/^>\s?/m', '', trim($matches[2]));
+
+                $title = ucfirst($type);
+                $icon = $icons[$type] ?? 'bi-info-circle-fill';
+
+                return <<<HTML
+                    <div class="markdown-alert markdown-alert-{$type}">
+                        <p class="markdown-alert-title">
+                            <i class="bi {$icon}"></i>{$title}
+                        </p>
+                    {$content}
+                    </div>
+
+                    HTML;
+            },
+            $markdown
+        );
     }
 }

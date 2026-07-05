@@ -46,6 +46,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('settings', function () {
             return new SettingsServiceImpl();
         });
+        $this->app->singleton('markdown', function () {
+            return new MarkdownServiceImpl();
+        });
+
         $this->app->singleton(FileService::class, FileServiceImpl::class);
         $this->app->singleton(EditorJsService::class, EditorJsServiceImpl::class);
         $this->app->singleton(MarkdownService::class, MarkdownServiceImpl::class);
