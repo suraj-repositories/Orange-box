@@ -20,7 +20,7 @@
 > This is a standard note.
  
 
-## Html alerts
+### Html alerts
 
 <div style="padding: 15px; border-left: 5px solid #2196F3; background-color: #e7f3fe; color: #0c5460; margin-bottom: 10px;">
   <strong>NOTE:</strong> This is a universal fallback alert using HTML. It works almost everywhere.

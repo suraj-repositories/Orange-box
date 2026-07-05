@@ -3,6 +3,8 @@ enableDarkTheme("#themeToggle");
 document.addEventListener('DOMContentLoaded', function () {
     new DocSearch('#search-button');
 
+    new CopyMaster("#documentationContent");
+
     enableSidebarBackdropCloseable();
     enableScrollSpy("#documentationContent");
     enableFeedbackSystem(".feedback-card");
@@ -583,3 +585,83 @@ class DocSearch {
     }
 }
 
+class CopyMaster {
+    constructor(container) {
+        this.container = typeof container === 'string'
+            ? document.querySelector(container)
+            : container;
+
+        if (!this.container) {
+            throw new Error('CopyMaster: Container not found.');
+        }
+
+        this.init();
+        this.observe();
+    }
+
+    init() {
+        this.container.querySelectorAll('pre').forEach(pre => this.addButton(pre));
+    }
+
+    observe() {
+        this.observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                for (const node of mutation.addedNodes) {
+                    if (node.nodeType !== Node.ELEMENT_NODE) continue;
+
+                    if (node.matches?.('pre')) {
+                        this.addButton(node);
+                    }
+
+                    node.querySelectorAll?.('pre').forEach(pre => {
+                        this.addButton(pre);
+                    });
+                }
+            }
+        });
+
+        this.observer.observe(this.container, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    addButton(pre) {
+        if (pre.hasAttribute('copy-button-added')) return;
+
+        pre.setAttribute('copy-button-added', '');
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.title = "Copy";
+        button.className = 'copy-button';
+        button.innerHTML = '<i class="bi bi-copy"></i>';
+
+        button.onclick = async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const code = pre.querySelector('code');
+            const text = code ? code.innerText : pre.innerText;
+
+            try {
+                await navigator.clipboard.writeText(text);
+
+                button.innerHTML = '<i class="bi bi-check2"></i>';
+                setTimeout(() => button.innerHTML = '<i class="bi bi-copy"></i>', 1500);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        if (getComputedStyle(pre).position === 'static') {
+            pre.style.position = 'relative';
+        }
+
+        pre.appendChild(button);
+    }
+
+    disconnect() {
+        this.observer.disconnect();
+    }
+}

@@ -21,3 +21,7 @@
 5. 🚀 Deployment
   - Production build
   - Environment variables
+
+
+- [x] Documentation
+- [ ] Testing
