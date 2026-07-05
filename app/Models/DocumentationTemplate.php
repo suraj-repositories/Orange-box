@@ -39,7 +39,7 @@ class DocumentationTemplate extends Model
 
     public function getPreviewImageUrlAttribute()
     {
-        return asset(Storage::url($this->preview_image));
+        return str_starts_with($this->preview_image, 'assets/') ? asset($this->preview_image) :  asset(Storage::url($this->preview_image));
     }
 
     public function purchases()

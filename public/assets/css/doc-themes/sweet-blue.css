@@ -1,9 +1,0 @@
-:root {
-    --primary: #3b82f6;
-    --primary-light: #eaf3ff;
-    --primary-dark: #2563eb;
-}
-
-[data-theme="dark"] {
-    --primary-light: #3b82f626;
-}

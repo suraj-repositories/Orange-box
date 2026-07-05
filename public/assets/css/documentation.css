@@ -9,13 +9,9 @@
     --text-dark: #2f384f;
     --text-second-dark: #757575;
 
-    --primary: #4fd675;
-    --primary-light: #e8fced;
-    --primary-dark: #40aa5e;
-
-    --primary: #8cb730;
-    --primary-light: #f2fce8;
-    --primary-dark: #93aa40;
+    --primary: #3b82f6;
+    --primary-light: #eaf3ff;
+    --primary-dark: #2563eb;
 }
 
 [data-theme="dark"] {
@@ -24,7 +20,7 @@
 
     --text-dark: #ffffff;
     --text-second-dark: #dbdbdb;
-    --primary-light: #c6ff8e33;
+    --primary-light: #3b82f626;
 }
 
 body {
@@ -1617,13 +1613,14 @@ ul.topnav-menu button i.bx {
 }
 
 
-#documentationDocumentContent pre{
+#documentationDocumentContent pre {
     margin: 1.5rem 0;
     padding: 1rem;
     overflow-x: auto;
     border-radius: 8px;
 }
-#documentationDocumentContent pre button.copy-button{
+
+#documentationDocumentContent pre button.copy-button {
     position: absolute;
     right: 5px;
     top: 5px;
@@ -1639,6 +1636,7 @@ ul.topnav-menu button i.bx {
     font-size: 18px;
     color: #fff;
 }
+
 #documentationDocumentContent pre button.code-copy-btn {
     display: none;
 }

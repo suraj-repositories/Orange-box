@@ -406,7 +406,7 @@ return [
     'documentation_templates' => [
         [
             'title' => 'Documentation Starter',
-            'key' => 'starter_docs',
+            'key' => 'doc-starter',
             'description' => 'A clean and flexible starter template suitable for API, product, and general documentation. Includes essential layout components for quick setup and easy customization.',
 
             'components' => [
@@ -440,13 +440,189 @@ return [
                 'font' => 'inter',
             ],
 
-            'preview_image' => 'templates/starter-docs.png',
+            'preview_image' => 'assets/images/doc-templates/doc-starter.png',
 
             'is_active' => true,
             'sort_order' => 1,
 
             'price' => 0.00,
-        ]
+        ],
+
+        [
+            'title' => 'Bright Red',
+            'key' => 'bright-red',
+            'description' => 'A bold and vibrant documentation template featuring bright red accents. Perfect for product launches, developer portals, and modern documentation that needs to stand out.',
+
+            'components' => [
+                [
+                    'type' => 'hero',
+                    'enabled' => true,
+                    'variant' => 'simple'
+                ],
+                [
+                    'type' => 'sidebar',
+                    'enabled' => true,
+                    'position' => 'left',
+                    'collapsible' => true
+                ],
+                [
+                    'type' => 'toc',
+                    'enabled' => true,
+                    'sticky' => true
+                ],
+                [
+                    'type' => 'footer',
+                    'enabled' => true,
+                    'variant' => 'minimal'
+                ],
+            ],
+
+            'config' => [
+                'default_mode' => 'light',
+                'allowed_modes' => ['light', 'dark'],
+                'layout' => 'wide',
+                'font' => 'inter',
+            ],
+
+            'preview_image' => 'assets/images/doc-templates/bright-red.png',
+
+            'is_active' => true,
+            'sort_order' => 2,
+
+            'price' => 0.00,
+        ],
+
+        [
+            'title' => 'Fiber Green',
+            'key' => 'fiber-green',
+            'description' => 'A fresh green-themed documentation template inspired by nature and growth. Ideal for SaaS products, open-source projects, and eco-friendly brands.',
+
+            'components' => [
+                [
+                    'type' => 'hero',
+                    'enabled' => true,
+                    'variant' => 'simple'
+                ],
+                [
+                    'type' => 'sidebar',
+                    'enabled' => true,
+                    'position' => 'left',
+                    'collapsible' => true
+                ],
+                [
+                    'type' => 'toc',
+                    'enabled' => true,
+                    'sticky' => true
+                ],
+                [
+                    'type' => 'footer',
+                    'enabled' => true,
+                    'variant' => 'minimal'
+                ],
+            ],
+
+            'config' => [
+                'default_mode' => 'light',
+                'allowed_modes' => ['light', 'dark'],
+                'layout' => 'wide',
+                'font' => 'inter',
+            ],
+
+            'preview_image' => 'assets/images/doc-templates/fiber-green.png',
+
+            'is_active' => true,
+            'sort_order' => 3,
+
+            'price' => 0.00,
+        ],
+
+        [
+            'title' => 'Box Orange',
+            'key' => 'box-orange',
+            'description' => 'A warm orange documentation template with a clean and energetic appearance. Great for startup documentation, knowledge bases, and internal team guides.',
+
+            'components' => [
+                [
+                    'type' => 'hero',
+                    'enabled' => true,
+                    'variant' => 'simple'
+                ],
+                [
+                    'type' => 'sidebar',
+                    'enabled' => true,
+                    'position' => 'left',
+                    'collapsible' => true
+                ],
+                [
+                    'type' => 'toc',
+                    'enabled' => true,
+                    'sticky' => true
+                ],
+                [
+                    'type' => 'footer',
+                    'enabled' => true,
+                    'variant' => 'minimal'
+                ],
+            ],
+
+            'config' => [
+                'default_mode' => 'light',
+                'allowed_modes' => ['light', 'dark'],
+                'layout' => 'wide',
+                'font' => 'inter',
+            ],
+
+            'preview_image' => 'assets/images/doc-templates/box-orange.png',
+
+            'is_active' => true,
+            'sort_order' => 4,
+
+            'price' => 0.00,
+        ],
+
+        [
+            'title' => 'Shine Purple',
+            'key' => 'shine-purple',
+            'description' => 'A premium purple documentation template with elegant styling and polished visuals. Suitable for AI products, creative platforms, and modern developer documentation.',
+
+            'components' => [
+                [
+                    'type' => 'hero',
+                    'enabled' => true,
+                    'variant' => 'simple'
+                ],
+                [
+                    'type' => 'sidebar',
+                    'enabled' => true,
+                    'position' => 'left',
+                    'collapsible' => true
+                ],
+                [
+                    'type' => 'toc',
+                    'enabled' => true,
+                    'sticky' => true
+                ],
+                [
+                    'type' => 'footer',
+                    'enabled' => true,
+                    'variant' => 'minimal'
+                ],
+            ],
+
+            'config' => [
+                'default_mode' => 'light',
+                'allowed_modes' => ['light', 'dark'],
+                'layout' => 'wide',
+                'font' => 'inter',
+            ],
+
+            'preview_image' => 'assets/images/doc-templates/shine-purple.png',
+
+            'is_active' => true,
+            'sort_order' => 5,
+
+            'price' => 0.00,
+        ],
     ],
 
 ];

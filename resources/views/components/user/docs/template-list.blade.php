@@ -3,7 +3,7 @@
         <div class="col">
             <div class="template-card d-flex flex-column h-100">
                 <a href="{{ authRoute('user.template.show', ['template' => $template]) }}">
-                    <img class="card-img-top rounded-top" src="{{ $template->preview_image_url }}" alt="Project Thumbnail"
+                    <img class="card-img-top rounded-top" src="{{ $template->preview_image_url }}" alt="Project Thumbnail" data-url="{{ $template->preview_image_url }}"
                         onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';">
                 </a>
                 <div class="template-meta">

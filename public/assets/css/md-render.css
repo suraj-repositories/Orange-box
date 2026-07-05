@@ -8,10 +8,6 @@
 
     --text-dark: #2f384f;
     --text-second-dark: #757575;
-
-    --primary: #8cb730;
-    --primary-light: #f2fce8;
-    --primary-dark: #93aa40;
 }
 
 [data-theme="dark"] {
