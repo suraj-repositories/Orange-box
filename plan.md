@@ -8,8 +8,8 @@
     - sync pages and sync documentation system creation --- completed
     - alert styles ---- done
     - code copy -------  done
+    - fix the pages code --- done
     - set few template styles ----- 
-    - fix the pages code
 
 2. accomplish search on users panel --- done
 

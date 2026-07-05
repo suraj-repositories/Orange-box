@@ -32,6 +32,11 @@
     <link rel="stylesheet" href="{{ asset('assets/css/documentation.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/md-render.css') }}">
     @vite(['resources/js/app.js'])
+
+    @if (isset($documentation) && !empty($documentation->template))
+        @php $templateKey = $documentation?->template?->key; @endphp
+        <link rel="stylesheet" href="{{ asset("assets/css/doc-themes/$templateKey.css") }}">
+    @endif
     @yield('css')
 
 </head>

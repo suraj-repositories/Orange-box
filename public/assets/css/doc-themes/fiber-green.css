@@ -1,0 +1,11 @@
+:root {
+    --primary: #8cb730;
+    --primary-light: #f2fce8;
+    --primary-dark: #93aa40;
+}
+
+[data-theme="dark"] {
+    --text-dark: #ffffff;
+    --text-second-dark: #dbdbdb;
+    --primary-light: #c6ff8e33;
+}
