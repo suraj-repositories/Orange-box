@@ -53,9 +53,10 @@ class AuthController extends Controller
 
         return back()
             ->withInput($request->only('login'))
-            ->withErrors([
-                'login' => 'Wrong credentials!',
-            ]);
+            ->with(
+                'error',
+                'Wrong credentials!',
+            );
     }
 
     public function showRegistrationForm()
