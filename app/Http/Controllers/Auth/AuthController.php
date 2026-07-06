@@ -19,25 +19,43 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validated = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:6'
+            'login' => 'required|string',
+            'password' => 'required|min:6',
         ]);
 
-        if (Auth::attempt($request->only(['email', 'password']))) {
+        $loginField = filter_var($request->login, FILTER_VALIDATE_EMAIL)
+            ? 'email'
+            : 'username';
+
+        if (Auth::attempt([
+            $loginField => $request->login,
+            'password' => $request->password,
+        ])) {
+
+            $request->session()->regenerate();
+
             $user = Auth::user();
 
             if ($user->hasRole('admin')) {
-                return redirect()->route('admin.dashboard')->with('success', 'Login Successful!');
-            } else if ($user->hasRole('editor', Auth::user()->id)) {
-                return redirect()->route('editor.dashboard')->with('success', 'Login Successful!');
-            } else if ($user->hasRole('user')) {
-                return redirect()->to(authRoute('user.dashboard'))->with('success', 'Login Successful!');
+                return redirect()->route('admin.dashboard')
+                    ->with('success', 'Login Successful!');
+            } elseif ($user->hasRole('editor')) {
+                return redirect()->route('editor.dashboard')
+                    ->with('success', 'Login Successful!');
+            } elseif ($user->hasRole('user')) {
+                return redirect()->to(authRoute('user.dashboard'))
+                    ->with('success', 'Login Successful!');
             }
 
-            return redirect()->route('home')->with('success', 'Login Successful!');
+            return redirect()->route('home')
+                ->with('success', 'Login Successful!');
         }
 
-        return redirect()->route('login')->with('error', 'Wrong Credentials!');
+        return back()
+            ->withInput($request->only('login'))
+            ->withErrors([
+                'login' => 'Wrong credentials!',
+            ]);
     }
 
     public function showRegistrationForm()

@@ -22,11 +22,11 @@
                                             @include('layout.alert')
                                         </div>
                                         <div class="form-group mb-3 mt-3">
-                                            <label for="emailaddress" class="form-label">Email address</label>
-                                            <input class="form-control" type="email" name="email" id="emailaddress"
-                                                value="{{ old('email') ?? '' }}"
-                                                placeholder="Enter your email">
-                                            @error('email')
+                                            <label for="emailaddress" class="form-label">Username / Email address </label>
+                                            <input class="form-control" type="text" name="login" id="emailaddress"
+                                                value="{{ old('login') ?? '' }}"
+                                                placeholder="Enter your username or email">
+                                            @error('login')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
