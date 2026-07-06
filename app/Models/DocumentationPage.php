@@ -102,6 +102,17 @@ class DocumentationPage extends Model
         }
         return $this->content_format == 'html' ? $this->content : '';
     }
+
+    public function getContentExtensionAttribute(): string
+    {
+        return match ($this->content_format) {
+            'markdown' => 'md',
+            'html' => 'html',
+            'text' => 'txt',
+            default => 'txt',
+        };
+    }
+
     public function getContentEditorjsAttribute()
     {
         return $this->content_format == 'editorjs' ? $this->content : '';
@@ -126,7 +137,7 @@ class DocumentationPage extends Model
             $child->deleteWithChildren();
         }
 
-        $this->delete(); // or forceDelete() if using SoftDeletes
+        $this->delete();
     }
 
     public function documentationRelease()

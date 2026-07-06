@@ -19,7 +19,8 @@
                                 <x-docs.breadcrumbs :documentation="$documentation" :currentPage="$currentPage" :username="$user->username"
                                     :version="$release->version" />
 
-                                <x-docs.copy-page-button :currentPage="$currentPage" />
+                                <x-docs.copy-page-button :currentPage="$currentPage"
+                                    rawUrl="{{ route('docs.show.raw', [$documentation->user, $documentation->url, $version, $currentPath, $currentPage->content_extension]) }}" />
                             </div>
 
                             <div id="documentationContent" class="documentation-content md-render" data-media-preview="true"

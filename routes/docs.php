@@ -24,6 +24,16 @@ Route::get(
     ->name('docs.show');
 
 Route::get(
+    '/{user:username}/docs-raw/{slug}/{version}/{path}.{extension}',
+    [DocumentationController::class, 'showRaw']
+)
+->where([
+    'path' => '.*',
+    'extension' => 'md|txt|html',
+])
+->name('docs.show.raw');
+
+Route::get(
     '/{user:username}/docs-extras/{slug}/{version}/{type}',
     [DocumentationDocumentController::class, 'index']
 )->name('docs.extras.show');

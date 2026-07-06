@@ -11,7 +11,7 @@ class CopyPageButton extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public $currentPage)
+    public function __construct(public $currentPage, public $rawUrl)
     {
         //
     }

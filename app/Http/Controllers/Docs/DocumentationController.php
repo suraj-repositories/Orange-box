@@ -144,6 +144,8 @@ class DocumentationController extends Controller
             ]);
         }
 
+        $currentPath = $path;
+
         return view('docs.index', compact(
             'documentation',
             'pages',
@@ -157,7 +159,71 @@ class DocumentationController extends Controller
             'top5Releases',
             'user',
             'view',
+            'currentPath',
+
         ));
+    }
+
+    public function showRaw(User $user, $slug, $version, $path = null, $extension)
+    {
+        $documentation = Documentation::where('user_id', $user->id)
+            ->where('url', $slug ?? '')
+            ->firstOrFail();
+
+        $release = DocumentationRelease::where('version', $version)
+            ->where('documentation_id', $documentation->id)
+            ->where('is_published', true)
+            ->firstOrFail();
+
+        abort_unless($documentation->user_id === $user->id, 404);
+
+        $segments = $path ? explode('/', $path) : [];
+
+        $currentPage = null;
+        $parentId = null;
+
+        if (count($segments) === 0) {
+            abort(404, 'Page not found!');
+        }
+
+        foreach ($segments as $segment) {
+
+            $currentPage = DocumentationPage::where('documentation_id', $documentation->id)
+                ->where('release_id', $release->id)
+                ->where('parent_id', $parentId)
+                ->where('slug', $segment)
+                ->where('is_published', 1)
+                ->first();
+
+            if (!$currentPage) {
+                abort(404, 'Page not found!');
+            }
+
+            $parentId = $currentPage->id;
+        }
+
+        $extensionMap = [
+            'markdown' => [
+                'extension' => 'md',
+                'contentType' => 'text/markdown; charset=UTF-8',
+            ],
+            'text' => [
+                'extension' => 'txt',
+                'contentType' => 'text/plain; charset=UTF-8',
+            ],
+            'html' => [
+                'extension' => 'html',
+                'contentType' => 'text/html; charset=UTF-8',
+            ],
+        ];
+
+        $config = $extensionMap[$currentPage->content_format] ?? null;
+
+        abort_unless($config, 404);
+        abort_unless($extension === $config['extension'], 404);
+
+        return response($currentPage->content)
+            ->header('Content-Type', $config['contentType']);
     }
 
     public function switchVersion(User $user, $slug, $version, $path = null)

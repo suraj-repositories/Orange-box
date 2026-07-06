@@ -15,7 +15,7 @@
     <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="width:300px">
 
         <li>
-            <button class="dropdown-item py-2" type="button" data-action="markdown" data-raw-url="">
+            <button class="dropdown-item py-2" type="button" data-action="markdown" data-raw-url="{{ $rawUrl }}">
                 <div class="d-flex">
                     <i class="bi bi-markdown fs-5 me-3 mt-1"></i>
                     <div>
