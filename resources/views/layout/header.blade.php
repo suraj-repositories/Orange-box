@@ -25,7 +25,7 @@
 
     <!-- Icons -->
     <link href="{{ asset('assets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{{ asset('assets/icons/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/icons/bootstrap-icons-1.13.1/bootstrap-icons.min.css') }}">
     <link rel='stylesheet' href='{{ asset('assets/icons/boxicons-2.1.4/css/boxicons.min.css') }}'>
 
     <link rel="stylesheet" href="{{ asset('assets/ckeditor5/ckeditor5.css') }}" />

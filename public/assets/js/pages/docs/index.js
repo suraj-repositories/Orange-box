@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     new CopyMaster("#documentationDocumentContent");
 
+    enableCopyPage("#copy-page-btn");
+
     enableSidebarBackdropCloseable();
     enableScrollSpy("#documentationContent");
     enableFeedbackSystem(".feedback-card");
@@ -667,4 +669,79 @@ class CopyMaster {
     disconnect() {
         this.observer.disconnect();
     }
+}
+
+
+function enableCopyPage(selector) {
+    const copyBtn = document.querySelector(selector);
+    const copyContent = document.querySelector("#copy-page-textarea");
+    const dropdownBtn = document.querySelector("#copy-page-btn-dropdown");
+
+    if (!copyBtn || !dropdownBtn || !copyContent) return;
+
+    let timeout = null;
+
+    async function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text);
+        }
+
+        copyContent.classList.remove("d-none");
+        copyContent.select();
+        copyContent.setSelectionRange(0, copyContent.value.length);
+
+        try {
+            document.execCommand("copy");
+        } finally {
+            copyContent.blur();
+            copyContent.classList.add("d-none");
+        }
+    }
+
+    copyBtn.addEventListener("click", async function () {
+        if (copyBtn.disabled) return;
+
+        try {
+            await copyText(copyContent.value);
+
+            copyBtn.disabled = true;
+
+            const originalHTML = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="bi bi-check-lg me-1"></i>Copied!';
+
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                copyBtn.innerHTML = originalHTML;
+                copyBtn.disabled = false;
+            }, 2000);
+        } catch (err) {
+            console.error("Failed to copy:", err);
+        }
+    });
+
+    const currentUrl = `${window.location.origin}${window.location.pathname}`;
+
+    document.querySelectorAll('#copy-page-area .dropdown-menu [data-action]').forEach(button => {
+        button.addEventListener('click', () => {
+            const action = button.dataset.action;
+
+            switch (action) {
+                case 'markdown':
+                    if (button.dataset.rawUrl) {
+                        window.open(button.dataset.rawUrl, '_blank');
+                    }
+                    break;
+
+                case 'ai':
+                    const query = encodeURIComponent(
+                        `Read from this URL: ${currentUrl} and explain it to me.`
+                    );
+
+                    window.open(button.dataset.url + query, '_blank');
+                    break;
+            }
+        });
+    });
+
+
 }
