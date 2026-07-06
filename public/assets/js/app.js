@@ -227,7 +227,6 @@ class App {
         var self = this;
         var body = document.documentElement;
 
-        // Menu Toggle Button ( Placed in Topbar) (Left menu collapse)
         var menuToggleBtn = document.querySelector('.button-toggle-menu');
         if (menuToggleBtn) {
             menuToggleBtn.addEventListener('click', function () {
@@ -251,11 +250,9 @@ class App {
         updateOnWindowResize();
         window.addEventListener('resize', updateOnWindowResize)
 
-        // sidebar - main menu
         if ($("#side-menu").length) {
             var navCollapse = $('#side-menu li .collapse');
 
-            // open one menu at a time only
             navCollapse.on({
                 'show.bs.collapse': function (event) {
                     var parent = $(event.target).parents('.collapse.show');
@@ -263,7 +260,6 @@ class App {
                 }
             });
 
-            // activate the menu in left side bar (Vertical Menu) based on url
             $("#side-menu a").each(function () {
                 var pageUrl = window.location.href.split(/[?#]/)[0];
                 if (this.href == pageUrl) {
