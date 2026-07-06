@@ -1640,3 +1640,14 @@ ul.topnav-menu button i.bx {
 #documentationDocumentContent pre button.code-copy-btn {
     display: none;
 }
+
+.breadcrumb-item a{
+    color: var(--text-dark);
+}
+.breadcrumb-item.active{
+    color: var(--text-second-dark);
+}
+
+.theme-btn{
+    color: var(--text-dark);
+}

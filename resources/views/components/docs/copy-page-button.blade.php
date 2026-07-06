@@ -2,12 +2,12 @@
 
     <textarea class="d-none" id="copy-page-textarea">{{ $currentPage->content ?? '' }}</textarea>
 
-    <button type="button" class="btn btn-sm border fw-semibold" id="copy-page-btn">
+    <button type="button" class="btn btn-sm border theme-btn" id="copy-page-btn">
         Copy Page
     </button>
 
     <button type="button" id="copy-page-btn-dropdown"
-        class="btn btn-sm border dropdown-toggle dropdown-toggle-split d-flex align-items-center justify-content-center"
+        class="btn btn-sm border dropdown-toggle dropdown-toggle-split d-flex align-items-center justify-content-center theme-btn"
         data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bi bi-chevron-down"></i>
     </button>
