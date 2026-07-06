@@ -24,7 +24,7 @@
                                         <div class="form-group mb-3 mt-3">
                                             <label for="emailaddress" class="form-label">Email address</label>
                                             <input class="form-control" type="email" name="email" id="emailaddress"
-                                                value="{{ old('email') ?? 'user@gmail.com' }}"
+                                                value="{{ old('email') ?? '' }}"
                                                 placeholder="Enter your email">
                                             @error('email')
                                                 <small class="text-danger">{{ $message }}</small>
@@ -34,7 +34,7 @@
                                         <div class="form-group mb-3">
                                             <label for="password" class="form-label">Password</label>
                                             <input class="form-control" type="password" name="password" id="password"
-                                                placeholder="Enter your password" value="12345678">
+                                                placeholder="Enter your password" value="">
                                             @error('password')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror

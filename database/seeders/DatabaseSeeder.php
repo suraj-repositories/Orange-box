@@ -24,5 +24,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AppThemeSeeder::class);
         $this->call(QuickLinkSeeder::class);
         $this->call(DocumentationTemplateSeeder::class);
+        $this->call(FaqSeeder::class);
     }
 }
