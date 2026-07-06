@@ -36,7 +36,10 @@ class DocumentationTemplateController extends Controller
                 ->orderByDesc('reviews_count'),
 
             'free' => $query
-                ->where('price', 0)
+                ->where(function ($query) {
+                    $query->where('price', 0)
+                        ->orWhereNull('price');
+                })
                 ->orderBy('sort_order'),
 
             'premium' => $query
@@ -50,6 +53,7 @@ class DocumentationTemplateController extends Controller
                 }),
 
             'purchased' => $query
+                ->has('purchases')
                 ->orderByDesc('purchases_count'),
 
             default => $query

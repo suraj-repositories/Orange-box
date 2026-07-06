@@ -9,7 +9,8 @@
     - alert styles ---- done
     - code copy -------  done
     - fix the pages code --- done
-    - set few template styles ----- 
+    - set few template styles -----  done
+    - fix small screen sidbear problem
 
 2. accomplish search on users panel --- done
 

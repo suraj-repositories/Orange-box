@@ -112,19 +112,20 @@
                                                 <span class="input-group-text">$</span>
                                                 <input type="number" step="0.01" name="original_price"
                                                     class="form-control" placeholder="Enter price"
-                                                    value="{{ old('original_price', $template->original_price ?? '') }}">
+                                                    value="{{ old('original_price', ($template->original_price ?? 0) == 0 ? '' : $template->original_price) }}">
                                             </div>
                                             @error('original_price')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
+
                                         <div class="col-6 mb-3">
                                             <label class="form-label">Discount Price</label>
                                             <div class="input-group">
                                                 <span class="input-group-text">$</span>
                                                 <input type="number" step="0.01" name="price" class="form-control"
                                                     placeholder="Enter price"
-                                                    value="{{ old('price', $template->price ?? '') }}">
+                                                    value="{{ old('price', ($template->price ?? 0) == 0 ? '' : $template->price) }}">
                                             </div>
                                             @error('price')
                                                 <small class="text-danger">{{ $message }}</small>
@@ -140,7 +141,7 @@
                                             @if (!empty($template?->preview_image))
                                                 <div class="multi-image-container mt-3">
                                                     <div class="image-box">
-                                                        <img src="{{ Storage::url($template->preview_image) }}">
+                                                        <img src="{{ $template->preview_image_url }}">
                                                     </div>
                                                 </div>
                                             @endif
