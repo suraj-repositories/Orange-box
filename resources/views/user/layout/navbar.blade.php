@@ -106,7 +106,7 @@
             <div class="ux-app-search-header">
                 <i class="bx bx-search lence-icon"></i>
                 <input type="text" class="ux-app-search-input" id="search-input" autocomplete="off"
-                    placeholder="Search docs, guides, or anything..." autofocus
+                    placeholder="Search pages, projects, or anything..." autofocus
                     data-username="{{ auth()?->user()?->username ?? '' }}">
                 <button type="button" class="ux-app-search-close" data-bs-dismiss="modal">
                     <i class="bx bx-x"></i>

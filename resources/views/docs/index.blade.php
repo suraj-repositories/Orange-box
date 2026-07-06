@@ -15,13 +15,22 @@
                     <div class="col-12 col-xl-9">
                         <div class="container mt-3 px-1 px-sm-4 mb-5">
 
-                            <div id="documentationContent" class="documentation-content md-render" data-media-preview="true" data-media-downloadable="true">
+                            <div class="d-flex gap-3 flex-wrap justify-content-between align-items-center mb-2">
+                                <x-docs.breadcrumbs :documentation="$documentation" :currentPage="$currentPage" :username="$user->username"
+                                    :version="$release->version" />
+
+                                <x-docs.copy-page-button :currentPage="$currentPage" />
+                            </div>
+
+                            <div id="documentationContent" class="documentation-content md-render" data-media-preview="true"
+                                data-media-downloadable="true">
                                 {!! $currentPage->content_html ?? '' !!}
                             </div>
 
 
                             @if (!empty($currentPage->git_link))
-                                <a href="{{ $currentPage->git_link }}" target="_blank" class="d-flex align-items-center my-5 edit-on-github">
+                                <a href="{{ $currentPage->git_link }}" target="_blank"
+                                    class="d-flex align-items-center my-5 edit-on-github">
                                     <i class='bx bx-edit'></i>
                                     <span>Edit this page on GitHub</span>
                                 </a>
@@ -108,5 +117,5 @@
         window.__page_exit_route = "{{ route('docs.user-activity.page-exit') }}";
     </script>
     <script src="{{ asset('assets/js/pages/docs/docs.js') }}"></script>
-        <script src="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.js') }}"></script>
+    <script src="{{ asset('assets/libs/image-preview-lib/oranbyte-image-preview.js') }}"></script>
 @endsection
