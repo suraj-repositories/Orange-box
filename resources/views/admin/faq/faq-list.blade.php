@@ -79,7 +79,7 @@
                                                 </button>
 
                                                 @if ($hasFilter)
-                                                    <a href="{{ route('admin.users.index') }}"
+                                                    <a href="{{ route('admin.faq.index') }}"
                                                         class="btn border ms-1 w-100">
                                                         Reset
                                                     </a>
