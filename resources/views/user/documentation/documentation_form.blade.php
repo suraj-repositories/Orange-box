@@ -164,7 +164,7 @@
                                                     <div class="col-md-5">
                                                         <div class="template-image-area">
 
-                                                            <img src="{{ $documentation?->template?->preview_image_url ?? asset('assets/images/defaults/doc-template.png') }}"
+                                                            <img src="{{ $documentation?->template?->preview_image_url ?? asset('assets/images/doc-templates/doc-starter.png') }}"
                                                                 alt=""
                                                                 onerror="this.onerror=null;this.src='{{ asset('assets/images/defaults/placeholder-600x400.svg') }}';" />
                                                         </div>

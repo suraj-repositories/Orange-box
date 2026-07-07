@@ -4533,7 +4533,7 @@ ul.directory-list.active {
     padding: 5px;
     border: 1px solid var(--bs-gray-300);
     border-radius: 10px;
-    min-height: 250px;
+    min-height: 200px;
 
 }
 
