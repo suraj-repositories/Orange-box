@@ -5798,3 +5798,10 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
     right: 6px;
     z-index: 1;
 }
+.mh-24px {
+    max-height: 24px;
+}
+
+table .apexcharts-canvas{
+    max-height: 24px !important;
+}
