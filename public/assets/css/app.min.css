@@ -15083,6 +15083,7 @@ body[data-menu-color=dark][data-leftbar-size=condensed] #wrapper .app-sidebar-me
 
 [data-sidebar=hidden] .app-sidebar-menu {
     width: 0;
+    overflow-x: hidden;
 }
 
 [data-sidebar=hidden] .topbar-custom {
