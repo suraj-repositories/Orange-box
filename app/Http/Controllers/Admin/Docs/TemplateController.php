@@ -19,12 +19,14 @@ class TemplateController extends Controller
         $templates = DocumentationTemplate::latest()->paginate(10);
         $title = "Templates";
 
+
         return view('admin.docs.template.template-list', compact('templates', 'title'));
     }
 
     public function create()
     {
-        return view('admin.docs.template.template-form');
+        $template = null;
+        return view('admin.docs.template.template-form', compact('template'));
     }
 
     public function store(Request $request)

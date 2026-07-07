@@ -4,11 +4,17 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ContactUsController extends Controller
 {
+
+ public function __construct(public FileService $fileService)
+    {
+
+    }
     //
     public function index()
     {
@@ -33,10 +39,7 @@ class ContactUsController extends Controller
             $attachment = null;
 
             if ($request->hasFile('attachment')) {
-
-                $attachment = $request
-                    ->file('attachment')
-                    ->store('contact-us', 'public');
+                $attachment = $this->fileService->uploadFile($request->file('attachment'), 'contact-us', 'public');
             }
 
             ContactMessage::create([

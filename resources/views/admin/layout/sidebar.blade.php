@@ -65,6 +65,18 @@
                         <span> Users</span>
                     </a>
                 </li>
+                <li>
+                    <a class="tp-link" href="{{ route('admin.faq.index') }}">
+                        <i class="bi bi-question-octagon fs-5"></i>
+                        <span>Faq's</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="tp-link" href="{{ route('admin.contact.index') }}">
+                        <i class="bi bi-chat-dots fs-5"></i>
+                        <span>Contact Messages</span>
+                    </a>
+                </li>
 
             </ul>
 
