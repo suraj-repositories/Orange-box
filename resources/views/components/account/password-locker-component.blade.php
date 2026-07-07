@@ -261,11 +261,11 @@
                                         <span>Email</span>
                                     </label>
 
-                                    <input type="radio" name="keytype" id="app" class="d-none">
+                                    {{-- <input type="radio" name="keytype" id="app" class="d-none">
                                     <label class="option-circle" for="app">
                                         <i class='bx bxl-android'></i>
                                         <span>App</span>
-                                    </label>
+                                    </label> --}}
                                 </div>
                             </div>
 

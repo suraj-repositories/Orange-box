@@ -18,12 +18,16 @@ class DocumentationVisitorsCard extends Component
         public ?int $documentationId = null,
         public ?int $releaseId = null
     ) {
+
         [$start, $end] = $this->resolveDateRange($this->duration);
 
         $baseQuery = DocumentationPageStat::query()
             ->join('documentation_pages as dp', 'dp.id', '=', 'documentation_page_stats.documentation_page_id')
             ->where('dp.user_id', Auth::id())
-            ->whereBetween('documentation_page_stats.date', [$start, $end])
+            ->whereBetween(
+                'documentation_page_stats.date',
+                [$start->toDateString(), $end->toDateString()]
+            )
             ->when($this->documentationId, fn($q) => $q->where('dp.documentation_id', $this->documentationId))
             ->when($this->releaseId, fn($q) => $q->where('dp.release_id', $this->releaseId));
 
@@ -70,30 +74,37 @@ class DocumentationVisitorsCard extends Component
 
         $mapped = $trend->pluck('visitors', 'date');
 
+
         $this->chart = [
             'categories' => $labelDates->values()->toArray(),
             'series' => $dateRange->map(fn($d) => (int) ($mapped[$d] ?? 0))->values()->toArray(),
         ];
+
     }
 
     private function resolveDateRange(string $duration): array
     {
+        $now = now();
+
         return match ($duration) {
             'yesterday' => [
-                now()->subDay()->startOfDay(),
-                now()->subDay()->endOfDay(),
+                $now->copy()->subDay()->startOfDay(),
+                $now->copy()->subDay()->endOfDay(),
             ],
+
             'week' => [
-                now()->subDays(6)->startOfDay(),
-                now()->endOfDay(),
+                $now->copy()->subDays(6)->startOfDay(),
+                $now->copy()->endOfDay(),
             ],
+
             'month' => [
-                now()->startOfMonth(),
-                now()->endOfDay(),
+                $now->copy()->startOfMonth(),
+                $now->copy()->endOfDay(),
             ],
+
             default => [
-                now()->startOfMonth(),
-                now()->endOfDay(),
+                $now->copy()->startOfMonth(),
+                $now->copy()->endOfDay(),
             ],
         };
     }

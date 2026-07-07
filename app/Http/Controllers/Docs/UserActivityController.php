@@ -13,7 +13,6 @@ class UserActivityController extends Controller
     //
     public function pageExit(Request $request)
     {
-        Log::info('here - '. $request->view_id);
         $isUpdated = DocumentationPageView::where('id', $request->view_id)
             ->whereNull('left_at')
             ->update([
