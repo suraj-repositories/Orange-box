@@ -17,11 +17,11 @@
                 <!-- start row -->
                 <div class="row">
                     <div class="col-md-12 col-xl-12">
-                        <div class="row g-3">
+                        <div class="row g-3 mb-3">
 
                             <div class="col-md-6 col-xl-3">
                                 <a href="{{ authRoute('user.daily-digest.me') }}">
-                                    <div class="card">
+                                    <div class="card mb-0">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
                                                 <div class="fs-14 mb-1">Daily Digestions</div>
@@ -50,7 +50,7 @@
 
                             <div class="col-md-6 col-xl-3">
                                 <a href="{{ authRoute('user.think-pad.me') }}">
-                                    <div class="card">
+                                    <div class="card mb-0">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
                                                 <div class="fs-14 mb-1">Think Pads</div>
@@ -80,7 +80,7 @@
 
                             <div class="col-md-6 col-xl-3">
                                 <a href="{{ authRoute('user.syntax-store.me') }}">
-                                    <div class="card">
+                                    <div class="card mb-0">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
                                                 <div class="fs-14 mb-1">Syntax Store</div>
@@ -110,7 +110,7 @@
 
                             <div class="col-md-6 col-xl-3">
                                 <a href="{{ authRoute('user.documentation.index') }}">
-                                    <div class="card">
+                                    <div class="card mb-0">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
                                                 <div class="fs-14 mb-1">Documentation Sites</div>

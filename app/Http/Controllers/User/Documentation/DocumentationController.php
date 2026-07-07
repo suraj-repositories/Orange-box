@@ -13,7 +13,6 @@ use App\Models\TemplatePurchase;
 use App\Models\User;
 use App\Services\FileService;
 use App\Services\GitService;
-use Dom\Document;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -298,7 +297,12 @@ class DocumentationController extends Controller
                 'success' => false,
                 'message' => $e instanceof ValidationException
                     ? $e->validator->errors()->first()
-                    : $e->getMessage(),
+                    : "Please delete the previous files first!",
+
+                'error' => $e instanceof ValidationException
+                    ? $e->validator->errors()->first()
+                    : $e->getMessage()
+
             ]);
         }
     }
