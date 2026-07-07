@@ -30,7 +30,7 @@ class FaqController extends Controller
                 $query->whereDate('created_at', '<=', $request->to_date);
             })
             ->orderBy('sort_order', 'asc')
-            ->paginate(10);
+            ->paginate(10)->withQueryString();
         $title = "FAQ's";
         return view('admin.faq.faq-list', compact('faqs', 'title', 'hasFilter'));
     }

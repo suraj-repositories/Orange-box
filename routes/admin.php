@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Docs\DocumentationController;
 use App\Http\Controllers\Admin\Docs\TemplateController;
+use App\Http\Controllers\Admin\Docs\TemplatePurchaseController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\FaqController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +34,9 @@ Route::prefix('contact-messages')->group(function () {
 });
 
 
+Route::prefix('documentation')->name('docs.')->group(function () {
+    Route::get('/', [DocumentationController::class, 'index'])->name('index');
+});
 
 Route::prefix('documentation/templates')->name('docs.templates.')->group(function () {
     Route::get('/', [TemplateController::class, 'index'])->name('index');
@@ -42,3 +47,9 @@ Route::prefix('documentation/templates')->name('docs.templates.')->group(functio
     Route::put('/{template}', [TemplateController::class, 'update'])->name('update');
     Route::patch('/{template}/status', [TemplateController::class, 'updateStatus'])->name('status.update');
 });
+
+Route::prefix('documentation/templates-purchases')->name('docs.templates-purchases.')->group(function () {
+    Route::get('/', [TemplatePurchaseController::class, 'index'])->name('index');
+});
+
+

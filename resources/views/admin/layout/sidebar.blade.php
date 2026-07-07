@@ -52,7 +52,13 @@
                     <div class="collapse" id="sidebarTemplates">
                         <ul class="nav-second-level">
                             <li>
+                                <a class='tp-link' href='{{ route('admin.docs.index') }}'>Documentations</a>
+                            </li>
+                            <li>
                                 <a class='tp-link' href='{{ route('admin.docs.templates.index') }}'>Templates</a>
+                            </li>
+                            <li>
+                                <a class='tp-link' href='{{ route('admin.docs.templates-purchases.index') }}'>Template Purchases</a>
                             </li>
 
                         </ul>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Docs;
 
 use App\Http\Controllers\Controller;
 use App\Models\DocumentationTemplate;
+use App\Models\TemplatePurchase;
 use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +20,10 @@ class TemplateController extends Controller
         $templates = DocumentationTemplate::latest()->paginate(10);
         $title = "Templates";
 
-
         return view('admin.docs.template.template-list', compact('templates', 'title'));
     }
+
+
 
     public function create()
     {

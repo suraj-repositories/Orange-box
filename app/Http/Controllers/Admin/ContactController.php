@@ -38,7 +38,7 @@ class ContactController extends Controller
                 $query->whereDate('created_at', '<=', $request->to_date);
             })
             ->latest()
-            ->paginate(10);
+            ->paginate(10)->withQueryString();
 
         $title = "Contact Messages";
 
