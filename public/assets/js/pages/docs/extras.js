@@ -16,6 +16,7 @@ function enableOnThisPageSection(selector) {
         }
     });
 
+    console.log(pageContent);
     observer.observe(pageContent, {
         attributes: true,
         attributeFilter: ['class']

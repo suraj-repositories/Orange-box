@@ -11,6 +11,7 @@ class ScrollSpyControl {
         const navContainer = document.querySelector('#scrollpsy-nav .nav');
         const dropdownMenu = document.getElementById('onThisPageMenu');
 
+        console.log(content, navContainer);
         if (!content || !navContainer) return;
 
         navContainer.innerHTML = '<div class="active-indicator"></div>';
