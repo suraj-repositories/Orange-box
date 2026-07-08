@@ -200,9 +200,11 @@ function enableFullScreenNav() {
 
 function enableScrollSpy(contentSelector) {
 
+    const ishere = document.querySelector(contentSelector);
+    if(!ishere) return;
+
     const sc = new ScrollSpyControl();
     sc.generateScrollSpy(contentSelector);
-
     sc.enableScrollpsyIndicator();
 
 }
