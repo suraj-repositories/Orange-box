@@ -10,9 +10,8 @@ function enableOnThisPageSection(selector) {
 
             const sc = new ScrollSpyControl();
             sc.generateScrollSpy(selector);
-            sc.smoothScrollBehaviour();
             sc.enableScrollpsyIndicator();
-
+            console.log('observer called');
             observer.disconnect();
         }
     });
