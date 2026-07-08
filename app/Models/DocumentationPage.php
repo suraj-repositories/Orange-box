@@ -72,7 +72,7 @@ class DocumentationPage extends Model
 
     public function release()
     {
-        return $this->belongsTo(documentationRelease::class, 'release_id');
+        return $this->belongsTo(DocumentationRelease::class, 'release_id');
     }
 
     public function children()
