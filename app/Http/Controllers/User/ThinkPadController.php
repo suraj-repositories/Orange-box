@@ -169,7 +169,7 @@ class ThinkPadController extends Controller
         $thinkPad->save();
         Swal::success([
             'title' => 'Success!',
-            'text' => 'Digestion Updated Successfully!',
+            'text' => 'Think Pad Updated Successfully!',
         ]);
         return redirect()->to(authRoute('user.think-pad.show', ['thinkPad' => $thinkPad]));
     }

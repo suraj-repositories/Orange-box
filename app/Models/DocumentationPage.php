@@ -67,7 +67,7 @@ class DocumentationPage extends Model
 
     public function documentation()
     {
-        return $this->belongsTo(documentation::class);
+        return $this->belongsTo(Documentation::class);
     }
 
     public function release()

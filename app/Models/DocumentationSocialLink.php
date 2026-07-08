@@ -19,4 +19,9 @@ class DocumentationSocialLink extends Model
     public function platform(){
         return $this->belongsTo(SocialMediaPlatform::class, 'social_media_platform_id');
     }
+
+     public function documentation()
+    {
+        return $this->belongsTo(Documentation::class);
+    }
 }
