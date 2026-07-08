@@ -145,7 +145,6 @@ class DocumentationPage extends Model
         return $this->belongsTo(DocumentationRelease::class, 'release_id', 'id');
     }
 
-
     public function sections()
     {
         return $this->hasMany(DocumentationSection::class);
