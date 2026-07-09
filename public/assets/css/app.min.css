@@ -938,6 +938,8 @@ progress {
     .container-sm {
         max-width: 720px
     }
+
+
 }
 
 @media (min-width:992px) {
@@ -14980,7 +14982,11 @@ li.menuitem-active>a:not(.collapsed)>span.menu-arrow {
     transform: rotate(90deg)
 }
 
-@media(max-width: 1039px) {}
+@media(max-width: 1040px) {
+    .footer {
+        display: none;
+    }
+}
 
 @media (max-width:991.98px) {
     body {
@@ -16567,6 +16573,14 @@ body.loading {
 
     .fc .fc-toolbar .fc-today-button {
         display: none
+    }
+
+    .file-manager-files .file-card .file-meta h2{
+        font-size: 12px !important;
+    }
+
+    .file-manager-files .file-card .file-meta .file-size {
+        font-size: 10px !important;
     }
 }
 

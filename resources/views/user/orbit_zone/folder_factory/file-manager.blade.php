@@ -56,6 +56,11 @@
                                             <div
                                                 class="w-100 p-2 d-flex align-items-center justify-content-between flex-wrap gap-1">
                                                 <div class="d-flex gap-2">
+
+                                                    <button class="btn file-manger-sidebar-toggle-btn"
+                                                        id="fileManagerSidebarToggleBtn">
+                                                     <i class="bi bi-layout-sidebar fs-4"></i>
+                                                    </button>
                                                     <button class="btn border d-flex gap-1 align-items-center"
                                                         id="create-folder-factory">
                                                         <i class="bx bx-folder"></i> New Folder

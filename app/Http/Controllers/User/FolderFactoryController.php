@@ -466,6 +466,14 @@ class FolderFactoryController extends Controller
         }
     }
 
+    public function downloadFile(User $user, File $file, Request $request)
+    {
+        if($user->id != $file->user_id){
+            abort(404);
+        }
+        return response()->download($file->file_url);
+    }
+
     public function moveFile(User $user, File $file, Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -147,6 +147,15 @@
                                     </li>
 
                                     <li>
+                                        <a class="dropdown-item"
+                                            href="{{ authRoute('user.files.download', ['file' => $item->id]) }}"
+                                            download>
+                                            <i class="bx bx-cloud-download me-1"></i>
+                                            Download File
+                                        </a>
+                                    </li>
+
+                                    <li>
                                         <button class="dropdown-item file-reallocation" data-action-title="Copy File"
                                             data-submit-url="{{ authRoute('user.files.copy', ['file' => $item->id]) }}">
                                             <i class="bx bx-copy me-1"></i>
@@ -205,8 +214,8 @@
                             <i class="bx {{ $item->is_favourite ? 'bxs-star' : 'bx-star' }} fs-4"></i>
                         </button>
 
-                        <div>
-                            <h2 class="mb-0">
+                        <div class="text-data-container">
+                            <h2 class="mb-0 text-truncate">
                                 {{ $item->item_name }}
                             </h2>
 

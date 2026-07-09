@@ -10,8 +10,8 @@
                 @if (session()->has('impersonator_admin_id'))
                     <li>
                         <div class=" nav-link ps-0">
-                            <a href="{{ route('stop-impersonation') }}" class="btn border py-1">
-                                <i class="bi bi-box-arrow-in-left fs-5"></i> Admin Panel
+                            <a href="{{ route('stop-impersonation') }}" class="btn border py-1 d-flex align-items-center w-fit justify-content-center px-2">
+                                <i class="bi bi-box-arrow-in-left fs-5"></i><span class="d-none d-sm-block ps-1">Admin Panel</span>
                             </a>
                         </div>
                     </li>

@@ -19,7 +19,7 @@
                     </div>
                     <div class="text-end">
                         <ol class="breadcrumb m-0 py-0">
-                            <li class="breadcrumb-item"><a href="{{ authRoute('user.folder-factory') }}">Folder Factory</a></li>
+                            <li class="breadcrumb-item"><a href="{{ authRoute('user.file-manager') }}">Folder Factory</a></li>
                             <li class="breadcrumb-item active">Upload Files</li>
                         </ol>
                     </div>

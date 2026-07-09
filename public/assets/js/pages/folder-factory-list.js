@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    enableSidebarToggle('#fileManagerSidebarToggleBtn');
     enableFolderFactoryDelete(".delete-folder-button");
     enableFolderFactoryCreation("#create-folder-factory", authRoute('user.folder-factory.save'));
     enableFolderFactoryEdit(".edit-form-factory-btn");
@@ -13,6 +15,38 @@ document.addEventListener('DOMContentLoaded', function () {
     enableDeleteAllSelected("#deleteAllSelectedBtn");
     enableRestoreFile('.restore-file-btn');
 });
+
+function enableSidebarToggle(toggleSelector) {
+    const toggleBtn = document.querySelector(toggleSelector);
+
+    if (!toggleBtn) return;
+
+    const shell = document.querySelector('.pm-root .pm-shell');
+
+    if (!shell) return;
+
+    toggleBtn.addEventListener('click', function () {
+        if (window.innerWidth >= 768) return;
+
+        shell.classList.toggle('pm-sidebar-open');
+    });
+
+    shell.addEventListener('click', function (e) {
+        if (
+            window.innerWidth < 768 &&
+            shell.classList.contains('pm-sidebar-open') &&
+            e.target === shell
+        ) {
+            shell.classList.remove('pm-sidebar-open');
+        }
+    });
+
+    window.addEventListener('resize', function () {
+        if (window.innerWidth >= 768) {
+            shell.classList.remove('pm-sidebar-open');
+        }
+    });
+}
 
 function enableFolderFactoryDelete(selector) {
     const buttons = document.querySelectorAll(selector);

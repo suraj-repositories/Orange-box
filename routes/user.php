@@ -109,6 +109,7 @@ Route::controller(CommentController::class)->group(function () {
 Route::controller(FolderFactoryController::class)->group(function () {
     Route::get('file-manager', 'fileManager')->name('file-manager');
 
+    Route::get('files/{file}/download', [FolderFactoryController::class, 'downloadFile'])->name('files.download');
     Route::post('files/{file}/copy', [FolderFactoryController::class, 'copyFile'])->name('files.copy');
     Route::post('folders/{folder}/copy', [FolderFactoryController::class, 'copyFolder'])->name('folders.copy');
     Route::post('files/{file}/move', [FolderFactoryController::class, 'moveFile'])->name('files.move');
