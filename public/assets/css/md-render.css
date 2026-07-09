@@ -120,11 +120,11 @@
 /* Code blocks */
 .md-render pre {
     margin: 1.5rem 0;
-    padding: 1rem;
-    overflow-x: auto;
+    padding: 0;
+    overflow-x: hidden;
     border-radius: 8px;
-    background: var(--dark);
     position: relative;
+    background-color: #2d2d2d;
 }
 
 .md-render pre button.copy-button {
@@ -142,6 +142,7 @@
     border: none;
     font-size: 18px;
     color: #fff;
+    background-color: inherit;
 }
 
 .md-render pre button.code-copy-btn {
@@ -149,10 +150,18 @@
 }
 
 .md-render pre code {
-    padding: 0;
+    overflow-x: auto;
+    padding: 1rem;
     background: transparent;
     color: #f8fafc;
     font-size: 0.9rem;
+    width: 100%;
+    display: block;
+}
+
+pre[class*=language-]{
+    padding: 0;
+    overflow: hidden;
 }
 
 /* Lists */
@@ -366,4 +375,10 @@
 
 .md-render ul:has(> li > input[type="checkbox"])>li:has(> input[type="checkbox"]:checked) {
     color: var(--text-second-dark);
+}
+
+@media (max-width: 991.98px) {
+    .content-page {
+        padding: 0 0;
+    }
 }

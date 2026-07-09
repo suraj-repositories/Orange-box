@@ -724,7 +724,7 @@ ul.topnav-menu button i.bx {
 .documentation-content h6 {
     position: relative;
     left: -30px;
-    padding-left: 30px;
+    padding-left: 32px;
 }
 
 .documentation-content h3,
@@ -740,10 +740,14 @@ ul.topnav-menu button i.bx {
 .documentation-content h6:hover::before {
     content: "#";
     position: absolute;
-    left: 5px;
+    left: 12px;
     font-weight: 800;
     color: var(--primary);
     cursor: pointer;
+}
+
+#copy-page-btn{
+    border-radius: 4px 0 0 4px;
 }
 
 .feedback-card {
