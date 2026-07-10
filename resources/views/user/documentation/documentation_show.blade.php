@@ -50,7 +50,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-flex gap-2">
+                                    <div class="d-flex gap-2 align-items-center flex-wrap">
                                         <a href="{{ authRoute('user.documentation.social-links.edit', ['documentation' => $documentation]) }}"
                                             class="btn btn-light border">
                                             Social Links

@@ -6,15 +6,15 @@
         </div>
         @if (!empty($skills) && count($skills) > 0)
             <div class="skills-details mt-3">
-            <h6 class="text-uppercase fs-13">Skills</h6>
+                <h6 class="text-uppercase fs-13">Skills</h6>
 
-            <div class="d-flex flex-wrap gap-2">
-                @foreach ($skills as $skill => $level)
-                    <span class="badge bg-light border px-3 text-dark py-2 fw-semibold">{{ $skill }}</span>
-                @endforeach
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach ($skills as $skill => $level)
+                        <span class="badge bg-light border px-3 text-dark py-2 fw-semibold">{{ $skill }}</span>
+                    @endforeach
+                </div>
+
             </div>
-
-        </div>
         @endif
 
     </div>
@@ -83,22 +83,23 @@
 
         <div class="row">
             @forelse ($projects as $project)
-                <div class="col-6">
-                <div class="card border">
-                    <div class="card-body">
-                        <h4 class="m-0 fw-semibold text-dark fs-16">{{ $project->title }}</h4>
-                        <div class="row mt-2 d-flex align-items-center">
-                            <div class="col">
-                                <h5 class="fs-20 mt-1 fw-bold">₹ {{ number_format($project->budget) }}</h5>
-                                <p class="mb-0 text-muted">Total Budget</p>
+                <div class="col-12 col-md-6">
+                    <div class="card border">
+                        <div class="card-body">
+                            <h4 class="m-0 fw-semibold text-dark fs-16">{{ $project->title }}</h4>
+                            <div class="row mt-2 d-flex align-items-center">
+                                <div class="col">
+                                    <h5 class="fs-20 mt-1 fw-bold">₹ {{ number_format($project->budget) }}</h5>
+                                    <p class="mb-0 text-muted">Total Budget</p>
+                                </div>
+                                <div class="col-auto">
+                                    <a href="{{ authRoute('user.project-board.show', ['slug' => $project->slug]) }}"
+                                        class="btn btn-sm btn-outline-dark px-3">More Details</a>
+                                </div>
                             </div>
-                            <div class="col-auto">
-                                <a href="{{ authRoute('user.project-board.show', ['slug' => $project->slug]) }}" class="btn btn-sm btn-outline-dark px-3">More Details</a>
-                            </div>
-                        </div>
-                    </div><!--end card-body-->
+                        </div><!--end card-body-->
+                    </div>
                 </div>
-            </div>
             @empty
                 <x-no-data />
             @endforelse
@@ -107,30 +108,31 @@
 
     @if (!empty($experties) && count($experties) > 0)
         <div class="col-md-6 col-sm-6 col-md-6 mb-0">
-        <div class="">
-            <h5 class="fs-16 text-dark fw-semibold mb-3 text-capitalize">Expertise</h5>
-        </div>
-
-        <div class="row align-items-center g-3">
-        @foreach ($experties as $skill => $level)
-            <div class="col-sm-3">
-                <p class="text-truncate mt-1 mb-0"><i class="mdi mdi-circle-medium text-primary me-2"></i>
-                    {{ $skill }}
-                </p>
+            <div class="">
+                <h5 class="fs-16 text-dark fw-semibold mb-3 text-capitalize">Expertise</h5>
             </div>
 
-            <div class="col-sm-9">
-                <div class="progress mt-1" style="height: 8px;">
-                    <div class="progress-bar progress-bar bg-primary rounded" role="progressbar" style="width: {{ $level }}%"
-                        aria-valuenow="{{ $level }}" aria-valuemin="0" aria-valuemax="100">
+            <div class="row align-items-center g-3">
+                @foreach ($experties as $skill => $level)
+                    <div class="col-sm-3">
+                        <p class="text-truncate mt-1 mb-0"><i class="mdi mdi-circle-medium text-primary me-2"></i>
+                            {{ $skill }}
+                        </p>
                     </div>
-                </div>
+
+                    <div class="col-sm-9">
+                        <div class="progress mt-1" style="height: 8px;">
+                            <div class="progress-bar progress-bar bg-primary rounded" role="progressbar"
+                                style="width: {{ $level }}%" aria-valuenow="{{ $level }}"
+                                aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-            @endforeach
+
+
         </div>
-
-
-    </div>
     @endif
     <!-- end skill -->
 </div>

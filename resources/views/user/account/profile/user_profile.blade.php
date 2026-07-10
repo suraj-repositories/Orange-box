@@ -30,7 +30,7 @@
 
                                 <div class="align-items-center">
                                     <div
-                                        class="d-flex align-items-center flex-wrap gap-4 justify-content-center justify-content-sm-start text-center text-sm-start">
+                                        class="d-flex align-items-center flex-wrap gap-4 justify-content-center justify-content-sm-start text-center text-sm-start flex-column flex-sm-row">
                                         <div class="position-relative">
                                             <img src="{{ $user->profilePicture() }}"
                                                 class="user_profile_picture rounded-circle avatar-xxl img-thumbnail float-start"
@@ -74,7 +74,7 @@
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link p-2 {{ request('tab') == 'about' || !request()->has('tab') ? 'active' : '' }}"
                                             id="about_tab" data-bs-toggle="tab" href="#tab_about" role="tab">
-                                            <span class="d-block d-sm-none"><i class="mdi mdi-information"></i></span>
+                                            <span class="d-block d-sm-none"><i class="mdi mdi-information-outline"></i></span>
                                             <span class="d-none d-sm-block">About</span>
                                         </a>
                                     </li>
@@ -126,29 +126,26 @@
 
                                     <div class="tab-pane {{ request('tab') == 'setting' ? 'active show' : '' }}"
                                         id="tab_setting" role="tabpanel">
-                                        <div class="row">
+                                        <div class="row g-3 mt-1">
+                                            <div class="col-lg-6 col-xl-6">
+                                                <div class="row g-3">
+                                                    <div class="col-12">
+                                                        @include('user.account.profile.personal_information_form')
 
-                                            <div class="row g-3">
-                                                <div class="col-lg-6 col-xl-6">
-                                                    <div class="row g-3">
-                                                        <div class="col-12">
-                                                            @include('user.account.profile.personal_information_form')
-
-                                                        </div>
-                                                        <div class="col-12">
-                                                            @include('user.account.profile.address_details_form')
-                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        @include('user.account.profile.address_details_form')
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-6 col-xl-6">
-                                                    <div class="row g-3">
-                                                        <div class="col-12">
-                                                            @include('user.account.profile.social_media_links_form')
+                                            </div>
+                                            <div class="col-lg-6 col-xl-6">
+                                                <div class="row g-3">
+                                                    <div class="col-12">
+                                                        @include('user.account.profile.social_media_links_form')
 
-                                                        </div>
-                                                        <div class="col-12">
-                                                            @include('user.account.profile.user_skill_form')
-                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        @include('user.account.profile.user_skill_form')
                                                     </div>
                                                 </div>
                                             </div>

@@ -47,6 +47,11 @@
     background: var(--light);
 }
 
+.md-render th{
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
 .md-render th,
 .md-render td {
     padding: 0.5rem 0.8rem;
