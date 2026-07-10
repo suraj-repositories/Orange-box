@@ -1,8 +1,8 @@
 <p align="center"><a href="https://box.oranbyte.com" target="_blank">
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./public/assets/images/logo-light.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./public/assets/images/logo-dark.svg">
-  <img alt="sdfsdfsdf." src="./public/assets/images/logo-light.svg" width="400">
+  <source media="(prefers-color-scheme: dark)" srcset="screenshots/logo-light.svg">
+  <source media="(prefers-color-scheme: light)" srcset="screenshots/logo-dark.svg">
+  <img alt="sdfsdfsdf." src="screenshots/logo-light.svg" width="400">
 </picture> 
 </a>
 </p>
@@ -83,7 +83,7 @@ A modern content, documentation, and project management system built with Larave
 ### Core 
 <div style="display: flex;flex-direction: column; grid-gap: 10px;">
      <div style="display: flex; grid-gap: 10px;">
-        <img src="screenshots/1.png" alt="screenshots" width="49%" style="border: 2px solid lightgreen"/>
+        <img src="screenshots/oranbyte1.png" alt="screenshots" width="49%" style="border: 2px solid lightgreen"/>
         <img src="screenshots/2.png" alt="screenshots" width="49%" style="border: 2px solid lightgreen"/>
     </div>
 </div>
