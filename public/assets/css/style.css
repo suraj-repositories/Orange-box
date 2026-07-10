@@ -3112,8 +3112,7 @@ ul.directory-list.active {
 .pm-root .pm-shell {
     display: grid;
     grid-template-columns: 220px 1fr;
-    min-height: 600px;
-    /* max-height: 88vh; */
+
 }
 
 .lh-cards i {
@@ -3227,8 +3226,19 @@ ul.directory-list.active {
 /* ---------- MAIN ---------- */
 .pm-root .pm-main {
     background: var(--pm-bg);
-    padding: 24px 28px;
+    height: 100%;
+    overflow-x: hidden;
     overflow-y: auto;
+    min-height: 770px;
+    max-height: 88vh;
+
+    /* Hide scrollbar */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+
+.pm-root .pm-main::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
 }
 
 /* ---------- PAGE HEADER ---------- */
@@ -3930,6 +3940,7 @@ ul.directory-list.active {
         font-size: 20px !important;
     }
 }
+
 @media (max-width: 640px) {
     .pm-root .pm-shell {
         grid-template-columns: 1fr;
@@ -3955,8 +3966,10 @@ ul.directory-list.active {
     }
 
     .pm-root .pm-main {
-        padding: 16px;
+        padding: 2px;
+
     }
+
 
     .pm-root .pm-ver-checks {
         grid-template-columns: repeat(2, 1fr);
@@ -5691,7 +5704,7 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
 }
 
 
-table th{
+table th {
     min-width: fit-content;
     white-space: nowrap;
 }
@@ -5837,7 +5850,7 @@ table .apexcharts-canvas {
 .pm-root .pm-shell {
     display: grid;
     grid-template-columns: 220px 1fr;
-    min-height: 600px;
+    min-height: 770px;
     max-height: 88vh;
 }
 
@@ -5883,7 +5896,8 @@ table .apexcharts-canvas {
         opacity: 1;
         visibility: visible;
     }
-    .file-manger-sidebar-toggle-btn{
+
+    .file-manger-sidebar-toggle-btn {
         display: flex !important;
     }
 }

@@ -52,7 +52,7 @@
                                         @include('user.orbit_zone.folder_factory.partials.file-manager-sidebar')
 
                                         <!-- MAIN CONTENT -->
-                                        <main class="fm-main">
+                                        <main class="pm-main">
                                             <div
                                                 class="w-100 p-2 d-flex align-items-center justify-content-between flex-wrap gap-1">
                                                 <div class="d-flex gap-2">
