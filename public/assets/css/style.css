@@ -3241,6 +3241,7 @@ ul.directory-list.active {
     display: none;             /* Chrome, Safari, Opera */
 }
 
+
 /* ---------- PAGE HEADER ---------- */
 .pm-root .pm-page-header {
     display: flex;
@@ -5308,6 +5309,15 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
 .template-images .image-scroll-wrapper {
     position: relative;
 }
+.template-images .image-scroll-wrapper button{
+    display: none;
+}
+.template-images .image-scroll-wrapper:has(.image-box) button{
+    display: block;
+}
+.template-images .image-scroll-wrapper:has(.image-box) .multi-image-container-scrollable{
+   margin-top: 15px;
+}
 
 .template-images .multi-image-container-scrollable {
     display: flex;
@@ -5317,7 +5327,7 @@ button.show-more-btn[aria-expanded="true"] .up-icon {
     scroll-behavior: smooth;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 4px;
+    padding: 0;
 }
 
 .template-images .multi-image-container-scrollable::-webkit-scrollbar {
