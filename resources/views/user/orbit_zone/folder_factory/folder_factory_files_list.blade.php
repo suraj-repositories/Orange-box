@@ -406,7 +406,7 @@
                                     <select class="select2-with-image" name="folder_id" id="folder-picker">
                                         @foreach ($folderFactories as $folder)
                                             <option value="{{ $folder->id }}" data-image="{{ $folder->getIconUrl() }}"
-                                                data-image-class="rounded-0" data-slug="{{ $folder->slug }}"
+                                                data-image-class="rounded-0" data-url="{{ authRoute('user.folder-factory.files.index',['folderId' => $folder->id]) }}"
                                                 {{ request()->get('folder') == $folder->slug ? 'selected' : '' }}>
                                                 {{ $folder->name }}
                                             </option>

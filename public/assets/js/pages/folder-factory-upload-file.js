@@ -14,13 +14,13 @@ function enableOpenFolderButton(selector) {
             const selectedOption = select.options[select.selectedIndex];
 
             if (selectedOption) {
-                const slug = selectedOption.dataset.slug;
+                const url = selectedOption.dataset.url;
 
-                if (slug) {
-                    redirectLink.href = authRoute('user.folder-factory.files.index', { slug: slug });
+                if (url) {
+                    redirectLink.href = url;
                     redirectLink.click();
                 } else {
-                    console.warn('No slug found for selected option');
+                    console.warn('No url found for selected option');
                 }
             } else {
                 console.warn('No option selected');

@@ -468,7 +468,7 @@ class FolderFactoryController extends Controller
 
     public function downloadFile(User $user, File $file, Request $request)
     {
-        if($user->id != $file->user_id){
+        if ($user->id != $file->user_id) {
             abort(404);
         }
         return response()->download($file->file_url);
@@ -775,6 +775,13 @@ class FolderFactoryController extends Controller
 
     public function create(User $user)
     {
+
+        FolderFactory::firstOrCreate([
+            'user_id' => $user->id,
+            'name' => 'My Drive',
+            'slug' => 'my-drive'
+        ]);
+
         $folderFactories = FolderFactory::where('user_id', $user->id)
             ->orderByRaw("
                 CASE

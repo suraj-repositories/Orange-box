@@ -38,8 +38,8 @@
                                                     <option value="{{ $folder->id }}"
                                                         data-image="{{ $folder->getIconUrl() }}"
                                                         data-image-class="rounded-0"
-                                                        data-slug="{{ $folder->slug }}"
-                                                    {{ request()->get('folder') == $folder->slug ? 'selected' : '' }}>
+                                                        data-url="{{ authRoute('user.folder-factory.files.index', ['folderId' => $folder->id]) }}"
+                                                        {{ request()->get('folder') == $folder->slug ? 'selected' : '' }}>
                                                         {{ $folder->name }}
                                                     </option>
                                                 @endforeach
@@ -169,5 +169,4 @@
     <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/js/lib-config/select2.init.js') }}"></script>
     <script src="{{ asset('assets/js/pages/folder-factory-upload-file.js') }}"></script>
-
 @endsection
