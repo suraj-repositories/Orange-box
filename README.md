@@ -77,6 +77,12 @@ A modern content, documentation, and project management system built with Larave
 - AI Writing Assistant
 - AI Knowledge Search
 - AI Release Notes -->
+  
+<!-- ## Channel Feature *(Planned)*
+- Create feeds for all users
+- dedicated section for posts 
+ -->
+
 
 ## Screenshots
 
