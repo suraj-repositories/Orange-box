@@ -466,12 +466,27 @@ class FolderFactoryController extends Controller
         }
     }
 
-    public function downloadFile(User $user, File $file, Request $request)
+    public function downloadFile(User $user, File $file)
     {
         if ($user->id != $file->user_id) {
             abort(404);
         }
-        return response()->download($file->file_url);
+
+        if (Storage::disk('public')->exists($file->file_path)) {
+            return Storage::disk('public')->download(
+                $file->file_path,
+                $file->file_name
+            );
+        }
+
+        if (Storage::disk('private')->exists($file->file_path)) {
+            return Storage::disk('private')->download(
+                $file->file_path,
+                $file->file_name
+            );
+        }
+
+        abort(404);
     }
 
     public function moveFile(User $user, File $file, Request $request)
