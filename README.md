@@ -2,7 +2,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="screenshots/logo-light.svg">
   <source media="(prefers-color-scheme: light)" srcset="screenshots/logo-dark.svg">
-  <img alt="sdfsdfsdf." src="screenshots/logo-light.svg" width="400">
+  <img alt="sdfsdfsdf." src="screenshots/logo-dark.svg" width="400" onerror="">
 </picture> 
 </a>
 </p>

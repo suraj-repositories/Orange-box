@@ -397,9 +397,6 @@ class OB_MediaViewer {
                 console.error('Download failed:', error);
                 alert("Download failed : ", error.message | 'Server may block the download!');
             });
-
-
-
     }
 
 }
