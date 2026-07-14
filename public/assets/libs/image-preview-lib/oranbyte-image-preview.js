@@ -380,22 +380,53 @@ class OB_MediaViewer {
         });
     }
 
-    downloadMedia(mediaUrl, fileName) {
+    downloadMedia(mediaUrl, fileName = "") {
 
-        fetch(mediaUrl, { mode: 'cors' })
-            .then(response => response.blob())
-            .then(blob => {
-                const blobUrl = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = blobUrl;
-                link.download = fileName;
+        const directDownload = () => {
+            try {
+                const link = document.createElement("a");
+                link.href = mediaUrl;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+
+                if (fileName) {
+                    link.download = fileName;
+                }
+
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+            } catch (e) {
+                console.error("Direct download failed:", e);
+                alert("Unable to download this file.");
+            }
+        };
+
+        fetch(mediaUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                return response.blob();
+            })
+            .then(blob => {
+                const blobUrl = URL.createObjectURL(blob);
+
+                const link = document.createElement("a");
+                link.href = blobUrl;
+                link.download = fileName || mediaUrl.split("/").pop();
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
             })
             .catch(error => {
-                console.error('Download failed:', error);
-                alert("Download failed : ", error.message | 'Server may block the download!');
+                console.warn("Fetch download failed. Falling back to direct download.", error);
+
+                directDownload();
             });
     }
 
